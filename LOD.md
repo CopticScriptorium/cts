@@ -32,10 +32,6 @@ An example of a versioned exemplar URN for a Coptic Scriptorium text might be:
 
 `urn:cts:copticLit:shenoute.A22.MONB_YA.20141108T000000Z`
 
-## Vocabulary
-
-Relationships between the texts in the Coptic Scriptorium corpus are described using the [LAWD Ontology](https://github.com/lawdi/LAWD).
-
 ## HTTP Responses
 
 Coptic Scriptorium uses the [303 URI approach](http://linkeddatabook.com/editions/1.0/#htoc12) to resolve requests for texts identified by the persistent URIs described above.
@@ -74,7 +70,15 @@ __Returned Representation__: Most recent version of the normalized HTML edition 
 
 ## CTS API and Citation/Passage Requests
 
-TBD
+The exact details of the CTS API implementation for Coptic Scriptorium are still TBD.  
+
+An initial CTS text inventory can be found at https://github.com/CopticScriptorium/cts/blob/master/inventory/textinventory.xml .
+
+## Vocabulary
+
+Relationships between the texts in the Coptic Scriptorium corpus are described using the [LAWD Ontology](https://github.com/lawdi/LAWD).
+
+An N3 representation of the initial CTS text inventory, using the LAWD ontology can be found at https://github.com/CopticScriptorium/cts/blob/master/inventory/textinventory.ttl .
 
 
 
