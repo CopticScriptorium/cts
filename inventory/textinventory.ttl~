@@ -11,364 +11,364 @@
     rdfs:label "White Monastery Manuscript EG"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
 
+<http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript EG (Analytic TEI XML Edition)"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
+
 <http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript EG (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript EG (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript EG (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript EG (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript EG (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript EG (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript EG (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript EG (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.001> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript BA"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BA (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BA (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BA (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BA (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BA (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BA (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BA (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BA (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BA (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript BB"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BB (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BB (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BB (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BB (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BB (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BB (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BB (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BB (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BB (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript BA"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BA (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BA (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BA (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BA (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BA (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BA (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BA (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BA (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BA (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript BB"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BB (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BB (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BB (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BB (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BB (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BB (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript BB (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript BB (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript BB (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica> a lawd:WrittenWork ;
     rdfs:label "Sahidica New Testament"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/ana/TEI> a lawd:Edition ;
+    rdfs:label "Sahidica New Testament (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/ana/html> a lawd:Edition ;
     rdfs:label "Sahidica New Testament (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/ana/xml> a lawd:Edition ;
-    rdfs:label "Sahidica New Testament (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/dipl/TEI> a lawd:Edition ;
+    rdfs:label "Sahidica New Testament (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/dipl/html> a lawd:Edition ;
     rdfs:label "Sahidica New Testament (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/dipl/xml> a lawd:Edition ;
-    rdfs:label "Sahidica New Testament (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/norm/TEI> a lawd:Edition ;
+    rdfs:label "Sahidica New Testament (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/norm/html> a lawd:Edition ;
     rdfs:label "Sahidica New Testament (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians.sahidica/norm/xml> a lawd:Edition ;
-    rdfs:label "Sahidica New Testament (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.corinthians> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica> a lawd:WrittenWork ;
     rdfs:label "Sahidica New Testament"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/ana/TEI> a lawd:Edition ;
+    rdfs:label "Sahidica New Testament (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/ana/html> a lawd:Edition ;
     rdfs:label "Sahidica New Testament (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/ana/xml> a lawd:Edition ;
-    rdfs:label "Sahidica New Testament (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/dipl/TEI> a lawd:Edition ;
+    rdfs:label "Sahidica New Testament (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/dipl/html> a lawd:Edition ;
     rdfs:label "Sahidica New Testament (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/dipl/xml> a lawd:Edition ;
-    rdfs:label "Sahidica New Testament (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/norm/TEI> a lawd:Edition ;
+    rdfs:label "Sahidica New Testament (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/norm/html> a lawd:Edition ;
     rdfs:label "Sahidica New Testament (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/norm/xml> a lawd:Edition ;
-    rdfs:label "Sahidica New Testament (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript YA"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YA (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YA (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YA (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YA (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YA (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YA (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YA (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YA (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YA (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript YB"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YB (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YB (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YB (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YB (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YB (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YB (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YB (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YB (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YB (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript ZC"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript ZC (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript ZC (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript ZC (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript ZC (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript ZC (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript ZC (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript ZC (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript ZC (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript ZC (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript XL"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript XL (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript XL (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript XL (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript XL (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript XL (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript XL (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript XL (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript XL (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript XL (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript YA"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YA (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YA (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YA (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YA (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YA (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YA (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript YA (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript YA (Normalized HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript YA (Normalized xml XML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
-
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH> a lawd:WrittenWork ;
     rdfs:label "White Monastery Manuscript ZH"@eng ;
+    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/ana/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript ZH (Analytic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/ana/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript ZH (Analytic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/ana/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript ZH (Analytic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/dipl/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript ZH (Diplomatic TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/dipl/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript ZH (Diplomatic HTML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/dipl/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript ZH (Diplomatic xml XML Edition)"@eng ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/norm/TEI> a lawd:Edition ;
+    rdfs:label "White Monastery Manuscript ZH (Normalized TEI XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/norm/html> a lawd:Edition ;
     rdfs:label "White Monastery Manuscript ZH (Normalized HTML Edition)"@eng ;
-    lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
-
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/norm/xml> a lawd:Edition ;
-    rdfs:label "White Monastery Manuscript ZH (Normalized xml XML Edition)"@eng ;
     lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.001> a lawd:ConceptualWork ;
