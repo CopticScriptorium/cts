@@ -72,7 +72,7 @@ __HTTP Response Status__: 303
 __Returned Representation__: Most recent version of the normalized HTML edition of the text
 
 
-## CTS API and Citation/Passage Requests
+## CTS API and Citation/Passage Identifiers
 
 The exact details of the CTS API implementation for Coptic Scriptorium are still TBD.  
 
