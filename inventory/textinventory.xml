@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:/home/balmas/workspace/cite/schemas/cts/TextInventory.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<TextInventory xmlns="http://chs.harvard.edu/xmlns/cts" tiversion="5.0.rc.1">
+    <ctsnamespace abbr="copticLit" ns="http://copticscriptorium.org/ns/copticLit">
+        <description xml:lang="eng">Sahidic Coptic literary and monastic texts</description>
+    </ctsnamespace>
+    <textgroup urn="urn:cts:copticLit:shenoute">
+        <groupname xml:lang="eng">Shenoute</groupname>
+        <work urn="urn:cts:copticLit:shenoute.A22" xml:lang="cop">
+            <title xml:lang="eng">Acephalous Work 22</title>
+            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_YA">
+                <label xml:lang="eng">White Monastery Manuscript YA</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_YB">
+                <label xml:lang="eng">White Monastery Manuscript YB</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_ZC">
+                <label xml:lang="eng">White Monastery Manuscript ZC</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:shenoute.AOF" xml:lang="cop">
+            <title xml:lang="eng">Abraham Our Father</title>
+            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_XL">
+                <label xml:lang="eng">White Monastery Manuscript XL</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_YA">
+                <label xml:lang="eng">White Monastery Manuscript YA</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_ZH">
+                <label xml:lang="eng">White Monastery Manuscript ZH</label>
+            </edition>
+        </work>
+    </textgroup>
+    <textgroup urn="urn:cts:copticLit:nt">
+        <groupname xml:lang="eng">New Testament</groupname>
+        <work urn="urn:cts:copticLit:nt.mark" xml:lang="grc">
+            <title xml:lang="eng">Gospel of Mark</title>
+            <edition urn="urn:cts:copticLit:nt.mark.sahidica">
+                <label xml:lang="eng">Sahidica New Testament</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:nt.corinthians" xml:lang="grc">
+            <title xml:lang="eng">Corinthians</title>
+            <edition urn="urn:cts:copticLit:nt.corinthians.sahidica">
+                <label xml:lang="eng">Sahidica New Testament</label>
+            </edition>
+        </work>
+    </textgroup>
+    <textgroup urn="urn:cts:copticLit:besa">
+        <groupname xml:lang="eng">Letters of Besa</groupname>
+        <work urn="urn:cts:copticLit:besa.aph" xml:lang="grc">
+            <title xml:lang="eng">Letters to Apthonia</title>
+            <edition urn="urn:cts:copticLit:besa.aph.MONB_BA">
+                <label xml:lang="eng">White Monastery Manuscript BA</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:besa.aph.MONB_BB">
+                <label xml:lang="eng">White Monastery Manuscript BB</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:besa.nuns" xml:lang="grc">
+            <title xml:lang="eng">Letters to Thieving Nuns</title>
+            <edition urn="urn:cts:copticLit:besa.nuns.MONB_BA">
+                <label xml:lang="eng">White Monastery Manuscript BA</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:besa.nuns.MONB_BB">
+                <label xml:lang="eng">White Monastery Manuscript BB</label>
+            </edition>
+        </work>
+    </textgroup>
+    <textgroup urn="urn:cts:copticLit:ap">
+        <groupname xml:lang="eng">The Apophthegmata Patrum</groupname>
+        <work urn="urn:cts:copticLit:ap.001" xml:lang="grc">
+            <title xml:lang="eng">The Apophthegmata Patrum</title>
+            <edition urn="urn:cts:copticLit:ap.001.MONB_EG">
+                <label xml:lang="eng">White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+    </textgroup>
+</TextInventory>
