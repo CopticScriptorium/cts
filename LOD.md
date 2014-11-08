@@ -44,12 +44,32 @@ A request for a text without reference to a specific exemplar will return an HTT
 
 Example requests, HTTP status code and returned representation are provided below.
 
-__URI__ | __HTTP Response Status__ | __Returned Representation__
---- | --- | ---
-http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA | 303 | Most recent version of the diplomatic HTML edition of the text
-http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ | 303 | HTML representation of either the requested exemplar (or if no longer example, the most recent version) of the diplomatic HTML edition of the text
-http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ/dipl/xml | 200 or 303 | the TEI XML representation of either the requested exemplar (with status 200) or the most recent version (with status 303)
-http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/html | 303 | Most recent version of the normalized HTML edition of the text
+__URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA`
+
+__HTTP Response Status__: 303 
+
+__Returned Representation__: Most recent version of the diplomatic HTML edition of the text
+
+
+__URI__: http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ
+
+__HTTP Response Status__: 303
+
+__Returned Representation__: HTML representation of either the requested exemplar (or if no longer example, the most recent version) of the diplomatic HTML edition of the text
+
+
+__URI__: http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ/dipl/xml
+
+__HTTP Response Status__: 200 or 303
+
+__Returned Representation__: the TEI XML representation of either the requested exemplar (with status 200) or the most recent version (with status 303)
+
+
+__URI__: http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/html
+
+__HTTP Response Status__: 303
+
+__Returned Representation__: Most recent version of the normalized HTML edition of the text
 
 
 ## CTS API and Citation/Passage Requests
