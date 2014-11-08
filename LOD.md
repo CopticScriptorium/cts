@@ -1,6 +1,8 @@
 LOD (Linked Open Data) Implementation Details
 ===
 
+__DRAFT DOCUMENT__
+
 ## Persistent Identifiers
 
 Coptic Scriptorium uses [CTS URNs](http://www.homermultitext.org/hmt-docs/specifications/ctsurn/) to provide persistent, technology-independent, identifiers for the texts in its corpus. It combines these with a URL prefix and format postfixes to provide stable, Linked-Data friendly URIs for the texts.
