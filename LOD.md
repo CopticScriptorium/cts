@@ -13,7 +13,7 @@ Format-independent identifier for a text:
 
 Visualization and Format specific identifiers for texts:
 
-*Visualization* | *Format* | *URI*
+__Visualization__ | __Format__ | __URI__
 --- | --- | ---
 Diplomatic | TEI XML | `http://copticscriptorium.org/<CTSURN>/dipl/xml`
 Diplomatic | HTML | `http://copticscriptorium.org/<CTSURN>/dipl/html`
@@ -24,7 +24,7 @@ Analytical | HTML | `http://copticscriptorium.org/<CTSURN>/ana/html`
 
 ## Versioning
 
-Coptic Scriptorium uses the __exemplar__ component of a CTS URN to identify specific versions of a text.  At the point of "publication" (exact meaning of this TBD), new URNs will be minted for the Coptic Scriptorium texts with either a datetime stamp or a Git commit hash to represent the version information.
+Coptic Scriptorium uses the *exemplar* component of a CTS URN to identify specific versions of a text.  At the point of "publication" (exact meaning of this TBD), new URNs will be minted for the Coptic Scriptorium texts with either a datetime stamp or a Git commit hash to represent the version information.
 
 Note that Coptic Scriptorium commits to not changing the representation of a text identified by a specific exemplar (i.e. versioned) URN, but it may not provide online access to the texts represented by those versions for perpetuity. It will however always redirect a request for a specific exemplar to a more recent version of the text, if the specifically requested exemplar is no longer available on via the Coptic Scriptorium online publication site. (See below under HTTP Responses for additional details.)
 
@@ -44,11 +44,13 @@ A request for a text without reference to a specific exemplar will return an HTT
 
 Example requests, HTTP status code and returned representation are provided below.
 
-*URI* | *HTTP Response Status* | *Returned Representation*
+__URI__ | __HTTP Response Status__ | __Returned Representation__
 --- | --- | ---
-`http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA` | 303 | Most recent HTML version of the text
-`http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ` | 303 | HTML representation of either the requested exemplar, or if no longer available, the most recent version
-`http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ/dipl/xml` | 200 or 303 | the TEI XML representation of either the requested exemplar (with status 200) or the most recent version (with status 303)
+http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA | 303 | Most recent version of the diplomatic HTML edition of the text
+http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ | 303 | HTML representation of either the requested exemplar (or if no longer example, the most recent version) of the diplomatic HTML edition of the text
+http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ/dipl/xml | 200 or 303 | the TEI XML representation of either the requested exemplar (with status 200) or the most recent version (with status 303)
+http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/html | 303 | Most recent version of the normalized HTML edition of the text
+
 
 ## CTS API and Citation/Passage Requests
 
