@@ -52,6 +52,7 @@ __HTTP Response Status__: 303
 
 __Returned Representation__: Most recent version of the diplomatic HTML edition of the text
 
+---
 
 __URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ`
 
@@ -59,6 +60,7 @@ __HTTP Response Status__: 303
 
 __Returned Representation__: HTML representation of either the requested exemplar (or if no longer example, the most recent version) of the diplomatic HTML edition of the text
 
+---
 
 __URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ/dipl/xml`
 
@@ -66,6 +68,7 @@ __HTTP Response Status__: 200 or 303
 
 __Returned Representation__: the TEI XML representation of either the requested exemplar (with status 200) or the most recent version (with status 303)
 
+---
 
 __URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/html`
 
