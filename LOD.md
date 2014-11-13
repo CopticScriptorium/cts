@@ -61,7 +61,7 @@ __Returned Representation__: HTML representation of either the requested exempla
 
 ---
 
-__URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ/dipl/xml`
+__URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YYYYMMDDTHHMMSSZ/tei/xml`
 
 __HTTP Response Status__: 200 or 303
 
