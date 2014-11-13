@@ -21,11 +21,10 @@ Visualization and Format specific identifiers for texts:
 
 __Visualization__ | __Format__ | __URI__
 --- | --- | ---
-Diplomatic | TEI XML | `http://copticscriptorium.org/<CTSURN>/dipl/xml`
+TEI  | XML | `http://copticscriptorium.org/<CTSURN>/tei/xml`
+PAULA |  XML |  `http://copticscriptorium.org/<CTSURN>/paula/xml`
 Diplomatic | HTML | `http://copticscriptorium.org/<CTSURN>/dipl/html`
-Normalized | TEI XML | `http://copticscriptorium.org/<CTSURN>/norm/xml`
 Normalized | HTML | `http://copticscriptorium.org/<CTSURN>/norm/html`
-Analytical | TEI XML | `http://copticscriptorium.org/<CTSURN>/ana/xml`
 Analytical | HTML | `http://copticscriptorium.org/<CTSURN>/ana/html`
 
 ## Versioning
