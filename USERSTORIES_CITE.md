@@ -7,7 +7,7 @@ Data Citation/Linking User Stories
 1. As a researcher I want to search for all occurences of a specific POS tag or tags in a text or the entire corpus and cite its occurence, in the context of the phrase in which it occurs, in the text, accompanied by the details of the query, and the specific annotations consulted.
 1. As a researcher I want to search loan words using the lang annotation and download the data in original and normalized form, possibly including lang and pos annotations.
 1. As a researcher I want to search for N-grams of either norm, norm_group, or pos in order to analyze style and cite the corpora in which they occur.
-1. As a researcher I want to identify and biblical verses quoted by Shenoute, Besa, or the AP, linking these citations to the original biblical texts in the the Coptic Scriptorium (or other?) corpora.
+1. As a researcher I want to identify and cite biblical verses quoted by Shenoute, Besa, or the AP, linking these citations to the original biblical texts in the the Coptic Scriptorium (or other?) corpora.
 1. As a researcher I want to search for and cite certain markers for Scriptural citation in order to see grammatical parallels. 
 1. As a researcher I want to cite specific passages I am using so that readers of my publication can use those citations to get directly to the cited passages in the Coptic Scriptorium corpus.
 
