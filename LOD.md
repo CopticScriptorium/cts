@@ -41,7 +41,7 @@ An example of a versioned exemplar URN for a Coptic Scriptorium text might be:
 
 Coptic Scriptorium uses the [303 URI approach](http://linkeddatabook.com/editions/1.0/#htoc12) to resolve requests for texts identified by the persistent URIs described above.
 
-A request for a text without reference to a specific exemplar will return an HTTP 303 response which redirects the browser or requesting client application to the most recent version of the text.  Requests for texts without specification of the format will return the most recent HTML diplomatic version of a text.
+A request for a text without reference to a specific exemplar will return an HTTP 303 response which redirects the browser or requesting client application to the most recent version of the text.  Requests for texts without specification of the format will return a list of links to the available formats and versions.
 
 Example requests, HTTP status code and returned representation are provided below.
 
@@ -49,7 +49,7 @@ __URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA`
 
 __HTTP Response Status__: 303 
 
-__Returned Representation__: Most recent version of the diplomatic HTML edition of the text
+__Returned Representation__: a list of links to available formats and versions of this text. 
 
 ---
 
@@ -57,7 +57,7 @@ __URI__: `http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA.YY
 
 __HTTP Response Status__: 303
 
-__Returned Representation__: HTML representation of either the requested exemplar (or if no longer example, the most recent version) of the diplomatic HTML edition of the text
+__Returned Representation__: a list of links to available formats of the requested exemplar (or if no longer example, the most recent version) of the text
 
 ---
 
