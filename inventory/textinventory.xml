@@ -39,9 +39,9 @@
                 <label xml:lang="eng">Sahidica New Testament</label>
             </edition>
         </work>
-        <work urn="urn:cts:copticLit:nt.corinthians" xml:lang="grc">
-            <title xml:lang="eng">Corinthians</title>
-            <edition urn="urn:cts:copticLit:nt.corinthians.sahidica">
+        <work urn="urn:cts:copticLit:nt.1cor" xml:lang="grc">
+            <title xml:lang="eng">First Corinthians</title>
+            <edition urn="urn:cts:copticLit:nt.1cor.sahidica">
                 <label xml:lang="eng">Sahidica New Testament</label>
             </edition>
         </work>

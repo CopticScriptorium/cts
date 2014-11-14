@@ -26,49 +26,54 @@
     </xsl:template>
     
     <xsl:template match="cts:work">
+        <xsl:variable name="lang">
+            <xsl:call-template name="fix_lang_code">
+                <xsl:with-param name="lang" select="cts:title/@xml:lang"/>
+            </xsl:call-template>
+        </xsl:variable>
         <rdf:Description rdf:about="{concat($baseurl,@urn)}">
             <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"></rdf:type>
-            <dc:title xml:lang="{cts:title/@xml:lang}"><xsl:value-of select="cts:title"></xsl:value-of></dc:title>
+            <dc:title xml:lang="{$lang}"><xsl:value-of select="cts:title"></xsl:value-of></dc:title>
         </rdf:Description>
         <xsl:apply-templates select="cts:edition"/>
     </xsl:template>
     
     <xsl:template match="cts:edition">
+        <xsl:variable name="lang">
+            <xsl:call-template name="fix_lang_code">
+                <xsl:with-param name="lang" select="cts:label/@xml:lang"/>
+            </xsl:call-template>
+        </xsl:variable>
         <rdf:Description rdf:about="{concat($baseurl,@urn)}">
             <rdf:type rdf:resource="http://lawd.info/ontology/WrittenWork"></rdf:type>
-            <rdfs:label xml:lang="{cts:label/@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of></rdfs:label>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of></rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
         </rdf:Description>
         <!-- This is Coptic Scriptorium specific - we want to represent for each conceptualization of the 
              written work visualizations of the diplomatic, normalized, tei and html as separate LAWD 'editions' -->
-        <rdf:Description rdf:about="{concat($baseurl,@urn,'/dipl/xml')}">
+        <rdf:Description rdf:about="{concat($baseurl,@urn,'/tei/xml')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
-            <rdfs:label xml:lang="{cts:label/@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Diplomatic xml XML Edition)</rdfs:label>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Diplomatic xml XML Edition)</rdfs:label>
+            <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
+        </rdf:Description>
+        <rdf:Description rdf:about="{concat($baseurl,@urn,'/paula/xml')}">
+            <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Normalized xml XML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
         </rdf:Description>
         <rdf:Description rdf:about="{concat($baseurl,@urn,'/dipl/html')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
-            <rdfs:label xml:lang="{cts:label/@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Diplomatic HTML Edition)</rdfs:label>
-            <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
-        </rdf:Description>
-        <rdf:Description rdf:about="{concat($baseurl,@urn,'/norm/xml')}">
-            <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
-            <rdfs:label xml:lang="{cts:label/@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Normalized xml XML Edition)</rdfs:label>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Diplomatic HTML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
         </rdf:Description>
         <rdf:Description rdf:about="{concat($baseurl,@urn,'/norm/html')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
-            <rdfs:label xml:lang="{cts:label/@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Normalized HTML Edition)</rdfs:label>
-            <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
-        </rdf:Description>
-        <rdf:Description rdf:about="{concat($baseurl,@urn,'/ana/xml')}">
-            <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
-            <rdfs:label xml:lang="{cts:label/@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Analytic xml XML Edition)</rdfs:label>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Normalized HTML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
         </rdf:Description>
         <rdf:Description rdf:about="{concat($baseurl,@urn,'/ana/html')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
-            <rdfs:label xml:lang="{cts:label/@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Analytic HTML Edition)</rdfs:label>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Analytic HTML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
         </rdf:Description>
         
@@ -76,10 +81,31 @@
     </xsl:template>
     
     <xsl:template match="cts:translation">
+        <xsl:variable name="lang">
+            <xsl:call-template name="fix_lang_code">
+                <xsl:with-param name="lang" select="cts:label/@xml:lang"/>
+            </xsl:call-template>
+        </xsl:variable>
         <rdf:Description rdf:about="{concat($baseurl,@urn)}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Translation"></rdf:type>
-            <rdfs:label xml:lang="{@xml:lang}"><xsl:value-of select="cts:label"></xsl:value-of></rdfs:label>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of></rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
         </rdf:Description>
+    </xsl:template>
+    
+    <xsl:template name="fix_lang_code">
+        <xsl:param name="lang"/>
+        <!-- this is a bit of a hack .. RDF wants 2 letter lang codes when they are available, but
+             CTS wants the 3 letter codes.  This needs to be improved to do the right thing for
+             languages other than English 
+        -->
+        <xsl:choose>
+            <xsl:when test="$lang='eng'">
+                <xsl:value-of select="'en'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$lang"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
