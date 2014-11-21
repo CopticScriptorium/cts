@@ -9,6 +9,7 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:cts="http://chs.harvard.edu/xmlns/cts"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dct="http://purl.org/dc/terms/"
     exclude-result-prefixes="xs"
     version="2.0">
     
@@ -55,26 +56,31 @@
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
             <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Diplomatic xml XML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
+            <dct:source rdf:resource="{concat($baseurl,@urn)}"/> 
         </rdf:Description>
         <rdf:Description rdf:about="{concat($baseurl,@urn,'/paula/xml')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
             <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Normalized xml XML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
+            <dct:source rdf:resource="{concat($baseurl,@urn)}"/>
         </rdf:Description>
         <rdf:Description rdf:about="{concat($baseurl,@urn,'/dipl/html')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
             <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Diplomatic HTML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
+            <dct:source rdf:resource="{concat($baseurl,@urn)}"/>
         </rdf:Description>
         <rdf:Description rdf:about="{concat($baseurl,@urn,'/norm/html')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
             <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Normalized HTML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
+            <dct:source rdf:resource="{concat($baseurl,@urn)}"/>
         </rdf:Description>
         <rdf:Description rdf:about="{concat($baseurl,@urn,'/ana/html')}">
             <rdf:type rdf:resource="http://lawd.info/ontology/Edition"></rdf:type>
             <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Analytic HTML Edition)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
+            <dct:source rdf:resource="{concat($baseurl,@urn)}"/>
         </rdf:Description>
         
 

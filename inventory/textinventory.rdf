@@ -4,7 +4,8 @@
          xmlns:cs="http://copticscriptorium.org"
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:cts="http://chs.harvard.edu/xmlns/cts"
-         xmlns:dc="http://purl.org/dc/elements/1.1/">
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:dct="http://purl.org/dc/terms/">
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22">
       <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"/>
       <dc:title xml:lang="en">Acephalous Work 22</dc:title>
@@ -18,26 +19,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB">
       <rdf:type rdf:resource="http://lawd.info/ontology/WrittenWork"/>
@@ -48,26 +54,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YB (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YB (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YB (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YB (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YB (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC">
       <rdf:type rdf:resource="http://lawd.info/ontology/WrittenWork"/>
@@ -78,26 +89,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZC (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZC (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZC (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZC (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZC (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF">
       <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"/>
@@ -112,26 +128,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript XL (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript XL (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript XL (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript XL (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript XL (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA">
       <rdf:type rdf:resource="http://lawd.info/ontology/WrittenWork"/>
@@ -142,26 +163,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript YA (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH">
       <rdf:type rdf:resource="http://lawd.info/ontology/WrittenWork"/>
@@ -172,26 +198,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZH (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZH (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZH (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZH (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript ZH (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.mark">
       <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"/>
@@ -206,26 +237,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor">
       <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"/>
@@ -240,26 +276,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">Sahidica New Testament (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph">
       <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"/>
@@ -274,26 +315,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB">
       <rdf:type rdf:resource="http://lawd.info/ontology/WrittenWork"/>
@@ -304,26 +350,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns">
       <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"/>
@@ -338,26 +389,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BA (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB">
       <rdf:type rdf:resource="http://lawd.info/ontology/WrittenWork"/>
@@ -368,26 +424,31 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript BB (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:ap.001">
       <rdf:type rdf:resource="http://lawd.info/ontology/ConceptualWork"/>
@@ -402,25 +463,30 @@
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript EG (Diplomatic xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/paula/xml">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript EG (Normalized xml XML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/dipl/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript EG (Diplomatic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/norm/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript EG (Normalized HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG"/>
    </rdf:Description>
    <rdf:Description rdf:about="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG/ana/html">
       <rdf:type rdf:resource="http://lawd.info/ontology/Edition"/>
       <rdfs:label xml:lang="en">White Monastery Manuscript EG (Analytic HTML Edition)</rdfs:label>
       <lawd:embodies rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001"/>
+      <dct:source rdf:resource="http://copticscriptorium.org/urn:cts:copticLit:ap.001.MONB_EG"/>
    </rdf:Description>
 </rdf:RDF>
