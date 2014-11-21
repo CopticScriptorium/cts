@@ -1,9 +1,9 @@
 Data Citation/Linking User Stories
 ===
 
-__story__ | __enabled by__ | __fulfilled?__
---- | --- | --
-1. As a researcher I want to cite HTML normalized visualizations in my publication. | using e.g.  `http://copticscriptorium.org/<CTSURN>/norm/html` | yes
+| __story__ | __enabled by__ | __fulfilled__ |
+| --- | --- | --- |
+| 1. As a researcher I want to cite HTML normalized visualizations in my publication. | using e.g.  `http://copticscriptorium.org/<CTSURN>/norm/html` | yes |
 2. As a researcher I want to link from the HTML normalized or analytic visualizations to the corresponding location in the diplomatic visualization to check the analysis/normalization. | the identifiers  `http://copticscriptorium.org/<CTSURN>/norm/html`, `http://copticscriptorium.org/<CTSURN>/norm/ana`, ``http://copticscriptorium.org/<CTSURN>/dipl/html` and `dct:source` relationship linking these to the same source | partially - may also require passage level citation scheme and alignment of this across visualizations
 3. As a researcher I want to search for all forms of a dictionary headword in a text or the entire corpus and cite its occurence in the specific version viewed of the text (where "text" means e.g. the LAWD written work or CTS edition). | the identifiers `http://copticscriptorium.org/<CTSURN>`,  `http://copticscriptorium.org/<CTSURN>/norm/html`, `http://copticscriptorium.org/<CTSURN>/norm/ana`, ``http://copticscriptorium.org/<CTSURN>/dipl/html` | partially - may also require passage level citation scheme and support for subreferences
 4. As a researcher I want to search for all occurences of a specific POS tag or tags in a text or the entire corpus and cite its occurence, in the context of the phrase in which it occurs, in the text, accompanied by the details of the query, and the specific annotations consulted. | the identifiers `http://copticscriptorium.org/<CTSURN>`,  `http://copticscriptorium.org/<CTSURN>/norm/html`, `http://copticscriptorium.org/<CTSURN>/norm/ana`, ``http://copticscriptorium.org/<CTSURN>/dipl/html` | partially - may also require passage level citation scheme and support for subreferences; will also require definition and use of a provenance standard (e.g. maybe see https://researchobject.github.io/specifications/bundle/) for query details; may require stable identifiers for the annotations themselves.
