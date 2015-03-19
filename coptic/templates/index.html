@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% verbatim %}
+	<div class="content primary" >
+
+		<div class="grid inner">
+
+			<div class="text-list list">
+				<div class="text-author" ng-repeat="collection in texts">
+					<div class="text-work" >
+						<div class="work-title-wrap">
+							<h2 class="work-title">{{collection.title}}</h2>
+							<h4 class="work-title-urn">urn:cts:copticLit:{{collection.urn_code}}</h4>
+						</div>
+						<div class="text-subwork" ng-repeat="text in collection.texts" ng-class-even="'even'" data-slug="{{text.slug}}">
+
+
+								<a href="/texts/{{text.slug}}" class="item-title-wrap">
+									<span class="text-item item-title">{{text.title}}</span>
+								</a>
+								<!--div class="information-tab-wrap version-wrap page-tabs">
+									<a href="/texts/{{text.slug}}" class="text-item information" data-type="information">
+										<span class="urn">Information</span>
+									</a>
+								</div-->
+
+								<div class="html-wrap version-wrap page-tabs">
+									<span class="version-label">
+										HTML:
+									</span>
+									<a href="/texts/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}" ng-repeat="format in collection.html_visualization_formats" data-type="{{format.slug}}">
+										<span class="urn">{{format.title}}</span>
+									</a>
+								</div>
+
+								<div class="other-versions-wrap version-wrap page-tabs">
+									<span class="version-label">
+										Resources:
+									</span>
+									<a href="{{collection.github}}" class="text-item tei" target="_blank">
+										<span class="urn">TEI</span>
+										<span class="fa fa-external-link"></span>
+									</a>
+
+									<a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c={{collection.annis_code}}" class="text-item annis" target="_blank">
+										<span class="urn">ANNIS</span>
+										<span class="fa fa-external-link"></span>
+									</a>
+
+								</div>
+
+								<a href="/" class="close-selected-text">
+									<span class="fa fa-times"></span>
+								</a> 
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+			<div id="selected_text" class="selected-text-wrap page-content" ng-hide="!selected_text">
+
+				<div class="text-format" ng-repeat="visualization in selected_text.html_visualizations" id="{{visualization.slug}}" >
+					<h3  class="subtitle">{{visualization.title}}</h3>
+					<div  class="coptic-text html" ng-bind-html="visualization.html | unsafe">
+					</div>
+				</div>
+
+				<!-- div id="information" class="meta-information">
+					<h3  class="subtitle">Information</h3>
+					<div class="meta-item" ng-repeat="meta_item in selected_text.meta">
+						<span class="meta-label">
+							{{meta_item.search_field}}:
+						</span>
+						<span class="meta-value">
+							&nbsp;{{meta_item.title}}
+						</span>
+					</div>
+				</div -->
+
+
+				<div class="citation-help">
+					<h3 class="subtitle">Cite this Document</h3>
+					<p>
+						In order to cite this document, please use the following URN structure:
+					</p>
+					<p>
+						<span class="label">Text (General):</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}</a>
+					</p>
+					<p ng-repeat="visualization in selected_text.html_visualizations">
+						<span class="label">{{visualization.title}} HTML:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/{{visualization.slug}}/html" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/{{visualization.slug}}/html</a>
+					</p>
+					<p>
+						<span class="label">TEI XML:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/tei/xml" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/tei/xml</a>
+					</p>
+					<p>
+						<span class="label">Paula XML:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/paula/xml" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/paula/xml</a>
+					</p>
+					<p>
+						<span class="label">reIANNIS:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/reiannis" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/reiannis</a>
+					</p>
+					<p>
+						<span class="label">Corpus:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}</a>
+					</p>
+					<!--p>
+						<span class="label">Author:</span>
+						<a href="urn:cts:copticLit:{{selected_text.collection.urn_code}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}</a>
+					</p-->
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div id="loading_modal" class="coptic-modal">
+		<div class="loading-modal-inner">
+			<span class="fa fa-spinner fa-spin">
+			</span>
+		</div>
+	</div>
+	{% endverbatim %}
+{% endblock %}

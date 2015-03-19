@@ -1,0 +1,38 @@
+# --------------------
+# SASS Files
+# --------------------
+*/.sass-cache/
+
+# --------------------
+# Bower Files
+# --------------------
+*/.bower-*/
+#*/bower_components
+
+# --------------------
+# App Files
+# --------------------
+*/test/coverage/
+*/modules/public/
+*/modules/views/
+*/public/build/
+*/min/
+sitemap.xml
+*sitemap.xml
+**/sitemap.xml
+robots.txt
+*robots.txt
+**/robots.txt
+*.sw[po]
+__pycache__
+*__pycache__
+**__pycache__
+*settings.py
+
+# --------------------
+# Env Files
+# --------------------
+apache2
+bin
+lib
+myproject

@@ -1,0 +1,82 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html ng-app="coptic" class="no-js">
+  <head prefix="og: http://ogp.me/ns#, cts: http://chs.harvard.edu/xmlns/cts">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+    	{% if title %}{{ title }} | {% endif %} 
+    	{{ site_title | default:_('Coptic Scriptorium URN Resolver') }}
+    </title>
+    <meta name="description" content="Coptic Scriptorium URN Resolver">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="icon" type="image/jpg" href="/static/img/logo.jpg">
+    <style>@import url('http://fonts.googleapis.com/css?family=Merriweather:400,300|Montserrat:400,700|Open+Sans:400,300,600|');</style>
+    <link rel="stylesheet" href="http://use.edgefonts.net/c/b243fd/1w;asul,2,WXx:R:n4/d">
+    <script src="http://use.edgefonts.net/asul:n4:default.js" type="text/javascript"></script>
+
+    <!-- Opengraph Meta -->
+    <meta property="og:title" content="{{work_title}} Coptic Scriptorium Text Server">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Coptic Scriptorium Text Server">
+    <meta property="og:image" content="/static/img/logo.jpg">
+
+    <!-- CTS Meta -->
+    <meta name="corpus_urn" property="cts:corpus_urn" content=""/>
+    <meta name="mss_urn" property="cts:mss_urn" content=""/> 
+    <meta name="document_urn" property="cts:document_urn" content=""/> 
+
+  </head>
+  <body ng-cloak class="text-server" data-ng-controller="TextController as text">
+
+	{% include "header.html" %}
+
+    <!-- Primary grid-->
+    <div class="grid primary">
+		<main class="main" role="main">	
+
+			{% block content %}{% endblock %}
+
+		</main>
+    </div>
+    <footer>
+      <div class="footer-text">
+        <div class="footer-title-wrap">
+        	<a href="/">
+	            <h3 class="site-title">Coptic Scriptorium</h3>
+	        </a>
+	    </div>
+        <div class="footer-text-column-1">
+          <p>The project is supported by the <a href="http://www.neh.gov" target="_blank">National Endowment for the Humanities</a> <a href="http://www.neh.gov/divisions/odh" target="_blank">Office of Digital Humanities</a> and <a href="http://www.neh.gov/divisions/preservation" target="_blank">Division of Preservation and Access</a>, the <a href="http://www.pacific.edu" target="blank">University of the Pacific</a>, and <a href="http://www.georgetown.edu" target="_blank">Georgetown University</a>. </p>
+        </div>
+        <div  class="footer-logos-wrap">
+          <img class="footer-logo up-logo" src="/static/img/footer_logo1.png">
+          <img class="footer-logo gt-logo" src="/static/img/footer_logo2.png">
+          <img class="footer-logo neh-logo" src="/static/img/footer_logo3.png">
+        </div>
+        <span class="copyright">
+          Copyright Coptic Scriptorium, 2015.
+        </span>
+      </div>
+    </footer>
+    <div id="loading_modal" class="hidden">
+      <div class="loading-modal-inner"><span class="fa fa-spinner fa-fw fa-spin"></span>
+      </div>
+    </div>
+  </body>
+  <!-- javascripts-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <!--script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js')-->
+  <!--script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-resource.js")-->
+  <script>window.jQuery || document.write('<script src="javascripts/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+  <script src="/static/js/angular.js"></script>
+  <script src="/static/js/angular-route.js"></script>
+  <script src="/static/js/angular-resource.js"></script>
+  <script src="/static/js/angular-sanitize.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script type="text/javascript" src="/static/js/headroom.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/headroom/0.6.0/angular.headroom.min.js"></script>
+</html>

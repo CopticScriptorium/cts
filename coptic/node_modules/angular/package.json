@@ -1,0 +1,54 @@
+{
+  "name": "angular",
+  "version": "1.4.0-beta.1",
+  "description": "HTML enhanced for web apps",
+  "main": "angular.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular/angular.js.git"
+  },
+  "keywords": [
+    "angular",
+    "framework",
+    "browser",
+    "client-side"
+  ],
+  "author": {
+    "name": "Angular Core Team",
+    "email": "angular-core+npm@google.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/angular.js/issues"
+  },
+  "homepage": "http://angularjs.org",
+  "gitHead": "f2dd3c79b0a73a8893375920f5a391ab1cef181f",
+  "_id": "angular@1.4.0-beta.1",
+  "_shasum": "990bb2edea18d575cf9bbfecabe0ab79ac6796b0",
+  "_from": "angular@1.4.0-beta.1",
+  "_npmVersion": "2.0.2",
+  "_nodeVersion": "0.10.26",
+  "_npmUser": {
+    "name": "angularcore",
+    "email": "angular-core+npm@google.com"
+  },
+  "maintainers": [
+    {
+      "name": "bclinkinbeard",
+      "email": "ben.clinkinbeard@gmail.com"
+    },
+    {
+      "name": "angularcore",
+      "email": "angular-core+npm@google.com"
+    }
+  ],
+  "dist": {
+    "shasum": "990bb2edea18d575cf9bbfecabe0ab79ac6796b0",
+    "tarball": "http://registry.npmjs.org/angular/-/angular-1.4.0-beta.1.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/angular/-/angular-1.4.0-beta.1.tgz"
+}

@@ -1,0 +1,139 @@
+<header >
+  <div class="header-row header-row-top header-info-wrap clearfix">
+
+    <div class="header-logos">
+      <div class="header-logo-top-wrap">
+        <img class="header-logo header-logo-left" src="/static/img/header_logo_left.png">
+        <img class="header-logo header-logo-center" src="/static/img/header_logo_center.png">
+        <img class="header-logo header-logo-right" src="/static/img/header_logo_right.png">
+      </div>
+      <div class="header-logo-bottom-wrap">
+        <img class="header-logo-bottom" src="/static/img/header_logo_bottom.png">
+      </div>
+
+    </div>
+
+    <form name="urn_form" class="urn-form">
+      <input type="text" class="urn-text" placeholder="Enter URN..." ng-model="entered_urn">
+      <span class="fa fa-chevron-right" ng-click="urn_submit()"></span>
+    </form>
+
+  </div>
+  <div class="header-row header-row-bottom search-tools-wrap">
+
+    <!-- Search by text, year, author, country of origin, hagiography, bible texts-->
+    <div class="search-tools">
+
+      <div class="input-tool-wrap tool-wrap">
+        <input type="text" class="text-search-input input-tool" placeholder="Text search"/ ng-model="text_search">
+        <span class="fa fa-keyboard-o" ng-click="toggle_keyboard( $event )"></span>
+        <div class="input-tool-panel tool-panel hidden">
+          <div class="keyboard">
+            <div class="row-1">
+              <span class="key" ng-click="press_key($event)">ⲑ</span>
+              <span class="key" ng-click="press_key($event)">ⲱ</span>
+              <span class="key" ng-click="press_key($event)">ⲉ</span>
+              <span class="key" ng-click="press_key($event)">ⲣ</span>
+              <span class="key" ng-click="press_key($event)">ⲧ</span>
+              <span class="key" ng-click="press_key($event)">ⲯ</span>
+              <span class="key" ng-click="press_key($event)">ⲩ</span>
+              <span class="key" ng-click="press_key($event)">ⲓ</span>
+              <span class="key" ng-click="press_key($event)">ⲟ</span>
+              <span class="key" ng-click="press_key($event)">ⲡ</span>
+              <span class="key" ng-click="press_key($event)">ϣ</span>
+            </div>
+            <div class="row-2">
+              <span class="key" ng-click="press_key($event)">ⲁ</span>
+              <span class="key" ng-click="press_key($event)">ⲥ</span>
+              <span class="key" ng-click="press_key($event)">ⲇ</span>
+              <span class="key" ng-click="press_key($event)">ϥ</span>
+              <span class="key" ng-click="press_key($event)">ⲅ</span>
+              <span class="key" ng-click="press_key($event)">ϩ</span>
+              <span class="key" ng-click="press_key($event)">ϫ</span>
+              <span class="key" ng-click="press_key($event)">ⲕ</span>
+              <span class="key" ng-click="press_key($event)">ⲗ</span>
+            </div>
+            <div class="row-3">
+              <span class="key" ng-click="press_key($event)">ⲍ</span>
+              <span class="key" ng-click="press_key($event)">ⲝ</span>
+              <span class="key" ng-click="press_key($event)">ⲭ</span>
+              <span class="key" ng-click="press_key($event)">ⲫ</span>
+              <span class="key" ng-click="press_key($event)">ⲃ</span>
+              <span class="key" ng-click="press_key($event)">ⲛ</span>
+              <span class="key" ng-click="press_key($event)">ⲙ</span>
+              <span class="key" ng-click="press_key($event)">ϭ</span>
+              <span class="key" ng-click="press_key($event)">ϯ</span>
+              <span class="key" ng-click="press_key($event)">ⲏ</span>
+            </div>
+            <span class="key space"  ng-click="press_key($event)"> </span>
+          </div>
+          <span class="fa fa-times raise-dropdowns" ng-click="raise_dropdowns()"></span>
+        </div>
+      </div> 
+
+      {% for field in search_fields %}
+        <div class="{{field.title | lower}}-tool-wrap tool-wrap" data-field="{{field.title | lower}}">
+          <div class="{{field.title | lower}}-tool tool-head" ng-click="toggle_tool_panel( $event )" >
+            <span class="tool-text"> {{field.title}} </span>
+            <span class="fa fa-chevron-down"></span>
+          </div>
+          <div class="{{field.title | lower}}-tool-panel tool-panel hidden">
+            {% for value in field.values %}
+              <div class="tool-search-item" ng-click="toggle_search_term( $event )" data-filter="{{value.title}}" data-searchid="{{value.id}}">
+                <span>{{value.title}}</span>
+              </div>
+            {% endfor %}
+            <span class="fa fa-times raise-dropdowns" ng-click="raise_dropdowns()"></span>
+          </div>
+        </div>
+      {% endfor %}
+      <!-- div class="advanced-search-tool-wrap tool-wrap" data-field="{{field.title | lower}}">
+        <div class="advanced-search-tool tool-head" ng-click="toggle_tool_panel( $event )" >
+          <span class="tool-text">Advanced Search</span>
+          <span class="fa fa-chevron-down"></span>
+        </div>
+        <div class="advanced-search-tool-panel tool-panel hidden">
+          {% for search_field in secondary_search_fields %}
+            <div class="advanced-search-tool-wrap tool-wrap" data-field="{{search_field.title}}">
+              <div class="advanced-search-tool-head" ng-click="toggle_advanced_search_tool_panel( $event )">
+                <span>{{search_field.title}}</span>
+                <span class="fa fa-chevron-down"></span>
+              </div>
+              <div class="{{search_field.title | lower}}-advanced-search-sub-tool-panel advanced-search-sub-tool-panel hidden">
+                {% for value in search_field.values %}
+                  <div class="advanced-search-tool-search-item tool-search-item" ng-click="toggle_search_term( $event )" data-filter="{{value.title}}" data-searchid="{{value.id}}">
+                    <span>{{value.title}}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div -->
+      <div class="clear-all-tool-wrap tool-wrap" ng-hide="!filters.length">
+        <div class="{{field.title | lower}}-tool tool-head" ng-click="clear_all_search_terms()" >
+          <span class="tool-text">Clear All</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</header>
+
+{% verbatim %}
+<div class="filters-wrap" ng-hide="!filters.length">
+  <div class="grid inner">
+    <div class="filters-wrap-inner">
+
+      <h4 class="subtitle">Filters:</h4>
+
+      <div class="filter-item" ng-repeat="filter in filters" data-filter="{{filter.filter}}" ng-click="remove_search_term($event)" data-field="{{filter.field}}">
+        <span class="filter-text">{{filter.field}}: {{filter.filter}}</span>
+        <span class="fa fa-times"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endverbatim %}
