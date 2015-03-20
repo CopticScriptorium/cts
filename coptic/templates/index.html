@@ -60,7 +60,10 @@
 
 				<div class="text-format" ng-repeat="visualization in selected_text.html_visualizations" id="{{visualization.slug}}" >
 					<h3  class="subtitle">{{visualization.title}}</h3>
-					<div  class="coptic-text html" ng-bind-html="visualization.html | unsafe">
+					<!-- div  class="coptic-text html" ng-bind-html="visualization.html | unsafe">
+					</div-->
+					<div class="coptic-text html">
+						<iframe width="900" height="900" ng-src="{{load_single_iframe( selected_text.collection.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
 					</div>
 				</div>
 

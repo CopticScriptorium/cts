@@ -268,6 +268,13 @@ angular.module('coptic')
 
 	};
 
+	$scope.load_single_iframe = function( collection_annis_name, selected_text_name, visualization_slug ){
+	// Load an iframe src elem
+
+		return "https://corpling.uis.georgetown.edu/annis/embeddedvis/htmldoc/" + collection_annis_name + "/" + selected_text_name + "?config=" + visualization_slug;
+
+	};
+
 
 	$scope.toggle_tool_panel = function( e ) {
 	// Toggle the search tool panels

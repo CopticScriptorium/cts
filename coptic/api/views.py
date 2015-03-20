@@ -287,6 +287,7 @@ class CopticEncoder(json.JSONEncoder):
 			collection['html_corpora_code'] = obj.html_corpora_code 
 			collection['slug'] = obj.slug 
 			collection['annis_code'] = obj.annis_code 
+			collection['annis_corpus_name'] = obj.annis_corpus_name
 			collection['github'] = obj.github 
 			collection['html_visualization_formats'] = []
 

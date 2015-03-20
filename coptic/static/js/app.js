@@ -3,7 +3,13 @@
  * 
  */
 
-angular.module('coptic', ['csFilters', 'ngSanitize', 'ngRoute', 'headroom']);
+angular.module('coptic', ['csFilters', 'ngSanitize', 'ngRoute', 'headroom']).config(function($sceDelegateProvider){
+
+	$sceDelegateProvider.resourceUrlWhitelist([
+		'self',
+		'https://corpling.uis.georgetown.edu/**']);
+
+});
 
 
 angular.module('csFilters', [])
@@ -357,6 +363,13 @@ angular.module('coptic')
 		$scope.text_query.model = "texts";
 		$scope.text_query.slug = $scope.path[2];
 		$scope.get_texts();
+
+	};
+
+	$scope.load_single_iframe = function( collection_annis_name, selected_text_name, visualization_slug ){
+	// Load an iframe src elem
+
+		return "https://corpling.uis.georgetown.edu/annis/embeddedvis/htmldoc/" + collection_annis_name + "/" + selected_text_name + "?config=" + visualization_slug;
 
 	};
 
