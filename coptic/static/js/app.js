@@ -171,7 +171,11 @@ angular.module('coptic')
 	$scope.$watch(
 			function(){return $scope.text_search},
 			function(val){
-				$scope.add_text_search();	
+				/* 
+				 * For now, disable the functionality of the text search until 
+				 * it is resolved in the future to ANNIS
+				 */
+				// $scope.add_text_search();	
 			}
 		);
 

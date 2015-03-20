@@ -84,6 +84,22 @@ class Collection(models.Model):
 		self.modified = datetime.datetime.today()
 		return super(Collection, self).save(*args, **kwargs)
 
+class TextMeta(models.Model):
+	"""
+	Meta item ingested from ANNIS	
+	"""
+
+	name = models.CharField(max_length=200)
+	value = models.CharField(max_length=200)
+	pre = models.CharField(max_length=200)
+	corpus_name = models.CharField(max_length=200)
+
+	class Meta:
+		verbose_name = "Text Meta Item"
+
+	def __str__(self):
+		return self.name + ": " + self.value 
+
 
 class Text(models.Model):
 	"""
@@ -98,6 +114,7 @@ class Text(models.Model):
 	collection = models.ForeignKey(Collection, blank=True, null=True)
 	ingest = models.ForeignKey(Ingest, blank=True, null=True)
 	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True, null=True)
+	text_meta = models.ManyToManyField(TextMeta, blank=True, null=True)
 
 
 	def __str__(self):

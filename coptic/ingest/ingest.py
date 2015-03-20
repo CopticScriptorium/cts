@@ -22,7 +22,7 @@ def fetch_texts( ingest ):
 	"""
 
 	# Get the text and ingest models (prevent circular import)
-	from texts.models import Collection, Author, Text, HtmlVisualization, HtmlVisualizationFormat 
+	from texts.models import Collection, Author, Text, HtmlVisualization, HtmlVisualizationFormat, TextMeta 
 	from ingest.models import Ingest 
 	from annis.models import AnnisServer
 
@@ -48,6 +48,51 @@ def fetch_texts( ingest ):
 		doc_name_annotations = soup.find_all("annotation")
 
 		for doc_name in doc_name_annotations:
+
+			# Create a New Text	
+			# Text: Title, slug, author, collection, ingest, xml_tei, xml_paula, html_visualization
+
+			# First, process the slug, and title
+			title = doc_name.find("name").text
+			slug = slugify( title ) 
+
+			# Check if this text already exists for this ingest
+			# texts = Text.objects.filter(slug=slug, ingest=ingest.id).count()
+			# if texts > 0:
+				# If it does exist, get that text to update
+			#	text = Text.objects.get(slug=slug, ingest=ingest.id) 
+			#else:
+
+			# Create a new text
+			text = Text()
+
+			# Set the title and slug on the text
+			text.title = title
+			text.slug = slug 
+			text.save()
+
+			print(" -- Importing", collection.title, text.title, text.id)
+
+
+			# Query ANNIS for the metadata for the document
+			meta_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + collection.annis_corpus_name + "/" + title
+			res = request.urlopen( meta_query_url )
+			xml = res.read() 
+			soup = BeautifulSoup( xml )
+			meta_items = soup.find_all("annotation")
+
+			# Save each meta item for the text document
+			for meta_item in meta_items:
+				text_meta = TextMeta()
+				text_meta.name = meta_item.find("name").text
+				text_meta.value = meta_item.find("value").text
+				text_meta.pre = meta_item.find("pre").text
+				meta_corpus_name = meta_item.find("corpusName")
+				if meta_corpus_name:
+					text_meta.corpus_name = meta_corpus_name.text 
+				text_meta.save()
+				text.text_meta.add(text_meta)
+
 
 			# Query ANNIS for each HTML format of the documents
 			for html_format in collection.html_visualization_formats.all():
@@ -82,32 +127,6 @@ def fetch_texts( ingest ):
 					for script_elem in script_elems:
 						text_html = text_html.replace( script_elem, "" )
 
-				# Text: Title, slug, author, collection, ingest, xml_tei, xml_paula, html_visualization
-
-				# First, process the slug, and title
-				title = doc_name.find("name").text
-				slug = slugify( doc_name.find("name").text )
-
-				# Check if this text already exists for this ingest
-				texts = Text.objects.filter(slug=slug, ingest=ingest.id).count()
-				if texts > 0:
-					# If it does exist, get that text to update
-					text = Text.objects.get(slug=slug, ingest=ingest.id) 
-				else:
-					# Create a new text
-					text = Text()
-
-					# Set the title and slug on the text
-					text.title = title
-					text.slug = slug 
-
-
-				# Add the collection and author keys
-				text.collection = Collection.objects.get( id=collection.id )
-
-				# Finally, add the ingest id to the text and save
-				text.ingest = Ingest.objects.get( id=ingest.id )
-
 				# Create the new html_visualization
 				html_visualization = HtmlVisualization()
 				html_visualization.visualization_format = html_format
@@ -115,10 +134,15 @@ def fetch_texts( ingest ):
 				html_visualization.save()
 
 				# Add the html visualization to the text
-				text.save()
 				text.html_visualizations.add(html_visualization)
 
-				print(" -- Importing", text.title, html_format.slug, text.id)
+
+			# Add the collection 
+			text.collection = collection 
+
+			# Add the ingest
+			text.ingest = ingest 
+			text.save()
 				
 	driver.quit()
 

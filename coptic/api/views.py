@@ -1,7 +1,7 @@
 import pdb
 import json
 from api.json import json_view
-from texts.models import Text, Collection, Author, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat
+from texts.models import Text, Collection, Author, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
 from ingest.models import Ingest
 
 ALLOWED_MODELS = ['texts', 'collections']
@@ -32,100 +32,111 @@ def _query( params={} ):
 
 	# If there's a model to query, such as collections or texts
 	if 'model' in params:
-		most_recent_ingest = Ingest.objects.all().order_by('-id')[0]
+		most_recent_ingests = Ingest.objects.all().order_by('-id')
+		if len( most_recent_ingests ) > 0:
+			most_recent_ingest = most_recent_ingests[0]
 
-		# If this is a query to the collections model
-		if params['model'] == 'collections':
+			# If this is a query to the collections model
+			if params['model'] == 'collections':
 
-			# If there are search filters included with the sanitized params
-			if "filters" in params:
+				# If there are search filters included with the sanitized params
+				if "filters" in params:
 
-				collection_ids = []
+					collection_ids = []
 
-				# Process the filters and find the collections based on the ID
-				for f in params['filters']:
-					if f['field'] == "corpus_urn":	
-						corpus_collections = Collection.objects.filter(urn_code=f['filter'])
-						for c in corpus_collections:
-							collection_ids.append( c.id )
+					# Process the filters and find the collections based on the ID
+					for f in params['filters']:
+						if f['field'] == "corpus_urn":	
+							corpus_collections = Collection.objects.filter(urn_code=f['filter'])
+							for c in corpus_collections:
+								collection_ids.append( c.id )
 
-					elif f['field'] == "text_search":
-						ts_collections = Collection.objects.all()
+						elif f['field'] == "text_search":
+							ts_collections = Collection.objects.all()
 
-						for ts_collection in ts_collections:
-							collection_has_textsearch_match = False
-							ts_texts = Text.objects.filter(collection=ts_collection.id)
+							for ts_collection in ts_collections:
+								collection_has_textsearch_match = False
+								ts_texts = Text.objects.filter(collection=ts_collection.id)
 
-							for ts_text in ts_texts:
-								ts_html_visualizations = ts_text.html_visualizations.all()
+								for ts_text in ts_texts:
+									ts_html_visualizations = ts_text.html_visualizations.all()
 
-								for ts_html_visualization in ts_html_visualizations:
-									if f['filter'] in ts_html_visualization.html:
-										collection_has_textsearch_match = True
+									for ts_html_visualization in ts_html_visualizations:
+										if f['filter'] in ts_html_visualization.html:
+											collection_has_textsearch_match = True
+											break
+
+									if collection_has_textsearch_match == True:
 										break
 
-								if collection_has_textsearch_match == True:
-									break
+								if collection_has_textsearch_match:
+									collection_ids.append( ts_collection.id )
 
-							if collection_has_textsearch_match:
-								collection_ids.append( ts_collection.id )
+						else:
+							sfv = SearchFieldValue.objects.filter(id=f['id'])
+							collection_ids = collection_ids + list( sfv.values_list('collections__id', flat=True) )
 
-					else:
-						sfv = SearchFieldValue.objects.filter(id=f['id'])
-						collection_ids = collection_ids + list( sfv.values_list('collections__id', flat=True) )
+					# Get Unique values from the ids
+					cid_set = set(collection_ids)
+					collection_ids = set(cid_set)
 
-				# Get Unique values from the ids
-				cid_set = set(collection_ids)
-				collection_ids = set(cid_set)
+					# query collections and texts
+					collections = Collection.objects.filter(id__in=collection_ids)
+					for collection in collections:
+						collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
 
-				# query collections and texts
-				collections = Collection.objects.filter(id__in=collection_ids)
-				for collection in collections:
-					collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
-
-			else:
-
-				# If there's a slug to query a specific collection
-				if "query" in params and "slug" in params['query']:
-					collections = Collection.objects.filter(slug=params['query']['slug'])
 				else:
-					# establish all the queries to be run
-					collections = Collection.objects.all()
 
-				for collection in collections:
-					collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+					# If there's a slug to query a specific collection
+					if "query" in params and "slug" in params['query']:
+						collections = Collection.objects.filter(slug=params['query']['slug'])
+					else:
+						# establish all the queries to be run
+						collections = Collection.objects.all()
 
-			# fetch the results and add to the objects dict
-			jsonproof_queryset(objects, 'collections', collections)
+					for collection in collections:
+						collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+
+				# fetch the results and add to the objects dict
+				jsonproof_queryset(objects, 'collections', collections)
 
 
-		# Otherwise, if this is a query to the texts model
-		elif params['model'] == 'texts':
+			# Otherwise, if this is a query to the texts model
+			elif params['model'] == 'texts':
 
-			if "query" in params and "slug" in params['query']:
-				texts = Text.objects.filter(slug=params['query']['slug'], ingest=most_recent_ingest.id).prefetch_related()
-				for text in texts:
-					text.meta = SearchFieldValue.objects.filter(collections__id=text.collection.id)
-			else:
-				texts = Text.objects.filter(ingest=most_recent_ingest.id)
+				if "query" in params and "slug" in params['query']:
+					texts = Text.objects.filter(slug=params['query']['slug'], ingest=most_recent_ingest.id).prefetch_related()
+					for text in texts:
+						text.meta = SearchFieldValue.objects.filter(collections__id=text.collection.id)
+				else:
+					texts = Text.objects.filter(ingest=most_recent_ingest.id)
 
-			# fetch the results and add to the objects dict
-			jsonproof_queryset(objects, 'texts', texts)
-			
+				# fetch the results and add to the objects dict
+				jsonproof_queryset(objects, 'texts', texts)
+				
 
 	# If the manifest is set in the params, render site manifest 
 	elif 'manifest' in params:
 		# setup the manifest of the archive
 		# Add more in the future
 
-		# establish all the queries to be run
-		most_recent_ingest = Ingest.objects.all().order_by('-id')[0]
-		collections = Collection.objects.all()
-		for collection in collections:
-			collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+		# establish all the queries to be run if there is ingest data
+		most_recent_ingests = Ingest.objects.all().order_by('-id')
+		if len( most_recent_ingests ) > 0:
 
-		# fetch the results and add to the objects dict
-		jsonproof_queryset(objects, 'collections', collections)
+			most_recent_ingest = most_recent_ingests[0]
+			collections = Collection.objects.all()
+
+			for collection in collections:
+				collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+
+			# fetch the results and add to the objects dict
+			jsonproof_queryset(objects, 'collections', collections)
+
+		# In case there is no ingest data, just return the collections
+		else:
+			collections = Collection.objects.all()
+
 
 
 	# Otherwise, no query is specified
