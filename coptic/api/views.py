@@ -106,8 +106,10 @@ def _query( params={} ):
 
 				if "query" in params and "slug" in params['query']:
 					texts = Text.objects.filter(slug=params['query']['slug'], ingest=most_recent_ingest.id).prefetch_related()
-					for text in texts:
-						text.meta = SearchFieldValue.objects.filter(collections__id=text.collection.id)
+
+					# for text in texts:
+					#	text.meta = SearchFieldValue.objects.filter(collections__id=text.collection.id)
+
 				else:
 					texts = Text.objects.filter(ingest=most_recent_ingest.id)
 
@@ -223,16 +225,13 @@ class CopticEncoder(json.JSONEncoder):
 			text['slug'] = obj.slug 
 			text['collection'] = obj.collection
 			text['html_visualizations'] = []
+			text['text_meta'] = []
 
-			if hasattr(obj, 'meta'):
-				text['meta'] = []
-				for sfv in obj.meta:
-					text['meta'].append({
-							'id' : sfv.id,
-							'title' : sfv.title,
-							'search_field': sfv.search_field.title,
-							'value' : sfv.value 
-						})
+			for text_meta in obj.text_meta.all(): 
+				text['text_meta'].append({
+						'name' : text_meta.name,
+						'value' : text_meta.value 
+					})
 
 			for html_visualization in obj.html_visualizations.all():
 				text['html_visualizations'].append({
