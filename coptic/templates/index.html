@@ -93,19 +93,32 @@
 					</p>
 					<p ng-repeat="visualization in selected_text.html_visualizations">
 						<span class="label">{{visualization.title}} HTML:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/{{visualization.slug}}/html" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/{{visualization.slug}}/html</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/{{visualization.slug}}/html" target="_blank" ng-hide="!selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/{{visualization.slug}}/html</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/{{visualization.slug}}/html" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/{{visualization.slug}}/html</a>
 					</p>
 					<p>
 						<span class="label">TEI XML:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/tei/xml" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/tei/xml</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/tei/xml" target="_blank" ng-hide="!selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/tei/xml</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/tei/xml" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/tei/xml</a>
 					</p>
 					<p>
 						<span class="label">Paula XML:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/paula/xml" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/paula/xml</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/paula/xml" target="_blank" ng-hide="!selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/paula/xml</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/paula/xml" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/paula/xml</a>
 					</p>
 					<p>
 						<span class="label">reIANNIS:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/reiannis" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/reiannis</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/reiannis" target="_blank" ng-hide="!selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/reiannis</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/reiannis" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/reiannis</a>
+					</p>
+					<p>
+						<span class="label">ANNIS UI:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/annis" target="_blank" ng-hide="!selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.slug}}/annis</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/annis" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.slug}}/annis</a>
+					</p>
+					<p ng-hide="!selected_text.msName.length">
+						<span class="label">Manuscript:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}</a>
 					</p>
 					<p>
 						<span class="label">Corpus:</span>

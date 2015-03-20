@@ -51,6 +51,21 @@ def _query( params={} ):
 							for c in corpus_collections:
 								collection_ids.append( c.id )
 
+						elif f['field'] == "mss_urn":	
+
+							mss_texts = []
+							cid_set = []
+							collection_ids = []
+
+							text_meta_items = TextMeta.objects.filter(name="msName", value=f['filter'])
+
+							# Get the textMeta msName items
+							for text_meta_item in text_meta_items:
+								mss_texts = mss_texts + list( Text.objects.filter(text_meta=text_meta_item.id) )
+
+							for mss_text in mss_texts:
+								collection_ids.append(mss_text.collection.id)
+
 						elif f['field'] == "text_search":
 							ts_collections = Collection.objects.all()
 
@@ -76,14 +91,32 @@ def _query( params={} ):
 							sfv = SearchFieldValue.objects.filter(id=f['id'])
 							collection_ids = collection_ids + list( sfv.values_list('collections__id', flat=True) )
 
-					# Get Unique values from the ids
-					cid_set = set(collection_ids)
-					collection_ids = set(cid_set)
 
-					# query collections and texts
-					collections = Collection.objects.filter(id__in=collection_ids)
-					for collection in collections:
-						collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
+					# If we have MSS texts to filter and join
+					if mss_texts:
+
+						# query collections and texts
+						collections = Collection.objects.filter(id__in=collection_ids)
+						for collection in collections:
+							if not hasattr( collection, "texts"):
+								collection.texts = []
+
+							for text in mss_texts:
+								if text.collection.id == collection.id:
+									collection.texts.append( text )
+
+
+					# Otherwise, get all the texts for each collection/corpus 
+					else:
+
+						# Get Unique values from the ids
+						cid_set = set(collection_ids)
+						collection_ids = set(cid_set)
+
+						# query collections and texts
+						collections = Collection.objects.filter(id__in=collection_ids)
+						for collection in collections:
+							collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
 
 				else:
 
@@ -228,6 +261,9 @@ class CopticEncoder(json.JSONEncoder):
 			text['text_meta'] = []
 
 			for text_meta in obj.text_meta.all(): 
+				if text_meta.name == "msName":
+					text['msName'] = text_meta.value
+
 				text['text_meta'].append({
 						'name' : text_meta.name,
 						'value' : text_meta.value 
