@@ -196,6 +196,7 @@ angular.module('coptic')
 			$(".selected").removeClass("selected");
 			$("meta[name=corpus_urn]").attr("content", "" );
 			$("meta[name=document_urn]").attr("content", "" ); 
+			$("meta[name=mss_urn]").attr("content", "" ); 
 
 
 		// If the application location is /texts index
@@ -337,6 +338,7 @@ angular.module('coptic')
 
 			$("meta[name=corpus_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code );
 			$("meta[name=document_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code + ":" + $scope.selected_text.slug ); 
+			$("meta[name=mss_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code + ":" + $scope.selected_text.msName ); 
 
 			$('html,body').scrollTop(0);
 
