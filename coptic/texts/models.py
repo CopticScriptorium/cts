@@ -153,7 +153,7 @@ class SearchFieldValue(models.Model):
 	title = models.CharField(max_length=200)
 	value = models.CharField(max_length=200)
 	search_field = models.ForeignKey(SearchField, blank=True, null=True)
-	collections = models.ManyToManyField(Collection, blank=True, null=True)
+	texts = models.ManyToManyField(Text, blank=True, null=True)
 
 	class Meta:
 		verbose_name = "Search Field Value"

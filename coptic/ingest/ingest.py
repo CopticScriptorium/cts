@@ -166,14 +166,15 @@ def fetch_search_fields( ingest ):
 		print( "Error with ingest, no ANNIS server found")
 		return False
 
-	# For each collection defined in the database, fetch results from ANNIS
-	for collection in Collection.objects.all():
+	# For each text defined in the database, fetch results from ANNIS
+	for text in Text.objects.all():
 
-		# Add the collection corpus name to the URL
-		corpora_url = annis_server.meta_url + collection.annis_corpus_name
-		print(" -- Search Field Ingest: querying", collection.title)
 
-		# At last, fetch the HTML for the corpus/document/html_format from ANNIS
+		# Add the text name to the URL
+		corpora_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + text.collection.annis_corpus_name + "/" + text.title
+		print(" -- Search Field Ingest: querying", text.title)
+
+		# Fetch the HTML for the corpus/document/html_format from ANNIS
 		try:
 			res = request.urlopen( corpora_url )
 			xml = res.read() 

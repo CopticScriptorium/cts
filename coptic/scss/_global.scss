@@ -382,8 +382,11 @@ footer {
 		font-size:14px;
 
 
-		&:hover, &:visited {
+		&:hover {
 			color:#AE2124;
+		}
+		&:visited {
+			color:#EFC17E;
 		}
 		&.github {
 			background: url("http://copticscriptorium.org/img/GitHub-Mark-Light-64px.png") no-repeat;
