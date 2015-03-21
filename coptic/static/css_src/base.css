@@ -1738,34 +1738,58 @@ div.htmlvis span {
   .search-tools-wrap .tool-wrap.author-tool-wrap {
     border: none;
   }
+
+  /* line 69, ../../scss/_responsive.scss */
+  header .header-logos .header-logo-top-wrap .header-logo-center {
+    padding: 0 5%;
+  }
 }
 @media (max-width: 800px) {
-  /* line 72, ../../scss/_responsive.scss */
+  /* line 75, ../../scss/_responsive.scss */
   .keyboard .key {
     font-size: 20px;
     line-height: 45px;
     padding: 5px 10px;
   }
 
-  /* line 77, ../../scss/_responsive.scss */
+  /* line 80, ../../scss/_responsive.scss */
   .keyboard .key.space {
     width: 40%;
     height: 20px;
   }
+
+  /* line 84, ../../scss/_responsive.scss */
+  .header-logo-bottom-wrap {
+    width: 100%;
+  }
+  /* line 86, ../../scss/_responsive.scss */
+  .header-logo-bottom-wrap img {
+    width: 90%;
+  }
 }
 @media (max-width: 600px) {
-  /* line 84, ../../scss/_responsive.scss */
+  /* line 93, ../../scss/_responsive.scss */
   .other-versions-wrap {
     padding-left: 10px;
   }
+
+  /* line 96, ../../scss/_responsive.scss */
+  header .header-logos .header-logo-top-wrap .header-logo {
+    width: 25%;
+  }
+
+  /* line 99, ../../scss/_responsive.scss */
+  header .header-logos .header-logo-top-wrap .header-logo-center {
+    width: 10%;
+  }
 }
 @media (max-width: 500px) {
-  /* line 90, ../../scss/_responsive.scss */
+  /* line 105, ../../scss/_responsive.scss */
   header .urn-form input {
     width: 80%;
   }
 
-  /* line 93, ../../scss/_responsive.scss */
+  /* line 108, ../../scss/_responsive.scss */
   header .urn-form {
     width: 95%;
   }
