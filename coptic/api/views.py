@@ -35,6 +35,7 @@ def _query( params={} ):
 		most_recent_ingests = Ingest.objects.all().order_by('-id')
 		if len( most_recent_ingests ) > 0:
 			most_recent_ingest = most_recent_ingests[0]
+			mss_texts = []
 
 			# If this is a query to the collections model
 			if params['model'] == 'collections':
@@ -53,7 +54,6 @@ def _query( params={} ):
 
 						elif f['field'] == "mss_urn":	
 
-							mss_texts = []
 							cid_set = []
 							collection_ids = []
 
@@ -93,7 +93,7 @@ def _query( params={} ):
 
 
 					# If we have MSS texts to filter and join
-					if mss_texts:
+					if len( mss_texts ):
 
 						# query collections and texts
 						collections = Collection.objects.filter(id__in=collection_ids)

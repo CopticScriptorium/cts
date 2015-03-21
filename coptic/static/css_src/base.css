@@ -1219,8 +1219,9 @@ a.text-item:focus {
 .filters-wrap h4.subtitle {
   font-size: 20px;
   display: inline-block;
+  color: #361b01;
 }
-/* line 351, ../../scss/_index.scss */
+/* line 352, ../../scss/_index.scss */
 .filters-wrap .filter-item {
   padding: 4px 12px;
   margin: 2px 5px 6px;
@@ -1230,19 +1231,19 @@ a.text-item:focus {
   vertical-align: middle;
   cursor: pointer;
 }
-/* line 359, ../../scss/_index.scss */
+/* line 360, ../../scss/_index.scss */
 .filters-wrap .filter-item span {
   vertical-align: middle;
   display: inline-block;
   font-size: 14px;
 }
-/* line 364, ../../scss/_index.scss */
+/* line 365, ../../scss/_index.scss */
 .filters-wrap .filter-item .filter-text {
   float: left;
   padding-top: 2px;
   padding-right: 5px;
 }
-/* line 369, ../../scss/_index.scss */
+/* line 370, ../../scss/_index.scss */
 .filters-wrap .filter-item .fa {
   padding: 6px 5px;
   font-size: 12px;
