@@ -92,6 +92,10 @@ if(navigator.userAgent.match(/iPad/i)){
 // js - modernizer
 $('.no-js').removeClass('no-js').addClass('js');
 
+var modiDate = new Date(document.lastModified);
+var showAs = (modiDate.getMonth() + 1) + "-" + modiDate.getDate() + "-" + modiDate.getFullYear();
+$("#lastupdate").html("Page last updated: " + showAs);
+
 
 });
 })(jQuery);

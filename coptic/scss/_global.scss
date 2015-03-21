@@ -370,7 +370,7 @@ footer {
 	clear:both;
 	background-color:$coptic-brown;
 	color:$light;
-	padding:10px 0;
+	padding:30px 0;
 	text-align:center;
 	width:100%;
 	position:relative;
@@ -378,9 +378,22 @@ footer {
 
 
 	a {
-		color:$light;
-		&:hover{
-			color:$light;
+		color:#EFC17E;
+		font-size:14px;
+
+
+		&:hover, &:visited {
+			color:#AE2124;
+		}
+		&.github {
+			background: url("http://copticscriptorium.org/img/GitHub-Mark-Light-64px.png") no-repeat;
+			background-size: 19px 19px;
+			padding-left: 25px;
+		}
+		&.twitter {
+			background: url("http://copticscriptorium.org/img/newsociallogo.png") no-repeat;
+			background-size: 19px 19px;
+			padding-left: 25px;
 		}
 	}
 
@@ -389,6 +402,13 @@ footer {
 		margin:10px auto;
 		display:inline-block;
 		width:90%;
+		font-size:14px;
+		line-height: 20px;
+
+		p {
+			color:$light;
+			font-size:14px;
+		}
 
 		.site-title {
 			@include font-accent(26px);
@@ -401,9 +421,6 @@ footer {
 		}
 
 		.footer-text-column-1 {
-			p {
-				color:$light;
-			}
 			a {
 				color:$light;
 				&:hover {
@@ -462,9 +479,9 @@ footer {
 		margin:0 auto;
 		.footer-logo {
 			display:inline-block;
-			width:10%;
+			width:6%;
 			height:auto;
-			margin:10px;
+			margin:5px;
 
 			&.neh-logo {
 				width:30%;
