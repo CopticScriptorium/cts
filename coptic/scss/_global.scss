@@ -6,7 +6,7 @@ html, body, input, p, span, label {
 	@include font-body; 
 }
 body {
-	@include parchment;
+	color:$parchment-light;
 }
 h1, h2, h3, h4, h5, h6 {
 	font-weight:300;
@@ -83,6 +83,61 @@ li {
  * Styles for navigation and header
  */
 // general navigation rules (when not fixed)
+ul#nav {
+	-webkit-transform: translateZ(0);
+	display:inline-block;
+	width:100%;
+	margin:0;
+	padding:10px 0;
+	text-align:center;
+	background:$coptic-brown;
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:10000;
+
+	li {
+		display:inline-block;
+		letter-spacing: 0.2em;
+		font-size: 12px;
+
+		a {
+			text-decoration: none;
+			padding:0 16px;
+			color: #F0D38E;
+			&:hover {
+				color: #FB3815;
+			}
+		}
+
+		ul {
+			margin-top: 15px;
+			padding-left: 0px;
+			padding-top: 20px;
+			margin-left: 0px;
+			display: none;
+			padding-bottom: 20px;
+			background-color: $coptic-brown;
+
+			li {
+				color:#DFD1B4;
+				display: block; 
+
+				&:hover {
+				    color:#DFD1B4;
+				}
+
+				a {
+					line-height: 40px;
+				}
+			}
+
+		}
+
+	}
+}
+
+
 header {
 	width:100%;
 	z-index:1000;
@@ -96,6 +151,7 @@ header {
 	.header-row-top {
 		@include parchment;
 		width:100%;
+		padding-top:60px;
 	}
 
 	a {
@@ -166,7 +222,7 @@ header {
 	.header-logos {
 		display:block;
 		width:100;
-		margin:0 auto;
+		margin:0 auto 15px;
 		text-align:center;
 		.header-logo-top-wrap {
 			display:inline-block;
@@ -190,21 +246,24 @@ header {
 	.urn-form {
 		vertical-align: top;
 		display:block;
-		width:50%;
-		margin:30px auto;
+		float:right;
+		width:40%;
+		margin:5px 10px 15px;
 		padding:0;
 
 		input {
 
-			width:85%;
+			width:60%;
 			padding:12px;
 			background:#fff;
+			float:right;
 			border:none;
 			outline:none;
 			vertical-align: top;
 			display:inline-block;
 		}
 		span {
+			float:right;
 			width:5%;
 			text-align:center;
 			vertical-align: middle;

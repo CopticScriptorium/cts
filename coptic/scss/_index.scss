@@ -36,7 +36,7 @@
 	border-left:1px solid $coptic-brown;
 	border-right:1px solid $coptic-brown;
 	display:inline-block;
-	background:#fdfdfd;
+	background:#fff;
 	@include box-shadow( #fff 0px 2px 5px);
 	@include transition( all, 50ms, linear, 0 );
 
