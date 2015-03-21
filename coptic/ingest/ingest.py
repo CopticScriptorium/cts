@@ -106,14 +106,14 @@ def fetch_texts( ingest ):
 				# Add the html format to the corpora URL
 				corpora_url = corpora_url + "?config=" + html_format.slug + "&v-1425855020142"
 
-				# At last, fetch the HTML for the corpus/document/html_format from ANNIS
-				# res = request.urlopen( corpora_url )
-				# html = res.read() 
+				# Fetch the HTML for the corpus/document/html_format from ANNIS
 				driver.get( corpora_url )
-				sleep(random.randint(14,22))
+				sleep( random.randint( 11,13 ) )
 				driver.delete_all_cookies()
+
 				body = driver.find_element_by_xpath("/html/body")
 				text_html = body.get_attribute("innerHTML")
+				styles = driver.find_elements_by_xpath("/html/head/style")
 
 				# Check to ensure there's html returned
 				# if "Could not query document" in text_html or "error" in text_html:
@@ -123,6 +123,13 @@ def fetch_texts( ingest ):
 
 				# Remove Javascript from the body content
 				if len( text_html ):
+
+					# Add the styles
+					for style_elem in styles: 
+						style_css = style_elem.get_attribute("innerHTML")
+						text_html = text_html + "<style>" + style_css + "</style>"
+
+					# For script element in the html, remove it
 					script_elems = re.findall(r'<script.*script>', text_html, re.DOTALL)
 					for script_elem in script_elems:
 						text_html = text_html.replace( script_elem, "" )
