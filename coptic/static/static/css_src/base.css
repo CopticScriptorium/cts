@@ -1782,14 +1782,19 @@ div.htmlvis span {
   header .header-logos .header-logo-top-wrap .header-logo-center {
     width: 10%;
   }
+
+  /* line 102, ../../scss/_responsive.scss */
+  header .header-row-top {
+    padding-top: 70px;
+  }
 }
 @media (max-width: 500px) {
-  /* line 105, ../../scss/_responsive.scss */
+  /* line 108, ../../scss/_responsive.scss */
   header .urn-form input {
     width: 80%;
   }
 
-  /* line 108, ../../scss/_responsive.scss */
+  /* line 111, ../../scss/_responsive.scss */
   header .urn-form {
     width: 95%;
   }
