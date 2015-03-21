@@ -471,32 +471,32 @@ footer {
   position: relative;
   margin-top: 150px;
 }
-/* line 380, ../../scss/_global.scss */
+/* line 379, ../../scss/_global.scss */
 footer a {
   color: #EFC17E;
   font-size: 14px;
 }
-/* line 385, ../../scss/_global.scss */
+/* line 384, ../../scss/_global.scss */
 footer a:hover {
   color: #AE2124;
 }
-/* line 388, ../../scss/_global.scss */
+/* line 387, ../../scss/_global.scss */
 footer a:visited {
   color: #EFC17E;
 }
-/* line 391, ../../scss/_global.scss */
+/* line 390, ../../scss/_global.scss */
 footer a.github {
   background: url("http://copticscriptorium.org/img/GitHub-Mark-Light-64px.png") no-repeat;
   background-size: 19px 19px;
   padding-left: 25px;
 }
-/* line 396, ../../scss/_global.scss */
+/* line 395, ../../scss/_global.scss */
 footer a.twitter {
   background: url("http://copticscriptorium.org/img/newsociallogo.png") no-repeat;
   background-size: 19px 19px;
   padding-left: 25px;
 }
-/* line 404, ../../scss/_global.scss */
+/* line 403, ../../scss/_global.scss */
 footer .footer-text {
   margin: 10px auto;
   display: inline-block;
@@ -504,12 +504,12 @@ footer .footer-text {
   font-size: 14px;
   line-height: 20px;
 }
-/* line 411, ../../scss/_global.scss */
+/* line 410, ../../scss/_global.scss */
 footer .footer-text p {
   color: white;
   font-size: 14px;
 }
-/* line 416, ../../scss/_global.scss */
+/* line 415, ../../scss/_global.scss */
 footer .footer-text .site-title {
   font-family: asul, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
   font-size: 26px;
@@ -517,46 +517,46 @@ footer .footer-text .site-title {
   margin: 20px 0 0px 0px;
   padding: 0;
 }
-/* line 422, ../../scss/_global.scss */
+/* line 421, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1, footer .footer-text .footer-text-column-2 {
   margin-top: 30px;
 }
-/* line 427, ../../scss/_global.scss */
+/* line 426, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 a {
   color: white;
 }
-/* line 433, ../../scss/_global.scss */
+/* line 432, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul {
   padding: 0;
   margin: 0 0 0 0;
 }
-/* line 436, ../../scss/_global.scss */
+/* line 435, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul li {
   display: inline-block;
 }
-/* line 438, ../../scss/_global.scss */
+/* line 437, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul li a {
   display: block;
   margin: 5px;
   padding: 20px;
   font-size: 22px;
 }
-/* line 443, ../../scss/_global.scss */
+/* line 442, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul li a:hover {
   color: #dddddd;
 }
-/* line 452, ../../scss/_global.scss */
+/* line 451, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-2 .social-wrap {
   margin: 10px 0;
   padding: 0;
 }
-/* line 455, ../../scss/_global.scss */
+/* line 454, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-2 .social-wrap span {
   color: white;
   font-size: 24px;
   padding: 10px;
 }
-/* line 464, ../../scss/_global.scss */
+/* line 463, ../../scss/_global.scss */
 footer .footer-text .copyright {
   clear: both;
   display: block;
@@ -564,28 +564,28 @@ footer .footer-text .copyright {
   font-size: 14px;
   margin: 30px 0;
 }
-/* line 470, ../../scss/_global.scss */
+/* line 469, ../../scss/_global.scss */
 footer .footer-text .copyright a {
   color: white;
 }
-/* line 472, ../../scss/_global.scss */
+/* line 471, ../../scss/_global.scss */
 footer .footer-text .copyright a:hover {
   text-decoration: none;
 }
-/* line 479, ../../scss/_global.scss */
+/* line 478, ../../scss/_global.scss */
 footer .footer-logos-wrap {
   width: 100%;
   text-align: center;
   margin: 0 auto;
 }
-/* line 483, ../../scss/_global.scss */
+/* line 482, ../../scss/_global.scss */
 footer .footer-logos-wrap .footer-logo {
   display: inline-block;
   width: 6%;
   height: auto;
   margin: 5px;
 }
-/* line 489, ../../scss/_global.scss */
+/* line 488, ../../scss/_global.scss */
 footer .footer-logos-wrap .footer-logo.neh-logo {
   width: 30%;
 }
@@ -593,51 +593,51 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
 /*
  * Styles for Dropdowns
  */
-/* line 500, ../../scss/_global.scss */
+/* line 499, ../../scss/_global.scss */
 .dropdown {
   position: relative;
 }
-/* line 503, ../../scss/_global.scss */
+/* line 502, ../../scss/_global.scss */
 .dropdown .dropdown-head {
   cursor: pointer;
 }
-/* line 505, ../../scss/_global.scss */
+/* line 504, ../../scss/_global.scss */
 .dropdown .dropdown-head label, .dropdown .dropdown-head .dropdown-arrow {
   cursor: pointer;
 }
-/* line 510, ../../scss/_global.scss */
+/* line 509, ../../scss/_global.scss */
 .dropdown .dropdown-panel {
   display: none;
   position: absolute;
   top: 0;
   left: 0;
 }
-/* line 516, ../../scss/_global.scss */
+/* line 515, ../../scss/_global.scss */
 .dropdown .dropdown-panel.lowered {
   display: block !important;
 }
 
-/* line 520, ../../scss/_global.scss */
+/* line 519, ../../scss/_global.scss */
 ::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 523, ../../scss/_global.scss */
+/* line 522, ../../scss/_global.scss */
 :-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 526, ../../scss/_global.scss */
+/* line 525, ../../scss/_global.scss */
 ::-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 529, ../../scss/_global.scss */
+/* line 528, ../../scss/_global.scss */
 :-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 534, ../../scss/_global.scss */
+/* line 533, ../../scss/_global.scss */
 #loading_modal {
   position: fixed;
   top: 0px;
@@ -647,7 +647,7 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   height: 100%;
   background: rgba(227, 202, 156, 0.88);
 }
-/* line 543, ../../scss/_global.scss */
+/* line 542, ../../scss/_global.scss */
 #loading_modal .loading-modal-inner {
   display: block;
   width: 50%;
@@ -656,11 +656,11 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   text-align: center;
   padding-top: 150px;
 }
-/* line 550, ../../scss/_global.scss */
+/* line 549, ../../scss/_global.scss */
 #loading_modal .loading-modal-inner img {
   margin: 0 auto;
 }
-/* line 553, ../../scss/_global.scss */
+/* line 552, ../../scss/_global.scss */
 #loading_modal .loading-modal-inner span {
   margin-top: 60px;
   display: inline-block;
@@ -1149,11 +1149,11 @@ a.text-item:focus {
 .advanced-search-tool-panel {
   z-index: 99;
 }
-/* line 272, ../../scss/_index.scss */
+/* line 271, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-wrap {
   display: inline-block;
 }
-/* line 276, ../../scss/_index.scss */
+/* line 275, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head {
   display: inline-block;
   padding: 5px 15px;
@@ -1162,23 +1162,23 @@ a.text-item:focus {
   cursor: pointer;
   color: #fff;
 }
-/* line 283, ../../scss/_index.scss */
+/* line 282, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head:hover {
   background: #361b01;
 }
-/* line 286, ../../scss/_index.scss */
+/* line 285, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head.advanced-search-tool-head-selected {
   color: #361b01;
   background: rgba(250, 250, 250, 0.8);
 }
-/* line 291, ../../scss/_index.scss */
+/* line 290, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head .fa {
   display: inline-block;
   vertical-align: top;
   font-size: 12px;
   padding: 5px;
 }
-/* line 298, ../../scss/_index.scss */
+/* line 297, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-sub-tool-panel {
   position: absolute;
   transform: translateY(100%) translateZ(0);
@@ -1189,18 +1189,18 @@ a.text-item:focus {
   margin: 0px auto;
   background: #361b01;
 }
-/* line 308, ../../scss/_index.scss */
+/* line 307, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-search-item {
   display: inline-block;
 }
 
-/* line 313, ../../scss/_index.scss */
+/* line 312, ../../scss/_index.scss */
 .keyboard {
   text-align: center;
   width: 100%;
   margin: 0 auto;
 }
-/* line 318, ../../scss/_index.scss */
+/* line 317, ../../scss/_index.scss */
 .keyboard .key {
   font-size: 30px;
   line-height: 60px;
@@ -1212,11 +1212,11 @@ a.text-item:focus {
   background: rgba(255, 255, 255, 0.96);
   cursor: pointer;
 }
-/* line 326, ../../scss/_index.scss */
+/* line 325, ../../scss/_index.scss */
 .keyboard .key:hover {
   background: rgba(245, 245, 245, 0.98);
 }
-/* line 330, ../../scss/_index.scss */
+/* line 329, ../../scss/_index.scss */
 .keyboard .key.space {
   width: 80%;
   max-width: 400px;
@@ -1225,23 +1225,23 @@ a.text-item:focus {
   margin: 10px;
 }
 
-/* line 340, ../../scss/_index.scss */
+/* line 339, ../../scss/_index.scss */
 .filters-wrap {
   display: block;
   width: 100%;
 }
-/* line 343, ../../scss/_index.scss */
+/* line 342, ../../scss/_index.scss */
 .filters-wrap .filters-wrap-inner {
   width: 95%;
   margin: 0 auto;
 }
-/* line 347, ../../scss/_index.scss */
+/* line 346, ../../scss/_index.scss */
 .filters-wrap h4.subtitle {
   font-size: 20px;
   display: inline-block;
   color: #361b01;
 }
-/* line 352, ../../scss/_index.scss */
+/* line 351, ../../scss/_index.scss */
 .filters-wrap .filter-item {
   padding: 4px 12px;
   margin: 2px 5px 6px;
@@ -1251,19 +1251,19 @@ a.text-item:focus {
   vertical-align: middle;
   cursor: pointer;
 }
-/* line 360, ../../scss/_index.scss */
+/* line 359, ../../scss/_index.scss */
 .filters-wrap .filter-item span {
   vertical-align: middle;
   display: inline-block;
   font-size: 14px;
 }
-/* line 365, ../../scss/_index.scss */
+/* line 364, ../../scss/_index.scss */
 .filters-wrap .filter-item .filter-text {
   float: left;
   padding-top: 2px;
   padding-right: 5px;
 }
-/* line 370, ../../scss/_index.scss */
+/* line 369, ../../scss/_index.scss */
 .filters-wrap .filter-item .fa {
   padding: 6px 5px;
   font-size: 12px;

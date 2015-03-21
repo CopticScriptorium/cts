@@ -151,14 +151,13 @@ def fetch_texts( ingest ):
 def fetch_search_fields( ingest ):
 
 	# Get the text and ingest models (prevent circular import)
-	from texts.models import Collection, SearchField, SearchFieldValue
+	from texts.models import Text, SearchField, SearchFieldValue
 	from ingest.models import Ingest 
 	from annis.models import AnnisServer
 
 	# Define meta_xml list and the ANNIS server to query 
 	search_fields = []
 	annis_server = AnnisServer.objects.all()[:1] 
-	# driver = webdriver.Firefox()
 
 	if len(annis_server) > 0:
 		annis_server = annis_server[0]
@@ -185,7 +184,6 @@ def fetch_search_fields( ingest ):
 			annotations = [] 
 
 		for annotation in annotations:
-			corpus_name = annotation.find("corpusname").text
 			name = annotation.find("name").text
 			value = annotation.find("value").text
 
@@ -194,16 +192,16 @@ def fetch_search_fields( ingest ):
 				if search_field['name'] == name:
 					is_in_search_fields = True
 
-					is_in_search_field_collections = False
+					is_in_search_field_texts = False
 					for sfc in search_field['values']:
 						if value == sfc['value']:
-							is_in_search_field_collections = True
-							sfc['collections'].append(corpus_name)
+							is_in_search_field_texts = True
+							sfc['texts'].append(text.slug)
 
-					if not is_in_search_field_collections:
+					if not is_in_search_field_texts:
 						search_field['values'].append({
 								'value' : value,
-								'collections' : [corpus_name]
+								'texts' : [text.slug]
 							})
 
 
@@ -212,7 +210,7 @@ def fetch_search_fields( ingest ):
 						'name' : name,
 						'values' : [{
 								'value' : value,
-								'collections' : [corpus_name]
+								'texts' : [text.slug]
 							}]
 					})
 
@@ -223,8 +221,8 @@ def fetch_search_fields( ingest ):
 	SearchField.objects.all().delete()
 	SearchFieldValue.objects.all().delete()
 
-	print(" -- Search Field Ingest: Ingesting new SearchFields and SearchFieldValues")
 	# Add all new search fields and mappings
+	print(" -- Search Field Ingest: Ingesting new SearchFields and SearchFieldValues")
 	for search_field in search_fields:
 		sf = SearchField()
 		sf.annis_name = search_field['name']
@@ -233,15 +231,22 @@ def fetch_search_fields( ingest ):
 		sf.order = 1
 		sf.save()
 
+		# Save value data
 		for value in search_field['values']:
+
 			sfv = SearchFieldValue()
 			sfv.search_field = sf
 			sfv.value = value['value']
 			sfv.title = value['value']
 			sfv.save()
-			for corpus_name in value['collections']:
-				sfv_collections = Collection.objects.filter(annis_corpus_name=corpus_name)
-				if len( sfv_collections ):
-					for sfv_collection in sfv_collections: 
-						sfv.collections.add( sfv_collection )
+
+			# Search field texts
+			for text in value['texts']:
+
+				sfv_texts = Text.objects.filter(slug=text)
+
+				# Add the texts via the native add ManyToMany handling
+				if len( sfv_texts ):
+					for sfv_text in sfv_texts: 
+						sfv.texts.add( sfv_text )
 

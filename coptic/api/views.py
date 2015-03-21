@@ -44,6 +44,7 @@ def _query( params={} ):
 				if "filters" in params:
 
 					collection_ids = []
+					text_ids = []
 
 					# Process the filters and find the collections based on the ID
 					for f in params['filters']:
@@ -89,8 +90,10 @@ def _query( params={} ):
 
 						else:
 							sfv = SearchFieldValue.objects.filter(id=f['id'])
-							collection_ids = collection_ids + list( sfv.values_list('collections__id', flat=True) )
-
+							text_ids = text_ids + list( sfv.values_list('texts__id', flat=True) )
+							search_texts = Text.objects.filter( id__in=text_ids )
+							for text in search_texts:
+								collection_ids.append(text.collection.id)
 
 					# If we have MSS texts to filter and join
 					if len( mss_texts ):
@@ -105,6 +108,19 @@ def _query( params={} ):
 								if text.collection.id == collection.id:
 									collection.texts.append( text )
 
+					# If we have other texts to filter and join
+					if len( text_ids ):
+
+						# Get Unique values from the ids
+						cid_set = set(collection_ids)
+						collection_ids = set(cid_set)
+
+						# query collections and texts
+						collections = Collection.objects.filter(id__in=collection_ids)
+						for collection in collections:
+							collection.texts = Text.objects.filter(id__in=text_ids, collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
+
+
 
 					# Otherwise, get all the texts for each collection/corpus 
 					else:
@@ -116,6 +132,7 @@ def _query( params={} ):
 						# query collections and texts
 						collections = Collection.objects.filter(id__in=collection_ids)
 						for collection in collections:
+
 							collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
 
 				else:
