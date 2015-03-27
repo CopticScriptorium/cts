@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render 
 from django.http import HttpResponse
 from texts.models import Text, Collection, SearchField, SearchFieldValue 
-import pdb
 
 def urn_redirect(request, query):
 	"""

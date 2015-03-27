@@ -189,6 +189,69 @@ def _query( params={} ):
 		else:
 			collections = Collection.objects.all()
 
+	# If urns is set in the params, return index of urns
+	elif 'urns' in params:
+
+		# establish all the queries to be run if there is ingest data
+		most_recent_ingests = Ingest.objects.all().order_by('-id')
+		most_recent_ingest = most_recent_ingests[0]
+		collections = Collection.objects.all()
+
+		objects['urns'] = []
+
+		# Get the urns for all collections
+		for i, collection in enumerate( collections ):
+
+			# Add a nested list for the urns related to this collection
+			objects['urns'].append([])
+
+			# Set the initial collection_urn	
+			collection_urn = "urn:cts:copticLit:" + collection.urn_code
+
+			# Add the collection urn to the collection urn list
+			objects['urns'][i].append( collection_urn )
+
+			# Get the texts for the collection to find their URNs
+			collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+
+			# Then add all the urns for texts related to the collection
+			for text in collection.texts:
+
+				# The base of the text_urn will be the collection urn
+				text_urn = collection_urn + ":"
+
+				# Fetch the text meta to look for an msName
+				text_meta = text.text_meta.all()
+
+				# If the meta_item is msName, add it to the text urn
+				for meta_item in text_meta:
+
+					if meta_item.name == "msName":
+						text_urn = text_urn + meta_item.value 
+
+						# If we have a msName, add that msName URN to the collection urns
+						if text_urn not in objects['urns'][i]:
+							objects['urns'][i].append( text_urn )
+
+						# Then add a final colon for the document urns
+						text_urn = text_urn + ":"
+
+				# Then add the text doc name from ANNIS
+				text_urn = text_urn + text.slug
+
+				# Add the text URN with the doc name from ANNIS to the collecition urns
+				objects['urns'][i].append( text_urn )
+
+				# Add the URNs for the HTML visualizations
+				html_visualizations = text.html_visualizations.all()
+				for visualization in html_visualizations:
+					objects['urns'][i].append( text_urn + "/" + visualization.visualization_format.title + "/html" )
+
+				# Add TEI, Paula, reIANNIS, and ANNIS UI
+				objects['urns'][i].append( text_urn + "/tei/xml" )
+				objects['urns'][i].append( text_urn + "/paula/xml" )
+				objects['urns'][i].append( text_urn + "/reiannis" )
+				objects['urns'][i].append( text_urn + "/annis" )
 
 
 	# Otherwise, no query is specified
@@ -238,6 +301,9 @@ def process_param_values( params, get ):
 
 		elif params[0] == "manifest":
 			clean['manifest'] = True
+
+		elif params[0] == "urns":
+			clean['urns'] = True
 
 		# Then process the supplied query
 		# Query should be included in api like this: 

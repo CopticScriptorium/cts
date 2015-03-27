@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from texts.models import Text, Collection, SearchField, SearchFieldValue
 from texts.search_fields import get_search_fields
 from ingest.models import Ingest
-import pdb
 
 # Both the list and the single views should render index.html for the client side app 
 def list(request, slug):
