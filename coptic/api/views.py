@@ -250,7 +250,7 @@ def _query( params={} ):
 				# Add TEI, Paula, reIANNIS, and ANNIS UI
 				objects['urns'][i].append( text_urn + "/tei/xml" )
 				objects['urns'][i].append( text_urn + "/paula/xml" )
-				objects['urns'][i].append( text_urn + "/reiannis" )
+				objects['urns'][i].append( text_urn + "/relannis" )
 				objects['urns'][i].append( text_urn + "/annis" )
 
 

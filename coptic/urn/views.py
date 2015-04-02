@@ -20,7 +20,7 @@ def urn_redirect(request, query):
 		return redirect( collection.github )
 
 	# If it's an REI annis query, redirect to github
-	if query[-1] == "reiannis":
+	if query[-1] == "relannis":
 		return redirect( collection.github )
 
 	# If it's an ANNIS URN, redirect to ANNIS
