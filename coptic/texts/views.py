@@ -10,8 +10,8 @@ def list(request, slug):
 	context = { 
 					'body_class' : "index",
 					'texts' : [],
-					'search_fields' : search_fields[0:4],
-					'secondary_search_fields' : search_fields[4:]
+					'search_fields' : search_fields[0:5],
+					'secondary_search_fields' : search_fields[5:]
 				}
 	return render(request, 'index.html', context) 
 
@@ -20,8 +20,8 @@ def single(request, slug):
 	context = { 
 					'body_class' : "index",
 					'texts' : [],
-					'search_fields' : search_fields[0:4],
-					'secondary_search_fields' : search_fields[4:]
+					'search_fields' : search_fields[0:5],
+					'secondary_search_fields' : search_fields[5:]
 				}
 	return render(request, 'index.html', context) 
 

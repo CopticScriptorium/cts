@@ -15,8 +15,8 @@ def home(request):
 	context = { 
 					'body_class' : "text-list",
 					'texts' : texts,
-					'search_fields' : search_fields[0:4],
-					'secondary_search_fields' : search_fields[4:]
+					'search_fields' : search_fields[0:5],
+					'secondary_search_fields' : search_fields[5:]
 				}
 				
 	return render(request, 'index.html', context) 
@@ -31,8 +31,8 @@ def not_found(request):
 	context = { 
 					'body_class' : "text-list",
 					'texts' : [],
-					'search_fields' : search_fields[0:4],
-					'secondary_search_fields' : search_fields[4:]
+					'search_fields' : search_fields[0:5],
+					'secondary_search_fields' : search_fields[5:]
 				}
 				
 	return render(request, '404.html', context) 
