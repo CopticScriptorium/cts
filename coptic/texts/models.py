@@ -63,6 +63,7 @@ class Collection(models.Model):
 	"""
 
 	title = models.CharField(max_length=200)
+	textgroup_urn_code = models.CharField(max_length=200)
 	urn_code = models.CharField(max_length=200)
 	html_corpora_code = models.CharField(max_length=200)
 	slug = models.SlugField(max_length=40)

@@ -74,8 +74,9 @@ def urn_redirect(request, query):
 		return redirect( url )
 
 
-	# Else, it's an inv
+	# Else, it's an invalid URN
 	else: 
 		# Invalid URN
+		# In the future, add URN not found error notice
 		return redirect( "/" )
 

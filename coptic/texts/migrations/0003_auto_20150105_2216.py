@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='text',
             name='author',
-            field=models.ForeignKey(default=0, blank=True, to='texts.Author'),
+            field=models.ForeignKey(default='', blank=True, to='texts.Author'),
             preserve_default=False,
         ),
         migrations.AddField(
