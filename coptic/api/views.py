@@ -7,7 +7,7 @@ from ingest.models import Ingest
 ALLOWED_MODELS = ['texts', 'collections']
 CLASSES = ( Text, Collection )
 
-@json_view
+@json_view()
 def api(request, __params__=None):
 	"""
 	Search with the search params from the via the client-side application
@@ -260,9 +260,6 @@ def _query( params={} ):
 
 	return objects 
 
-# Dump an object to JSON
-def to_JSON(obj):
-	return json.dumps(obj, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 # ready a django queryset for json serialization
 def jsonproof_queryset(objects, model_name, queryset):
@@ -278,7 +275,7 @@ def jsonproof_queryset(objects, model_name, queryset):
 		if isinstance( item, CLASSES ): 
 
 			# if it is an instance of a class, append the dict
-			item = json.dumps( item, cls=CopticEncoder )
+			item = coptic_encoder( item )
 
 
 		# Finally, add the item to the objects response at the model 
@@ -329,77 +326,76 @@ def process_param_values( params, get ):
 
 
 # Define custom encoder for the queryset model class instances
-class CopticEncoder(json.JSONEncoder):
+def coptic_encoder( obj ):
 
-	def default(self, obj):
+	encoded = {}
 
-		# If we're dumping an instance of the Text class to JSON
-		if isinstance(obj, Text):
-			text = {}
+	# If we're dumping an instance of the Text class to JSON
+	if isinstance(obj, Text):
+		text = {}
 
-			text['title'] = obj.title 
-			text['slug'] = obj.slug 
-			text['collection'] = obj.collection
-			text['html_visualizations'] = []
-			text['text_meta'] = []
+		text['title'] = obj.title 
+		text['slug'] = obj.slug 
+		text['html_visualizations'] = []
+		text['text_meta'] = []
 
-			for text_meta in obj.text_meta.all(): 
-				if text_meta.name == "msName":
-					text['msName'] = text_meta.value
+		for text_meta in obj.text_meta.all(): 
+			if text_meta.name == "msName":
+				text['msName'] = text_meta.value
 
-				text['text_meta'].append({
-						'name' : text_meta.name,
-						'value' : text_meta.value 
+			text['text_meta'].append({
+					'name' : text_meta.name,
+					'value' : text_meta.value 
+				})
+
+		for html_visualization in obj.html_visualizations.all():
+			text['html_visualizations'].append({
+					"title" : html_visualization.visualization_format.title,
+					"slug" : html_visualization.visualization_format.slug,
+					"html" : html_visualization.html
+				})
+
+		text['collection'] = coptic_encoder( obj.collection )
+
+		encoded = text
+
+	# If we're dumping an instance of the Collection class to JSON
+	elif isinstance(obj, Collection):
+		collection = {}
+
+		collection['title'] = obj.title 
+		collection['urn_code'] = obj.urn_code 
+		collection['textgroup_urn_code'] = obj.textgroup_urn_code 
+		collection['html_corpora_code'] = obj.html_corpora_code 
+		collection['slug'] = obj.slug 
+		collection['annis_code'] = obj.annis_code 
+		collection['annis_corpus_name'] = obj.annis_corpus_name
+		collection['github'] = obj.github 
+		collection['html_visualization_formats'] = []
+
+		for html_visualization_format in obj.html_visualization_formats.all():
+			collection['html_visualization_formats'].append({
+					'title' : html_visualization_format.title,
+					'slug' : html_visualization_format.slug
+				}) 
+
+		if hasattr(obj, 'texts'):
+			collection['texts'] = []
+			for i, text in enumerate( obj.texts ):
+				collection['texts'].append({
+						'id' : text.id,
+						'title' : text.title,
+						'slug' : text.slug,
+						'html_visualizations' : [] 
 					})
-
-			for html_visualization in obj.html_visualizations.all():
-				text['html_visualizations'].append({
-						"title" : html_visualization.visualization_format.title,
-						"slug" : html_visualization.visualization_format.slug,
-						"html" : html_visualization.html
-					})
-
-			return text
-
-		# If we're dumping an instance of the Collection class to JSON
-		elif isinstance(obj, Collection):
-			collection = {}
-
-			collection['title'] = obj.title 
-			collection['urn_code'] = obj.urn_code 
-			collection['textgroup_urn_code'] = obj.textgroup_urn_code 
-			collection['html_corpora_code'] = obj.html_corpora_code 
-			collection['slug'] = obj.slug 
-			collection['annis_code'] = obj.annis_code 
-			collection['annis_corpus_name'] = obj.annis_corpus_name
-			collection['github'] = obj.github 
-			collection['html_visualization_formats'] = []
-
-			for html_visualization_format in obj.html_visualization_formats.all():
-				collection['html_visualization_formats'].append({
-						'title' : html_visualization_format.title,
-						'slug' : html_visualization_format.slug
-					}) 
-
-			if hasattr(obj, 'texts'):
-				collection['texts'] = []
-				for i, text in enumerate( obj.texts ):
-					collection['texts'].append({
-							'id' : text.id,
-							'title' : text.title,
-							'slug' : text.slug,
-							'html_visualizations' : [] 
+				for html_visualization in text.html_visualizations.all():
+					collection['texts'][ i ]['html_visualizations'].append({
+							"title" : html_visualization.visualization_format.title,
+							"slug" : html_visualization.visualization_format.slug
 						})
-					for html_visualization in text.html_visualizations.all():
-						collection['texts'][ i ]['html_visualizations'].append({
-								"title" : html_visualization.visualization_format.title,
-								"slug" : html_visualization.visualization_format.slug,
-								"html" : html_visualization.html
-							})
 
-			return collection 
+		encoded = collection
 
-		# Let the base class default method raise the TypeError
-		return json.JSONEncoder.default(self, obj)
+	return encoded 
 
 

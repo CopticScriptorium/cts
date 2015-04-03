@@ -24,8 +24,8 @@ logger.info('Using %s JSON module.', json.__name__)
 
 def _dump_json(data):
     if getattr(settings, 'JSON_USE_DJANGO_SERIALIZER', True):
-        return json.dumps(data, cls=DjangoJSONEncoder)
-    return json.dumps(data)
+        return json.dumps(data, cls=DjangoJSONEncoder, indent=4)
+    return json.dumps(data, indent=4)
 
 
 def json_view(*args, **kwargs):

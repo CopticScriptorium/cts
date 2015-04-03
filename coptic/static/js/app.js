@@ -327,7 +327,7 @@ angular.module('coptic')
 		if ( typeof res.collections !== "undefined" ){
 
 			res.collections.forEach(function(collection){
-				texts.push( JSON.parse( collection ) );
+				texts.push( collection );
 			});
 
 			$scope.texts = texts; 
@@ -336,8 +336,7 @@ angular.module('coptic')
 		}else if ( typeof res.texts !== "undefined" ) {
 
 			// Should handle the possibility of multiple selected in future
-			res.texts = JSON.parse(res.texts);
-			$scope.selected_text = res.texts;
+			$scope.selected_text = res.texts[0];
 
 			$target = $(".text-subwork[data-slug='" + $scope.text_query.slug + "']");
 			$(".text-subwork").addClass("hidden");
