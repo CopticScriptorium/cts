@@ -2,7 +2,7 @@ import datetime
 from django.db import models
 from ingest.models import Ingest
 from django.db.models.signals import post_save
-import pdb
+from texts.search_fields import populate_values
 
 
 class Author(models.Model):
@@ -138,7 +138,7 @@ class SearchField(models.Model):
 	annis_name = models.CharField(max_length=200)
 	texts_field = models.CharField(max_length=200, blank=True, null=True)
 	order = models.IntegerField()
-	splittable = models.CharField(max_length=200)
+	splittable = models.CharField(max_length=200, blank=True, null=True)
 
 	class Meta:
 		verbose_name = "Search Field"
@@ -169,49 +169,4 @@ def post_save_search_field(sender, instance, **kwargs):
 
 # Register the post save signal 
 post_save.connect(post_save_search_field, sender=SearchField, dispatch_uid="")	
-
-# Populating values for the search fields
-def populate_values( instance ):
-
-	attr = instance.texts_field
-	texts = Text.objects.all()
-	values = []
-	search_field_values = []
-
-	# Select the values for the specified attr in the text
-	for text in texts:
-		if hasattr( text, attr ):
-			value = getattr( text, attr )
-			if value not in values:
-				values.append( value )
-		else:
-			print(" -- -- Warning for SearchField:  Text does not have attr", attr, ": Text :", text)
-
-
-	# Add distinct values for the search field values
-	for value in values:
-
-		title = ''
-		if hasattr( value, "name" ):
-			title = value.name
-		elif hasattr( value, "title"):
-			title = value.title
-		elif hasattr( value, "id"):
-			title = value.id
-		else:
-			title = value 
-
-		is_in_sfvs = False
-		for search_field_value in search_field_values:
-			if title == search_field_value.title:
-				is_in_sfvs = True 
-
-		if not is_in_sfvs:
-			sfv = SearchFieldValue()
-			sfv.title = title
-			sfv.field = instance
-			sfv.save()
-			search_field_values.append(sfv)
-
-	return True	 
 

@@ -28,6 +28,7 @@ __pycache__
 *__pycache__
 **__pycache__
 *settings.py
+*/my.cnf
 
 # --------------------
 # Env Files
