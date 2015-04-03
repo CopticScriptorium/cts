@@ -367,6 +367,7 @@ class CopticEncoder(json.JSONEncoder):
 
 			collection['title'] = obj.title 
 			collection['urn_code'] = obj.urn_code 
+			collection['textgroup_urn_code'] = obj.textgroup_urn_code 
 			collection['html_corpora_code'] = obj.html_corpora_code 
 			collection['slug'] = obj.slug 
 			collection['annis_code'] = obj.annis_code 
