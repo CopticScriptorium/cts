@@ -484,19 +484,23 @@ footer a:hover {
 footer a:visited {
   color: #EFC17E;
 }
-/* line 390, ../../scss/_global.scss */
+/* line 389, ../../scss/_global.scss */
+footer a:visited:hover {
+  color: #AE2124;
+}
+/* line 393, ../../scss/_global.scss */
 footer a.github {
   background: url("http://copticscriptorium.org/img/GitHub-Mark-Light-64px.png") no-repeat;
   background-size: 19px 19px;
   padding-left: 25px;
 }
-/* line 395, ../../scss/_global.scss */
+/* line 398, ../../scss/_global.scss */
 footer a.twitter {
   background: url("http://copticscriptorium.org/img/newsociallogo.png") no-repeat;
   background-size: 19px 19px;
   padding-left: 25px;
 }
-/* line 403, ../../scss/_global.scss */
+/* line 406, ../../scss/_global.scss */
 footer .footer-text {
   margin: 10px auto;
   display: inline-block;
@@ -504,12 +508,12 @@ footer .footer-text {
   font-size: 14px;
   line-height: 20px;
 }
-/* line 410, ../../scss/_global.scss */
+/* line 413, ../../scss/_global.scss */
 footer .footer-text p {
   color: white;
   font-size: 14px;
 }
-/* line 415, ../../scss/_global.scss */
+/* line 418, ../../scss/_global.scss */
 footer .footer-text .site-title {
   font-family: asul, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
   font-size: 26px;
@@ -517,46 +521,46 @@ footer .footer-text .site-title {
   margin: 20px 0 0px 0px;
   padding: 0;
 }
-/* line 421, ../../scss/_global.scss */
+/* line 424, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1, footer .footer-text .footer-text-column-2 {
   margin-top: 30px;
 }
-/* line 426, ../../scss/_global.scss */
+/* line 429, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 a {
   color: white;
 }
-/* line 432, ../../scss/_global.scss */
+/* line 435, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul {
   padding: 0;
   margin: 0 0 0 0;
 }
-/* line 435, ../../scss/_global.scss */
+/* line 438, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul li {
   display: inline-block;
 }
-/* line 437, ../../scss/_global.scss */
+/* line 440, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul li a {
   display: block;
   margin: 5px;
   padding: 20px;
   font-size: 22px;
 }
-/* line 442, ../../scss/_global.scss */
+/* line 445, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-1 nav.footer ul li a:hover {
   color: #dddddd;
 }
-/* line 451, ../../scss/_global.scss */
+/* line 454, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-2 .social-wrap {
   margin: 10px 0;
   padding: 0;
 }
-/* line 454, ../../scss/_global.scss */
+/* line 457, ../../scss/_global.scss */
 footer .footer-text .footer-text-column-2 .social-wrap span {
   color: white;
   font-size: 24px;
   padding: 10px;
 }
-/* line 463, ../../scss/_global.scss */
+/* line 466, ../../scss/_global.scss */
 footer .footer-text .copyright {
   clear: both;
   display: block;
@@ -564,28 +568,28 @@ footer .footer-text .copyright {
   font-size: 14px;
   margin: 30px 0;
 }
-/* line 469, ../../scss/_global.scss */
+/* line 472, ../../scss/_global.scss */
 footer .footer-text .copyright a {
   color: white;
 }
-/* line 471, ../../scss/_global.scss */
+/* line 474, ../../scss/_global.scss */
 footer .footer-text .copyright a:hover {
   text-decoration: none;
 }
-/* line 478, ../../scss/_global.scss */
+/* line 481, ../../scss/_global.scss */
 footer .footer-logos-wrap {
   width: 100%;
   text-align: center;
   margin: 0 auto;
 }
-/* line 482, ../../scss/_global.scss */
+/* line 485, ../../scss/_global.scss */
 footer .footer-logos-wrap .footer-logo {
   display: inline-block;
   width: 6%;
   height: auto;
   margin: 5px;
 }
-/* line 488, ../../scss/_global.scss */
+/* line 491, ../../scss/_global.scss */
 footer .footer-logos-wrap .footer-logo.neh-logo {
   width: 30%;
 }
@@ -593,51 +597,51 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
 /*
  * Styles for Dropdowns
  */
-/* line 499, ../../scss/_global.scss */
+/* line 502, ../../scss/_global.scss */
 .dropdown {
   position: relative;
 }
-/* line 502, ../../scss/_global.scss */
+/* line 505, ../../scss/_global.scss */
 .dropdown .dropdown-head {
   cursor: pointer;
 }
-/* line 504, ../../scss/_global.scss */
+/* line 507, ../../scss/_global.scss */
 .dropdown .dropdown-head label, .dropdown .dropdown-head .dropdown-arrow {
   cursor: pointer;
 }
-/* line 509, ../../scss/_global.scss */
+/* line 512, ../../scss/_global.scss */
 .dropdown .dropdown-panel {
   display: none;
   position: absolute;
   top: 0;
   left: 0;
 }
-/* line 515, ../../scss/_global.scss */
+/* line 518, ../../scss/_global.scss */
 .dropdown .dropdown-panel.lowered {
   display: block !important;
 }
 
-/* line 519, ../../scss/_global.scss */
+/* line 522, ../../scss/_global.scss */
 ::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 522, ../../scss/_global.scss */
+/* line 525, ../../scss/_global.scss */
 :-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 525, ../../scss/_global.scss */
+/* line 528, ../../scss/_global.scss */
 ::-moz-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 528, ../../scss/_global.scss */
+/* line 531, ../../scss/_global.scss */
 :-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.6);
 }
 
-/* line 533, ../../scss/_global.scss */
+/* line 536, ../../scss/_global.scss */
 #loading_modal {
   position: fixed;
   top: 0px;
@@ -647,7 +651,7 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   height: 100%;
   background: rgba(227, 202, 156, 0.88);
 }
-/* line 542, ../../scss/_global.scss */
+/* line 545, ../../scss/_global.scss */
 #loading_modal .loading-modal-inner {
   display: block;
   width: 50%;
@@ -656,11 +660,11 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   text-align: center;
   padding-top: 150px;
 }
-/* line 549, ../../scss/_global.scss */
+/* line 552, ../../scss/_global.scss */
 #loading_modal .loading-modal-inner img {
   margin: 0 auto;
 }
-/* line 552, ../../scss/_global.scss */
+/* line 555, ../../scss/_global.scss */
 #loading_modal .loading-modal-inner span {
   margin-top: 60px;
   display: inline-block;

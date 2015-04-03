@@ -386,6 +386,9 @@ footer {
 		}
 		&:visited {
 			color:#EFC17E;
+			&:hover {
+				color:#AE2124;
+			}
 		}
 		&.github {
 			background: url("http://copticscriptorium.org/img/GitHub-Mark-Light-64px.png") no-repeat;
