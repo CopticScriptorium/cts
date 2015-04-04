@@ -136,7 +136,6 @@ class SearchField(models.Model):
 
 	title = models.CharField(max_length=200)
 	annis_name = models.CharField(max_length=200)
-	texts_field = models.CharField(max_length=200, blank=True, null=True)
 	order = models.IntegerField()
 	splittable = models.CharField(max_length=200, blank=True, null=True)
 

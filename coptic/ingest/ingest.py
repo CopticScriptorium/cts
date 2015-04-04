@@ -4,13 +4,12 @@ ingest.py
 Fetch Texts from their source lists in ANNIS
 
 """
-import pdb
 import re
 from urllib import request
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 from time import sleep
 import random
 
@@ -54,7 +53,7 @@ def fetch_texts( ingest ):
 
 			# First, process the slug, and title
 			title = doc_name.find("name").text
-			slug = slugify( title ) 
+			slug = slugify( title ).__str__() 
 
 			# Check if this text already exists for this ingest
 			# texts = Text.objects.filter(slug=slug, ingest=ingest.id).count()
@@ -221,7 +220,7 @@ def fetch_search_fields( ingest ):
 							}]
 					})
 
-		sleep(random.randint(1,3))
+		sleep(1)
 
 	# Delete all former searchfield values
 	print(" -- Search Field Ingest: Deleting all SearchFields and SearchFieldValues")
@@ -234,7 +233,6 @@ def fetch_search_fields( ingest ):
 		sf = SearchField()
 		sf.annis_name = search_field['name']
 		sf.title = search_field['name']
-		sf.texts_field = ""
 		sf.order = 1
 		sf.save()
 

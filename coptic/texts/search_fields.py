@@ -20,7 +20,7 @@ def populate_values( instance ):
 
 	from texts.models import Text, SearchField, SearchFieldValue
 
-	if len( instance.splittable ) > 0:
+	if instance.splittable:
 
 		split_sfvs = []
 		sfvs = SearchFieldValue.objects.filter(search_field=instance.id)
