@@ -31,27 +31,36 @@ def urn_redirect(request, query):
 	# If the urn length is 6, it's definitely a text query
 	if len( urn ) == 6: 
 
-		# Add the text URN slug 
-		text_urn = urn[5] 
-		url  = "/texts/" + text_urn
+		# Check the passage URN against the collection texts metadata
+		text_slug = check_passage_urn( urn, collection )
 
-		# If it's an HTML query, specify redirect to the html visualization url 
-		if query[-1] == "html":
-			url = url + "/" + query[-2]
+		# A text exists for the URN query parameter 
+		if text_slug:
+			# Add the slug to the redirect URL  
+			url  = "/texts/" + text_slug
+
+			# If it's an HTML query, specify redirect to the html visualization url 
+			if query[-1] == "html":
+				url = url + "/" + query[-2]
+
+		else:
+			# Add the slug to the redirect URL  
+			url  = "/"
+
 
 		return redirect( url ) 
 
 	# If it's a length of 5, this means the URN might be a text or might be a manuscript
 	elif len( urn ) == 5: 
 
-		possible_text_urn = urn[4] 
-		texts = Text.objects.filter(slug=possible_text_urn)
+		# Check the passage URN against the collection texts metadata
+		text_slug = check_passage_urn( urn, collection )
 
 		# A text exists for the URN query parameter 
-		if len( texts ):
+		if text_slug:
 
 			# Add the text URN slug
-			url  = "/texts/" + texts[0].slug
+			url  = "/texts/" + text_slug 
 
 			# If it's an HTML query, specify redirect to the html visualization url 
 			if query[-1] == "html":
@@ -80,3 +89,53 @@ def urn_redirect(request, query):
 		# In the future, add URN not found error notice
 		return redirect( "/" )
 
+
+def check_passage_urn( urn, collection ):
+
+	# Parse the passage URN
+	passage_urn = urn[4].split("-") 
+	if len( passage_urn ) > 1:
+		passage_urn.sort()
+		passage_urn_low = passage_urn[0] 
+		passage_urn_high = passage_urn[1]
+
+	# Get the texts for the specifed collection to locate the passage
+	collection_texts = Text.objects.filter(collection=collection.id)
+
+	# Check the passage urn against each text metadata
+	for text in collection_texts:
+		gt_pages_from = False
+		lt_pages_to = False
+
+		# For each meta item, check if it is pages_from, pages_to, or chapter
+		for meta in text.text_meta.all():
+
+			# Check the pages_from / pages_to range against the passage_urn
+			if meta.name in ["pages_from", "pages_to"]:
+
+				# Check the pages_from value 
+				if meta.name == "pages_from": 
+
+					if passage_urn_low >= meta.value:
+						if lt_pages_to:
+							text_slug = text.slug
+							break
+						else:
+							gt_pages_from = True
+
+				# Check the pages_to value
+				elif meta.name == "pages_to":
+
+					if passage_urn_high <= meta.value:
+						if gt_pages_from:
+							text_slug = text.slug
+							break
+						else:
+							lt_pages_to = True
+
+			# Check an exact match on the chapter metadatum
+			elif meta.name == "chapter":
+				if meta.value == passage_urn[0]:
+					text_slug = text.slug
+
+	return text_slug 
