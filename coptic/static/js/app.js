@@ -338,6 +338,30 @@ angular.module('coptic')
 			// Should handle the possibility of multiple selected in future
 			$scope.selected_text = res.texts[0];
 
+			// Set pertinent metadata directly to the selected_text object
+			$scope.selected_text.text_meta.forEach(function(meta){
+					if ( meta.name === "pages_from" ){
+						$scope.selected_text.pages_from = meta.value;
+					}else if ( meta.name === "pages_to" ){
+						$scope.selected_text.pages_to = meta.value;
+					}else if ( meta.name === "chapter" ){
+						$scope.selected_text.chapter = meta.value;
+					}
+				});
+
+			// Set the passage URN based on the metadata attributes
+			$scope.selected_text.passage_urn = "";
+			if ( typeof $scope.selected_text.pages_from !== "undefined" ){
+				$scope.selected_text.passage_urn = $scope.selected_text.pages_from;
+			} 
+			if ( typeof $scope.selected_text.pages_to !== "undefined" ){
+				$scope.selected_text.passage_urn = $scope.selected_text.passage_urn + "-" + $scope.selected_text.pages_to;
+			} 
+			if ( typeof $scope.selected_text.chapter !== "undefined" ){
+				$scope.selected_text.passage_urn = $scope.selected_text.chapter;
+			} 
+
+			// Toggle the specific classes and visibility on elements
 			$target = $(".text-subwork[data-slug='" + $scope.text_query.slug + "']");
 			$(".text-subwork").addClass("hidden");
 			$(".text-work").addClass("hidden");
@@ -345,10 +369,12 @@ angular.module('coptic')
 			$target.parents(".text-work").removeClass("hidden");
 			$target.removeClass("hidden").addClass("single-header");
 
+			// Set the HTML document meta elements
 			$("meta[name=corpus_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code );
 			$("meta[name=document_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code + ":" + $scope.selected_text.slug ); 
 			$("meta[name=mss_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code + ":" + $scope.selected_text.msName ); 
 
+			// Scroll back to the top
 			$('html,body').scrollTop(0);
 
 		}
@@ -698,14 +724,11 @@ angular.module('coptic')
 	$scope.raise_dropdowns = function(){
 	// Raise all dropdowns
 		$(".tool-panel").addClass("hidden");
-
 	};
 
 	$scope.urn_submit = function(){
 	// Navigate to entered URN
-
 		document.location.href = "/" + $scope.entered_urn;
-
 	};
 
 	$scope.show_loading_modal = function(){

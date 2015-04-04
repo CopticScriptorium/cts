@@ -121,7 +121,6 @@ def _query( params={} ):
 							collection.texts = Text.objects.filter(id__in=text_ids, collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
 
 
-
 					# Otherwise, get all the texts for each collection/corpus 
 					else:
 
