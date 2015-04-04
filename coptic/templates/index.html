@@ -86,8 +86,9 @@
 						In order to cite this document, please use these URNs. These URNs resolve to the latest edition of the data. Citations by scholars should include date accessed in their footnotes.  Earlier data may be accessed in the archives from the <a href="{{selected_text.collection.github}}" target="_blank">GitHub repository</a> for the text.
 					</p>
 					<p>
-						<span class="label">Text (General):</span>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}</a>
+						<span class="label">Passage:</span>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}" target="_blank" ng-hide="!selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}</a>
+						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}</a>
 					</p>
 					<p ng-repeat="visualization in selected_text.html_visualizations">
 						<span class="label">{{visualization.title}} HTML:</span>
@@ -115,15 +116,15 @@
 						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/annis" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/annis</a>
 					</p>
 					<p ng-hide="!selected_text.msName.length">
-						<span class="label">Manuscript:</span>
+						<span class="label">Edition Manuscript:</span>
 						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}</a>
 					</p>
 					<p>
-						<span class="label">Corpus:</span>
+						<span class="label">Text Corpus:</span>
 						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}</a>
 					</p>
 					<p>
-						<span class="label">Textgroup:</span>
+						<span class="label">Author Textgroup:</span>
 						<a href="/urn:cts:copticLit:{{selected_text.collection.textgroup_urn_code}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.textgroup_urn_code}}</a>
 					</p>
 				</div>

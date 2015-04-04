@@ -346,7 +346,7 @@ def coptic_encoder( obj ):
 
 		for text_meta in obj.text_meta.all(): 
 			if text_meta.name == "msName":
-				text['msName'] = text_meta.value
+				text['msName'] = text_meta.value.replace(".", "-")
 
 			text['text_meta'].append({
 					'name' : text_meta.name,
