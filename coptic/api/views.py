@@ -48,8 +48,14 @@ def _query( params={} ):
 
 					# Process the filters and find the collections based on the ID
 					for f in params['filters']:
+
 						if f['field'] == "corpus_urn":	
 							corpus_collections = Collection.objects.filter(urn_code=f['filter'])
+							for c in corpus_collections:
+								collection_ids.append( c.id )
+
+						if f['field'] == "textgroup_urn":	
+							corpus_collections = Collection.objects.filter(textgroup_urn_code=f['filter'])
 							for c in corpus_collections:
 								collection_ids.append( c.id )
 
