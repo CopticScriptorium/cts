@@ -95,7 +95,7 @@ def urn_redirect(request, query):
 		else:
 
 			# It's a collection query, render the collection text index
-			url = "/filter/mss_urn=0:" +  urn[4]
+			url = "/filter/mss_urn=0:" +  urn[4].replace("-", ".")
 
 		return redirect( url ) 
 
