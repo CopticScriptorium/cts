@@ -32,7 +32,7 @@
         <xsl:value-of select="concat($baseurl,@urn,'/paula/xml')"/><xsl:text>&#x0a;</xsl:text>
         <xsl:value-of select="concat($baseurl,@urn,'/dipl/html')"/><xsl:text>&#x0a;</xsl:text>
         <xsl:value-of select="concat($baseurl,@urn,'/norm/html')"/><xsl:text>&#x0a;</xsl:text>
-        <xsl:value-of select="concat($baseurl,@urn,'/analytic/html')"/><xsl:text>&#x0a;</xsl:text>
+        <xsl:value-of select="concat($baseurl,@urn,'/ana/html')"/><xsl:text>&#x0a;</xsl:text>
     </xsl:template>
     
     <xsl:template match="*"/>

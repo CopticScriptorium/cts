@@ -6,482 +6,482 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix dct: <http://purl.org/dc/terms/> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> a lawd:ConceptualWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> a lawd:ConceptualWork ;
 	dc:title "Acephalous Work 22"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> a lawd:WrittenWork ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> a lawd:WrittenWork ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428/relannis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428/relannis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428/annis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428/annis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428/tei/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428/tei/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428/paula/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428/paula/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428/dipl/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428/dipl/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428/norm/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428/norm/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428/analytic/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 421-428 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_421_428> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428/ana/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 421-428 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_421_428> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> a lawd:WrittenWork ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> a lawd:WrittenWork ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518/relannis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518/relannis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518/annis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518/annis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518/tei/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518/tei/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518/paula/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518/paula/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518/dipl/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518/dipl/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518/norm/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518/norm/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518/analytic/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YA from MS pages 517-518 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YA_517_518> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518/ana/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YA from MS pages 517-518 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya_517_518> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> a lawd:WrittenWork ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> a lawd:WrittenWork ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320/relannis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320/relannis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320/annis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320/annis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320/tei/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320/tei/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320/paula/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320/paula/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320/dipl/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320/dipl/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320/norm/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320/norm/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320/analytic/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript YB from MS pages 307-320 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_YB_307_320> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320/ana/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript YB from MS pages 307-320 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb_307_320> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> a lawd:WrittenWork ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> a lawd:WrittenWork ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308/relannis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308/relannis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308/annis> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308/annis> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308/tei/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308/tei/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308/paula/xml> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308/paula/xml> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308/dipl/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308/dipl/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308/norm/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308/norm/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308/analytic/html> a lawd:Edition ;
-	rdfs:label "A22 in White Monastery Manuscript ZC from MS pages 301-308 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308/ana/html> a lawd:Edition ;
+	rdfs:label "a22 in White Monastery Manuscript ZC from MS pages 301-308 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc_301_308> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> a lawd:ConceptualWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> a lawd:ConceptualWork ;
 	dc:title "Abraham Our Father"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> a lawd:WrittenWork ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> a lawd:WrittenWork ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94/relannis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94/relannis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94/annis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94/annis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94/tei/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94/tei/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94/paula/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94/paula/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94/dipl/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94/dipl/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94/norm/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94/norm/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94/analytic/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript XL pages 93-94 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94/ana/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript XL pages 93-94 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl_93_94> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> a lawd:WrittenWork ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> a lawd:WrittenWork ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520/relannis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520/relannis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520/annis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520/annis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520/tei/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520/tei/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520/paula/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520/paula/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520/dipl/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520/dipl/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520/norm/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520/norm/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520/analytic/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 518-520 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520/ana/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 518-520 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_518_520> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> a lawd:WrittenWork ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> a lawd:WrittenWork ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530/relannis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530/relannis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530/annis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530/annis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530/tei/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530/tei/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530/paula/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530/paula/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530/dipl/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530/dipl/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530/norm/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530/norm/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530/analytic/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 525-530 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530/ana/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 525-530 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_525_530> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> a lawd:WrittenWork ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> a lawd:WrittenWork ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540/relannis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540/relannis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540/annis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540/annis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540/tei/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540/tei/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540/paula/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540/paula/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540/dipl/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540/dipl/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540/norm/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540/norm/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540/analytic/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 535-540 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540/ana/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 535-540 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_535_540> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> a lawd:WrittenWork ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> a lawd:WrittenWork ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550/relannis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550/relannis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550/annis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550/annis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550/tei/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550/tei/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550/paula/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550/paula/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550/dipl/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550/dipl/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550/norm/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550/norm/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550/analytic/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 547-550 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550/ana/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 547-550 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_547_550> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> a lawd:WrittenWork ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> a lawd:WrittenWork ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554/relannis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554 (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554/relannis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554 (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554/annis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554 (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554/annis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554 (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554/tei/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554 (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554/tei/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554 (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554/paula/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554 (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554/paula/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554 (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554/dipl/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554 (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554/dipl/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554 (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554/norm/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554 (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554/norm/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554 (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554/analytic/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript YA pages 551-554 (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554/ana/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript YA pages 551-554 (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya_551_554> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> a lawd:WrittenWork ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> a lawd:WrittenWork ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D/relannis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d/relannis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d (relAnnis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D/annis> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d/annis> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d (Annis representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D/tei/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d/tei/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d (Diplomatic XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D/paula/xml> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d/paula/xml> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d (Normalized XML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D/dipl/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d/dipl/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d (Diplomatic HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D/norm/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d/norm/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d (Normalized HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D/analytic/html> a lawd:Edition ;
-	rdfs:label "AOF from White Monastery Manuscript ZH fragments 1 a-d (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D> .
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d/ana/html> a lawd:Edition ;
+	rdfs:label "abraham from White Monastery Manuscript ZH fragments 1 a-d (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> a lawd:ConceptualWork ;
 	dc:title "Not Because A Fox Barks"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> a lawd:WrittenWork ;
 	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216/relannis> a lawd:Edition ;
 	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216/annis> a lawd:Edition ;
 	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216/tei/xml> a lawd:Edition ;
 	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216/paula/xml> a lawd:Edition ;
 	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216/dipl/html> a lawd:Edition ;
 	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216/norm/html> a lawd:Edition ;
 	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216/analytic/html> a lawd:Edition ;
-	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216/ana/html> a lawd:Edition ;
+	rdfs:label "Fox from White Monastery Manuscript XH pages 204-26 (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.MONB_XH_204_216> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:shenoute.fox.monbxh_204_216> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> a lawd:ConceptualWork ;
 	dc:title "Gospel of Mark"@en .
@@ -520,8 +520,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahdica NT Mark (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahdica NT Mark (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica> .
 
@@ -559,8 +559,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Mark (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Mark (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.mark> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.mark.sahidica_ed> .
 
@@ -601,8 +601,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Cor (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Cor (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica> .
 
@@ -640,8 +640,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Cor (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Cor (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1cor.sahidica_ed> .
 
@@ -682,8 +682,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Cor (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Cor (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica> .
 
@@ -721,8 +721,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Cor (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Cor (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2cor.sahidica_ed> .
 
@@ -763,8 +763,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rom> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Romans (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Romans (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rom> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica> .
 
@@ -802,8 +802,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rom> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Romans (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Romans (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rom> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rom.sahidica_ed> .
 
@@ -844,8 +844,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.gal> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Galatians (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Galatians (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.gal> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica> .
 
@@ -883,8 +883,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.gal> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Galatians (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Galatians (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.gal> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.gal.sahidica_ed> .
 
@@ -925,8 +925,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.eph> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Ephesians (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Ephesians (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.eph> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica> .
 
@@ -964,8 +964,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.eph> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Ephesians (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Ephesians (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.eph> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.eph.sahidica_ed> .
 
@@ -1006,8 +1006,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phil> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Philippians (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Philippians (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phil> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica> .
 
@@ -1045,8 +1045,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phil> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Philippians (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Philippians (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phil> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phil.sahidica_ed> .
 
@@ -1087,8 +1087,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.col> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Colossians (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Colossians (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.col> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica> .
 
@@ -1126,8 +1126,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.col> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Colossians (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Colossians (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.col> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.col.sahidica_ed> .
 
@@ -1168,8 +1168,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Thessalonians (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Thessalonians (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica> .
 
@@ -1207,8 +1207,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Thessalonians (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Thessalonians (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1thess.sahidica_ed> .
 
@@ -1249,8 +1249,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Thessalonians (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Thessalonians (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica> .
 
@@ -1288,8 +1288,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Thessalonians (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Thessalonians (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2thess.sahidica_ed> .
 
@@ -1330,8 +1330,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Timothy (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Timothy (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica> .
 
@@ -1369,8 +1369,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Timothy (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Timothy (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1tim.sahidica_ed> .
 
@@ -1411,8 +1411,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Timothy (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Timothy (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica> .
 
@@ -1450,8 +1450,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Timothy (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Timothy (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2tim.sahidica_ed> .
 
@@ -1492,8 +1492,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Peter (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Peter (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica> .
 
@@ -1531,8 +1531,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 Peter (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 Peter (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1pet.sahidica_ed> .
 
@@ -1573,8 +1573,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Peter (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Peter (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica> .
 
@@ -1612,8 +1612,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 Peter (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 Peter (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2pet.sahidica_ed> .
 
@@ -1654,8 +1654,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 John (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 John (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica> .
 
@@ -1693,8 +1693,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 1 John (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 1 John (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.1john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.1john.sahidica_ed> .
 
@@ -1735,8 +1735,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 John (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 John (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica> .
 
@@ -1774,8 +1774,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 2 John (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 2 John (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.2john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.2john.sahidica_ed> .
 
@@ -1816,8 +1816,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.3john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 3 John (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 3 John (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.3john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica> .
 
@@ -1855,8 +1855,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.3john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT 3 John (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT 3 John (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.3john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.3john.sahidica_ed> .
 
@@ -1897,8 +1897,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.titus> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Titus (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Titus (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.titus> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica> .
 
@@ -1936,8 +1936,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.titus> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Titus (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Titus (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.titus> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.titus.sahidica_ed> .
 
@@ -1978,8 +1978,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jude> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Jude (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Jude (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jude> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica> .
 
@@ -2017,8 +2017,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jude> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Jude (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Jude (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jude> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jude.sahidica_ed> .
 
@@ -2059,8 +2059,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Philemon (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Philemon (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica> .
 
@@ -2098,8 +2098,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Philemon (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Philemon (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.phlm.sahidica_ed> .
 
@@ -2140,8 +2140,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.heb> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Hebrews (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Hebrews (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.heb> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica> .
 
@@ -2179,8 +2179,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.heb> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Hebrews (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Hebrews (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.heb> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.heb.sahidica_ed> .
 
@@ -2221,8 +2221,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jas> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT James (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT James (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jas> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica> .
 
@@ -2260,8 +2260,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jas> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT James (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT James (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.jas> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.jas.sahidica_ed> .
 
@@ -2302,8 +2302,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.matt> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Matthew (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Matthew (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.matt> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica> .
 
@@ -2341,8 +2341,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.matt> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Matthew (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Matthew (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.matt> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.matt.sahidica_ed> .
 
@@ -2383,8 +2383,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.luke> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Luke (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Luke (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.luke> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica> .
 
@@ -2422,8 +2422,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.luke> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Luke (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Luke (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.luke> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.luke.sahidica_ed> .
 
@@ -2464,8 +2464,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT John (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT John (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica> .
 
@@ -2503,8 +2503,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT John (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT John (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.john> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.john.sahidica_ed> .
 
@@ -2545,8 +2545,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.acts> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Acts of the Apostles (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Acts of the Apostles (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.acts> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica> .
 
@@ -2584,8 +2584,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.acts> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Acts of the Apostles (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Acts of the Apostles (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.acts> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.acts.sahidica_ed> .
 
@@ -2626,8 +2626,8 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rev> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Revelation (uncurated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Revelation (uncurated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rev> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica> .
 
@@ -2665,757 +2665,757 @@
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rev> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica_ed/analytic/html> a lawd:Edition ;
-	rdfs:label "Sahidica NT Revelation (curated edition) (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica_ed/ana/html> a lawd:Edition ;
+	rdfs:label "Sahidica NT Revelation (curated edition) (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:nt.rev> ;
 	dct:source <http://copticscriptorium.org/urn:cts:copticLit:nt.rev.sahidica_ed> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph> a lawd:ConceptualWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> a lawd:ConceptualWork ;
 	dc:title "Letters to Apthonia"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> a lawd:WrittenWork ;
 	rdfs:label "Apthonia from White Monastery Manuscript BA"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/relannis> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BA (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/annis> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BA (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/tei/xml> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BA (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/paula/xml> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BA (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/dipl/html> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BA (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/norm/html> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BA (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA/analytic/html> a lawd:Edition ;
-	rdfs:label "Apthonia from White Monastery Manuscript BA (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BA> .
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/ana/html> a lawd:Edition ;
+	rdfs:label "Apthonia from White Monastery Manuscript BA (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> a lawd:WrittenWork ;
 	rdfs:label "Apthonia from White Monastery Manuscript BB"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb/relannis> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BB (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb/annis> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BB (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb/tei/xml> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BB (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb/paula/xml> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BB (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb/dipl/html> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BB (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb/norm/html> a lawd:Edition ;
 	rdfs:label "Apthonia from White Monastery Manuscript BB (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB/analytic/html> a lawd:Edition ;
-	rdfs:label "Apthonia from White Monastery Manuscript BB (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aph> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aph.MONB_BB> .
+<http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb/ana/html> a lawd:Edition ;
+	rdfs:label "Apthonia from White Monastery Manuscript BB (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> a lawd:ConceptualWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> a lawd:ConceptualWork ;
 	dc:title "Letters to Thieving Nuns"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> a lawd:WrittenWork ;
 	rdfs:label "Nuns from White Monastery Manuscript BA"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba/relannis> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BA (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba/annis> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BA (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba/tei/xml> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BA (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba/paula/xml> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BA (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba/dipl/html> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BA (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba/norm/html> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BA (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA/analytic/html> a lawd:Edition ;
-	rdfs:label "Nuns from White Monastery Manuscript BA (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BA> .
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba/ana/html> a lawd:Edition ;
+	rdfs:label "Nuns from White Monastery Manuscript BA (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbba> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> a lawd:WrittenWork ;
 	rdfs:label "Nuns from White Monastery Manuscript BB"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb/relannis> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BB (relAnnis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb/annis> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BB (Annis representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb/tei/xml> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BB (Diplomatic XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb/paula/xml> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BB (Normalized XML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb/dipl/html> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BB (Diplomatic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb/norm/html> a lawd:Edition ;
 	rdfs:label "Nuns from White Monastery Manuscript BB (Normalized HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> .
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB/analytic/html> a lawd:Edition ;
-	rdfs:label "Nuns from White Monastery Manuscript BB (Analytic HTML representation)"@en ;
-	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.nuns.MONB_BB> .
+<http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb/ana/html> a lawd:Edition ;
+	rdfs:label "Nuns from White Monastery Manuscript BB (ana HTML representation)"@en ;
+	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving> ;
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:besa.thieving.monbbb> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.114> a lawd:ConceptualWork ;
 	dc:title "AP 114 Theophilus"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 114 Theophilus from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.114> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.114.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.125> a lawd:ConceptualWork ;
 	dc:title "AP 125 Joseph"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 125 Joseph from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.125> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.125.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.157> a lawd:ConceptualWork ;
 	dc:title "AP 157 Papnoute"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 157 Papnoute from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.157> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.157.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.172> a lawd:ConceptualWork ;
 	dc:title "AP 172 Antonius"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 172 Antonius from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.172> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.172.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.177> a lawd:ConceptualWork ;
 	dc:title "AP 177 Ephraim"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 177 Ephraim from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.177> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.177.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.216> a lawd:ConceptualWork ;
 	dc:title "AP 216 Besarion"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 216 Besarion from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.216> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.216.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.22> a lawd:ConceptualWork ;
 	dc:title "AP 22 Fragment"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 22 Fragment from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.22> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.22.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.23> a lawd:ConceptualWork ;
 	dc:title "AP 23 Isaac"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 23 Isaac from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.23> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.23.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.25> a lawd:ConceptualWork ;
 	dc:title "AP 25 Pambo"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 25 Pambo from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.25> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.25.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.26> a lawd:ConceptualWork ;
 	dc:title "AP 26 Cassian"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 26 Cassian from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.26> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.26.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.34> a lawd:ConceptualWork ;
 	dc:title "AP 34 Theodorus"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 34 Theodorus from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.34> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.34.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.42> a lawd:ConceptualWork ;
 	dc:title "AP 42 Sarah"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 42 Sarah from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.42> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.42.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.53> a lawd:ConceptualWork ;
 	dc:title "AP 53 Ammona"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 53 Ammona from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.53> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.53.monbeg> .
 
 <http://copticscriptorium.org/urn:cts:copticLit:ap.90> a lawd:ConceptualWork ;
 	dc:title "AP 90 Olympius"@en .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> a lawd:WrittenWork ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> a lawd:WrittenWork ;
 	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG/relannis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/relannis> a lawd:Edition ;
 	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (relAnnis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG/annis> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/annis> a lawd:Edition ;
 	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (Annis representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG/tei/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/tei/xml> a lawd:Edition ;
 	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (Diplomatic XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG/paula/xml> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/paula/xml> a lawd:Edition ;
 	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (Normalized XML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG/dipl/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/dipl/html> a lawd:Edition ;
 	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (Diplomatic HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG/norm/html> a lawd:Edition ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/norm/html> a lawd:Edition ;
 	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (Normalized HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> .
 
-<http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG/analytic/html> a lawd:Edition ;
-	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (Analytic HTML representation)"@en ;
+<http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/ana/html> a lawd:Edition ;
+	rdfs:label "AP 90 Olympius from White Monastery Manuscript EG (ana HTML representation)"@en ;
 	lawd:embodies <http://copticscriptorium.org/urn:cts:copticLit:ap.90> ;
-	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.MONB_EG> .
+	dct:source <http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg> .

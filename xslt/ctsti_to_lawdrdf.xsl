@@ -95,9 +95,9 @@
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
             <dct:source rdf:resource="{concat($baseurl,@urn)}"/>
         </rdf:Description>
-        <rdf:Description rdf:about="{concat($baseurl,@urn,'/analytic/html')}">
+        <rdf:Description rdf:about="{concat($baseurl,@urn,'/ana/html')}">
             <rdf:type rdf:resource="{$edition}"></rdf:type>
-            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (Analytic HTML representation)</rdfs:label>
+            <rdfs:label xml:lang="{$lang}"><xsl:value-of select="cts:label"></xsl:value-of> (ana HTML representation)</rdfs:label>
             <lawd:embodies rdf:resource="{concat($baseurl,parent::cts:work/@urn)}"></lawd:embodies>
             <dct:source rdf:resource="{concat($baseurl,@urn)}"/>
         </rdf:Description>

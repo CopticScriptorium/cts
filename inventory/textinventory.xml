@@ -6,49 +6,49 @@
     </ctsnamespace>
     <textgroup urn="urn:cts:copticLit:shenoute">
         <groupname xml:lang="eng">Shenoute</groupname>
-        <work urn="urn:cts:copticLit:shenoute.A22" xml:lang="cop">
+        <work urn="urn:cts:copticLit:shenoute.a22" xml:lang="cop">
             <title xml:lang="eng">Acephalous Work 22</title>
-            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_YA_421_428">
-                <label xml:lang="eng">A22 in White Monastery Manuscript YA from MS pages 421-428</label>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbya_421_428">
+                <label xml:lang="eng">a22 in White Monastery Manuscript YA from MS pages 421-428</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_YA_517_518">
-                <label xml:lang="eng">A22 in White Monastery Manuscript YA from MS pages 517-518</label>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbya_517_518">
+                <label xml:lang="eng">a22 in White Monastery Manuscript YA from MS pages 517-518</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_YB_307_320">
-                <label xml:lang="eng">A22 in White Monastery Manuscript YB from MS pages 307-320</label>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbyb_307_320">
+                <label xml:lang="eng">a22 in White Monastery Manuscript YB from MS pages 307-320</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_ZC_301_308">
-                <label xml:lang="eng">A22 in White Monastery Manuscript ZC from MS pages 301-308</label>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbzc_301_308">
+                <label xml:lang="eng">a22 in White Monastery Manuscript ZC from MS pages 301-308</label>
             </edition>
             
         </work>
-        <work urn="urn:cts:copticLit:shenoute.AOF" xml:lang="cop">
+        <work urn="urn:cts:copticLit:shenoute.abraham" xml:lang="cop">
             <title xml:lang="eng">Abraham Our Father</title>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_XL_93_94">
-                <label xml:lang="eng">AOF from White Monastery Manuscript XL pages 93-94</label>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbxl_93_94">
+                <label xml:lang="eng">abraham from White Monastery Manuscript XL pages 93-94</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_YA_518_520">
-                <label xml:lang="eng">AOF from White Monastery Manuscript YA pages 518-520</label>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_518_520">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 518-520</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_YA_525_530">
-                <label xml:lang="eng">AOF from White Monastery Manuscript YA pages 525-530</label>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_525_530">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 525-530</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_YA_535_540">
-                <label xml:lang="eng">AOF from White Monastery Manuscript YA pages 535-540</label>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_535_540">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 535-540</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_YA_547_550">
-                <label xml:lang="eng">AOF from White Monastery Manuscript YA pages 547-550</label>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_547_550">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 547-550</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_YA_551_554">
-                <label xml:lang="eng">AOF from White Monastery Manuscript YA pages 551-554</label>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_551_554">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 551-554</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_ZH_FRG1_A_D">
-                <label xml:lang="eng">AOF from White Monastery Manuscript ZH fragments 1 a-d</label>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d">
+                <label xml:lang="eng">abraham from White Monastery Manuscript ZH fragments 1 a-d</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:shenoute.fox" xml:lang="cop">
             <title xml:lang="eng">Not Because A Fox Barks</title>
-            <edition urn="urn:cts:copticLit:shenoute.fox.MONB_XH_204_216">
+            <edition urn="urn:cts:copticLit:shenoute.fox.monbxh_204_216">
                 <label xml:lang="eng">Fox from White Monastery Manuscript XH pages 204-26</label>
             </edition>
         </work>
@@ -302,21 +302,21 @@
     </textgroup>
     <textgroup urn="urn:cts:copticLit:besa">
         <groupname xml:lang="eng">Letters of Besa</groupname>
-        <work urn="urn:cts:copticLit:besa.aph" xml:lang="cop">
+        <work urn="urn:cts:copticLit:besa.aphthonia" xml:lang="cop">
             <title xml:lang="eng">Letters to Apthonia</title>
-            <edition urn="urn:cts:copticLit:besa.aph.MONB_BA">
+            <edition urn="urn:cts:copticLit:besa.aphthonia.monbba">
                 <label xml:lang="eng">Apthonia from White Monastery Manuscript BA</label>
             </edition>
-            <edition urn="urn:cts:copticLit:besa.aph.MONB_BB">
+            <edition urn="urn:cts:copticLit:besa.aphthonia.monbbb">
                 <label xml:lang="eng">Apthonia from White Monastery Manuscript BB</label>
             </edition>
         </work>
-        <work urn="urn:cts:copticLit:besa.nuns" xml:lang="cop">
+        <work urn="urn:cts:copticLit:besa.thieving" xml:lang="cop">
             <title xml:lang="eng">Letters to Thieving Nuns</title>
-            <edition urn="urn:cts:copticLit:besa.nuns.MONB_BA">
+            <edition urn="urn:cts:copticLit:besa.thieving.monbba">
                 <label xml:lang="eng">Nuns from White Monastery Manuscript BA</label>
             </edition>
-            <edition urn="urn:cts:copticLit:besa.nuns.MONB_BB">
+            <edition urn="urn:cts:copticLit:besa.thieving.monbbb">
                 <label xml:lang="eng">Nuns from White Monastery Manuscript BB</label>
             </edition>
         </work>
@@ -325,85 +325,85 @@
         <groupname xml:lang="eng">The Apophthegmata Patrum</groupname>
         <work urn="urn:cts:copticLit:ap.114" xml:lang="cop">
             <title xml:lang="eng">AP 114 Theophilus</title>
-            <edition urn="urn:cts:copticLit:ap.114.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.114.monbeg">
                 <label xml:lang="eng">AP 114 Theophilus from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.125" xml:lang="cop">
             <title xml:lang="eng">AP 125 Joseph</title>
-            <edition urn="urn:cts:copticLit:ap.125.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.125.monbeg">
                 <label xml:lang="eng">AP 125 Joseph from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.157" xml:lang="cop">
             <title xml:lang="eng">AP 157 Papnoute</title>
-            <edition urn="urn:cts:copticLit:ap.157.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.157.monbeg">
                 <label xml:lang="eng">AP 157 Papnoute from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.172" xml:lang="cop">
             <title xml:lang="eng">AP 172 Antonius</title>
-            <edition urn="urn:cts:copticLit:ap.172.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.172.monbeg">
                 <label xml:lang="eng">AP 172 Antonius from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.177" xml:lang="cop">
             <title xml:lang="eng">AP 177 Ephraim</title>
-            <edition urn="urn:cts:copticLit:ap.177.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.177.monbeg">
                 <label xml:lang="eng">AP 177 Ephraim from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.216" xml:lang="cop">
             <title xml:lang="eng">AP 216 Besarion</title>
-            <edition urn="urn:cts:copticLit:ap.216.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.216.monbeg">
                 <label xml:lang="eng">AP 216 Besarion from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.22" xml:lang="cop">
             <title xml:lang="eng">AP 22 Fragment</title>
-            <edition urn="urn:cts:copticLit:ap.22.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.22.monbeg">
                 <label xml:lang="eng">AP 22 Fragment from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.23" xml:lang="cop">
             <title xml:lang="eng">AP 23 Isaac</title>
-            <edition urn="urn:cts:copticLit:ap.23.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.23.monbeg">
                 <label xml:lang="eng">AP 23 Isaac from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.25" xml:lang="cop">
             <title xml:lang="eng">AP 25 Pambo</title>
-            <edition urn="urn:cts:copticLit:ap.25.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.25.monbeg">
                 <label xml:lang="eng">AP 25 Pambo from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.26" xml:lang="cop">
             <title xml:lang="eng">AP 26 Cassian</title>
-            <edition urn="urn:cts:copticLit:ap.26.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.26.monbeg">
                 <label xml:lang="eng">AP 26 Cassian from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.34" xml:lang="cop">
             <title xml:lang="eng">AP 34 Theodorus</title>
-            <edition urn="urn:cts:copticLit:ap.34.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.34.monbeg">
                 <label xml:lang="eng">AP 34 Theodorus from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.42" xml:lang="cop">
             <title xml:lang="eng">AP 42 Sarah</title>
-            <edition urn="urn:cts:copticLit:ap.42.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.42.monbeg">
                 <label xml:lang="eng">AP 42 Sarah from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.53" xml:lang="cop">
             <title xml:lang="eng">AP 53 Ammona</title>
-            <edition urn="urn:cts:copticLit:ap.53.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.53.monbeg">
                 <label xml:lang="eng">AP 53 Ammona from White Monastery Manuscript EG</label>
             </edition>
         </work>
         <work urn="urn:cts:copticLit:ap.90" xml:lang="cop">
             <title xml:lang="eng">AP 90 Olympius</title>
-            <edition urn="urn:cts:copticLit:ap.90.MONB_EG">
+            <edition urn="urn:cts:copticLit:ap.90.monbeg">
                 <label xml:lang="eng">AP 90 Olympius from White Monastery Manuscript EG</label>
             </edition>
         </work>

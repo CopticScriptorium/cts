@@ -124,7 +124,7 @@ http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/paula/xml
 http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/dipl/html
 http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/norm/html
 http://copticscriptorium.org/urn:cts:copticLit:ap.90.monbeg/ana/html
-urn:cts:copticLit:besa.aph
+urn:cts:copticLit:besa.aphthonia
 urn:cts:copticLit:besa.aphthonia.monbba
 http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/relannis
 http://copticscriptorium.org/urn:cts:copticLit:besa.aphthonia.monbba/annis
