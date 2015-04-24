@@ -6,28 +6,50 @@
     </ctsnamespace>
     <textgroup urn="urn:cts:copticLit:shenoute">
         <groupname xml:lang="eng">Shenoute</groupname>
-        <work urn="urn:cts:copticLit:shenoute.A22" xml:lang="cop">
+        <work urn="urn:cts:copticLit:shenoute.a22" xml:lang="cop">
             <title xml:lang="eng">Acephalous Work 22</title>
-            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_YA">
-                <label xml:lang="eng">White Monastery Manuscript YA</label>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbya_421_428">
+                <label xml:lang="eng">a22 in White Monastery Manuscript YA from MS pages 421-428</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_YB">
-                <label xml:lang="eng">White Monastery Manuscript YB</label>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbya_517_518">
+                <label xml:lang="eng">a22 in White Monastery Manuscript YA from MS pages 517-518</label>
             </edition>
-            <edition urn="urn:cts:copticLit:shenoute.A22.MONB_ZC">
-                <label xml:lang="eng">White Monastery Manuscript ZC</label>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbyb_307_320">
+                <label xml:lang="eng">a22 in White Monastery Manuscript YB from MS pages 307-320</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.a22.monbzc_301_308">
+                <label xml:lang="eng">a22 in White Monastery Manuscript ZC from MS pages 301-308</label>
+            </edition>
+            
+        </work>
+        <work urn="urn:cts:copticLit:shenoute.abraham" xml:lang="cop">
+            <title xml:lang="eng">Abraham Our Father</title>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbxl_93_94">
+                <label xml:lang="eng">abraham from White Monastery Manuscript XL pages 93-94</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_518_520">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 518-520</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_525_530">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 525-530</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_535_540">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 535-540</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_547_550">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 547-550</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbya_551_554">
+                <label xml:lang="eng">abraham from White Monastery Manuscript YA pages 551-554</label>
+            </edition>
+            <edition urn="urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d">
+                <label xml:lang="eng">abraham from White Monastery Manuscript ZH fragments 1 a-d</label>
             </edition>
         </work>
-        <work urn="urn:cts:copticLit:shenoute.AOF" xml:lang="cop">
-            <title xml:lang="eng">Abraham Our Father</title>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_XL">
-                <label xml:lang="eng">White Monastery Manuscript XL</label>
-            </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_YA">
-                <label xml:lang="eng">White Monastery Manuscript YA</label>
-            </edition>
-            <edition urn="urn:cts:copticLit:shenoute.AOF.MONB_ZH">
-                <label xml:lang="eng">White Monastery Manuscript ZH</label>
+        <work urn="urn:cts:copticLit:shenoute.fox" xml:lang="cop">
+            <title xml:lang="eng">Not Because A Fox Barks</title>
+            <edition urn="urn:cts:copticLit:shenoute.fox.monbxh_204_216">
+                <label xml:lang="eng">Fox from White Monastery Manuscript XH pages 204-26</label>
             </edition>
         </work>
     </textgroup>
@@ -35,44 +57,354 @@
         <groupname xml:lang="eng">New Testament</groupname>
         <work urn="urn:cts:copticLit:nt.mark" xml:lang="grc">
             <title xml:lang="eng">Gospel of Mark</title>
-            <edition urn="urn:cts:copticLit:nt.mark.sahidica">
-                <label xml:lang="eng">Sahidica New Testament</label>
-            </edition>
+            <translation urn="urn:cts:copticLit:nt.mark.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahdica NT Mark (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.mark.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Mark (curated edition)</label>
+            </translation>
+            
         </work>
         <work urn="urn:cts:copticLit:nt.1cor" xml:lang="grc">
             <title xml:lang="eng">First Corinthians</title>
-            <edition urn="urn:cts:copticLit:nt.1cor.sahidica">
-                <label xml:lang="eng">Sahidica New Testament</label>
-            </edition>
+            <translation urn="urn:cts:copticLit:nt.1cor.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Cor (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.1cor.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Cor (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.2cor" xml:lang="grc">
+            <title xml:lang="eng">Second Corinthians</title>
+            <translation urn="urn:cts:copticLit:nt.2cor.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Cor (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.2cor.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Cor (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.rom" xml:lang="grc">
+            <title xml:lang="eng">Romans</title>
+            <translation urn="urn:cts:copticLit:nt.rom.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Romans (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.rom.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Romans (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.gal" xml:lang="grc">
+            <title xml:lang="eng">Galatians</title>
+            <translation urn="urn:cts:copticLit:nt.gal.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Galatians (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.gal.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Galatians (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.eph" xml:lang="grc">
+            <title xml:lang="eng">Ephesians</title>
+            <translation urn="urn:cts:copticLit:nt.eph.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Ephesians (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.eph.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Ephesians (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.phil" xml:lang="grc">
+            <title xml:lang="eng">Philippians</title>
+            <translation urn="urn:cts:copticLit:nt.phil.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Philippians (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.phil.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Philippians (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.col" xml:lang="grc">
+            <title xml:lang="eng">Colossians</title>
+            <translation urn="urn:cts:copticLit:nt.col.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Colossians (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.col.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Colossians (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.1thess" xml:lang="grc">
+            <title xml:lang="eng">1 Thessalonians</title>
+            <translation urn="urn:cts:copticLit:nt.1thess.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Thessalonians (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.1thess.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Thessalonians (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.2thess" xml:lang="grc">
+            <title xml:lang="eng">2 Thessalonians</title>
+            <translation urn="urn:cts:copticLit:nt.2thess.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Thessalonians (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.2thess.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Thessalonians (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.1tim" xml:lang="grc">
+            <title xml:lang="eng">1 Timothy</title>
+            <translation urn="urn:cts:copticLit:nt.1tim.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Timothy (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.1tim.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Timothy (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.2tim" xml:lang="grc">
+            <title xml:lang="eng">2 Timothy</title>
+            <translation urn="urn:cts:copticLit:nt.2tim.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Timothy (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.2tim.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Timothy (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.1pet" xml:lang="grc">
+            <title xml:lang="eng">1 Peter</title>
+            <translation urn="urn:cts:copticLit:nt.1pet.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Peter (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.1pet.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 Peter (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.2pet" xml:lang="grc">
+            <title xml:lang="eng">2 Peter</title>
+            <translation urn="urn:cts:copticLit:nt.2pet.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Peter (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.2pet.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 Peter (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.1john" xml:lang="grc">
+            <title xml:lang="eng">1 John</title>
+            <translation urn="urn:cts:copticLit:nt.1john.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 John (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.1john.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 1 John (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.2john" xml:lang="grc">
+            <title xml:lang="eng">2 John</title>
+            <translation urn="urn:cts:copticLit:nt.2john.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 John (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.2john.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 2 John (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.3john" xml:lang="grc">
+            <title xml:lang="eng">3 John</title>
+            <translation urn="urn:cts:copticLit:nt.3john.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 3 John (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.3john.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT 3 John (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.titus" xml:lang="grc">
+            <title xml:lang="eng">Titus</title>
+            <translation urn="urn:cts:copticLit:nt.titus.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Titus (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.titus.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Titus (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.jude" xml:lang="grc">
+            <title xml:lang="eng">Jude</title>
+            <translation urn="urn:cts:copticLit:nt.jude.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Jude (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.jude.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Jude (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.phlm" xml:lang="grc">
+            <title xml:lang="eng">Philemon</title>
+            <translation urn="urn:cts:copticLit:nt.phlm.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Philemon (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.phlm.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Philemon (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.heb" xml:lang="grc">
+            <title xml:lang="eng">Hebrews</title>
+            <translation urn="urn:cts:copticLit:nt.heb.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Hebrews (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.heb.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Hebrews (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.jas" xml:lang="grc">
+            <title xml:lang="eng">James</title>
+            <translation urn="urn:cts:copticLit:nt.jas.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT James (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.jas.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT James (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.matt" xml:lang="grc">
+            <title xml:lang="eng">Matthew</title>
+            <translation urn="urn:cts:copticLit:nt.matt.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Matthew (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.matt.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Matthew (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.luke" xml:lang="grc">
+            <title xml:lang="eng">Luke</title>
+            <translation urn="urn:cts:copticLit:nt.luke.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Luke (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.luke.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Luke (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.john" xml:lang="grc">
+            <title xml:lang="eng">John</title>
+            <translation urn="urn:cts:copticLit:nt.john.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT John (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.john.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT John (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.acts" xml:lang="grc">
+            <title xml:lang="eng">Acts of the Apostles</title>
+            <translation urn="urn:cts:copticLit:nt.acts.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Acts of the Apostles (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.acts.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Acts of the Apostles (curated edition)</label>
+            </translation>
+        </work>
+        <work urn="urn:cts:copticLit:nt.rev" xml:lang="grc">
+            <title xml:lang="eng">Revelation</title>
+            <translation urn="urn:cts:copticLit:nt.rev.sahidica" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Revelation (uncurated edition)</label>
+            </translation>
+            <translation urn="urn:cts:copticLit:nt.rev.sahidica_ed" xml:lang="cop">
+                <label xml:lang="eng">Sahidica NT Revelation (curated edition)</label>
+            </translation>
         </work>
     </textgroup>
     <textgroup urn="urn:cts:copticLit:besa">
         <groupname xml:lang="eng">Letters of Besa</groupname>
-        <work urn="urn:cts:copticLit:besa.aph" xml:lang="grc">
+        <work urn="urn:cts:copticLit:besa.aphthonia" xml:lang="cop">
             <title xml:lang="eng">Letters to Apthonia</title>
-            <edition urn="urn:cts:copticLit:besa.aph.MONB_BA">
-                <label xml:lang="eng">White Monastery Manuscript BA</label>
+            <edition urn="urn:cts:copticLit:besa.aphthonia.monbba">
+                <label xml:lang="eng">Apthonia from White Monastery Manuscript BA</label>
             </edition>
-            <edition urn="urn:cts:copticLit:besa.aph.MONB_BB">
-                <label xml:lang="eng">White Monastery Manuscript BB</label>
+            <edition urn="urn:cts:copticLit:besa.aphthonia.monbbb">
+                <label xml:lang="eng">Apthonia from White Monastery Manuscript BB</label>
             </edition>
         </work>
-        <work urn="urn:cts:copticLit:besa.nuns" xml:lang="grc">
+        <work urn="urn:cts:copticLit:besa.thieving" xml:lang="cop">
             <title xml:lang="eng">Letters to Thieving Nuns</title>
-            <edition urn="urn:cts:copticLit:besa.nuns.MONB_BA">
-                <label xml:lang="eng">White Monastery Manuscript BA</label>
+            <edition urn="urn:cts:copticLit:besa.thieving.monbba">
+                <label xml:lang="eng">Nuns from White Monastery Manuscript BA</label>
             </edition>
-            <edition urn="urn:cts:copticLit:besa.nuns.MONB_BB">
-                <label xml:lang="eng">White Monastery Manuscript BB</label>
+            <edition urn="urn:cts:copticLit:besa.thieving.monbbb">
+                <label xml:lang="eng">Nuns from White Monastery Manuscript BB</label>
             </edition>
         </work>
     </textgroup>
     <textgroup urn="urn:cts:copticLit:ap">
         <groupname xml:lang="eng">The Apophthegmata Patrum</groupname>
-        <work urn="urn:cts:copticLit:ap.001" xml:lang="grc">
-            <title xml:lang="eng">The Apophthegmata Patrum</title>
-            <edition urn="urn:cts:copticLit:ap.001.MONB_EG">
-                <label xml:lang="eng">White Monastery Manuscript EG</label>
+        <work urn="urn:cts:copticLit:ap.114" xml:lang="cop">
+            <title xml:lang="eng">AP 114 Theophilus</title>
+            <edition urn="urn:cts:copticLit:ap.114.monbeg">
+                <label xml:lang="eng">AP 114 Theophilus from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.125" xml:lang="cop">
+            <title xml:lang="eng">AP 125 Joseph</title>
+            <edition urn="urn:cts:copticLit:ap.125.monbeg">
+                <label xml:lang="eng">AP 125 Joseph from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.157" xml:lang="cop">
+            <title xml:lang="eng">AP 157 Papnoute</title>
+            <edition urn="urn:cts:copticLit:ap.157.monbeg">
+                <label xml:lang="eng">AP 157 Papnoute from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.172" xml:lang="cop">
+            <title xml:lang="eng">AP 172 Antonius</title>
+            <edition urn="urn:cts:copticLit:ap.172.monbeg">
+                <label xml:lang="eng">AP 172 Antonius from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.177" xml:lang="cop">
+            <title xml:lang="eng">AP 177 Ephraim</title>
+            <edition urn="urn:cts:copticLit:ap.177.monbeg">
+                <label xml:lang="eng">AP 177 Ephraim from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.216" xml:lang="cop">
+            <title xml:lang="eng">AP 216 Besarion</title>
+            <edition urn="urn:cts:copticLit:ap.216.monbeg">
+                <label xml:lang="eng">AP 216 Besarion from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.22" xml:lang="cop">
+            <title xml:lang="eng">AP 22 Fragment</title>
+            <edition urn="urn:cts:copticLit:ap.22.monbeg">
+                <label xml:lang="eng">AP 22 Fragment from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.23" xml:lang="cop">
+            <title xml:lang="eng">AP 23 Isaac</title>
+            <edition urn="urn:cts:copticLit:ap.23.monbeg">
+                <label xml:lang="eng">AP 23 Isaac from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.25" xml:lang="cop">
+            <title xml:lang="eng">AP 25 Pambo</title>
+            <edition urn="urn:cts:copticLit:ap.25.monbeg">
+                <label xml:lang="eng">AP 25 Pambo from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.26" xml:lang="cop">
+            <title xml:lang="eng">AP 26 Cassian</title>
+            <edition urn="urn:cts:copticLit:ap.26.monbeg">
+                <label xml:lang="eng">AP 26 Cassian from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.34" xml:lang="cop">
+            <title xml:lang="eng">AP 34 Theodorus</title>
+            <edition urn="urn:cts:copticLit:ap.34.monbeg">
+                <label xml:lang="eng">AP 34 Theodorus from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.42" xml:lang="cop">
+            <title xml:lang="eng">AP 42 Sarah</title>
+            <edition urn="urn:cts:copticLit:ap.42.monbeg">
+                <label xml:lang="eng">AP 42 Sarah from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.53" xml:lang="cop">
+            <title xml:lang="eng">AP 53 Ammona</title>
+            <edition urn="urn:cts:copticLit:ap.53.monbeg">
+                <label xml:lang="eng">AP 53 Ammona from White Monastery Manuscript EG</label>
+            </edition>
+        </work>
+        <work urn="urn:cts:copticLit:ap.90" xml:lang="cop">
+            <title xml:lang="eng">AP 90 Olympius</title>
+            <edition urn="urn:cts:copticLit:ap.90.monbeg">
+                <label xml:lang="eng">AP 90 Olympius from White Monastery Manuscript EG</label>
             </edition>
         </work>
     </textgroup>
