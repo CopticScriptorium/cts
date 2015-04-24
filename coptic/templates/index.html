@@ -62,9 +62,13 @@
 					<h3  class="subtitle">{{visualization.title}}</h3>
 					<div  class="coptic-text html" ng-bind-html="visualization.html | unsafe">
 					</div>
-					<!--div class="coptic-text html">
+
+					<!-- <iframe> solution, if CS wanted to load textual content directly from ANNIS  -->
+					<!-- div class="coptic-text html">
 						<iframe width="900" height="900" ng-src="{{load_single_iframe( selected_text.collection.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
-					</div-->
+
+					</div -->
+
 				</div>
 
 				<div id="information" class="meta-information">
@@ -87,37 +91,29 @@
 					</p>
 					<p>
 						<span class="label">Passage:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}" target="_blank" ng-hide="!selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}</a>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}" target="_blank" ng-hide="selected_text.msName.length">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}</a>
+						<a href="/{{selected_text.passage_urn}}" target="_blank">{{selected_text.passage_urn}}</a>
+
 					</p>
 					<p ng-repeat="visualization in selected_text.html_visualizations">
 						<span class="label">{{visualization.title}} HTML:</span>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/{{visualization.slug}}/html" target="_blank" ng-hide="!selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/{{visualization.slug}}/html</a>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/{{visualization.slug}}/html" target="_blank" ng-hide="selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/{{visualization.slug}}/html</a>
+						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/{{visualization.slug}}/html" target="_blank" >http://copticscriptorium.org/{{selected_text.passage_urn}}/{{visualization.slug}}/html</a>
+
 					</p>
 					<p>
 						<span class="label">TEI XML:</span>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/tei/xml" target="_blank" ng-hide="!selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/tei/xml</a>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/tei/xml" target="_blank" ng-hide="selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/tei/xml</a>
+						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/tei/xml" target="_blank">http://copticscriptorium.org/{{selected_text.passage_urn}}/tei/xml</a>
 					</p>
 					<p>
 						<span class="label">Paula XML:</span>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/paula/xml" target="_blank" ng-hide="!selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/paula/xml</a>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/paula/xml" target="_blank" ng-hide="selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/paula/xml</a>
+						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/paula/xml" target="_blank">http://copticscriptorium.org/{{selected_text.passage_urn}}/paula/xml</a>
 					</p>
 					<p>
 						<span class="label">reIANNIS:</span>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/relannis" target="_blank" ng-hide="!selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/relannis</a>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/relannis" target="_blank" ng-hide="selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/relannis</a>
+						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/relannis" target="_blank" >http://copticscriptorium.org/{{selected_text.passage_urn}}/relannis</a>
 					</p>
 					<p>
 						<span class="label">ANNIS UI:</span>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/annis" target="_blank" ng-hide="!selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}:{{selected_text.passage_urn}}/annis</a>
-						<a href="http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/annis" target="_blank" ng-hide="selected_text.msName.length">http://copticscriptorium.org/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.passage_urn}}/annis</a>
-					</p>
-					<p ng-hide="!selected_text.msName.length">
-						<span class="label">Edition Manuscript:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}" target="_blank">urn:cts:copticLit:{{selected_text.collection.urn_code}}:{{selected_text.msName}}</a>
+						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/annis" target="_blank" >http://copticscriptorium.org/{{selected_text.passage_urn}}/annis</a>
 					</p>
 					<p>
 						<span class="label">Text Corpus:</span>

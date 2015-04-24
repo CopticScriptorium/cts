@@ -238,17 +238,25 @@ angular.module('coptic')
 
 			// Set pertinent metadata directly to the selected_text object
 			$scope.selected_text.text_meta.forEach(function(meta){
+
 					if ( meta.name === "pages_from" ){
 						$scope.selected_text.pages_from = meta.value;
+
 					}else if ( meta.name === "pages_to" ){
 						$scope.selected_text.pages_to = meta.value;
+
 					}else if ( meta.name === "chapter" ){
 						$scope.selected_text.chapter = meta.value;
+
+					}else if ( meta.name === "document_cts_urn" ){
+						$scope.selected_text.passage_urn = meta.value;
+
 					}
+
 				});
 
+			/*
 			// Set the passage URN based on the metadata attributes
-			$scope.selected_text.passage_urn = "";
 			if ( typeof $scope.selected_text.pages_from !== "undefined" ){
 				$scope.selected_text.passage_urn = $scope.selected_text.pages_from;
 			} 
@@ -258,6 +266,7 @@ angular.module('coptic')
 			if ( typeof $scope.selected_text.chapter !== "undefined" ){
 				$scope.selected_text.passage_urn = $scope.selected_text.chapter;
 			} 
+			*/
 
 			// Toggle the specific classes and visibility on elements
 			$target = $(".text-subwork[data-slug='" + $scope.text_query.slug + "']");
@@ -269,8 +278,7 @@ angular.module('coptic')
 
 			// Set the HTML document meta elements
 			$("meta[name=corpus_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code );
-			$("meta[name=document_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code + ":" + $scope.selected_text.slug ); 
-			$("meta[name=mss_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code + ":" + $scope.selected_text.msName ); 
+			$("meta[name=document_urn]").attr("content", $scope.selected_text.passage_urn ); 
 
 			// Scroll back to the top
 			$('html,body').scrollTop(0);
