@@ -10,7 +10,7 @@ def get_search_fields():
 
 	search_fields = SearchField.objects.all().order_by("order")
 	for search_field in search_fields:
-		search_field.values = SearchFieldValue.objects.filter(search_field=search_field.id) 
+		search_field.values = SearchFieldValue.objects.filter( search_field=search_field.id ) 
 
 	return search_fields 
 
@@ -23,7 +23,7 @@ def populate_values( instance ):
 	if instance.splittable:
 
 		split_sfvs = []
-		sfvs = SearchFieldValue.objects.filter(search_field=instance.id)
+		sfvs = SearchFieldValue.objects.filter( search_field=instance.id )
 
 		# for each search field value, split it on the splittable field
 		for sfv in sfvs:

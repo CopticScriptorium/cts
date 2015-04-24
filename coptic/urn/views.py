@@ -104,7 +104,7 @@ def check_passage_urn( urn_candidate ):
 	"""
 	Lookup the passage URN against the document_cts_urn metadata from ANNIS
 	"""
-	text_slug = ""
+	sel_text = {}
 	print(urn_candidate)
 
 	# Check the passage urn against each text metadata
@@ -115,7 +115,7 @@ def check_passage_urn( urn_candidate ):
 
 			# Check the pages_from / pages_to range against the passage_urn
 			if meta.name == "document_cts_urn":
-				if meta.value.split(":")[-1] == urn_candidate[-1]: 
-					text_slug = text.slug
+				if meta.value.split(":")[3] == urn_candidate[3]: 
+					sel_text = text	
 
-	return text
+	return sel_text 
