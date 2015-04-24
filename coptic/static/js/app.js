@@ -321,7 +321,9 @@ angular.module('coptic')
 	 * Updates texts with returned data from API query
 	 */
 	$scope.update_texts = function( res ){
-		var texts = [];
+		var texts = []
+		,	passage_urn
+		;
 
 		// If it is a collection response 
 		if ( typeof res.collections !== "undefined" ){
@@ -341,34 +343,15 @@ angular.module('coptic')
 			// Set pertinent metadata directly to the selected_text object
 			$scope.selected_text.text_meta.forEach(function(meta){
 
-					if ( meta.name === "pages_from" ){
-						$scope.selected_text.pages_from = meta.value;
-
-					}else if ( meta.name === "pages_to" ){
-						$scope.selected_text.pages_to = meta.value;
-
-					}else if ( meta.name === "chapter" ){
-						$scope.selected_text.chapter = meta.value;
-
-					}else if ( meta.name === "document_cts_urn" ){
+					if ( meta.name === "document_cts_urn" ){
 						$scope.selected_text.passage_urn = meta.value;
-
+						passage_urn = meta.value.split(":");
+						passage_urn = passage_urn[3].split(".");
+						$scope.selected_text.textgroup_urn = passage_urn[0];
+						$scope.selected_text.corpus_urn = passage_urn[1];
 					}
 
 				});
-
-			/*
-			// Set the passage URN based on the metadata attributes
-			if ( typeof $scope.selected_text.pages_from !== "undefined" ){
-				$scope.selected_text.passage_urn = $scope.selected_text.pages_from;
-			} 
-			if ( typeof $scope.selected_text.pages_to !== "undefined" ){
-				$scope.selected_text.passage_urn = $scope.selected_text.passage_urn + "-" + $scope.selected_text.pages_to;
-			} 
-			if ( typeof $scope.selected_text.chapter !== "undefined" ){
-				$scope.selected_text.passage_urn = $scope.selected_text.chapter;
-			} 
-			*/
 
 			// Toggle the specific classes and visibility on elements
 			$target = $(".text-subwork[data-slug='" + $scope.text_query.slug + "']");
@@ -379,7 +362,7 @@ angular.module('coptic')
 			$target.removeClass("hidden").addClass("single-header");
 
 			// Set the HTML document meta elements
-			$("meta[name=corpus_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.collection.urn_code );
+			$("meta[name=corpus_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.corpus_urn );
 			$("meta[name=document_urn]").attr("content", $scope.selected_text.passage_urn ); 
 
 			// Scroll back to the top

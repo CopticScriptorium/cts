@@ -35,7 +35,7 @@ def _query( params={} ):
 		most_recent_ingests = Ingest.objects.all().order_by('-id')
 		if len( most_recent_ingests ) > 0:
 			most_recent_ingest = most_recent_ingests[0]
-			mss_texts = []
+			selected_texts = []
 
 			# If this is a query to the collections model
 			if params['model'] == 'collections':
@@ -49,30 +49,15 @@ def _query( params={} ):
 					# Process the filters and find the collections based on the ID
 					for f in params['filters']:
 
+						# Lookup by corpus URN data from ANNIS
 						if f['field'] == "corpus_urn":	
-							corpus_collections = Collection.objects.filter(urn_code=f['filter'])
-							for c in corpus_collections:
-								collection_ids.append( c.id )
+							collection_ids, selected_texts = get_corpus_texts( f['filter'], collection_ids, selected_texts )
 
-						if f['field'] == "textgroup_urn":	
-							corpus_collections = Collection.objects.filter(textgroup_urn_code=f['filter'])
-							for c in corpus_collections:
-								collection_ids.append( c.id )
+						# Lookup by textgroup URN data from ANNIS
+						elif f['field'] == "textgroup_urn":	
+							collection_ids, selected_texts = get_textgroup_texts( f['filter'], collection_ids, selected_texts )
 
-						elif f['field'] == "mss_urn":	
-
-							cid_set = []
-							collection_ids = []
-
-							text_meta_items = TextMeta.objects.filter(name="msName", value=f['filter'])
-
-							# Get the textMeta msName items
-							for text_meta_item in text_meta_items:
-								mss_texts = mss_texts + list( Text.objects.filter(text_meta=text_meta_item.id) )
-
-							for mss_text in mss_texts:
-								collection_ids.append(mss_text.collection.id)
-
+						# Do a textsearch across the corpora
 						elif f['field'] == "text_search":
 							ts_collections = Collection.objects.all()
 
@@ -94,6 +79,8 @@ def _query( params={} ):
 								if collection_has_textsearch_match:
 									collection_ids.append( ts_collection.id )
 
+						# Otherwise, treat it as a general meta query to the ANNIS metadata ingested
+						# as searchfields
 						else:
 							sfv = SearchFieldValue.objects.filter(id=f['id'])
 							text_ids = text_ids + list( sfv.values_list('texts__id', flat=True) )
@@ -101,21 +88,25 @@ def _query( params={} ):
 							for text in search_texts:
 								collection_ids.append(text.collection.id)
 
-					# If we have MSS texts to filter and join
-					if len( mss_texts ):
+
+					# If we have selected texts to filter and join
+					if len( selected_texts ):
+
+						# Get Unique values from the ids
+						cid_set = set(collection_ids)
+						collection_ids = set(cid_set)
 
 						# query collections and texts
 						collections = Collection.objects.filter(id__in=collection_ids)
 						for collection in collections:
-							if not hasattr( collection, "texts"):
-								collection.texts = []
 
-							for text in mss_texts:
+							collection.texts = []
+							for text in selected_texts:
 								if text.collection.id == collection.id:
 									collection.texts.append( text )
 
 					# If we have other texts to filter and join
-					if len( text_ids ):
+					elif len( text_ids ):
 
 						# Get Unique values from the ids
 						cid_set = set(collection_ids)
@@ -140,6 +131,7 @@ def _query( params={} ):
 
 							collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
 
+				# There are no filters, check for specific collections
 				else:
 
 					# If there's a slug to query a specific collection
@@ -149,8 +141,11 @@ def _query( params={} ):
 						# establish all the queries to be run
 						collections = Collection.objects.all()
 
+					# Query texts for the collections
 					for collection in collections:
+						# Ensure prefetch related
 						collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+
 
 				# fetch the results and add to the objects dict
 				jsonproof_queryset(objects, 'collections', collections)
@@ -404,3 +399,56 @@ def coptic_encoder( obj ):
 	return encoded 
 
 
+def get_corpus_texts( filter_value, collection_ids, selected_texts ):
+	"""
+	Lookup texts based on corpus URN data from the document_cts_urn
+	"""
+	matched_text_meta_objects = []
+	filter_value = filter_value.split(".")
+
+	# Compare document_cts_urn meta values to the filter_value from the search params
+	for text_meta_object in TextMeta.objects.filter( name="document_cts_urn" ):
+
+		parsed_urn = text_meta_object.value.split(":")
+		parsed_urn = parsed_urn[3].split(".")
+
+		if parsed_urn[0] == filter_value[0] and parsed_urn[1] == filter_value[1]:
+			matched_text_meta_objects.append( text_meta_object )
+
+	# Get the textMeta msName items
+	for matched_text_meta_object in matched_text_meta_objects:
+		selected_texts = selected_texts + list( Text.objects.filter( text_meta=matched_text_meta_object.id ) )
+
+	# Aggregate the collection ids for each text
+	for sel_text in selected_texts:
+		if sel_text.collection.id not in collection_ids:
+			collection_ids.append(sel_text.collection.id)
+
+	return collection_ids, selected_texts 
+
+
+def get_textgroup_texts( filter_value, collection_ids, selected_texts ):
+	"""
+	Lookup texts based on textgroup URN data from the document_cts_urn
+	"""
+	matched_text_meta_objects = []
+
+	# Compare document_cts_urn meta values to the filter_value from the search params
+	for text_meta_object in TextMeta.objects.filter( name="document_cts_urn" ):
+		parsed_urn = text_meta_object.value.split(":")
+		parsed_urn = parsed_urn[3].split(".")
+		if parsed_urn[0] == filter_value:
+			matched_text_meta_objects.append( text_meta_object )
+
+
+	# Get the textMeta msName items
+	for matched_text_meta_object in matched_text_meta_objects:
+		selected_texts = selected_texts + list( Text.objects.filter(text_meta=matched_text_meta_object.id) )
+
+	# Aggregate the collection ids for each text
+	for sel_text in selected_texts:
+		if sel_text.collection.id not in collection_ids:
+			collection_ids.append(sel_text.collection.id)
+
+
+	return collection_ids, selected_texts 
