@@ -233,7 +233,7 @@ def fetch_search_fields( ingest ):
 		sf = SearchField()
 		sf.annis_name = search_field['name']
 		sf.title = search_field['name']
-		sf.order = 1
+		sf.order = 10 
 		sf.save()
 
 		# Save value data

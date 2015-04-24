@@ -30,7 +30,7 @@ def urn_redirect(request, query):
 			text = check_passage_urn( urn_candidate )
 
 			# A text exists for the URN query parameter 
-			if passage_slug:
+			if text:
 				# Add the slug to the redirect URL  
 				url  = "/texts/" + text.slug 
 
