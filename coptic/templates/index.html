@@ -6,12 +6,18 @@
 
 		<div class="grid inner">
 
-			<div class="text-list list">
+			<section class="project-description entry-text" ng-hide="texts.length">
+
+
+			</section>
+
+			<section class="text-list list" ng-hide="!texts.length">
+
 				<div class="text-author" ng-repeat="collection in texts">
 					<div class="text-work" >
 						<div class="work-title-wrap">
-							<h2 class="work-title">{{collection.title}}</h2>
-							<h4 class="work-title-urn">urn:cts:copticLit:{{collection.urn_code}}</h4>
+							<h2 class="work-title title">{{collection.title}}</h2>
+							<h4 class="work-title-urn urn">urn:cts:copticLit:{{collection.urn_code}}</h4>
 						</div>
 						<div class="text-subwork" ng-repeat="text in collection.texts" ng-class-even="'even'" data-slug="{{text.slug}}">
 
@@ -33,6 +39,8 @@
 									<span class="version-label">
 										Resources:
 									</span>
+
+
 									<a href="{{collection.github}}" class="text-item tei" target="_blank">
 										<span class="urn">TEI</span>
 										<span class="fa fa-external-link"></span>
@@ -43,20 +51,26 @@
 										<span class="fa fa-external-link"></span>
 									</a>
 
+									<a href="{{collection.github}}" class="text-item paula" target="_blank">
+										<span class="urn">PAULA</span>
+										<span class="fa fa-external-link"></span>
+									</a>
+
 								</div>
 
 								<a href="/" class="close-selected-text">
 									<span class="fa fa-times"></span>
 								</a> 
 
-						</div>
+						</div><!-- .text-subwork -->
 
-					</div>
+					</div><!-- .text-work -->
 
-				</div>
+				</div><!-- .text-author -->
 
-			</div>
-			<div id="selected_text" class="selected-text-wrap page-content" ng-hide="!selected_text">
+			</section><!-- .text-list -->
+
+			<section id="selected_text" class="selected-text-wrap page-content" ng-hide="!selected_text">
 
 				<div class="text-format" ng-repeat="visualization in selected_text.html_visualizations" id="{{visualization.slug}}" >
 					<h3  class="subtitle">{{visualization.title}}</h3>
@@ -96,24 +110,24 @@
 					</p>
 					<p ng-repeat="visualization in selected_text.html_visualizations">
 						<span class="label">{{visualization.title}} HTML:</span>
-						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/{{visualization.slug}}/html" target="_blank" >http://copticscriptorium.org/{{selected_text.passage_urn}}/{{visualization.slug}}/html</a>
+						<a href="http://coptic.aweb.io/{{selected_text.passage_urn}}/{{visualization.slug}}/html" target="_blank" >http://coptic.aweb.io/{{selected_text.passage_urn}}/{{visualization.slug}}/html</a>
 
 					</p>
 					<p>
 						<span class="label">TEI XML:</span>
-						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/tei/xml" target="_blank">http://copticscriptorium.org/{{selected_text.passage_urn}}/tei/xml</a>
+						<a href="http://coptic.aweb.io/{{selected_text.passage_urn}}/tei/xml" target="_blank">http://coptic.aweb.io/{{selected_text.passage_urn}}/tei/xml</a>
 					</p>
 					<p>
 						<span class="label">Paula XML:</span>
-						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/paula/xml" target="_blank">http://copticscriptorium.org/{{selected_text.passage_urn}}/paula/xml</a>
+						<a href="http://coptic.aweb.io/{{selected_text.passage_urn}}/paula/xml" target="_blank">http://coptic.aweb.io/{{selected_text.passage_urn}}/paula/xml</a>
 					</p>
 					<p>
 						<span class="label">reIANNIS:</span>
-						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/relannis" target="_blank" >http://copticscriptorium.org/{{selected_text.passage_urn}}/relannis</a>
+						<a href="http://coptic.aweb.io/{{selected_text.passage_urn}}/relannis" target="_blank" >http://coptic.aweb.io/{{selected_text.passage_urn}}/relannis</a>
 					</p>
 					<p>
 						<span class="label">ANNIS UI:</span>
-						<a href="http://copticscriptorium.org/{{selected_text.passage_urn}}/annis" target="_blank" >http://copticscriptorium.org/{{selected_text.passage_urn}}/annis</a>
+						<a href="http://coptic.aweb.io/{{selected_text.passage_urn}}/annis" target="_blank" >http://coptic.aweb.io/{{selected_text.passage_urn}}/annis</a>
 					</p>
 					<p>
 						<span class="label">Text Corpus:</span>
@@ -123,16 +137,21 @@
 						<span class="label">Author Textgroup:</span>
 						<a href="/urn:cts:copticLit:{{selected_text.textgroup_urn}}" target="_blank">urn:cts:copticLit:{{selected_text.textgroup_urn}}</a>
 					</p>
-				</div>
-			</div>
-		</div>
+				
+				</div><!-- .citation-help -->
 
-	</div>
+			</section><!-- .selected-text-wrap.page-content -->
+
+		</div><!-- .grid.inner -->
+
+	</div><!-- .content.primary -->
+
 	<div id="loading_modal" class="coptic-modal">
 		<div class="loading-modal-inner">
 			<span class="fa fa-spinner fa-spin">
 			</span>
 		</div>
-	</div>
+	</div><!-- #loading_modal.coptic-modal -->
+
 	{% endverbatim %}
 {% endblock %}
