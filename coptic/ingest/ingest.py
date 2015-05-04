@@ -25,6 +25,12 @@ def fetch_texts( ingest ):
 	from ingest.models import Ingest 
 	from annis.models import AnnisServer
 
+	# Delete all former texts, textmeta, and visualizations 
+	print(" -- Document Ingest: Deleting all document values")
+	Text.objects.all().delete()
+	HTMLVisualization.objects.all().delete()
+	HTMLVisualizationFormat.objects.all().delete()
+
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
 	driver = webdriver.Firefox()

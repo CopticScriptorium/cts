@@ -200,7 +200,12 @@ angular.module('coptic')
 			// Index
 			$scope.show_loading_modal();
 			$scope.is_single = false;
-			$scope.get_collections( {} );
+			$scope.selected_text = null;
+
+			// Default to displaying no texts, only show the landing page description text
+			$scope.texts = [];
+			$scope.hide_loading_modal();
+
 			// Wipe Search Terms / Filters
 			$scope.filters = [];
 			$(".selected").removeClass("selected");
@@ -214,7 +219,18 @@ angular.module('coptic')
 			// /texts index
 			$scope.show_loading_modal();
 			$scope.is_single = false;
-			$scope.get_collections( {} );
+			$scope.selected_text = null;
+
+			// Default to displaying no texts, only show the landing page description text
+			$scope.texts = [];
+			$scope.hide_loading_modal();
+
+			// Wipe Search Terms / Filters
+			$scope.filters = [];
+			$(".selected").removeClass("selected");
+			$("meta[name=corpus_urn]").attr("content", "" );
+			$("meta[name=document_urn]").attr("content", "" ); 
+			$("meta[name=mss_urn]").attr("content", "" ); 
 
 
 		// If the application location is at /filters/:filters or /text/:slug
@@ -276,16 +292,22 @@ angular.module('coptic')
 			})
 			.success(function(data, status, headers, config){
 
+				// Log relevant data
 				if ( $scope.coptic_env === "development" ){
 						console.log("Collection Response:", data);
 				}
 
+				// Update the texts with the returned data
 				$scope.update_texts( data );
 
+				// If the view is set to single text, show the single template
 				if ( $scope.is_single ){
 					$scope.show_single();
+
+				// Otherwise, update the texts and hide the loading modal
 				}else{
 					$scope.hide_loading_modal();
+
 				}
 
 			})
@@ -303,11 +325,17 @@ angular.module('coptic')
 	 *
 	 */
 	$scope.get_texts = function( ){
+
+		// Log relevant details (for development only)
 		console.log("Texts Query", $scope.text_query);
 
 		$http.get('/api/' + $scope.text_query.model + '/slug:' + $scope.text_query.slug, $scope.text_query )
 			.success(function(data, status, headers, config){
+
+				// Log the response data
 				console.log( "Response", data);
+
+				// Update texts with the response data
 				$scope.update_texts( data );
 
 			})
@@ -328,13 +356,23 @@ angular.module('coptic')
 		// If it is a collection response 
 		if ( typeof res.collections !== "undefined" ){
 
-			res.collections.forEach(function(collection){
-				texts.push( collection );
-			});
+			// Ensure that if the path is /, no texts are added (only the project
+			// description text should be shown)
+			if ( $scope.path.length > 0  ){
+				res.collections.forEach(function(collection){
+					texts.push( collection );
 
-			$scope.texts = texts; 
-			//$scope.hide_loading_modal();
+				});
 
+				$scope.texts = texts; 
+
+			}else {
+				$scope.texts = [];
+
+			}
+
+
+		// If it is a texts response
 		}else if ( typeof res.texts !== "undefined" ) {
 
 			// Should handle the possibility of multiple selected in future
@@ -607,22 +645,27 @@ angular.module('coptic')
 
 		$scope.filters = [];
 
+		// Process filter URLs
 		filter_url.forEach(function(filter){
 			var filter_value;
 			filter = decodeURI(filter);
 			filter = filter.split("=");
-			filter_value = filter[1].split(":")
 
-			$scope.filters.push({
-						id : filter_value[0],
-						filter : filter_value[1],
-						field : filter[0]
-					});
-			$(".tool-search-item[data-searchid='" + filter_value[0] + "']").addClass("selected");
+			// if filter contains a key val pair demarcated by = 
+			if ( filter.length > 1 ) {
+				filter_value = filter[1].split(":")
 
-			if ( filter[0] === "text_search" ){
-				$(".text-search-input").val( filter_value[1] );
-				$scope.text_search = filter_value[1];
+				$scope.filters.push({
+							id : filter_value[0],
+							filter : filter_value[1],
+							field : filter[0]
+						});
+				$(".tool-search-item[data-searchid='" + filter_value[0] + "']").addClass("selected");
+
+				if ( filter[0] === "text_search" ){
+					$(".text-search-input").val( filter_value[1] );
+					$scope.text_search = filter_value[1];
+				}
 			}
 
 		});
@@ -677,12 +720,15 @@ angular.module('coptic')
 
 		if ( $scope.filters.length > 0 ){
 			$location.path( "/filter/" + filters_url );
+			$scope.get_collections( $scope.text_query );
+
 		}else{
 			$location.path( "/" );
+			$scope.texts = [];
+
 		}
 
 
-		$scope.get_collections( $scope.text_query );
 
 	};
 

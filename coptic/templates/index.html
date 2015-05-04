@@ -8,17 +8,32 @@
 
 			<section class="project-description entry-text" ng-hide="texts.length">
 
+				<h1 class="title">Coptic Scriptorium URN Resolver</h1>
 
-			</section>
+				<p class="description-text">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum dui velit. Suspendisse in cursus tortor, at hendrerit lacus. Nullam sed massa pellentesque, finibus massa vel, imperdiet elit. Phasellus scelerisque tristique aliquet. Nullam ornare ut mi quis dictum. Proin vel accumsan odio. Maecenas sed sapien pellentesque, mollis tellus sed, cursus neque. Proin et cursus quam. Ut eu nunc quis diam ornare scelerisque dignissim eget nunc. Suspendisse vel massa tortor. Cras ligula libero, vulputate id maximus at, dictum eu velit. Nulla ornare gravida egestas.
+				</p>
+				<p class="description-text">
+					Vivamus congue elit et quam convallis, a euismod neque fermentum. Aenean sed tincidunt purus. Nunc sit amet neque accumsan, rhoncus arcu sed, finibus sem. Integer velit nisl, posuere nec eleifend varius, iaculis sed leo. Sed sodales sem at tortor lobortis, at lacinia tellus mattis. Mauris finibus velit vel sem tempus gravida. Integer et gravida est. Quisque lacinia ante nec ligula interdum, imperdiet porta nibh accumsan. Sed tristique lorem et turpis luctus vulputate. Suspendisse ultrices eu mi non rutrum. Quisque venenatis, elit sed interdum dignissim, sem lectus tempus nisi, eu pellentesque velit dolor id tellus. Morbi lectus sapien, luctus ut nisl vel, elementum pellentesque metus. Nulla at lorem luctus, tincidunt felis sit amet, pharetra nulla. Phasellus nec suscipit sapien. Phasellus ornare velit ac justo bibendum, vel ullamcorper neque tempus.
+				</p>
+				<p class="description-text">
+					Maecenas eget gravida elit. Nunc tempus justo eu vestibulum porta. Donec porta nunc libero, non imperdiet odio ultrices sit amet. Proin elementum efficitur lobortis. Etiam sit amet fringilla massa, sed auctor orci. Nulla rhoncus nisi tortor, vel varius magna maximus molestie. Phasellus lacinia vestibulum interdum. Phasellus fringilla felis eget diam vulputate fermentum. Curabitur luctus scelerisque enim, condimentum vestibulum sapien laoreet ut. Maecenas cursus risus iaculis feugiat pellentesque.
+				</p>
+
+			</section><!-- .project-description -->
 
 			<section class="text-list list" ng-hide="!texts.length">
 
 				<div class="text-author" ng-repeat="collection in texts">
+
 					<div class="text-work" >
+
 						<div class="work-title-wrap">
 							<h2 class="work-title title">{{collection.title}}</h2>
 							<h4 class="work-title-urn urn">urn:cts:copticLit:{{collection.urn_code}}</h4>
+
 						</div>
+						
 						<div class="text-subwork" ng-repeat="text in collection.texts" ng-class-even="'even'" data-slug="{{text.slug}}">
 
 
