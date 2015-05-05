@@ -5,29 +5,6 @@ from django.db.models.signals import post_save
 from texts.search_fields import populate_values
 
 
-class Author(models.Model):
-	"""
-	Model for text authors
-	"""
-
-	name = models.CharField(max_length=200)
-	urn_code = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=40)
-	created = models.DateTimeField(editable=False)
-	modified = models.DateTimeField(editable=False)
-
-	def __str__(self):
-		return self.name
-
-	def save(self, *args, **kwargs):
-		''' On save, update timestamps '''
-		if not self.id:
-			self.created = datetime.datetime.today()
-		self.modified = datetime.datetime.today()
-		return super(Author, self).save(*args, **kwargs)
-
-
-
 class HtmlVisualizationFormat(models.Model):
 	"""
 	Model for different types of HTML visualizations, such as "norm", "ana", "dipl", and "sahidica"
