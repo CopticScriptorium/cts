@@ -1,27 +1,26 @@
 import pdb
 import json
 from api.json import json_view
-from texts.models import Text, Collection, Author, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
-from ingest.models import Ingest
+from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
 
-ALLOWED_MODELS = ['texts', 'collections']
-CLASSES = ( Text, Collection )
+ALLOWED_MODELS = ['texts', 'corpus']
+CLASSES = ( Text, Corpus )
 
 @json_view()
-def api(request, __params__=None):
+def api(request, _params=None):
 	"""
 	Search with the search params from the via the client-side application
 	"""
 	params = {}
 	get = request.GET
 
-	if __params__ != None:
-		params = process_param_values( __params__, get )
+	if _params != None:
+		params = process_param_values( _params, get )
 		pass
 
 	return _query( params ) 
 
-# basic search implementation for returning data 
+# Basic search implementation for returning data via the JSON API
 def _query( params={} ):
 	"""
 	Query the database with the sanitized params
@@ -30,141 +29,138 @@ def _query( params={} ):
 	search_filter = {}
 	objects = {} 
 
-	# If there's a model to query, such as collections or texts
+	# If there's a model to query, such as corpus or texts
 	if 'model' in params:
-		most_recent_ingests = Ingest.objects.all().order_by('-id')
-		if len( most_recent_ingests ) > 0:
-			most_recent_ingest = most_recent_ingests[0]
-			selected_texts = []
+		selected_texts = []
 
-			# If this is a query to the collections model
-			if params['model'] == 'collections':
+		# If this is a query to the corpus model
+		if params['model'] == 'corpus':
 
-				# If there are search filters included with the sanitized params
-				if "filters" in params:
+			# If there are search filters included with the sanitized params
+			if "filters" in params:
 
-					collection_ids = []
-					text_ids = []
+				corpus_ids = []
+				text_ids = []
 
-					# Process the filters and find the collections based on the ID
-					for f in params['filters']:
+				# Process the filters and find the corpus based on the ID
+				for f in params['filters']:
 
-						# Lookup by corpus URN data from ANNIS
-						if f['field'] == "corpus_urn":	
-							collection_ids, selected_texts = get_corpus_texts( f['filter'], collection_ids, selected_texts )
+					# Lookup by corpus URN data from ANNIS
+					if f['field'] == "corpus_urn":	
+						corpus_ids, selected_texts = get_corpus_texts( f['filter'], corpus_ids, selected_texts )
 
-						# Lookup by textgroup URN data from ANNIS
-						elif f['field'] == "textgroup_urn":	
-							collection_ids, selected_texts = get_textgroup_texts( f['filter'], collection_ids, selected_texts )
+					# Lookup by textgroup URN data from ANNIS
+					elif f['field'] == "textgroup_urn":	
+						corpus_ids, selected_texts = get_textgroup_texts( f['filter'], corpus_ids, selected_texts )
 
-						# Do a textsearch across the corpora
-						elif f['field'] == "text_search":
-							ts_collections = Collection.objects.all()
+					# Do a textsearch across the corpora
+					elif f['field'] == "text_search":
+						ts_corpus = Corpus.objects.all()
 
-							for ts_collection in ts_collections:
-								collection_has_textsearch_match = False
-								ts_texts = Text.objects.filter(collection=ts_collection.id)
+						for ts_corpus in ts_corpus:
+							corpus_has_textsearch_match = False
+							ts_texts = Text.objects.filter(corpus=ts_corpus.id)
 
-								for ts_text in ts_texts:
-									ts_html_visualizations = ts_text.html_visualizations.all()
+							for ts_text in ts_texts:
+								ts_html_visualizations = ts_text.html_visualizations.all()
 
-									for ts_html_visualization in ts_html_visualizations:
-										if f['filter'] in ts_html_visualization.html:
-											collection_has_textsearch_match = True
-											break
-
-									if collection_has_textsearch_match == True:
+								for ts_html_visualization in ts_html_visualizations:
+									if f['filter'] in ts_html_visualization.html:
+										corpus_has_textsearch_match = True
 										break
 
-								if collection_has_textsearch_match:
-									collection_ids.append( ts_collection.id )
+								if corpus_has_textsearch_match == True:
+									break
 
-						# Otherwise, treat it as a general meta query to the ANNIS metadata ingested
-						# as searchfields
-						else:
-							sfv = SearchFieldValue.objects.filter(id=f['id'])
-							text_ids = text_ids + list( sfv.values_list('texts__id', flat=True) )
-							search_texts = Text.objects.filter( id__in=text_ids )
-							for text in search_texts:
-								collection_ids.append(text.collection.id)
+							if corpus_has_textsearch_match:
+								corpus_ids.append( ts_corpus.id )
 
-
-					# If we have selected texts to filter and join
-					if len( selected_texts ):
-
-						# Get Unique values from the ids
-						cid_set = set(collection_ids)
-						collection_ids = set(cid_set)
-
-						# query collections and texts
-						collections = Collection.objects.filter(id__in=collection_ids)
-						for collection in collections:
-
-							collection.texts = []
-							for text in selected_texts:
-								if text.collection.id == collection.id:
-									collection.texts.append( text )
-
-					# If we have other texts to filter and join
-					elif len( text_ids ):
-
-						# Get Unique values from the ids
-						cid_set = set(collection_ids)
-						collection_ids = set(cid_set)
-
-						# query collections and texts
-						collections = Collection.objects.filter(id__in=collection_ids)
-						for collection in collections:
-							collection.texts = Text.objects.filter(id__in=text_ids, collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
-
-
-					# Otherwise, get all the texts for each collection/corpus 
+					# Otherwise, treat it as a general meta query to the ANNIS metadata ingested
+					# as searchfields
 					else:
+						sfv = SearchFieldValue.objects.filter(id=f['id'])
+						text_ids = text_ids + list( sfv.values_list('texts__id', flat=True) )
+						search_texts = Text.objects.filter( id__in=text_ids )
+						for text in search_texts:
+							corpus_ids.append(text.corpus.id)
 
-						# Get Unique values from the ids
-						cid_set = set(collection_ids)
-						collection_ids = set(cid_set)
 
-						# query collections and texts
-						collections = Collection.objects.filter(id__in=collection_ids)
-						for collection in collections:
+				# If we have selected texts to filter and join
+				if len( selected_texts ):
 
-							collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id, ).prefetch_related().order_by('slug')
+					# Get Unique values from the ids
+					cid_set = set(corpus_ids)
+					corpus_ids = set(cid_set)
 
-				# There are no filters, check for specific collections
+					# query corpus and texts
+					corpus = Corpus.objects.filter(id__in=corpus_ids)
+					for corpus in corpus:
+
+						corpus.texts = []
+						for text in selected_texts:
+							if text.corpus.id == corpus.id:
+								corpus.texts.append( text )
+
+				# If we have other texts to filter and join
+				elif len( text_ids ):
+
+					# Get Unique values from the ids
+					cid_set = set(corpus_ids)
+					corpus_ids = set(cid_set)
+
+					# query corpus and texts
+					corpus = Corpus.objects.filter(id__in=corpus_ids)
+					for corpus in corpus:
+						corpus.texts = Text.objects.filter(id__in=text_ids, corpus=corpus.id ).prefetch_related().order_by('slug')
+
+
+				# Otherwise, get all the texts for each corpus/corpus 
 				else:
 
-					# If there's a slug to query a specific collection
-					if "query" in params and "slug" in params['query']:
-						collections = Collection.objects.filter(slug=params['query']['slug'])
-					else:
-						# establish all the queries to be run
-						collections = Collection.objects.all()
+					# Get Unique values from the ids
+					cid_set = set(corpus_ids)
+					corpus_ids = set(cid_set)
 
-					# Query texts for the collections
-					for collection in collections:
-						# Ensure prefetch related
-						collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+					# query corpus and texts
+					corpus = Corpus.objects.filter(id__in=corpus_ids)
+					for corpus in corpus:
 
+						corpus.texts = Text.objects.filter(corpus=corpus.id ).prefetch_related().order_by('slug')
 
-				# fetch the results and add to the objects dict
-				jsonproof_queryset(objects, 'collections', collections)
+			# There are no filters, check for specific corpus
+			else:
 
-
-			# Otherwise, if this is a query to the texts model
-			elif params['model'] == 'texts':
-
+				# If there's a slug to query a specific corpus
 				if "query" in params and "slug" in params['query']:
-					texts = Text.objects.filter(slug=params['query']['slug'], ingest=most_recent_ingest.id).prefetch_related()
-
-					# for text in texts:
-					#	text.meta = SearchFieldValue.objects.filter(collections__id=text.collection.id)
-
+					corpus = Corpus.objects.filter(slug=params['query']['slug'])
 				else:
-					texts = Text.objects.filter(ingest=most_recent_ingest.id)
+					# establish all the queries to be run
+					corpus = Corpus.objects.all()
 
-				# fetch the results and add to the objects dict
-				jsonproof_queryset(objects, 'texts', texts)
+				# Query texts for the corpus
+				for corpus in corpus:
+					# Ensure prefetch related
+					corpus.texts = Text.objects.filter(corpus=corpus.id ).prefetch_related().order_by('slug')
+
+
+			# fetch the results and add to the objects dict
+			jsonproof_queryset(objects, 'corpus', corpus)
+
+
+		# Otherwise, if this is a query to the texts model
+		elif params['model'] == 'texts':
+
+			if "query" in params and "slug" in params['query']:
+				texts = Text.objects.filter( slug=params['query']['slug'] ).prefetch_related()
+
+				# for text in texts:
+				#	text.meta = SearchFieldValue.objects.filter(corpus__id=text.corpus.id)
+
+			else:
+				texts = Text.objects.filter()
+
+			# fetch the results and add to the objects dict
+			jsonproof_queryset(objects, 'texts', texts)
 				
 
 	# If the manifest is set in the params, render site manifest 
@@ -172,53 +168,42 @@ def _query( params={} ):
 		# setup the manifest of the archive
 		# Add more in the future
 
-		# establish all the queries to be run if there is ingest data
-		most_recent_ingests = Ingest.objects.all().order_by('-id')
-		if len( most_recent_ingests ) > 0:
+		corpus = Corpus.objects.all()
 
-			most_recent_ingest = most_recent_ingests[0]
-			collections = Collection.objects.all()
+		for corpus in corpus:
+			corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
-			for collection in collections:
-				collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+		# fetch the results and add to the objects dict
+		jsonproof_queryset(objects, 'corpus', corpus)
 
-			# fetch the results and add to the objects dict
-			jsonproof_queryset(objects, 'collections', collections)
-
-		# In case there is no ingest data, just return the collections
-		else:
-			collections = Collection.objects.all()
 
 	# If urns is set in the params, return index of urns
 	elif 'urns' in params:
 
-		# establish all the queries to be run if there is ingest data
-		most_recent_ingests = Ingest.objects.all().order_by('-id')
-		most_recent_ingest = most_recent_ingests[0]
-		collections = Collection.objects.all()
+		corpus = Corpus.objects.all()
 
 		objects['urns'] = []
 
-		# Get the urns for all collections
-		for i, collection in enumerate( collections ):
+		# Get the urns for all corpus
+		for i, corpus in enumerate( corpus ):
 
-			# Add a nested list for the urns related to this collection
+			# Add a nested list for the urns related to this corpus
 			objects['urns'].append([])
 
-			# Set the initial collection_urn	
-			collection_urn = "urn:cts:copticLit:" + collection.urn_code
+			# Set the initial corpus_urn	
+			corpus_urn = "urn:cts:copticLit:" + corpus.urn_code
 
-			# Add the collection urn to the collection urn list
-			objects['urns'][i].append( collection_urn )
+			# Add the corpus urn to the corpus urn list
+			objects['urns'][i].append( corpus_urn )
 
-			# Get the texts for the collection to find their URNs
-			collection.texts = Text.objects.filter(collection=collection.id, ingest=most_recent_ingest.id).prefetch_related().order_by('slug')
+			# Get the texts for the corpus to find their URNs
+			corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
-			# Then add all the urns for texts related to the collection
-			for text in collection.texts:
+			# Then add all the urns for texts related to the corpus
+			for text in corpus.texts:
 
-				# The base of the text_urn will be the collection urn
-				text_urn = collection_urn + ":"
+				# The base of the text_urn will be the corpus urn
+				text_urn = corpus_urn + ":"
 
 				# Fetch the text meta to look for an msName
 				text_meta = text.text_meta.all()
@@ -229,7 +214,7 @@ def _query( params={} ):
 					if meta_item.name == "msName":
 						text_urn = text_urn + meta_item.value 
 
-						# If we have a msName, add that msName URN to the collection urns
+						# If we have a msName, add that msName URN to the corpus urns
 						if text_urn not in objects['urns'][i]:
 							objects['urns'][i].append( text_urn )
 
@@ -355,51 +340,51 @@ def coptic_encoder( obj ):
 					"html" : html_visualization.html
 				})
 
-		text['collection'] = coptic_encoder( obj.collection )
+		text['corpus'] = coptic_encoder( obj.corpus )
 
 		encoded = text
 
-	# If we're dumping an instance of the Collection class to JSON
-	elif isinstance(obj, Collection):
-		collection = {}
+	# If we're dumping an instance of the Corpus class to JSON
+	elif isinstance(obj, Corpus):
+		corpus = {}
 
-		collection['title'] = obj.title 
-		collection['urn_code'] = obj.urn_code 
-		collection['textgroup_urn_code'] = obj.textgroup_urn_code 
-		collection['html_corpora_code'] = obj.html_corpora_code 
-		collection['slug'] = obj.slug 
-		collection['annis_code'] = obj.annis_code 
-		collection['annis_corpus_name'] = obj.annis_corpus_name
-		collection['github'] = obj.github 
-		collection['html_visualization_formats'] = []
+		corpus['title'] = obj.title 
+		corpus['urn_code'] = obj.urn_code 
+		corpus['textgroup_urn_code'] = obj.textgroup_urn_code 
+		corpus['html_corpora_code'] = obj.html_corpora_code 
+		corpus['slug'] = obj.slug 
+		corpus['annis_code'] = obj.annis_code 
+		corpus['annis_corpus_name'] = obj.annis_corpus_name
+		corpus['github'] = obj.github 
+		corpus['html_visualization_formats'] = []
 
 		for html_visualization_format in obj.html_visualization_formats.all():
-			collection['html_visualization_formats'].append({
+			corpus['html_visualization_formats'].append({
 					'title' : html_visualization_format.title,
 					'slug' : html_visualization_format.slug
 				}) 
 
 		if hasattr(obj, 'texts'):
-			collection['texts'] = []
+			corpus['texts'] = []
 			for i, text in enumerate( obj.texts ):
-				collection['texts'].append({
+				corpus['texts'].append({
 						'id' : text.id,
 						'title' : text.title,
 						'slug' : text.slug,
 						'html_visualizations' : [] 
 					})
 				for html_visualization in text.html_visualizations.all():
-					collection['texts'][ i ]['html_visualizations'].append({
+					corpus['texts'][ i ]['html_visualizations'].append({
 							"title" : html_visualization.visualization_format.title,
 							"slug" : html_visualization.visualization_format.slug
 						})
 
-		encoded = collection
+		encoded = corpus
 
 	return encoded 
 
 
-def get_corpus_texts( filter_value, collection_ids, selected_texts ):
+def get_corpus_texts( filter_value, corpus_ids, selected_texts ):
 	"""
 	Lookup texts based on corpus URN data from the document_cts_urn
 	"""
@@ -419,15 +404,15 @@ def get_corpus_texts( filter_value, collection_ids, selected_texts ):
 	for matched_text_meta_object in matched_text_meta_objects:
 		selected_texts = selected_texts + list( Text.objects.filter( text_meta=matched_text_meta_object.id ) )
 
-	# Aggregate the collection ids for each text
+	# Aggregate the corpus ids for each text
 	for sel_text in selected_texts:
-		if sel_text.collection.id not in collection_ids:
-			collection_ids.append(sel_text.collection.id)
+		if sel_text.corpus.id not in corpus_ids:
+			corpus_ids.append(sel_text.corpus.id)
 
-	return collection_ids, selected_texts 
+	return corpus_ids, selected_texts 
 
 
-def get_textgroup_texts( filter_value, collection_ids, selected_texts ):
+def get_textgroup_texts( filter_value, corpus_ids, selected_texts ):
 	"""
 	Lookup texts based on textgroup URN data from the document_cts_urn
 	"""
@@ -445,10 +430,10 @@ def get_textgroup_texts( filter_value, collection_ids, selected_texts ):
 	for matched_text_meta_object in matched_text_meta_objects:
 		selected_texts = selected_texts + list( Text.objects.filter(text_meta=matched_text_meta_object.id) )
 
-	# Aggregate the collection ids for each text
+	# Aggregate the corpus ids for each text
 	for sel_text in selected_texts:
-		if sel_text.collection.id not in collection_ids:
-			collection_ids.append(sel_text.collection.id)
+		if sel_text.corpus.id not in corpus_ids:
+			corpus_ids.append(sel_text.corpus.id)
 
 
-	return collection_ids, selected_texts 
+	return corpus_ids, selected_texts 

@@ -111,7 +111,7 @@ angular.module('coptic')
 	// Set the environment to development or production 
 	$scope.coptic_env = "development";
 
-	// Persisten location Path
+	// Persistent location Path
 	$scope.path = location.pathname.split("/");
 
 	// Filters for the search tools 
@@ -124,7 +124,7 @@ angular.module('coptic')
 	$scope.texts = [];
 
 	// Accepted models for the API
-	$scope.models = ["ingests", "collections", "texts"];
+	$scope.models = ["ingests", "corpus", "texts"];
 
 	// The selected text value for single text view
 	$scope.selected_text = null;
@@ -245,7 +245,7 @@ angular.module('coptic')
 				$(".text-format").hide();
 				$scope.show_loading_modal();
 				$scope.is_single = true;
-				$scope.get_collections( {} );
+				$scope.get_corpus( {} );
 			}
 
 
@@ -259,23 +259,23 @@ angular.module('coptic')
 			}else {
 				$scope.show_loading_modal();
 				$scope.is_single = true;
-				$scope.get_collections( {} );
+				$scope.get_corpus( {} );
 			}
 		}
 
 	};
 
 	/*
-	 * Collection Query to API
+	 * Corpus Query to API
 	 *
 	 *    -- Sends query object params
-	 *    -- Receives object with array of collections
+	 *    -- Receives object with array of corpus
 	 *
 	 */
-	$scope.get_collections = function( query ){
+	$scope.get_corpus = function( query ){
 
 		if ( $scope.coptic_env === "development" ){
-			console.log("Collections Query:", query);
+			console.log("Corpus Query:", query);
 		}
 
 		$scope.selected_text = null;
@@ -284,17 +284,13 @@ angular.module('coptic')
 		$(".work-title-wrap").removeClass("hidden");
 		$(".single-header").removeClass("single-header");
 
-		// query the collections
-		$http({
-				url : '/api/collections/',
-				method : "GET",
-				params : query,
-			})
+		// query the corpus
+		$http.get( '/api/', query )
 			.success(function(data, status, headers, config){
 
 				// Log relevant data
 				if ( $scope.coptic_env === "development" ){
-						console.log("Collection Response:", data);
+						console.log("Corpus Response:", data);
 				}
 
 				// Update the texts with the returned data
@@ -324,12 +320,12 @@ angular.module('coptic')
 	 *    -- Receives object with array of texts 
 	 *
 	 */
-	$scope.get_texts = function( ){
+	$scope.get_texts = function( query ){
 
 		// Log relevant details (for development only)
-		console.log("Texts Query", $scope.text_query);
+		console.log("Texts Query", query);
 
-		$http.get('/api/' + $scope.text_query.model + '/slug:' + $scope.text_query.slug, $scope.text_query )
+		$http.get('/api/', query )
 			.success(function(data, status, headers, config){
 
 				// Log the response data
@@ -353,14 +349,14 @@ angular.module('coptic')
 		,	passage_urn
 		;
 
-		// If it is a collection response 
-		if ( typeof res.collections !== "undefined" ){
+		// If it is a corpus response 
+		if ( typeof res.corpora !== "undefined" ){
 
 			// Ensure that if the path is /, no texts are added (only the project
 			// description text should be shown)
 			if ( $scope.path.length > 0  ){
-				res.collections.forEach(function(collection){
-					texts.push( collection );
+				res.corpora.forEach(function(corpus){
+					texts.push( corpus );
 
 				});
 
@@ -420,14 +416,14 @@ angular.module('coptic')
 		$scope.text_query = {};
 		$scope.text_query.model = "texts";
 		$scope.text_query.slug = $scope.path[2];
-		$scope.get_texts();
+		$scope.get_texts( $scope.text_query );
 
 	};
 
-	$scope.load_single_iframe = function( collection_annis_name, selected_text_name, visualization_slug ){
+	$scope.load_single_iframe = function( corpus_annis_name, selected_text_name, visualization_slug ){
 	// Load an iframe src elem
 
-		return "https://corpling.uis.georgetown.edu/annis/embeddedvis/htmldoc/" + collection_annis_name + "/" + selected_text_name + "?config=" + visualization_slug;
+		return "https://corpling.uis.georgetown.edu/annis/embeddedvis/htmldoc/" + corpus_annis_name + "/" + selected_text_name + "?config=" + visualization_slug;
 
 	};
 
@@ -559,12 +555,12 @@ angular.module('coptic')
 
 		// Update the text_query
 		$scope.text_query = {
-				model : "collections",
+				model : "corpus",
 				filters : $scope.filters
 			};	
 
 		$scope.selected_text = null;
-		$scope.get_collections( $scope.text_query );
+		$scope.get_corpus( $scope.text_query );
 
 
 	};
@@ -606,12 +602,12 @@ angular.module('coptic')
 
 			// Update the text_query
 			$scope.text_query = {
-					model : "collections",
+					model : "corpus",
 					filters : $scope.filters
 				};	
 
 			$scope.selected_text = null;
-			$scope.get_collections( $scope.text_query );
+			$scope.get_corpus( $scope.text_query );
 
 
 		}else {
@@ -625,12 +621,12 @@ angular.module('coptic')
 
 				// Update the text_query
 				$scope.text_query = {
-						model : "collections",
+						model : "corpus",
 						filters : $scope.filters
 					};	
 
 				$scope.selected_text = null;
-				$scope.get_collections( $scope.text_query );
+				$scope.get_corpus( $scope.text_query );
 
 			}
 
@@ -671,12 +667,12 @@ angular.module('coptic')
 		});
 
 		$scope.text_query = {
-				model : "collections",
+				model : "corpus",
 				filters : $scope.filters
 			};	
 
 		$scope.selected_text = null;
-		$scope.get_collections( $scope.text_query );
+		$scope.get_corpus( $scope.text_query );
 
 	};
 
@@ -708,7 +704,7 @@ angular.module('coptic')
 		}
 
 		$scope.text_query = {
-				model : "collections",
+				model : "corpus",
 				filters : $scope.filters
 			};	
 
@@ -720,7 +716,7 @@ angular.module('coptic')
 
 		if ( $scope.filters.length > 0 ){
 			$location.path( "/filter/" + filters_url );
-			$scope.get_collections( $scope.text_query );
+			$scope.get_corpus( $scope.text_query );
 
 		}else{
 			$location.path( "/" );

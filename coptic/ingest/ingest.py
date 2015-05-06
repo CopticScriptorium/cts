@@ -21,7 +21,7 @@ def fetch_texts( ingest ):
 	"""
 
 	# Get the text and ingest models (prevent circular import)
-	from texts.models import Collection, Author, Text, HtmlVisualization, HtmlVisualizationFormat, TextMeta 
+	from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualizationFormat, SearchField, SearchFieldValue
 	from ingest.models import Ingest 
 	from annis.models import AnnisServer
 
@@ -33,7 +33,7 @@ def fetch_texts( ingest ):
 
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
-	driver = webdriver.Firefox()
+	driver = webdriver.PhantomJS()
 
 	if len(annis_server) > 0:
 		annis_server = annis_server[0]
@@ -42,7 +42,7 @@ def fetch_texts( ingest ):
 		return False
 
 	# For each collection defined in the database, fetch results from ANNIS
-	for collection in Collection.objects.all():
+	for collection in Corpus.objects.all():
 
 		# Fetch documents based on the docnames specified on the collection object
 		doc_name_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/docnames/" + collection.annis_corpus_name
@@ -158,19 +158,14 @@ def fetch_texts( ingest ):
 				
 	driver.quit()
 
-	return True 
-
-def fetch_search_fields( ingest ):
-
-	# Get the text and ingest models (prevent circular import)
-	from texts.models import Text, SearchField, SearchFieldValue
-	from ingest.models import Ingest 
-	from annis.models import AnnisServer
-
+	#
+	# Then query ANNIS for text meta values and document metadata
+	#
 	# Define meta_xml list and the ANNIS server to query 
 	search_fields = []
 	annis_server = AnnisServer.objects.all()[:1] 
 
+	# Ensure there is an annis server available to query
 	if len(annis_server) > 0:
 		annis_server = annis_server[0]
 	else:
@@ -179,7 +174,6 @@ def fetch_search_fields( ingest ):
 
 	# For each text defined in the database, fetch results from ANNIS
 	for text in Text.objects.all():
-
 
 		# Add the text name to the URL
 		corpora_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + text.collection.annis_corpus_name + "/" + text.title

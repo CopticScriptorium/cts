@@ -34,21 +34,19 @@ class HtmlVisualization(models.Model):
 		return self.visualization_format.title
 
 
-class Collection(models.Model):
+class Corpus(models.Model):
 	"""
-	Collection, or also regularized to ANNIS as "Corpus"
+	Corpus model, containing pertinent information to corpora ingested from ANNIS	
 	"""
 
-	title = models.CharField(max_length=200)
-	textgroup_urn_code = models.CharField(max_length=200)
-	urn_code = models.CharField(max_length=200)
-	html_corpora_code = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=40)
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
+	title = models.CharField(max_length=200)
+	slug = models.SlugField(max_length=40)
+	urn_code = models.CharField(max_length=200)
+	html_corpora_code = models.CharField(max_length=200)
 	annis_code = models.CharField(max_length=200)
 	annis_corpus_name = models.CharField(max_length=200)
-	author = models.ForeignKey(Author, blank=True, null=True)
 	github = models.CharField(max_length=200)
 	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True, null=True)
 
@@ -60,7 +58,7 @@ class Collection(models.Model):
 		if not self.id:
 			self.created = datetime.datetime.today()
 		self.modified = datetime.datetime.today()
-		return super(Collection, self).save(*args, **kwargs)
+		return super(Corpus, self).save(*args, **kwargs)
 
 class TextMeta(models.Model):
 	"""
@@ -88,8 +86,7 @@ class Text(models.Model):
 	slug = models.SlugField(max_length=40)
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
-	author = models.ForeignKey(Author, blank=True, null=True)
-	collection = models.ForeignKey(Collection, blank=True, null=True)
+	corpus = models.ForeignKey(Corpus, blank=True, null=True)
 	ingest = models.ForeignKey(Ingest, blank=True, null=True)
 	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True, null=True)
 	text_meta = models.ManyToManyField(TextMeta, blank=True, null=True)

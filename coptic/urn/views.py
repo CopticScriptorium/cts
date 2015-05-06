@@ -1,7 +1,7 @@
 import pdb
 from django.shortcuts import get_object_or_404, redirect, render 
 from django.http import HttpResponse
-from texts.models import Text, Collection, SearchField, SearchFieldValue 
+from texts.models import Text, Corpus, SearchField, SearchFieldValue 
 
 def urn_redirect(request, query):
 	"""
@@ -23,10 +23,10 @@ def urn_redirect(request, query):
 		# If the text_urn length is greater than or equal to a length of 3, treat it like a passage URN
 		if len( text_urn ) >= 3:
 
-			# reconstruct the collection urn 
-			collection_urn = text_urn[0] + "." + text_urn[1] 
+			# reconstruct the corpus urn 
+			corpus_urn = text_urn[0] + "." + text_urn[1] 
 
-			# Check the passage URN against the collection texts metadata
+			# Check the passage URN against the corpus texts metadata
 			text = check_passage_urn( urn_candidate )
 
 			# A text exists for the URN query parameter 
@@ -40,15 +40,15 @@ def urn_redirect(request, query):
 
 				# If it's a xml query, for the moment redirect to github
 				elif query[-1] == "xml":
-					return redirect( text.collection.github )
+					return redirect( text.corpus.github )
 
 				# If it's an REI annis query, redirect to github
 				elif query[-1] == "relannis":
-					return redirect( text.collection.github )
+					return redirect( text.corpus.github )
 
 				# If it's an ANNIS URN, redirect to ANNIS
 				elif query[-1] == "annis":
-					return redirect( "https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" + text.collection.annis_code )	
+					return redirect( "https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" + text.corpus.annis_code )	
 
 				# Redirect to the specified text passage url
 				return redirect( url )
@@ -63,11 +63,11 @@ def urn_redirect(request, query):
 		# If the text_urn length is equal to 2, treat it like a work urn
 		elif len( text_urn ) == 2:
 
-			# Reconstruct the collection/work/corpus urn
-			collection_urn = text_urn[0] + "." + text_urn[1] 
+			# Reconstruct the corpus/work/corpus urn
+			corpus_urn = text_urn[0] + "." + text_urn[1] 
 
 			# Add the corpus urn filter 
-			url = "/filter/corpus_urn=0:" + collection_urn
+			url = "/filter/corpus_urn=0:" + corpus_urn
 
 			# Redirect to the specified URL 
 			return redirect( url )

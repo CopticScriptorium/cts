@@ -1,5 +1,4 @@
 from django.contrib import admin
-from ingest.models import Ingest, IngestSearchFields
+from ingest.models import Ingest
 
 admin.site.register(Ingest)
-admin.site.register(IngestSearchFields)

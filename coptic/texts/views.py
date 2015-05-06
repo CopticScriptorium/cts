@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
-from texts.models import Text, Collection, SearchField, SearchFieldValue
 from texts.search_fields import get_search_fields
 from ingest.models import Ingest
 
