@@ -245,7 +245,7 @@ angular.module('coptic')
 				$(".text-format").hide();
 				$scope.show_loading_modal();
 				$scope.is_single = true;
-				$scope.get_corpus( {} );
+				$scope.get_corpora( {} );
 			}
 
 
@@ -259,23 +259,23 @@ angular.module('coptic')
 			}else {
 				$scope.show_loading_modal();
 				$scope.is_single = true;
-				$scope.get_corpus( {} );
+				$scope.get_corpora( {} );
 			}
 		}
 
 	};
 
 	/*
-	 * Corpus Query to API
+	 * Corpora Query to API
 	 *
 	 *    -- Sends query object params
 	 *    -- Receives object with array of corpus
 	 *
 	 */
-	$scope.get_corpus = function( query ){
+	$scope.get_corpora = function( query ){
 
 		if ( $scope.coptic_env === "development" ){
-			console.log("Corpus Query:", query);
+			console.log("Corpora Query:", query);
 		}
 
 		$scope.selected_text = null;
@@ -285,12 +285,16 @@ angular.module('coptic')
 		$(".single-header").removeClass("single-header");
 
 		// query the corpus
-		$http.get( '/api/', query )
+		$http({
+				url : "/api/", 
+				method : "GET",
+				params : query 
+			})
 			.success(function(data, status, headers, config){
 
 				// Log relevant data
 				if ( $scope.coptic_env === "development" ){
-						console.log("Corpus Response:", data);
+						console.log("Corpora Response:", data);
 				}
 
 				// Update the texts with the returned data
@@ -325,7 +329,11 @@ angular.module('coptic')
 		// Log relevant details (for development only)
 		console.log("Texts Query", query);
 
-		$http.get('/api/', query )
+		$http({
+				url : "/api/", 
+				method : "GET",
+				params : query 
+			})
 			.success(function(data, status, headers, config){
 
 				// Log the response data
@@ -560,7 +568,7 @@ angular.module('coptic')
 			};	
 
 		$scope.selected_text = null;
-		$scope.get_corpus( $scope.text_query );
+		// $scope.get_corpora( $scope.text_query );
 
 
 	};
@@ -607,7 +615,7 @@ angular.module('coptic')
 				};	
 
 			$scope.selected_text = null;
-			$scope.get_corpus( $scope.text_query );
+			$scope.get_corpora( $scope.text_query );
 
 
 		}else {
@@ -626,7 +634,7 @@ angular.module('coptic')
 					};	
 
 				$scope.selected_text = null;
-				$scope.get_corpus( $scope.text_query );
+				$scope.get_corpora( $scope.text_query );
 
 			}
 
@@ -672,7 +680,7 @@ angular.module('coptic')
 			};	
 
 		$scope.selected_text = null;
-		$scope.get_corpus( $scope.text_query );
+		$scope.get_corpora( $scope.text_query );
 
 	};
 
@@ -716,7 +724,7 @@ angular.module('coptic')
 
 		if ( $scope.filters.length > 0 ){
 			$location.path( "/filter/" + filters_url );
-			$scope.get_corpus( $scope.text_query );
+			$scope.get_corpora( $scope.text_query );
 
 		}else{
 			$location.path( "/" );

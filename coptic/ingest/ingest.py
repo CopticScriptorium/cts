@@ -15,7 +15,7 @@ import random
 
 def fetch_texts( ingest ):
 	"""
-	For all collection specified in the database, query the document names and ingest
+	For all corpus specified in the database, query the document names and ingest
 	specified html visualizations for all document names
 
 	"""
@@ -28,8 +28,8 @@ def fetch_texts( ingest ):
 	# Delete all former texts, textmeta, and visualizations 
 	print(" -- Document Ingest: Deleting all document values")
 	Text.objects.all().delete()
-	HTMLVisualization.objects.all().delete()
-	HTMLVisualizationFormat.objects.all().delete()
+	HtmlVisualization.objects.all().delete()
+	HtmlVisualizationFormat.objects.all().delete()
 
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
@@ -41,11 +41,11 @@ def fetch_texts( ingest ):
 		print( "Error with ingest, no ANNIS server found")
 		return False
 
-	# For each collection defined in the database, fetch results from ANNIS
-	for collection in Corpus.objects.all():
+	# For each corpus defined in the database, fetch results from ANNIS
+	for corpus in Corpus.objects.all():
 
-		# Fetch documents based on the docnames specified on the collection object
-		doc_name_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/docnames/" + collection.annis_corpus_name
+		# Fetch documents based on the docnames specified on the corpus object
+		doc_name_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/docnames/" + corpus.annis_corpus_name
 		res = request.urlopen( doc_name_query_url )
 		xml = res.read() 
 
@@ -55,7 +55,7 @@ def fetch_texts( ingest ):
 		for doc_name in doc_name_annotations:
 
 			# Create a New Text	
-			# Text: Title, slug, author, collection, ingest, xml_tei, xml_paula, html_visualization
+			# Text: Title, slug, author, corpus, ingest, xml_tei, xml_paula, html_visualization
 
 			# First, process the slug, and title
 			title = doc_name.find("name").text
@@ -76,11 +76,11 @@ def fetch_texts( ingest ):
 			text.slug = slug 
 			text.save()
 
-			print(" -- Importing", collection.title, text.title, text.id)
+			print(" -- Importing", corpus.title, text.title, text.id)
 
 
 			# Query ANNIS for the metadata for the document
-			meta_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + collection.annis_corpus_name + "/" + title
+			meta_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + corpus.annis_corpus_name + "/" + title
 			res = request.urlopen( meta_query_url )
 			xml = res.read() 
 			soup = BeautifulSoup( xml )
@@ -100,10 +100,10 @@ def fetch_texts( ingest ):
 
 
 			# Query ANNIS for each HTML format of the documents
-			for html_format in collection.html_visualization_formats.all():
+			for html_format in corpus.html_visualization_formats.all():
 
-				# Add the collection corpus name to the URL
-				corpora_url = annis_server.html_url + collection.annis_corpus_name
+				# Add the corpus corpus name to the URL
+				corpora_url = annis_server.html_url + corpus.annis_corpus_name
 
 				# Add the document name to the corpora URL
 				corpora_url = corpora_url + "/" + doc_name.find("name").text
@@ -149,8 +149,8 @@ def fetch_texts( ingest ):
 				text.html_visualizations.add(html_visualization)
 
 
-			# Add the collection 
-			text.collection = collection 
+			# Add the corpus 
+			text.corpus = corpus 
 
 			# Add the ingest
 			text.ingest = ingest 
@@ -176,7 +176,7 @@ def fetch_texts( ingest ):
 	for text in Text.objects.all():
 
 		# Add the text name to the URL
-		corpora_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + text.collection.annis_corpus_name + "/" + text.title
+		corpora_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + text.corpus.annis_corpus_name + "/" + text.title
 		print(" -- Search Field Ingest: querying", text.title)
 
 		# Fetch the HTML for the corpus/document/html_format from ANNIS

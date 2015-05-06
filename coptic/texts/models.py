@@ -50,6 +50,9 @@ class Corpus(models.Model):
 	github = models.CharField(max_length=200)
 	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True, null=True)
 
+	class Meta:
+		verbose_name_plural = "Corpora"
+
 	def __str__(self):
 		return self.title
 

@@ -18,9 +18,6 @@ class Ingest(models.Model):
 	def __str__(self):
 		return self.created.strftime('%H:%S %d.%b.%Y')
 
-	class Meta:
-		verbose_name = "Document Ingest"
-
 	def save(self, *args, **kwargs):
 		''' On save, update timestamps '''
 		if not self.id:
