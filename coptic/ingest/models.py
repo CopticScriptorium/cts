@@ -23,6 +23,8 @@ class Ingest(models.Model):
 		if not self.id:
 			self.created = datetime.datetime.today()
 		self.modified = datetime.datetime.today()
+
+		print(" -- Ingest: Deleting all previous ingests")
 		Ingest.objects.all().delete()
 
 		return super(Ingest, self).save(*args, **kwargs)

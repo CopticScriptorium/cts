@@ -44,7 +44,7 @@ def coptic_encoder( obj ):
 
 		corpus['title'] = obj.title 
 		corpus['urn_code'] = obj.urn_code 
-		corpus['textgroup_urn_code'] = obj.textgroup_urn_code 
+		# corpus['textgroup_urn_code'] = obj.textgroup_urn_code 
 		corpus['html_corpora_code'] = obj.html_corpora_code 
 		corpus['slug'] = obj.slug 
 		corpus['annis_code'] = obj.annis_code 

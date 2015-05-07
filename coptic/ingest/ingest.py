@@ -15,7 +15,7 @@ import random
 
 def fetch_texts( ingest ):
 	"""
-	For all corpus specified in the database, query the document names and ingest
+	For all corpora specified in the database, query the document names and ingest
 	specified html visualizations for all document names
 
 	"""
@@ -26,10 +26,15 @@ def fetch_texts( ingest ):
 	from annis.models import AnnisServer
 
 	# Delete all former texts, textmeta, and visualizations 
-	print(" -- Document Ingest: Deleting all document values")
+	print(" -- Ingest: Deleting all document values")
 	Text.objects.all().delete()
+	TextMeta.objects.all().delete()
 	HtmlVisualization.objects.all().delete()
-	HtmlVisualizationFormat.objects.all().delete()
+
+	# Delete all former searchfield values
+	print(" -- Ingest: Deleting all SearchFields and SearchFieldValues")
+	SearchField.objects.all().delete()
+	SearchFieldValue.objects.all().delete()
 
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
@@ -177,7 +182,7 @@ def fetch_texts( ingest ):
 
 		# Add the text name to the URL
 		corpora_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + text.corpus.annis_corpus_name + "/" + text.title
-		print(" -- Search Field Ingest: querying", text.title)
+		print(" -- Ingest: querying", text.title)
 
 		# Fetch the HTML for the corpus/document/html_format from ANNIS
 		try:
@@ -186,7 +191,7 @@ def fetch_texts( ingest ):
 			soup = BeautifulSoup( xml )
 			annotations = soup.find_all("annotation")
 		except HTTPError:
-			print(" -- Search Field Ingest: HTTPError with corpora_url", corpora_url)
+			print(" -- Ingest: HTTPError with corpora_url", corpora_url)
 			annotations = [] 
 
 		for annotation in annotations:
@@ -222,13 +227,9 @@ def fetch_texts( ingest ):
 
 		sleep(1)
 
-	# Delete all former searchfield values
-	print(" -- Search Field Ingest: Deleting all SearchFields and SearchFieldValues")
-	SearchField.objects.all().delete()
-	SearchFieldValue.objects.all().delete()
 
 	# Add all new search fields and mappings
-	print(" -- Search Field Ingest: Ingesting new SearchFields and SearchFieldValues")
+	print(" -- Ingest: Ingesting new SearchFields and SearchFieldValues")
 	for search_field in search_fields:
 		sf = SearchField()
 		sf.annis_name = search_field['name']

@@ -69,8 +69,8 @@ def _query( params={} ):
 					corpus_ids = set(cid_set)
 
 					# Query corpus and texts
-					corpus = Corpus.objects.filter(id__in=corpus_ids)
-					for corpus in corpus:
+					corpora = Corpus.objects.filter(id__in=corpus_ids)
+					for corpus in corpora:
 						corpus.texts = []
 						for text in selected_texts:
 							if text.corpus.id == corpus.id:
@@ -84,8 +84,8 @@ def _query( params={} ):
 					corpus_ids = set(cid_set)
 
 					# query corpus and texts
-					corpus = Corpus.objects.filter(id__in=corpus_ids)
-					for corpus in corpus:
+					corpora = Corpus.objects.filter(id__in=corpus_ids)
+					for corpus in corpora:
 						corpus.texts = Text.objects.filter(id__in=text_ids, corpus=corpus.id ).prefetch_related().order_by('slug')
 
 
@@ -97,8 +97,8 @@ def _query( params={} ):
 					corpus_ids = set(cid_set)
 
 					# query corpus and texts
-					corpus = Corpus.objects.filter(id__in=corpus_ids)
-					for corpus in corpus:
+					corpora = Corpus.objects.filter(id__in=corpus_ids)
+					for corpus in corpora:
 
 						corpus.texts = Text.objects.filter(corpus=corpus.id ).prefetch_related().order_by('slug')
 
@@ -107,19 +107,19 @@ def _query( params={} ):
 
 				# If there's a slug to query a specific corpus
 				if "query" in params and "slug" in params['query']:
-					corpus = Corpus.objects.filter( slug=params['query']['slug'] )
+					corpora = Corpus.objects.filter( slug=params['query']['slug'] )
 				else:
 					# establish all the queries to be run
-					corpus = Corpus.objects.all()
+					corpora = Corpus.objects.all()
 
 				# Query texts for the corpus
-				for corpus in corpus:
+				for corpus in corpora:
 					# Ensure prefetch related
 					corpus.texts = Text.objects.filter( corpus=corpus.id ).prefetch_related().order_by('slug')
 
 
 			# fetch the results and add to the objects dict
-			jsonproof_queryset(objects, 'corpus', corpus)
+			jsonproof_queryset(objects, 'corpus', corpora)
 
 
 		# Otherwise, if this is a query to the texts model
@@ -143,24 +143,24 @@ def _query( params={} ):
 		# setup the manifest of the archive
 		# Add more in the future
 
-		corpus = Corpus.objects.all()
+		corpora = Corpus.objects.all()
 
-		for corpus in corpus:
+		for corpus in corpora:
 			corpus.texts = Text.objects.filter( corpus=corpus.id ).prefetch_related().order_by( 'slug' )
 
 		# fetch the results and add to the objects dict
-		jsonproof_queryset( objects, 'corpus', corpus )
+		jsonproof_queryset( objects, 'corpus', corpora )
 
 
 	# If urns is set in the params, return index of urns
 	elif 'urns' in params:
 
-		corpus = Corpus.objects.all()
+		corpora = Corpus.objects.all()
 
 		objects['urns'] = []
 
 		# Get the urns for all corpus
-		for i, corpus in enumerate( corpus ):
+		for i, corpus in enumerate( corpora ):
 
 			# Add a nested list for the urns related to this corpus
 			objects['urns'].append([])
