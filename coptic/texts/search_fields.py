@@ -1,6 +1,4 @@
-import pdb
-
-
+# Retrieve a list of searchfields for the search toolbar
 def get_search_fields():
 	"""
 	Get the search fields for the search tools in the site header

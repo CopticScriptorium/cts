@@ -38,7 +38,7 @@ def fetch_texts( ingest ):
 
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
-	driver = webdriver.PhantomJS()
+	driver = webdriver.Firefox()
 
 	if len(annis_server) > 0:
 		annis_server = annis_server[0]
