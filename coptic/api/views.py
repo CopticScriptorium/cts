@@ -106,8 +106,8 @@ def _query( params={} ):
 			else:
 
 				# If there's a slug to query a specific corpus
-				if "query" in params and "slug" in params['query']:
-					corpora = Corpus.objects.filter( slug=params['query']['slug'] )
+				if "corpus" in params and "slug" in params['corpus']:
+					corpora = Corpus.objects.filter( slug=params['corpus']['slug'] )
 				else:
 					# establish all the queries to be run
 					corpora = Corpus.objects.all()
@@ -125,14 +125,20 @@ def _query( params={} ):
 		# Otherwise, if this is a query to the texts model
 		elif params['model'] == 'texts':
 
-			if "query" in params and "slug" in params['query']:
-				texts = Text.objects.filter( slug=params['query']['slug'] ).prefetch_related()
-
-				# for text in texts:
-				#	text.meta = SearchFieldValue.objects.filter(corpus__id=text.corpus.id)
+			if (( 
+						"corpus" in params 
+					and "slug" in params['corpus'] 
+					)
+				and (
+						"text" in params 
+					and "slug" in params['text'] 
+				)):
+				corpus = Corpus.objects.get( slug=params['corpus']['slug'] )
+				texts = Text.objects.filter( slug=params['text']['slug'], corpus=corpus.id ).prefetch_related()
 
 			else:
-				texts = Text.objects.filter()
+				objects['error'] = "No Text Query specified--missing corpus slug or text slug";
+				return objects
 
 			# fetch the results and add to the objects dict
 			jsonproof_queryset( objects, 'texts', texts )
@@ -256,6 +262,17 @@ def process_param_values( get ):
 			if get['model'] in ALLOWED_MODELS:
 				clean['model'] = get['model'] 
 
+			if "corpus_slug" in get:
+				clean['corpus'] = {
+						'slug' : get['corpus_slug'].strip()
+					}
+
+			if "text_slug" in get:
+				clean['text'] = {
+						'slug' : get['text_slug'].strip()
+					}
+
+
 		elif "manifest" in get:
 			clean['manifest'] = True
 
@@ -269,6 +286,7 @@ def process_param_values( get ):
 			for f in _filters:
 				filters.append( json.loads(f) )
 			clean['filters'] = filters
+
 
 	return clean
 

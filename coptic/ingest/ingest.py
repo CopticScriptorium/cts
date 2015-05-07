@@ -66,13 +66,6 @@ def fetch_texts( ingest ):
 			title = doc_name.find("name").text
 			slug = slugify( title ).__str__() 
 
-			# Check if this text already exists for this ingest
-			# texts = Text.objects.filter(slug=slug, ingest=ingest.id).count()
-			# if texts > 0:
-				# If it does exist, get that text to update
-			#	text = Text.objects.get(slug=slug, ingest=ingest.id) 
-			#else:
-
 			# Create a new text
 			text = Text()
 

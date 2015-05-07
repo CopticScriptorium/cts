@@ -10,11 +10,11 @@ angular.module("coptic")
       });
     $routeProvider.
       // Single text with HTML Version
-      when('/texts/:slug/:html_version', {
+      when('/texts/:corpus_slug/:text_slug/:html_version', {
         controller: 'TextController'
       }).
       // Single text
-      when('/texts/:slug/', {
+      when('/texts/:corpus_slug/:text_slug', {
         controller: 'TextController'
       }).
       // Text index

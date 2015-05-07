@@ -6,7 +6,7 @@
 
 		<div class="grid inner">
 
-			<section class="project-description entry-text" ng-hide="texts.length">
+			<section class="project-description entry-text" ng-hide="texts.length || selected_text">
 
 				<h1 class="title">Coptic Scriptorium URN Resolver</h1>
 
@@ -22,22 +22,22 @@
 
 			</section><!-- .project-description -->
 
-			<section class="text-list list" ng-hide="!texts.length">
+			<section class="text-list list" ng-hide="!texts.length && !selected_text">
 
-				<div class="text-author" ng-repeat="collection in texts">
+				<div class="text-author" ng-repeat="corpus in texts">
 
 					<div class="text-work" >
 
 						<div class="work-title-wrap">
-							<h2 class="work-title title">{{collection.title}}</h2>
-							<h4 class="work-title-urn urn">urn:cts:copticLit:{{collection.urn_code}}</h4>
+							<h2 class="work-title title">{{corpus.title}}</h2>
+							<h4 class="work-title-urn urn">urn:cts:copticLit:{{corpus.urn_code}}</h4>
 
 						</div>
 						
-						<div class="text-subwork" ng-repeat="text in collection.texts" ng-class-even="'even'" data-slug="{{text.slug}}">
+						<div class="text-subwork" ng-repeat="text in corpus.texts" ng-class-even="'even'" data-text-slug="{{text.slug}}" data-corpus-slug="{{corpus.slug}}">
 
 
-								<a href="/texts/{{text.slug}}" class="item-title-wrap">
+								<a href="/texts/{{corpus.slug}}/{{text.slug}}" class="item-title-wrap">
 									<span class="text-item item-title">{{text.title}}</span>
 								</a>
 
@@ -45,7 +45,7 @@
 									<span class="version-label">
 										HTML:
 									</span>
-									<a href="/texts/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}" ng-repeat="format in collection.html_visualization_formats" data-type="{{format.slug}}">
+									<a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}" ng-repeat="format in corpus.html_visualization_formats" data-type="{{format.slug}}">
 										<span class="urn">{{format.title}}</span>
 									</a>
 								</div>
@@ -56,17 +56,17 @@
 									</span>
 
 
-									<a href="{{collection.github}}" class="text-item tei" target="_blank">
+									<a href="{{corpus.github}}" class="text-item tei" target="_blank">
 										<span class="urn">TEI</span>
 										<span class="fa fa-external-link"></span>
 									</a>
 
-									<a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c={{collection.annis_code}}" class="text-item annis" target="_blank">
+									<a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c={{corpus.annis_code}}" class="text-item annis" target="_blank">
 										<span class="urn">ANNIS</span>
 										<span class="fa fa-external-link"></span>
 									</a>
 
-									<a href="{{collection.github}}" class="text-item paula" target="_blank">
+									<a href="{{corpus.github}}" class="text-item paula" target="_blank">
 										<span class="urn">PAULA</span>
 										<span class="fa fa-external-link"></span>
 									</a>
@@ -94,7 +94,7 @@
 
 					<!-- <iframe> solution, if CS wanted to load textual content directly from ANNIS  -->
 					<!-- div class="coptic-text html">
-						<iframe width="900" height="900" ng-src="{{load_single_iframe( selected_text.collection.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
+						<iframe width="900" height="900" ng-src="{{load_single_iframe( selected_text.corpus.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
 
 					</div -->
 
@@ -116,7 +116,7 @@
 				<div class="citation-help">
 					<h3 class="subtitle">Cite this Document</h3>
 					<p>
-						In order to cite this document, please use these URNs. These URNs resolve to the latest edition of the data. Citations by scholars should include date accessed in their footnotes.  Earlier data may be accessed in the archives from the <a href="{{selected_text.collection.github}}" target="_blank">GitHub repository</a> for the text.
+						In order to cite this document, please use these URNs. These URNs resolve to the latest edition of the data. Citations by scholars should include date accessed in their footnotes.  Earlier data may be accessed in the archives from the <a href="{{selected_text.corpus.github}}" target="_blank">GitHub repository</a> for the text.
 					</p>
 					<p>
 						<span class="label">Passage:</span>

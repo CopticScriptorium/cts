@@ -52,11 +52,11 @@ angular.module("coptic")
       });
     $routeProvider.
       // Single text with HTML Version
-      when('/texts/:slug/:html_version', {
+      when('/texts/:corpus_slug/:text_slug/:html_version', {
         controller: 'TextController'
       }).
       // Single text
-      when('/texts/:slug/', {
+      when('/texts/:corpus_slug/:text_slug', {
         controller: 'TextController'
       }).
       // Text index
@@ -156,13 +156,13 @@ angular.module('coptic')
 			function(val){
 				if ( $(".text-format").length > 0 ){
 
-					if ( $scope.path.length < 4 ){
+					if ( $scope.path.length < 5 ){
 						$(".text-format").hide();
 						$scope.hide_loading_modal();
 
-					} else if ( $scope.path[3] !== $scope.selected_text_format ) {
+					} else if ( $scope.path[4] !== $scope.selected_text_format ) {
 						$(".text-format").hide();
-						$scope.toggle_text_format( $scope.path[3] );
+						$scope.toggle_text_format( $scope.path[4] );
 						$scope.hide_loading_modal();
 
 					}else if ( $scope.selected_text_format === "" ){
@@ -178,16 +178,16 @@ angular.module('coptic')
 	/*
 	 *  Watch the text search input in the search tools 
 	 */
+	/* 
+	 * For now, disable the functionality of the text search until 
+	 * it is resolved in the future to ANNIS
 	$scope.$watch(
 			function(){return $scope.text_search},
 			function(val){
-				/* 
-				 * For now, disable the functionality of the text search until 
-				 * it is resolved in the future to ANNIS
-				 */
 				// $scope.add_text_search();	
 			}
 		);
+	 */
 
 	/*
 	 *  Update: manages primary lifecycle for the angular application 
@@ -197,6 +197,7 @@ angular.module('coptic')
 
 		// If the application location is index
 		if( $scope.path.length == 0 || ( $scope.path.length > 1 && $scope.path[1] === "" ) ){
+
 			// Index
 			$scope.show_loading_modal();
 			$scope.is_single = false;
@@ -216,6 +217,7 @@ angular.module('coptic')
 
 		// If the application location is /texts index
 		}else if ( $scope.path.length === 2 ) {
+
 			// /texts index
 			$scope.show_loading_modal();
 			$scope.is_single = false;
@@ -233,33 +235,43 @@ angular.module('coptic')
 			$("meta[name=mss_urn]").attr("content", "" ); 
 
 
-		// If the application location is at /filters/:filters or /text/:slug
+		// If the application location is at /filters/:filters
 		}else if ( $scope.path.length === 3 ) {
 
-			if ( $scope.path[1] === "filter" ){
-				// Load filters
-				$scope.load_filters();
+			// load filters
+			$scope.load_filters();
 
-			}else{
-				// Single text (/text/:slug)
-				$(".text-format").hide();
-				$scope.show_loading_modal();
-				$scope.is_single = true;
-				$scope.get_corpora( {} );
+
+		// If the application location is at /text/:corpus_slug/:text_slug
+		}else if ( $scope.path.length === 4 ) {
+
+			// Single text (/text/:corpus_slug/:text_slug)
+			$(".text-format").hide();
+			$scope.show_loading_modal();
+			$scope.is_single = true;
+
+			if ( $scope.texts.length === 0 ){
+				$scope.get_corpora( {
+						model : "corpus",
+						filters : $scope.filters
+					} );
 			}
 
-
-		// Single text html version (/text/:slug/:html_version)
-		}else if ( $scope.path.length === 4 ) {
+		// Single text html version (/text/:corpus_slug/:slug/:html_version)
+		}else if ( $scope.path.length === 5 ) {
 			if ( $scope.is_single === true ) {
-
-				//$scope.selected_text_format = "";
 				$scope.toggle_text_format( $scope.path[3] );
 
 			}else {
 				$scope.show_loading_modal();
 				$scope.is_single = true;
-				$scope.get_corpora( {} );
+				if ( $scope.texts.length === 0 ){
+					$scope.get_corpora( {
+							model : "corpus",
+							filters : $scope.filters
+						} );
+				}
+
 			}
 		}
 
@@ -396,7 +408,7 @@ angular.module('coptic')
 				});
 
 			// Toggle the specific classes and visibility on elements
-			$target = $(".text-subwork[data-slug='" + $scope.text_query.slug + "']");
+			$target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" + $scope.text_query.corpus_slug + "']");
 			$(".text-subwork").addClass("hidden");
 			$(".text-work").addClass("hidden");
 			$(".work-title-wrap").addClass("hidden");
@@ -421,10 +433,13 @@ angular.module('coptic')
 		;
 
 		$(".text-format").hide();
-		$scope.text_query = {};
-		$scope.text_query.model = "texts";
-		$scope.text_query.slug = $scope.path[2];
+		$scope.text_query = {
+							model : "texts",
+							corpus_slug : $scope.path[2],
+							text_slug : $scope.path[3]
+						};
 		$scope.get_texts( $scope.text_query );
+
 
 	};
 
@@ -568,7 +583,6 @@ angular.module('coptic')
 			};	
 
 		$scope.selected_text = null;
-		// $scope.get_corpora( $scope.text_query );
 
 
 	};
