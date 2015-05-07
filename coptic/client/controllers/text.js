@@ -256,12 +256,12 @@ angular.module('coptic')
 		;
 
 		// If it is a corpus response 
-		if ( typeof res.corpora !== "undefined" ){
+		if ( typeof res.corpus !== "undefined" ){
 
 			// Ensure that if the path is /, no texts are added (only the project
 			// description text should be shown)
 			if ( $scope.path.length > 0  ){
-				res.corpora.forEach(function(corpus){
+				res.corpus.forEach(function(corpus){
 					texts.push( corpus );
 
 				});
