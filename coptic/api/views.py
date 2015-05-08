@@ -22,7 +22,6 @@ def _query( params={} ):
 	"""
 	Query the database with the sanitized params
 	"""
-	print(params)
 
 	search_filter = {}
 	objects = {} 

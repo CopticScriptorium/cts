@@ -147,6 +147,8 @@ angular.module('coptic')
 			$(".text-format").hide();
 			$scope.show_loading_modal();
 			$scope.is_single = true;
+			$scope.show_single();
+
 
 			if ( $scope.texts.length === 0 ){
 				$scope.get_corpora( {
@@ -158,7 +160,7 @@ angular.module('coptic')
 		// Single text html version (/text/:corpus_slug/:slug/:html_version)
 		}else if ( $scope.path.length === 5 ) {
 			if ( $scope.is_single === true ) {
-				$scope.toggle_text_format( $scope.path[3] );
+				$scope.toggle_text_format( $scope.path[4] );
 
 			}else {
 				$scope.show_loading_modal();
@@ -319,6 +321,9 @@ angular.module('coptic')
 
 			// Scroll back to the top
 			$('html,body').scrollTop(0);
+
+			// Hide the loading modal window
+			$scope.hide_loading_modal();
 
 		}
 
