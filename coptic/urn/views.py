@@ -32,7 +32,7 @@ def urn_redirect(request, query):
 			# A text exists for the URN query parameter 
 			if text:
 				# Add the slug to the redirect URL  
-				url  = "/texts/" + text.slug 
+				url  = "/texts/" + text.corpus.slug + "/" + text.slug 
 
 				# If it's an HTML query, specify redirect to the html visualization url 
 				if query[-1] == "html":
@@ -60,7 +60,7 @@ def urn_redirect(request, query):
 				return redirect( "/" )
 
 
-		# If the text_urn length is equal to 2, treat it like a work urn
+		# If the text_urn length is equal to 2, treat it like a corpus urn
 		elif len( text_urn ) == 2:
 
 			# Reconstruct the corpus/work/corpus urn
