@@ -29,6 +29,7 @@ __pycache__
 **__pycache__
 *settings.py
 */my.cnf
+*/ghostdriver.log
 
 # --------------------
 # Env Files
