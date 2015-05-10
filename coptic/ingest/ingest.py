@@ -12,6 +12,7 @@ from selenium import webdriver
 from django.utils.text import slugify
 from time import sleep
 import random
+import logging
 
 def fetch_texts( ingest ):
 	"""
@@ -25,14 +26,17 @@ def fetch_texts( ingest ):
 	from ingest.models import Ingest 
 	from annis.models import AnnisServer
 
+	# Set up an instance of the logger
+	logger = logging.getLogger(__name__)
+
 	# Delete all former texts, textmeta, and visualizations 
-	print(" -- Ingest: Deleting all document values")
+	logger.info(" -- Ingest: Deleting all document values")
 	Text.objects.all().delete()
 	TextMeta.objects.all().delete()
 	HtmlVisualization.objects.all().delete()
 
 	# Delete all former searchfield values
-	print(" -- Ingest: Deleting all SearchFields and SearchFieldValues")
+	logger.info(" -- Ingest: Deleting all SearchFields and SearchFieldValues")
 	SearchField.objects.all().delete()
 	SearchFieldValue.objects.all().delete()
 
@@ -42,15 +46,30 @@ def fetch_texts( ingest ):
 
 	if len(annis_server) > 0:
 		annis_server = annis_server[0]
+
+		# Ensure trailing slash in the annis server base domain
+		if not annis_server.base_domain.endswith("/"):
+			annis_server.base_domain += "/"
+
 	else:
-		print( "Error with ingest, no ANNIS server found")
+		logger.error( "Error with ingest, no ANNIS server found")
 		return False
+
+	#
+	# This is where the corpus ingest from ANNIS should be built out
+	#
+	# corpus_name_query_url = annis_server.base_domain + annis_server.
+	# res = request.urlopen( doc_name_query_url )
+	# xml = res.read() 
+
+	# soup = BeautifulSoup( xml )
+	# doc_name_annotations = soup.find_all("annotation")
 
 	# For each corpus defined in the database, fetch results from ANNIS
 	for corpus in Corpus.objects.all():
 
 		# Fetch documents based on the docnames specified on the corpus object
-		doc_name_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/docnames/" + corpus.annis_corpus_name
+		doc_name_query_url = annis_server.base_domain + annis_server.corpus_docname_url.replace("%corpus_name%", corpus.annis_corpus_name)
 		res = request.urlopen( doc_name_query_url )
 		xml = res.read() 
 
@@ -74,11 +93,10 @@ def fetch_texts( ingest ):
 			text.slug = slug 
 			text.save()
 
-			print(" -- Importing", corpus.title, text.title, text.id)
-
+			logger.info(" -- Importing", corpus.title, text.title, text.id)
 
 			# Query ANNIS for the metadata for the document
-			meta_query_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + corpus.annis_corpus_name + "/" + title
+			meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace("%corpus_name%", + corpus.annis_corpus_name ).replace("%document_name%", title)
 			res = request.urlopen( meta_query_url )
 			xml = res.read() 
 			soup = BeautifulSoup( xml )
@@ -101,13 +119,7 @@ def fetch_texts( ingest ):
 			for html_format in corpus.html_visualization_formats.all():
 
 				# Add the corpus corpus name to the URL
-				corpora_url = annis_server.html_url + corpus.annis_corpus_name
-
-				# Add the document name to the corpora URL
-				corpora_url = corpora_url + "/" + doc_name.find("name").text
-
-				# Add the html format to the corpora URL
-				corpora_url = corpora_url + "?config=" + html_format.slug + "&v-1425855020142"
+				corpora_url = annis_server.base_domain + annis_server.html_visualization_url.replace("%corpus_name%", corpus.annis_corpus_name).replace("%document_name%", doc_name.find("name").text ).replace("%html_visualization_format%", html_format.slug)
 
 				# Fetch the HTML for the corpus/document/html_format from ANNIS
 				driver.get( corpora_url )
@@ -121,7 +133,7 @@ def fetch_texts( ingest ):
 				# Check to ensure there's html returned
 				# if "Could not query document" in text_html or "error" in text_html:
 				if "Client response status: 403" in text_html:
-					print(" -- Error fetching", corpora_url)
+					logger.error(" -- Error fetching", corpora_url)
 					text_html = ""
 
 				# Remove Javascript from the body content
@@ -167,24 +179,24 @@ def fetch_texts( ingest ):
 	if len(annis_server) > 0:
 		annis_server = annis_server[0]
 	else:
-		print( "Error with ingest, no ANNIS server found")
+		logger.error( "Error with ingest, no ANNIS server found")
 		return False
 
 	# For each text defined in the database, fetch results from ANNIS
 	for text in Text.objects.all():
 
 		# Add the text name to the URL
-		corpora_url = "http://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/" + text.corpus.annis_corpus_name + "/" + text.title
-		print(" -- Ingest: querying", text.title)
+		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace("%corpus_name%", + corpus.annis_corpus_name ).replace("%document_name%", title)
+		logger.info(" -- Ingest: querying", text.title)
 
 		# Fetch the HTML for the corpus/document/html_format from ANNIS
 		try:
-			res = request.urlopen( corpora_url )
+			res = request.urlopen( meta_query_url )
 			xml = res.read() 
 			soup = BeautifulSoup( xml )
 			annotations = soup.find_all("annotation")
 		except HTTPError:
-			print(" -- Ingest: HTTPError with corpora_url", corpora_url)
+			logger.error(" -- Ingest: HTTPError with corpora_url", corpora_url)
 			annotations = [] 
 
 		for annotation in annotations:
@@ -218,11 +230,9 @@ def fetch_texts( ingest ):
 							}]
 					})
 
-		sleep(1)
-
 
 	# Add all new search fields and mappings
-	print(" -- Ingest: Ingesting new SearchFields and SearchFieldValues")
+	logger.info(" -- Ingest: Ingesting new SearchFields and SearchFieldValues")
 	for search_field in search_fields:
 		sf = SearchField()
 		sf.annis_name = search_field['name']

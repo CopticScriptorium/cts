@@ -1,4 +1,4 @@
-import pdb
+import logging
 from django.shortcuts import get_object_or_404, redirect, render 
 from django.http import HttpResponse
 from texts.models import Text, Corpus, SearchField, SearchFieldValue 
@@ -7,6 +7,9 @@ def urn_redirect(request, query):
 	"""
 	Redirect the application to the correct text based on an ingested URN
 	"""
+
+	# Set up an instance of the logger
+	logger = logging.getLogger(__name__)
 
 	# Split the initial URN query parameters
 	query = query.split("/")
@@ -56,7 +59,7 @@ def urn_redirect(request, query):
 			else:
 				# Invalid URN
 				# In the future, add URN not found error notice
-				print( " -- URN error, no passage slug found from check_passage_urn")
+				logger.error( " -- URN error, no passage slug found from check_passage_urn")
 				return redirect( "/" )
 
 
@@ -88,7 +91,7 @@ def urn_redirect(request, query):
 		else:
 			# Invalid URN
 			# In the future, add URN not found error notice
-			print( " -- URN error, no textgroup, work, or passage URN to query" )
+			logger.error( " -- URN error, no textgroup, work, or passage URN to query" )
 			return redirect( "/" )
 
 
@@ -96,7 +99,7 @@ def urn_redirect(request, query):
 	else: 
 		# Invalid URN
 		# In the future, add URN not found error notice
-		print( " -- URN error, malformed URN for colon demarcated parameters" )
+		logger.error( " -- URN error, malformed URN for colon demarcated parameters" )
 		return redirect( "/" )
 
 
@@ -105,7 +108,6 @@ def check_passage_urn( urn_candidate ):
 	Lookup the passage URN against the document_cts_urn metadata from ANNIS
 	"""
 	sel_text = {}
-	print(urn_candidate)
 
 	# Check the passage urn against each text metadata
 	for text in Text.objects.all(): 

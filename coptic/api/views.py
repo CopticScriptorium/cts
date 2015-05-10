@@ -1,4 +1,3 @@
-import pdb
 import json
 from api.json import json_view
 from api.encoder import coptic_encoder

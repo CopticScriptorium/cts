@@ -5,6 +5,7 @@ from django.forms import ValidationError
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from ingest.ingest import fetch_texts
+import logging
 
 
 class Ingest(models.Model):
@@ -24,7 +25,10 @@ class Ingest(models.Model):
 			self.created = datetime.datetime.today()
 		self.modified = datetime.datetime.today()
 
-		print(" -- Ingest: Deleting all previous ingests")
+		# Set up an instance of the logger
+		logger = logging.getLogger(__name__)
+
+		logger.info(" -- Ingest: Deleting all previous ingests")
 		Ingest.objects.all().delete()
 
 		return super(Ingest, self).save(*args, **kwargs)
