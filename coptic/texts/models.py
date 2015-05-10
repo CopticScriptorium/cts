@@ -11,6 +11,7 @@ class HtmlVisualizationFormat(models.Model):
 	"""
 
 	title = models.CharField(max_length=200)
+	button_title = models.CharField(max_length=200)
 	slug = models.CharField(max_length=200)
 
 	class Meta:
@@ -33,6 +34,22 @@ class HtmlVisualization(models.Model):
 	def __str__(self):
 		return self.visualization_format.title
 
+class CorpusMeta(models.Model):
+	"""
+	Meta corpus item ingested from ANNIS	
+	"""
+
+	name = models.CharField(max_length=200)
+	value = models.CharField(max_length=200)
+	pre = models.CharField(max_length=200)
+	corpus_name = models.CharField(max_length=200)
+
+	class Meta:
+		verbose_name = "Corpus Meta Item"
+
+	def __str__(self):
+		return self.name + ": " + self.value 
+
 
 class Corpus(models.Model):
 	"""
@@ -49,6 +66,7 @@ class Corpus(models.Model):
 	annis_corpus_name = models.CharField(max_length=200)
 	github = models.CharField(max_length=200)
 	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True, null=True)
+	corpus_meta = models.ManyToManyField(CorpusMeta, blank=True, null=True)
 
 	class Meta:
 		verbose_name_plural = "Corpora"
@@ -63,9 +81,10 @@ class Corpus(models.Model):
 		self.modified = datetime.datetime.today()
 		return super(Corpus, self).save(*args, **kwargs)
 
+
 class TextMeta(models.Model):
 	"""
-	Meta item ingested from ANNIS	
+	Meta text item ingested from ANNIS	
 	"""
 
 	name = models.CharField(max_length=200)

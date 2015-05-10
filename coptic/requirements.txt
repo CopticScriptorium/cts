@@ -1,0 +1,5 @@
+django=1.7
+django-grappelli=2.6.4
+beautifulsoup4=4.3.2
+selenium=2.45.0
+mysql-connector-python=2.0.3
