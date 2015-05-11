@@ -4,15 +4,19 @@ ingest.py
 Fetch Texts from their source lists in ANNIS
 
 """
+import pdb
 import re
-from urllib import request
-from urllib.error import HTTPError
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from django.utils.text import slugify
 from time import sleep
 import random
 import logging
+from urllib import request
+from urllib.error import HTTPError
+from bs4 import BeautifulSoup
+from django.utils.text import slugify
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def fetch_texts( ingest ):
 	"""
@@ -22,7 +26,7 @@ def fetch_texts( ingest ):
 	"""
 
 	# Get the text and ingest models (prevent circular import)
-	from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualizationFormat, SearchField, SearchFieldValue
+	from texts.models import Corpus, Text, CorpusMeta, TextMeta, HtmlVisualization, HtmlVisualizationFormat, SearchField, SearchFieldValue
 	from ingest.models import Ingest 
 	from annis.models import AnnisServer
 
@@ -68,8 +72,27 @@ def fetch_texts( ingest ):
 	# For each corpus defined in the database, fetch results from ANNIS
 	for corpus in Corpus.objects.all():
 
+		# Query ANNIS for the metadata for the corpus
+		meta_query_url = annis_server.base_domain + annis_server.corpus_metadata_url.replace(":corpus_name", corpus.annis_corpus_name )
+		res = request.urlopen( meta_query_url )
+		xml = res.read() 
+		soup = BeautifulSoup( xml )
+		meta_items = soup.find_all("annotation")
+
+		# Save each meta item for the text document
+		for meta_item in meta_items:
+			corpus_meta = CorpusMeta()
+			corpus_meta.name = meta_item.find("name").text
+			corpus_meta.value = meta_item.find("value").text
+			corpus_meta.pre = meta_item.find("pre").text
+			meta_corpus_name = meta_item.find("corpusName")
+			if meta_corpus_name:
+				corpus_meta.corpus_name = meta_corpus_name.text 
+			corpus_meta.save()
+			corpus.corpus_meta.add(corpus_meta)
+
 		# Fetch documents based on the docnames specified on the corpus object
-		doc_name_query_url = annis_server.base_domain + annis_server.corpus_docname_url.replace("%corpus_name%", corpus.annis_corpus_name)
+		doc_name_query_url = annis_server.base_domain + annis_server.corpus_docname_url.replace(":corpus_name", corpus.annis_corpus_name)
 		res = request.urlopen( doc_name_query_url )
 		xml = res.read() 
 
@@ -93,10 +116,10 @@ def fetch_texts( ingest ):
 			text.slug = slug 
 			text.save()
 
-			logger.info(" -- Importing", corpus.title, text.title, text.id)
+			logger.info(" -- Importing " + corpus.title + " " + text.title + " " + str( text.id ) )
 
 			# Query ANNIS for the metadata for the document
-			meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace("%corpus_name%", + corpus.annis_corpus_name ).replace("%document_name%", title)
+			meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(":corpus_name", corpus.annis_corpus_name ).replace(":document_name", text.title)
 			res = request.urlopen( meta_query_url )
 			xml = res.read() 
 			soup = BeautifulSoup( xml )
@@ -119,11 +142,16 @@ def fetch_texts( ingest ):
 			for html_format in corpus.html_visualization_formats.all():
 
 				# Add the corpus corpus name to the URL
-				corpora_url = annis_server.base_domain + annis_server.html_visualization_url.replace("%corpus_name%", corpus.annis_corpus_name).replace("%document_name%", doc_name.find("name").text ).replace("%html_visualization_format%", html_format.slug)
+				corpora_url = annis_server.base_domain + annis_server.html_visualization_url.replace(":corpus_name", corpus.annis_corpus_name).replace(":document_name", doc_name.find("name").text ).replace(":html_visualization_format", html_format.slug)
 
 				# Fetch the HTML for the corpus/document/html_format from ANNIS
 				driver.get( corpora_url )
-				sleep( random.randint( 11,13 ) )
+
+				# Wait for visualization to load in browser
+				# sleep( random.randint( 11,13 ) )
+				element = WebDriverWait(driver, 30).until(
+					EC.presence_of_element_located((By.CLASS_NAME, "htmlvis"))
+				)
 				driver.delete_all_cookies()
 
 				body = driver.find_element_by_xpath("/html/body")
@@ -133,7 +161,7 @@ def fetch_texts( ingest ):
 				# Check to ensure there's html returned
 				# if "Could not query document" in text_html or "error" in text_html:
 				if "Client response status: 403" in text_html:
-					logger.error(" -- Error fetching", corpora_url)
+					logger.error(" -- Error fetching " + corpora_url)
 					text_html = ""
 
 				# Remove Javascript from the body content
@@ -186,8 +214,8 @@ def fetch_texts( ingest ):
 	for text in Text.objects.all():
 
 		# Add the text name to the URL
-		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace("%corpus_name%", + corpus.annis_corpus_name ).replace("%document_name%", title)
-		logger.info(" -- Ingest: querying", text.title)
+		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(":corpus_name", corpus.annis_corpus_name ).replace(":document_name", text.title)
+		logger.info(" -- Ingest: querying " + text.title)
 
 		# Fetch the HTML for the corpus/document/html_format from ANNIS
 		try:
@@ -196,7 +224,7 @@ def fetch_texts( ingest ):
 			soup = BeautifulSoup( xml )
 			annotations = soup.find_all("annotation")
 		except HTTPError:
-			logger.error(" -- Ingest: HTTPError with corpora_url", corpora_url)
+			logger.error(" -- Ingest: HTTPError with corpora_url " + meta_query_url)
 			annotations = [] 
 
 		for annotation in annotations:
