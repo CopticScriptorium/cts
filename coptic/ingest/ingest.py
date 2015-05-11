@@ -74,10 +74,14 @@ def fetch_texts( ingest ):
 
 		# Query ANNIS for the metadata for the corpus
 		meta_query_url = annis_server.base_domain + annis_server.corpus_metadata_url.replace(":corpus_name", corpus.annis_corpus_name )
-		res = request.urlopen( meta_query_url )
-		xml = res.read() 
-		soup = BeautifulSoup( xml )
-		meta_items = soup.find_all("annotation")
+		try:
+			res = request.urlopen( meta_query_url )
+			xml = res.read() 
+			soup = BeautifulSoup( xml )
+			meta_items = soup.find_all("annotation")
+		except HTTPError:
+			logger.error(" -- Ingest: HTTPError with meta_query_url " + meta_query_url)
+			meta_items = [] 
 
 		# Save each meta item for the text document
 		for meta_item in meta_items:
@@ -93,11 +97,16 @@ def fetch_texts( ingest ):
 
 		# Fetch documents based on the docnames specified on the corpus object
 		doc_name_query_url = annis_server.base_domain + annis_server.corpus_docname_url.replace(":corpus_name", corpus.annis_corpus_name)
-		res = request.urlopen( doc_name_query_url )
-		xml = res.read() 
 
-		soup = BeautifulSoup( xml )
-		doc_name_annotations = soup.find_all("annotation")
+		try:
+			res = request.urlopen( doc_name_query_url )
+			xml = res.read() 
+			soup = BeautifulSoup( xml )
+			doc_name_annotations = soup.find_all("annotation")
+		except HTTPError:
+			logger.error(" -- Ingest: HTTPError with meta_query_url " + meta_query_url)
+			doc_name_annotations = [] 
+
 
 		for doc_name in doc_name_annotations:
 
@@ -107,6 +116,11 @@ def fetch_texts( ingest ):
 			# First, process the slug, and title
 			title = doc_name.find("name").text
 			slug = slugify( title ).__str__() 
+
+			# Add exception for besa.letters corpus in ANNIS
+			if corpus.annis_corpus_name == "besa.letters":
+				if title != corpus.slug:
+					continue
 
 			# Create a new text
 			text = Text()
@@ -149,14 +163,20 @@ def fetch_texts( ingest ):
 
 				# Wait for visualization to load in browser
 				# sleep( random.randint( 11,13 ) )
-				element = WebDriverWait(driver, 30).until(
-					EC.presence_of_element_located((By.CLASS_NAME, "htmlvis"))
-				)
-				driver.delete_all_cookies()
+				try:
+					element = WebDriverWait(driver, 20).until(
+						EC.presence_of_element_located((By.CLASS_NAME, "htmlvis"))
+					)
+					driver.delete_all_cookies()
 
-				body = driver.find_element_by_xpath("/html/body")
-				text_html = body.get_attribute("innerHTML")
-				styles = driver.find_elements_by_xpath("/html/head/style")
+					body = driver.find_element_by_xpath("/html/body")
+					text_html = body.get_attribute("innerHTML")
+					styles = driver.find_elements_by_xpath("/html/head/style")
+				except:
+					text_html = ""
+					styles = []
+					driver.quit()
+					driver = webdriver.Firefox()
 
 				# Check to ensure there's html returned
 				# if "Could not query document" in text_html or "error" in text_html:
@@ -201,21 +221,13 @@ def fetch_texts( ingest ):
 	#
 	# Define meta_xml list and the ANNIS server to query 
 	search_fields = []
-	annis_server = AnnisServer.objects.all()[:1] 
-
-	# Ensure there is an annis server available to query
-	if len(annis_server) > 0:
-		annis_server = annis_server[0]
-	else:
-		logger.error( "Error with ingest, no ANNIS server found")
-		return False
 
 	# For each text defined in the database, fetch results from ANNIS
 	for text in Text.objects.all():
 
 		# Add the text name to the URL
-		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(":corpus_name", corpus.annis_corpus_name ).replace(":document_name", text.title)
-		logger.info(" -- Ingest: querying " + text.title)
+		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(":corpus_name", text.corpus.annis_corpus_name ).replace(":document_name", text.title)
+		logger.info(" -- Ingest: querying " + text.title + " @ " + meta_query_url)
 
 		# Fetch the HTML for the corpus/document/html_format from ANNIS
 		try:
@@ -224,7 +236,7 @@ def fetch_texts( ingest ):
 			soup = BeautifulSoup( xml )
 			annotations = soup.find_all("annotation")
 		except HTTPError:
-			logger.error(" -- Ingest: HTTPError with corpora_url " + meta_query_url)
+			logger.error(" -- Ingest: HTTPError with meta_query_url " + meta_query_url)
 			annotations = [] 
 
 		for annotation in annotations:

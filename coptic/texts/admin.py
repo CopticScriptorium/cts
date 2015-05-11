@@ -1,7 +1,8 @@
 from django.contrib import admin
-from texts.models import Corpus, Text, TextMeta, SearchField, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat
+from texts.models import Corpus, CorpusMeta, Text, TextMeta, SearchField, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat
 
 admin.site.register(Corpus)
+admin.site.register(CorpusMeta)
 admin.site.register(Text)
 admin.site.register(TextMeta)
 admin.site.register(SearchField)
