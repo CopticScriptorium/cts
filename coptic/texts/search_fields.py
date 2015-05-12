@@ -1,3 +1,5 @@
+import pdb
+
 # Retrieve a list of searchfields for the search toolbar
 def get_search_fields():
 	"""
@@ -28,8 +30,7 @@ def populate_values( instance ):
 
 			# Split the search field value on the splittable field
 			split_values = sfv.value.split( instance.splittable )
-			sfv_texts = sfv.texts.all()
-
+			sfv_texts = list( sfv.texts.all() )
 
 			# For each value, in the split values, add its data to the split sfvs list
 			for value in split_values:
@@ -40,12 +41,14 @@ def populate_values( instance ):
 				for split_sfv in split_sfvs:
 					if value == split_sfv['value']:
 						val_is_in_split_sfvs = True 
-						split_sfv['texts'].union( set( sfv_texts ) )
+						for sfv_text in sfv_texts:
+							if sfv_text not in split_sfv['texts']:
+								split_sfv['texts'].append(sfv_text)
 
 				if not val_is_in_split_sfvs:
 					split_sfvs.append({
 							'value' : value,
-							'texts' : set( sfv_texts )
+							'texts' : sfv_texts
 						})
 
 		# Remove the old Search Field Values
