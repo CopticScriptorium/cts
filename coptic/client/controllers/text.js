@@ -267,7 +267,7 @@ angular.module('coptic')
 	 */
 	$scope.update_texts = function( res ){
 		var texts = []
-		,	passage_urn
+		,	edition_urn
 		;
 
 		// If it is a corpus response 
@@ -299,11 +299,11 @@ angular.module('coptic')
 			$scope.selected_text.text_meta.forEach(function(meta){
 
 					if ( meta.name === "document_cts_urn" ){
-						$scope.selected_text.passage_urn = meta.value;
-						passage_urn = meta.value.split(":");
-						passage_urn = passage_urn[3].split(".");
-						$scope.selected_text.textgroup_urn = passage_urn[0];
-						$scope.selected_text.corpus_urn = passage_urn[1];
+						$scope.selected_text.edition_urn = meta.value;
+						edition_urn = meta.value.split(":");
+						edition_urn = edition_urn[3].split(".");
+						$scope.selected_text.textgroup_urn = edition_urn[0];
+						$scope.selected_text.corpus_urn = edition_urn[1];
 					}
 
 				});
@@ -318,7 +318,7 @@ angular.module('coptic')
 
 			// Set the HTML document meta elements
 			$("meta[name=corpus_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.corpus_urn );
-			$("meta[name=document_urn]").attr("content", $scope.selected_text.passage_urn ); 
+			$("meta[name=document_urn]").attr("content", $scope.selected_text.edition_urn ); 
 
 			// Scroll back to the top
 			$('html,body').scrollTop(0);
