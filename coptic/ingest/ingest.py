@@ -17,6 +17,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from xvfbwrapper import Xvfb
 
 def fetch_texts( ingest ):
 	"""
@@ -46,6 +47,8 @@ def fetch_texts( ingest ):
 
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
+	vdisplay = Xvfb()
+	vdisplay.start()
 	driver = webdriver.Firefox()
 
 	if len(annis_server) > 0:
@@ -215,6 +218,7 @@ def fetch_texts( ingest ):
 			text.save()
 				
 	driver.quit()
+	vdisplay.stop()
 
 	#
 	# Then query ANNIS for text meta values and document metadata
