@@ -53,6 +53,7 @@ def coptic_encoder( obj ):
 		for html_visualization_format in obj.html_visualization_formats.all():
 			corpus['html_visualization_formats'].append({
 					'title' : html_visualization_format.title,
+					'button_title' : html_visualization_format.button_title,
 					'slug' : html_visualization_format.slug
 				}) 
 

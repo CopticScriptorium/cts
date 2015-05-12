@@ -770,80 +770,79 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
 .page-tabs a {
   padding: 7px 12px;
   margin: 5px 5px;
-  text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
   display: inline-block;
   background: #361b01;
   color: white;
 }
-/* line 86, ../../scss/_single.scss */
+/* line 85, ../../scss/_single.scss */
 .page-tabs a:hover {
   background: #361b01;
 }
-/* line 89, ../../scss/_single.scss */
+/* line 88, ../../scss/_single.scss */
 .page-tabs a.selected-text-type {
   background: #361b01;
 }
-/* line 92, ../../scss/_single.scss */
+/* line 91, ../../scss/_single.scss */
 .page-tabs a.external {
   background: transparent;
   color: #444;
 }
-/* line 95, ../../scss/_single.scss */
+/* line 94, ../../scss/_single.scss */
 .page-tabs a.external:hover {
   color: #222;
 }
-/* line 99, ../../scss/_single.scss */
+/* line 98, ../../scss/_single.scss */
 .page-tabs a .fa-external-link {
   padding: 0px 0 2px 5px;
   font-size: 10px;
   vertical-align: bottom;
 }
 
-/* line 108, ../../scss/_single.scss */
+/* line 107, ../../scss/_single.scss */
 .single .page-content {
   width: 90%;
   margin: 0 auto;
 }
-/* line 111, ../../scss/_single.scss */
+/* line 110, ../../scss/_single.scss */
 .single .page-content .text-format {
   padding: 10px 0;
 }
-/* line 116, ../../scss/_single.scss */
+/* line 115, ../../scss/_single.scss */
 .single .page-content h3.subtitle {
   margin: 30px 0;
 }
-/* line 119, ../../scss/_single.scss */
+/* line 118, ../../scss/_single.scss */
 .single .page-content .html {
   width: 99%;
   margin: 0 auto;
 }
 
-/* line 124, ../../scss/_single.scss */
+/* line 123, ../../scss/_single.scss */
 .citation-help {
   margin: 20px auto;
 }
-/* line 126, ../../scss/_single.scss */
+/* line 125, ../../scss/_single.scss */
 .citation-help h3.subtitle {
   margin: 10px 0 20px;
 }
-/* line 129, ../../scss/_single.scss */
+/* line 128, ../../scss/_single.scss */
 .citation-help p {
   width: 98%;
   margin: 5px auto 15px;
   font-size: 14px;
 }
-/* line 134, ../../scss/_single.scss */
+/* line 133, ../../scss/_single.scss */
 .citation-help a {
   text-decoration: underline;
 }
-/* line 137, ../../scss/_single.scss */
+/* line 136, ../../scss/_single.scss */
 .citation-help .label {
   font-weight: bold;
 }
 
-/* line 141, ../../scss/_single.scss */
+/* line 140, ../../scss/_single.scss */
 .meta-item {
   width: 43.5%;
   display: inline-block;
@@ -851,12 +850,12 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   margin: 5px 4% 5px 1%;
   font-size: 14px;
 }
-/* line 148, ../../scss/_single.scss */
+/* line 147, ../../scss/_single.scss */
 .meta-item .meta-label {
   font-weight: bold;
 }
 
-/* line 156, ../../scss/_single.scss */
+/* line 155, ../../scss/_single.scss */
 .v-panel {
   position: relative !important;
 }
@@ -878,8 +877,17 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   margin-bottom: 0px;
   font-weight: 700;
 }
-
+/* line 18, ../../scss/_index.scss */
+.project-description a {
+  color: #AE2124;
+}
 /* line 20, ../../scss/_index.scss */
+.project-description a:hover {
+  text-decoration: underline;
+  color: #941C1F;
+}
+
+/* line 28, ../../scss/_index.scss */
 .text-work {
   width: 100%;
   clear: both;
@@ -888,20 +896,20 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   margin: 0px auto;
   padding: 10px 0 0;
 }
-/* line 27, ../../scss/_index.scss */
+/* line 35, ../../scss/_index.scss */
 .text-work .work-title-wrap {
   width: 98%;
   padding: 15px 1%;
   border-bottom: 3px solid #361b01;
 }
-/* line 33, ../../scss/_index.scss */
+/* line 41, ../../scss/_index.scss */
 .text-work h2.work-title {
   margin: 20px 0 0px;
   display: inline-block;
   font-size: 28px;
   color: #361b01;
 }
-/* line 40, ../../scss/_index.scss */
+/* line 48, ../../scss/_index.scss */
 .text-work .work-title-urn {
   display: inline-block;
   font-size: 20px;
@@ -909,7 +917,7 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   padding: 5px 10px;
 }
 
-/* line 49, ../../scss/_index.scss */
+/* line 57, ../../scss/_index.scss */
 .text-subwork {
   width: 97.8%;
   vertical-align: top;
@@ -928,20 +936,20 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   -o-transition: all 50ms linear 0;
   transition: all 50ms linear 0;
 }
-/* line 63, ../../scss/_index.scss */
+/* line 71, ../../scss/_index.scss */
 .text-subwork:hover {
   background: #fff;
 }
-/* line 65, ../../scss/_index.scss */
+/* line 73, ../../scss/_index.scss */
 .text-subwork:hover .item-title-wrap {
   color: #1d1810;
 }
-/* line 68, ../../scss/_index.scss */
+/* line 76, ../../scss/_index.scss */
 .text-subwork:hover .item-title {
   color: #1d1810;
 }
 
-/* line 75, ../../scss/_index.scss */
+/* line 83, ../../scss/_index.scss */
 .item-title-wrap {
   padding: 2px 10px 5px 5px;
   color: #361b01;
@@ -951,7 +959,7 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   text-overflow: ellipsis;
 }
 
-/* line 83, ../../scss/_index.scss */
+/* line 91, ../../scss/_index.scss */
 .text-item {
   font-size: 14px;
   display: inline-block;
@@ -960,12 +968,12 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
-/* line 91, ../../scss/_index.scss */
+/* line 99, ../../scss/_index.scss */
 .text-item.author {
   width: 100%;
   padding: 5px 0px 0;
 }
-/* line 95, ../../scss/_index.scss */
+/* line 103, ../../scss/_index.scss */
 .text-item.item-title {
   color: #361b01;
   width: 100%;
@@ -976,13 +984,13 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   font-weight: 100;
 }
 
-/* line 103, ../../scss/_index.scss */
+/* line 111, ../../scss/_index.scss */
 .close-selected-text {
   display: none;
   color: #361b01;
 }
 
-/* line 107, ../../scss/_index.scss */
+/* line 115, ../../scss/_index.scss */
 .version-wrap {
   margin: 0px auto;
   padding: 0px 0;
@@ -990,42 +998,42 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   vertical-align: top;
   display: inline-block;
 }
-/* line 114, ../../scss/_index.scss */
+/* line 122, ../../scss/_index.scss */
 .version-wrap .version-label {
   display: inline-block;
   padding: 10px 0;
   font-size: 14px;
   color: #361b01;
 }
-/* line 122, ../../scss/_index.scss */
+/* line 130, ../../scss/_index.scss */
 .version-wrap.page-tabs a span {
   font-size: 12px;
 }
-/* line 126, ../../scss/_index.scss */
+/* line 134, ../../scss/_index.scss */
 .version-wrap.information-tab-wrap {
   display: none;
 }
 
-/* line 130, ../../scss/_index.scss */
+/* line 138, ../../scss/_index.scss */
 .html-wrap {
   width: 36%;
 }
 
-/* line 133, ../../scss/_index.scss */
+/* line 141, ../../scss/_index.scss */
 .other-versions-wrap {
   width: 30%;
 }
 
-/* line 137, ../../scss/_index.scss */
+/* line 145, ../../scss/_index.scss */
 a.text-item:hover {
   text-decoration: none;
 }
-/* line 140, ../../scss/_index.scss */
+/* line 148, ../../scss/_index.scss */
 a.text-item:focus {
   text-decoration: none;
 }
 
-/* line 144, ../../scss/_index.scss */
+/* line 152, ../../scss/_index.scss */
 .search-tools-wrap {
   clear: both;
   display: block;
@@ -1034,69 +1042,69 @@ a.text-item:focus {
   position: relative;
   text-align: left;
 }
-/* line 152, ../../scss/_index.scss */
+/* line 160, ../../scss/_index.scss */
 .search-tools-wrap .search-tools {
   width: 90%;
   margin: 0 auto;
 }
-/* line 157, ../../scss/_index.scss */
+/* line 165, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap {
   display: inline-block;
   vertical-align: top;
   margin-right: -5px;
 }
-/* line 162, ../../scss/_index.scss */
+/* line 170, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head {
   display: block;
   padding: 15px 5px 15px 20px;
   cursor: pointer;
   border-right: 1px solid white;
 }
-/* line 168, ../../scss/_index.scss */
+/* line 176, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head:first-child {
   border-left: 1px solid white;
 }
-/* line 172, ../../scss/_index.scss */
+/* line 180, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head:hover {
   background: #361b01;
 }
-/* line 176, ../../scss/_index.scss */
+/* line 184, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head.tool-head-selected {
   background: #361b01;
 }
-/* line 178, ../../scss/_index.scss */
+/* line 186, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head.tool-head-selected span {
   color: #fff;
 }
-/* line 184, ../../scss/_index.scss */
+/* line 192, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head span {
   display: inline-block;
   vertical-align: top;
 }
-/* line 189, ../../scss/_index.scss */
+/* line 197, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head .tool-text {
   font-weight: 400;
   color: #fff;
   text-transform: uppercase;
   font-size: 14px;
 }
-/* line 197, ../../scss/_index.scss */
+/* line 205, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head .fa-chevron-down {
   font-size: 14px;
   color: #fff;
   padding: 2px 10px;
 }
-/* line 204, ../../scss/_index.scss */
+/* line 212, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap.input-tool-wrap {
   width: 30%;
   margin-right: 2%;
   display: none;
 }
-/* line 210, ../../scss/_index.scss */
+/* line 218, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap.author-tool-wrap {
   border-left: 1px solid white;
 }
-/* line 216, ../../scss/_index.scss */
+/* line 224, ../../scss/_index.scss */
 .search-tools-wrap input {
   margin: 5px 0;
   padding: 12px;
@@ -1105,11 +1113,11 @@ a.text-item:focus {
   border: none;
   outline: none;
 }
-/* line 227, ../../scss/_index.scss */
+/* line 235, ../../scss/_index.scss */
 .search-tools-wrap input.with-coptic {
   font-family: antinoouRegular, sans-serif;
 }
-/* line 233, ../../scss/_index.scss */
+/* line 241, ../../scss/_index.scss */
 .search-tools-wrap .fa-keyboard-o {
   cursor: pointer;
   display: inline-block;
@@ -1119,17 +1127,17 @@ a.text-item:focus {
   font-size: 24px;
   color: #fff;
 }
-/* line 241, ../../scss/_index.scss */
+/* line 249, ../../scss/_index.scss */
 .search-tools-wrap .fa-keyboard-o:hover {
   color: #eee;
 }
-/* line 245, ../../scss/_index.scss */
+/* line 253, ../../scss/_index.scss */
 .search-tools-wrap .fa-keyboard-o.keys-shown {
   background: #e3ca9c;
   color: #361b01;
 }
 
-/* line 252, ../../scss/_index.scss */
+/* line 260, ../../scss/_index.scss */
 .tool-panel {
   position: absolute;
   z-index: 99;
@@ -1141,7 +1149,7 @@ a.text-item:focus {
   transform: translateY(100%) translateZ(0);
   bottom: 0;
 }
-/* line 262, ../../scss/_index.scss */
+/* line 270, ../../scss/_index.scss */
 .tool-panel .tool-search-item {
   display: inline-block;
   padding: 10px 20px;
@@ -1150,12 +1158,12 @@ a.text-item:focus {
   background: #361b01;
   color: #fff;
 }
-/* line 271, ../../scss/_index.scss */
+/* line 279, ../../scss/_index.scss */
 .tool-panel .tool-search-item.selected {
   color: #361b01;
   background: rgba(240, 240, 240, 0.85);
 }
-/* line 276, ../../scss/_index.scss */
+/* line 284, ../../scss/_index.scss */
 .tool-panel .raise-dropdowns {
   position: absolute;
   right: 20px;
@@ -1167,15 +1175,15 @@ a.text-item:focus {
   padding: 5px;
 }
 
-/* line 287, ../../scss/_index.scss */
+/* line 295, ../../scss/_index.scss */
 .advanced-search-tool-panel {
   z-index: 99;
 }
-/* line 290, ../../scss/_index.scss */
+/* line 298, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-wrap {
   display: inline-block;
 }
-/* line 294, ../../scss/_index.scss */
+/* line 302, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head {
   display: inline-block;
   padding: 5px 15px;
@@ -1184,23 +1192,23 @@ a.text-item:focus {
   cursor: pointer;
   color: #fff;
 }
-/* line 301, ../../scss/_index.scss */
+/* line 309, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head:hover {
   background: #361b01;
 }
-/* line 304, ../../scss/_index.scss */
+/* line 312, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head.advanced-search-tool-head-selected {
   color: #361b01;
   background: rgba(250, 250, 250, 0.8);
 }
-/* line 309, ../../scss/_index.scss */
+/* line 317, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-head .fa {
   display: inline-block;
   vertical-align: top;
   font-size: 12px;
   padding: 5px;
 }
-/* line 316, ../../scss/_index.scss */
+/* line 324, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-sub-tool-panel {
   position: absolute;
   transform: translateY(100%) translateZ(0);
@@ -1211,18 +1219,18 @@ a.text-item:focus {
   margin: 0px auto;
   background: #361b01;
 }
-/* line 326, ../../scss/_index.scss */
+/* line 334, ../../scss/_index.scss */
 .advanced-search-tool-panel .advanced-search-tool-search-item {
   display: inline-block;
 }
 
-/* line 331, ../../scss/_index.scss */
+/* line 339, ../../scss/_index.scss */
 .keyboard {
   text-align: center;
   width: 100%;
   margin: 0 auto;
 }
-/* line 336, ../../scss/_index.scss */
+/* line 344, ../../scss/_index.scss */
 .keyboard .key {
   font-size: 30px;
   line-height: 60px;
@@ -1234,11 +1242,11 @@ a.text-item:focus {
   background: rgba(255, 255, 255, 0.96);
   cursor: pointer;
 }
-/* line 344, ../../scss/_index.scss */
+/* line 352, ../../scss/_index.scss */
 .keyboard .key:hover {
   background: rgba(245, 245, 245, 0.98);
 }
-/* line 348, ../../scss/_index.scss */
+/* line 356, ../../scss/_index.scss */
 .keyboard .key.space {
   width: 80%;
   max-width: 400px;
@@ -1247,23 +1255,23 @@ a.text-item:focus {
   margin: 10px;
 }
 
-/* line 358, ../../scss/_index.scss */
+/* line 366, ../../scss/_index.scss */
 .filters-wrap {
   display: block;
   width: 100%;
 }
-/* line 361, ../../scss/_index.scss */
+/* line 369, ../../scss/_index.scss */
 .filters-wrap .filters-wrap-inner {
   width: 95%;
   margin: 0 auto;
 }
-/* line 365, ../../scss/_index.scss */
+/* line 373, ../../scss/_index.scss */
 .filters-wrap h4.subtitle {
   font-size: 20px;
   display: inline-block;
   color: #361b01;
 }
-/* line 370, ../../scss/_index.scss */
+/* line 378, ../../scss/_index.scss */
 .filters-wrap .filter-item {
   padding: 4px 12px;
   margin: 2px 5px 6px;
@@ -1273,19 +1281,19 @@ a.text-item:focus {
   vertical-align: middle;
   cursor: pointer;
 }
-/* line 378, ../../scss/_index.scss */
+/* line 386, ../../scss/_index.scss */
 .filters-wrap .filter-item span {
   vertical-align: middle;
   display: inline-block;
   font-size: 14px;
 }
-/* line 383, ../../scss/_index.scss */
+/* line 391, ../../scss/_index.scss */
 .filters-wrap .filter-item .filter-text {
   float: left;
   padding-top: 2px;
   padding-right: 5px;
 }
-/* line 388, ../../scss/_index.scss */
+/* line 396, ../../scss/_index.scss */
 .filters-wrap .filter-item .fa {
   padding: 6px 5px;
   font-size: 12px;

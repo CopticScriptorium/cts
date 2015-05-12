@@ -38,7 +38,15 @@
 							<h2 class="work-title title">{{corpus.title}}</h2>
 							<h4 class="work-title-urn urn">urn:cts:copticLit:{{corpus.urn_code}}</h4>
 
-						</div>
+							<div class="work-meta-wrap page-tabs">
+								<a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c={{corpus.annis_code}}" class="text-item annis" target="_blank">
+									<span class="urn">Search ANNIS</span>
+									<span class="fa fa-external-link"></span>
+								</a>
+							</div><!-- .work-meta-wrap -->
+
+						</div><!-- .work-title-wrap -->
+
 						
 						<div class="text-subwork" ng-repeat="text in corpus.texts" ng-class-even="'even'" data-text-slug="{{text.slug}}" data-corpus-slug="{{corpus.slug}}">
 
@@ -49,16 +57,16 @@
 
 								<div class="html-wrap version-wrap page-tabs">
 									<span class="version-label">
-										HTML:
+										Read:
 									</span>
 									<a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}" ng-repeat="format in corpus.html_visualization_formats" data-type="{{format.slug}}">
-										<span class="urn">{{format.title}}</span>
+										<span class="urn">{{format.button_title}}</span>
 									</a>
 								</div>
 
 								<div class="other-versions-wrap version-wrap page-tabs">
 									<span class="version-label">
-										Resources:
+										Downloads:
 									</span>
 
 
@@ -67,8 +75,8 @@
 										<span class="fa fa-external-link"></span>
 									</a>
 
-									<a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c={{corpus.annis_code}}" class="text-item annis" target="_blank">
-										<span class="urn">ANNIS</span>
+									<a href="{{corpus.github}}" class="text-item annis" target="_blank">
+										<span class="urn">relANNIS</span>
 										<span class="fa fa-external-link"></span>
 									</a>
 
