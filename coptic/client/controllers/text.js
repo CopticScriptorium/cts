@@ -165,6 +165,7 @@ angular.module('coptic')
 			}else {
 				$scope.show_loading_modal();
 				$scope.is_single = true;
+				$scope.show_single();
 				if ( $scope.texts.length === 0 ){
 					$scope.get_corpora( {
 							model : "corpus",

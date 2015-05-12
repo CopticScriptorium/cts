@@ -37,7 +37,21 @@
 		width:98%;
 		padding:15px 1%;
 		border-bottom:3px solid $coptic-brown;
+
+
 	}
+
+	.work-meta-wrap {
+		display:block;
+		margin-left:0;
+		a {
+			margin:0;
+			span {
+				font-size:12px;
+			}
+		}
+	}
+
 	h2.work-title {
 		margin:20px 0 0px;
 		display:inline-block;
@@ -51,7 +65,7 @@
 		font-size:20px;
 		color:$coptic-brown;
 		padding:5px 10px;
-
+		margin:10px;
 	}
 }
 .text-subwork {
@@ -136,10 +150,10 @@
 	}
 }
 .html-wrap {
-	width:36%;
+	width:30%;
 }
 .other-versions-wrap {
-	width:30%;
+	width:40%;
 }
 a.text-item {
 	&:hover {
