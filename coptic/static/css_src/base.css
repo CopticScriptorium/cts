@@ -746,27 +746,28 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
 /* line 60, ../../scss/_single.scss */
 .selected-text-wrap .text-format {
   margin: 20px auto;
+  display: none;
 }
 
-/* line 65, ../../scss/_single.scss */
+/* line 66, ../../scss/_single.scss */
 .single {
   padding: 50px 0;
 }
 
-/* line 68, ../../scss/_single.scss */
+/* line 69, ../../scss/_single.scss */
 .single h1.title {
   display: inline-block;
   vertical-align: middle;
   font-size: 32px;
 }
 
-/* line 73, ../../scss/_single.scss */
+/* line 74, ../../scss/_single.scss */
 .page-tabs {
   display: inline-block;
   vertical-align: middle;
   margin-left: 20px;
 }
-/* line 77, ../../scss/_single.scss */
+/* line 78, ../../scss/_single.scss */
 .page-tabs a {
   padding: 7px 12px;
   margin: 5px 5px;
@@ -776,73 +777,73 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   background: #361b01;
   color: white;
 }
-/* line 85, ../../scss/_single.scss */
+/* line 86, ../../scss/_single.scss */
 .page-tabs a:hover {
   background: #361b01;
 }
-/* line 88, ../../scss/_single.scss */
+/* line 89, ../../scss/_single.scss */
 .page-tabs a.selected-text-type {
   background: #361b01;
 }
-/* line 91, ../../scss/_single.scss */
+/* line 92, ../../scss/_single.scss */
 .page-tabs a.external {
   background: transparent;
   color: #444;
 }
-/* line 94, ../../scss/_single.scss */
+/* line 95, ../../scss/_single.scss */
 .page-tabs a.external:hover {
   color: #222;
 }
-/* line 98, ../../scss/_single.scss */
+/* line 99, ../../scss/_single.scss */
 .page-tabs a .fa-external-link {
   padding: 0px 0 2px 5px;
   font-size: 10px;
   vertical-align: bottom;
 }
 
-/* line 107, ../../scss/_single.scss */
+/* line 108, ../../scss/_single.scss */
 .single .page-content {
   width: 90%;
   margin: 0 auto;
 }
-/* line 110, ../../scss/_single.scss */
+/* line 111, ../../scss/_single.scss */
 .single .page-content .text-format {
   padding: 10px 0;
 }
-/* line 115, ../../scss/_single.scss */
+/* line 114, ../../scss/_single.scss */
 .single .page-content h3.subtitle {
   margin: 30px 0;
 }
-/* line 118, ../../scss/_single.scss */
+/* line 117, ../../scss/_single.scss */
 .single .page-content .html {
   width: 99%;
   margin: 0 auto;
 }
 
-/* line 123, ../../scss/_single.scss */
+/* line 122, ../../scss/_single.scss */
 .citation-help {
   margin: 20px auto;
 }
-/* line 125, ../../scss/_single.scss */
+/* line 124, ../../scss/_single.scss */
 .citation-help h3.subtitle {
   margin: 10px 0 20px;
 }
-/* line 128, ../../scss/_single.scss */
+/* line 127, ../../scss/_single.scss */
 .citation-help p {
   width: 98%;
   margin: 5px auto 15px;
   font-size: 14px;
 }
-/* line 133, ../../scss/_single.scss */
+/* line 132, ../../scss/_single.scss */
 .citation-help a {
   text-decoration: underline;
 }
-/* line 136, ../../scss/_single.scss */
+/* line 135, ../../scss/_single.scss */
 .citation-help .label {
   font-weight: bold;
 }
 
-/* line 140, ../../scss/_single.scss */
+/* line 139, ../../scss/_single.scss */
 .meta-item {
   width: 43.5%;
   display: inline-block;
@@ -850,12 +851,12 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   margin: 5px 4% 5px 1%;
   font-size: 14px;
 }
-/* line 147, ../../scss/_single.scss */
+/* line 146, ../../scss/_single.scss */
 .meta-item .meta-label {
   font-weight: bold;
 }
 
-/* line 155, ../../scss/_single.scss */
+/* line 154, ../../scss/_single.scss */
 .v-panel {
   position: relative !important;
 }

@@ -157,16 +157,13 @@ angular.module('coptic')
 				if ( $(".text-format").length > 0 ){
 
 					if ( $scope.path.length < 5 ){
-						$(".text-format").hide();
 						$scope.hide_loading_modal();
 
 					} else if ( $scope.path[4] !== $scope.selected_text_format ) {
-						$(".text-format").hide();
 						$scope.toggle_text_format( $scope.path[4] );
 						$scope.hide_loading_modal();
 
 					}else if ( $scope.selected_text_format === "" ){
-						$(".text-format").hide();
 						$scope.hide_loading_modal();
 
 					}
@@ -259,7 +256,7 @@ angular.module('coptic')
 					} );
 			}
 
-		// Single text html version (/text/:corpus_slug/:slug/:html_version)
+		// Single text html version (/text/:corpus_slug/:text_slug/:html_version)
 		}else if ( $scope.path.length === 5 ) {
 			if ( $scope.is_single === true ) {
 				$scope.toggle_text_format( $scope.path[4] );
@@ -267,7 +264,7 @@ angular.module('coptic')
 			}else {
 				$scope.show_loading_modal();
 				$scope.is_single = true;
-				$scope.show_single();
+
 				if ( $scope.texts.length === 0 ){
 					$scope.get_corpora( {
 							model : "corpus",
@@ -769,7 +766,7 @@ angular.module('coptic')
 
 		$scope.selected_text_format = type;
 
-		$target = $(".text-item[data-type=" + type + "]");
+		$target = $(".single-header .text-item[data-type=" + type + "]");
 		if ( !$target.hasClass("selected-text-type") ){	
 
 			// Update the displayed text format if not currently selected
