@@ -2,17 +2,19 @@ import json
 from api.json import json_view
 from api.encoder import coptic_encoder
 from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
+import pdb
 
 ALLOWED_MODELS = ['texts', 'corpus']
 CLASSES = ( Text, Corpus )
 
 @json_view()
-def api( request ):
+def api( request, params ):
 	"""
 	Search with the search params from the via the client-side application
 	"""
 	get = request.GET
-	params = process_param_values( get )
+	params = params.split("/")
+	params = process_param_values( params, get )
 
 	return _query( params ) 
 
@@ -181,27 +183,14 @@ def _query( params={} ):
 			# Then add all the urns for texts related to the corpus
 			for text in corpus.texts:
 
-				# The base of the text_urn will be the corpus urn
-				text_urn = corpus_urn + ":"
-
 				# Fetch the text meta to look for an msName
 				text_meta = text.text_meta.all()
 
 				# If the meta_item is msName, add it to the text urn
 				for meta_item in text_meta:
 
-					if meta_item.name == "msName":
-						text_urn = text_urn + meta_item.value 
-
-						# If we have a msName, add that msName URN to the corpus urns
-						if text_urn not in objects['urns'][i]:
-							objects['urns'][i].append( text_urn )
-
-						# Then add a final colon for the document urns
-						text_urn = text_urn + ":"
-
-				# Then add the text doc name from ANNIS
-				text_urn = text_urn + text.slug
+					if meta_item.name == "document_cts_urn":
+						text_urn = meta_item.value 
 
 				# Add the text URN with the doc name from ANNIS to the collecition urns
 				objects['urns'][i].append( text_urn )
@@ -250,12 +239,11 @@ def jsonproof_queryset(objects, model_name, queryset):
 
 
 # Process the param values to ensure security
-def process_param_values( get ):
+def process_param_values( params, get ):
 	clean = {}
 
 	if get:
-
-			# first, process the type of query by model or manifest
+		# first, process the type of query by model or manifest
 		if "model" in get:	
 			if get['model'] in ALLOWED_MODELS:
 				clean['model'] = get['model'] 
@@ -285,6 +273,12 @@ def process_param_values( get ):
 				filters.append( json.loads(f) )
 			clean['filters'] = filters
 
+	else:
+		if "manifest" in params:
+			clean['manifest'] = True
+
+		elif "urns" in params:
+			clean['urns'] = True
 
 	return clean
 
