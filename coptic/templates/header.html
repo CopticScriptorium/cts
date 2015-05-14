@@ -22,18 +22,18 @@
         <img class="header-logo header-logo-center" src="/static/img/header_logo_center.png">
         <img class="header-logo header-logo-right" src="/static/img/header_logo_right.png">
       </div>
-      <form name="urn_form" class="urn-form" ng-submit="urn_submit()">
-      <span class="fa fa-chevron-right" ng-click="urn_submit()"></span>
-      <input type="text" class="urn-text" placeholder="Enter URN..." ng-model="entered_urn">
-  </form>
-
+      
       <div class="header-logo-bottom-wrap">
         <img class="header-logo-bottom" src="/static/img/header_logo_bottom.png">
       </div>
 
     </div>
 
-<!-- cts removed form for urn box from here-->
+    <form name="urn_form" class="urn-form" ng-submit="urn_submit()">
+      <span class="fa fa-chevron-right" ng-click="urn_submit()"></span>
+      <input type="text" class="urn-text" placeholder="Enter URN..." ng-model="entered_urn">
+    </form>
+
   </div>
   <div class="header-row header-row-bottom search-tools-wrap">
 
