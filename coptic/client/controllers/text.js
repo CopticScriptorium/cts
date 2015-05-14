@@ -53,17 +53,18 @@ angular.module('coptic')
 			function(){return document.getElementById("selected_text").innerHTML},
 			function(val){
 				if ( $(".text-format").length > 0 ){
-
-					if ( $scope.path.length < 5 ){
+					if ( $scope.path.length < 4 ){
 						$scope.hide_loading_modal();
 
-					} else if ( $scope.path[4] !== $scope.selected_text_format ) {
-						$scope.toggle_text_format( $scope.path[4] );
-						$scope.hide_loading_modal();
+					} else {
+						if ( $scope.path[4] !== $scope.selected_text_format ) {
+							$scope.toggle_text_format( $scope.path[4] );
+							$scope.hide_loading_modal();
 
-					}else if ( $scope.selected_text_format === "" ){
-						$scope.hide_loading_modal();
+						}else{
+							$scope.hide_loading_modal();
 
+						}
 					}
 
 				}
@@ -117,6 +118,7 @@ angular.module('coptic')
 			$scope.show_loading_modal();
 			$scope.is_single = false;
 			$scope.selected_text = null;
+			$scope.selected_text_format = null;
 
 			// Default to displaying no texts, only show the landing page description text
 			$scope.texts = [];
@@ -136,6 +138,11 @@ angular.module('coptic')
 			// load filters
 			$scope.load_filters();
 
+			// Ensure single is null
+			$scope.is_single = false;
+			$scope.selected_text = null;
+			$scope.selected_text_format = null;
+
 
 		// If the application location is at /text/:corpus_slug/:text_slug
 		}else if ( $scope.path.length === 4 ) {
@@ -145,6 +152,7 @@ angular.module('coptic')
 			$scope.show_loading_modal();
 			$scope.is_single = true;
 			$scope.show_single();
+			$scope.selected_text_format = null;
 
 
 			if ( $scope.texts.length === 0 ){
@@ -168,6 +176,8 @@ angular.module('coptic')
 							model : "corpus",
 							filters : $scope.filters
 						} );
+				}else {
+					$scope.show_single();
 				}
 
 			}
@@ -211,7 +221,7 @@ angular.module('coptic')
 				$scope.update_texts( data );
 
 				// If the view is set to single text, show the single template
-				if ( $scope.is_single ){
+				if ( $scope.is_single && $scope.path[4] !== $scope.selected_text_format ) {
 					$scope.show_single();
 
 				// Otherwise, update the texts and hide the loading modal
@@ -279,6 +289,18 @@ angular.module('coptic')
 				});
 
 				$scope.texts = texts; 
+
+				if ( $scope.is_single ){
+
+					// Toggle the specific classes and visibility on elements
+					$target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" + $scope.text_query.corpus_slug + "']");
+					$(".text-subwork").addClass("hidden");
+					$(".text-work").addClass("hidden");
+					$(".work-title-wrap").addClass("hidden");
+					$target.parents(".text-work").removeClass("hidden");
+					$target.removeClass("hidden").addClass("single-header");
+
+				}
 
 			}else {
 				$scope.texts = [];

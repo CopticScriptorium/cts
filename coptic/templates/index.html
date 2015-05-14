@@ -6,7 +6,7 @@
 
 		<div class="grid inner">
 
-			<section class="project-description entry-text" ng-hide="texts.length || selected_text">
+			<section class="project-description entry-text" ng-hide="texts.length || is_single">
 
 				<h1 class="title">Coptic Scriptorium URN Resolver</h1>
 
@@ -28,7 +28,7 @@
 
 			</section><!-- .project-description -->
 
-			<section class="text-list list" ng-hide="!texts.length && !selected_text">
+			<section class="text-list list" ng-hide="!texts.length && !is_single">
 
 				<div class="text-author" ng-repeat="corpus in texts">
 
@@ -99,7 +99,7 @@
 
 			</section><!-- .text-list -->
 
-			<section id="selected_text" class="selected-text-wrap page-content" ng-hide="!selected_text">
+			<section id="selected_text" class="selected-text-wrap page-content" ng-hide="!is_single">
 
 				<div class="text-format" ng-repeat="visualization in selected_text.html_visualizations" id="{{visualization.slug}}" >
 					<h3  class="subtitle">{{visualization.title}}</h3>
