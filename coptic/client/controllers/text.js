@@ -151,15 +151,15 @@ angular.module('coptic')
 			$(".text-format").hide();
 			$scope.show_loading_modal();
 			$scope.is_single = true;
-			$scope.show_single();
 			$scope.selected_text_format = null;
-
 
 			if ( $scope.texts.length === 0 ){
 				$scope.get_corpora( {
 						model : "corpus",
 						filters : $scope.filters
 					} );
+			}else {
+				$scope.show_single();
 			}
 
 		// Single text html version (/text/:corpus_slug/:text_slug/:html_version)

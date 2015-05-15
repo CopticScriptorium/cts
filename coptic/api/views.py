@@ -198,7 +198,7 @@ def _query( params={} ):
 				# Add the URNs for the HTML visualizations
 				html_visualizations = text.html_visualizations.all()
 				for visualization in html_visualizations:
-					objects['urns'][i].append( text_urn + "/" + visualization.visualization_format.title + "/html" )
+					objects['urns'][i].append( text_urn + "/" + visualization.visualization_format.slug + "/html" )
 
 				# Add TEI, Paula, reIANNIS, and ANNIS UI
 				objects['urns'][i].append( text_urn + "/tei/xml" )

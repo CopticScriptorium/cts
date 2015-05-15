@@ -48,7 +48,7 @@ def populate_values( instance ):
 				if not val_is_in_split_sfvs:
 					split_sfvs.append({
 							'value' : value,
-							'texts' : sfv_texts
+							'texts' : sfv_texts[:]
 						})
 
 		# Remove the old Search Field Values

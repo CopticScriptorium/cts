@@ -256,12 +256,12 @@ def fetch_texts( ingest ):
 					for sfc in search_field['values']:
 						if value == sfc['value']:
 							is_in_search_field_texts = True
-							sfc['texts'].append(text.slug)
+							sfc['texts'].append(text.id)
 
 					if not is_in_search_field_texts:
 						search_field['values'].append({
 								'value' : value,
-								'texts' : [text.slug]
+								'texts' : [text.id]
 							})
 
 
@@ -270,7 +270,7 @@ def fetch_texts( ingest ):
 						'name' : name,
 						'values' : [{
 								'value' : value,
-								'texts' : [text.slug]
+								'texts' : [text.id]
 							}]
 					})
 
@@ -294,9 +294,9 @@ def fetch_texts( ingest ):
 			sfv.save()
 
 			# Search field texts
-			for text in value['texts']:
+			for text_id in value['texts']:
 
-				sfv_texts = Text.objects.filter(slug=text)
+				sfv_texts = Text.objects.filter(id=text_id)
 
 				# Add the texts via the native add ManyToMany handling
 				if len( sfv_texts ):
