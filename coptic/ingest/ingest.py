@@ -40,11 +40,6 @@ def fetch_texts( ingest ):
 	TextMeta.objects.all().delete()
 	HtmlVisualization.objects.all().delete()
 
-	# Delete all former searchfield values
-	logger.info(" -- Ingest: Deleting all SearchFields and SearchFieldValues")
-	SearchField.objects.all().delete()
-	SearchFieldValue.objects.all().delete()
-
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
 	vdisplay = Xvfb()
@@ -274,6 +269,20 @@ def fetch_texts( ingest ):
 							}]
 					})
 
+	# Make a shadow copy of all Search Fields
+	original_search_fields = []
+	for sf in SearchField.objects.all():
+		original_search_fields.append({
+				'title' : sf.title,
+				'annis_name' : sf.annis_name,
+				'order' : sf.order,
+				'splittable' : sf.splittable
+			})	
+
+	# And delete all former searchfield values
+	logger.info(" -- Ingest: Deleting all SearchFields and SearchFieldValues")
+	SearchField.objects.all().delete()
+	SearchFieldValue.objects.all().delete()
 
 	# Add all new search fields and mappings
 	logger.info(" -- Ingest: Ingesting new SearchFields and SearchFieldValues")
@@ -281,7 +290,26 @@ def fetch_texts( ingest ):
 		sf = SearchField()
 		sf.annis_name = search_field['name']
 		sf.title = search_field['name']
-		sf.order = 10 
+
+		# Check the search fields against the original search fields
+		# If there is a match in the original search fields, take the 
+		# order and splittable values from the original search fields
+		matched_original_searchfield = False
+		original_search_field = {}
+		for orig_sf in original_search_fields:
+			if sf.annis_name == orig_sf['annis_name']:
+				matched_original_searchfield = True
+				original_search_field = orig_sf
+
+
+		if matched_original_searchfield:
+			sf.order = original_search_field['order']
+			sf.splittable = original_search_field['splittable']
+
+		else:
+			sf.order = 10 
+			sf.splittable = ""
+
 		sf.save()
 
 		# Save value data
