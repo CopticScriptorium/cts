@@ -13,8 +13,10 @@ def coptic_encoder( obj ):
 	if isinstance(obj, Text):
 		text = {}
 
-		text['title'] = obj.title 
-		text['slug'] = obj.slug 
+		text['id'] = obj.id
+		text['title'] = obj.title
+		text['slug'] = obj.slug
+		text['is_expired'] = obj.is_expired
 		text['html_visualizations'] = []
 		text['text_meta'] = []
 

@@ -1,7 +1,7 @@
 """
 ingest.py
 
-Fetch Texts from their source lists in ANNIS
+Fetch Texts from their source in ANNIS
 
 """
 import pdb
@@ -160,7 +160,6 @@ def fetch_texts( ingest ):
 				driver.get( corpora_url )
 
 				# Wait for visualization to load in browser
-				# sleep( random.randint( 11,13 ) )
 				try:
 					element = WebDriverWait(driver, 20).until(
 						EC.presence_of_element_located((By.CLASS_NAME, "htmlvis"))

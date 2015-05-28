@@ -103,14 +103,14 @@
 
 				<div class="text-format" ng-repeat="visualization in selected_text.html_visualizations" id="{{visualization.slug}}" >
 					<h3  class="subtitle">{{visualization.title}}</h3>
-					<div  class="coptic-text html" ng-bind-html="visualization.html | unsafe">
+					<div  class="coptic-text html" ng-bind-html="visualization.html | unsafe" ng-hide="selected_text.is_expired">
 					</div>
 
 					<!-- <iframe> solution, if CS wanted to load textual content directly from ANNIS  -->
-					<!-- div class="coptic-text html">
-						<iframe width="900" height="900" ng-src="{{load_single_iframe( selected_text.corpus.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
+					<div class="coptic-text html" ng-show="selected_text.is_expired">
+						<iframe width="900" height="900" ng-src="{{load_single_iframe( selected_text.is_expired, selected_text.corpus.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
 
-					</div -->
+					</div>
 
 				</div>
 

@@ -2,6 +2,7 @@ import json
 from api.json import json_view
 from api.encoder import coptic_encoder
 from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
+from ingest.expire import ingest_expired_text
 import pdb
 
 ALLOWED_MODELS = ['texts', 'corpus']
@@ -206,6 +207,10 @@ def _query( params={} ):
 				objects['urns'][i].append( text_urn + "/relannis" )
 				objects['urns'][i].append( text_urn + "/annis" )
 
+	# If ingest is in the params, reingest the specifed text id 
+	elif 'ingest' in params:
+		objects['ingest_res'] = ingest_expired_text( params['text_id'] )
+
 
 	# Otherwise, no query is specified
 	else:
@@ -264,6 +269,10 @@ def process_param_values( params, get ):
 
 		elif "urns" in get:
 			clean['urns'] = True
+
+		elif "ingest" in get:
+			clean['ingest'] = True
+			clean['text_id'] = get['id'].strip()
 
 		# Then process the supplied query
 		_filters = get.getlist("filters") 

@@ -415,6 +415,29 @@ angular.module('coptic')
 
 			// Should handle the possibility of multiple selected in future
 			$scope.selected_text = res.texts[0];
+			$scope.filters = [];
+
+			// If the selected text is expired, trigger an ingest for the text
+			if ($scope.selected_text.is_expired === true){
+
+
+				// Trigger the ingest for the selected text
+				$http({
+						url : "/api/", 
+						method : "GET",
+						params : {
+							ingest : true,
+							id : $scope.selected_text.id
+						} 
+					})
+					.success(function(data, status, headers, config){
+						console.log('Single Text Ingest:', data);
+					})
+					.error(function(error, status, headers, config){
+						console.log('Error with Single Text Ingest:', error);
+					});
+
+			}
 
 			// Set pertinent metadata directly to the selected_text object
 			$scope.selected_text.text_meta.forEach(function(meta){
@@ -468,10 +491,14 @@ angular.module('coptic')
 
 	};
 
-	$scope.load_single_iframe = function( corpus_annis_name, selected_text_name, visualization_slug ){
+	$scope.load_single_iframe = function( is_expired, corpus_annis_name, selected_text_name, visualization_slug ){
 	// Load an iframe src elem
 
-		return "https://corpling.uis.georgetown.edu/annis/embeddedvis/htmldoc/" + corpus_annis_name + "/" + selected_text_name + "?config=" + visualization_slug;
+		if ( is_expired ){ 
+			return "https://corpling.uis.georgetown.edu/annis/embeddedvis/htmldoc/" + corpus_annis_name + "/" + selected_text_name + "?config=" + visualization_slug;
+		}else{
+			return "";
+		}
 
 	};
 

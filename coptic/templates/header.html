@@ -40,7 +40,7 @@
     <!-- Search by text, year, author, country of origin, hagiography, bible texts-->
     <div class="search-tools">
 
-      <div class="input-tool-wrap tool-wrap">
+      <!--div class="input-tool-wrap tool-wrap">
         <input type="text" class="text-search-input input-tool" placeholder="Query ANNIS . . ."/ ng-model="text_search">
         <span class="fa fa-keyboard-o" ng-click="toggle_keyboard( $event )"></span>
         <div class="input-tool-panel tool-panel hidden">
@@ -85,7 +85,7 @@
           </div>
           <span class="fa fa-times raise-dropdowns" ng-click="raise_dropdowns()"></span>
         </div>
-      </div> 
+      </div--> 
 
       {% for field in search_fields %}
         <div class="{{field.title | lower}}-tool-wrap tool-wrap" data-field="{{field.title | lower}}">

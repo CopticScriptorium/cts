@@ -107,6 +107,7 @@ class Text(models.Model):
 	slug = models.SlugField(max_length=40)
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
+	is_expired = models.BooleanField(default=False)
 	corpus = models.ForeignKey(Corpus, blank=True, null=True)
 	ingest = models.ForeignKey(Ingest, blank=True, null=True)
 	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True, null=True)
