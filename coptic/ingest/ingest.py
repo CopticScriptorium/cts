@@ -309,6 +309,8 @@ def fetch_texts( ingest ):
 			sf.order = 10 
 			sf.splittable = ""
 
+		# Save the search field so that it has an id to be added to the 
+		# search field value search_field foreign key attribute 
 		sf.save()
 
 		# Save value data
@@ -330,3 +332,6 @@ def fetch_texts( ingest ):
 					for sfv_text in sfv_texts: 
 						sfv.texts.add( sfv_text )
 
+		# Resave the SearchField to apply the search field splittable to the
+		# ingested search field values 
+		sf.save()
