@@ -27,6 +27,19 @@
 	.search-tools-wrap .tool-wrap .tool-head span.tool-text {
 		font-size:10px;
 	}
+	header .header-logos {
+		width:55%;
+	}
+	header .header-logos .header-logo-top-wrap .header-logo {
+		width:25%;
+	}
+	header .header-logos .header-logo-top-wrap .header-logo-center {
+		padding:0 5%;
+		width:10%;
+	}
+	header .header-row-top {
+		padding-top:70px;
+	}
 
 }
 
@@ -66,9 +79,7 @@
 	.search-tools-wrap .tool-wrap.author-tool-wrap {
 		border:none;
 	}
-	header .header-logos .header-logo-top-wrap .header-logo-center {
-		padding:0 5%;
-	}
+
 }
 
 @media (max-width:800px){
@@ -81,11 +92,31 @@
 		width:40%;
 		height:20px;
 	}
+	header .header-row-top {
+		text-align:center;
+	}
 	.header-logo-bottom-wrap {
 		width:100%;
 		img {
 			width:90%;
 		}
+	}
+	header .header-logos {
+		width:95%;
+		margin:10px auto;
+		display:inline-block;
+		float:none;
+	}
+	header .urn-form {
+		display:inline-block;
+		text-align:center;
+		float:none;
+		width:95%;
+		margin:10px auto 20px;
+	}
+	header .urn-form input {
+		width:80%;
+		padding:12px 2%;
 	}
 }
 
@@ -93,22 +124,8 @@
 	.other-versions-wrap {
 		padding-left:10px;
 	}
-	header .header-logos .header-logo-top-wrap .header-logo {
-		width:25%;
-	}
-	header .header-logos .header-logo-top-wrap .header-logo-center {
-		width:10%;
-	}
-	header .header-row-top {
-		padding-top:70px;
-	}
+
 }
 
 @media (max-width:500px){
-	header .urn-form input {
-		width:80%;
-	}
-	header .urn-form {
-		width:95%;
-	}
 }

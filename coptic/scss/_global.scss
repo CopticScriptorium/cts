@@ -221,9 +221,10 @@ header {
 
 	.header-logos {
 		display:block;
-		width:100;
-		margin:0 auto 15px;
+		width:60%;
+		margin:0 2% 15px;
 		text-align:center;
+		float:left;
 		.header-logo-top-wrap {
 			display:inline-block;
 			text-align:center;
@@ -232,29 +233,31 @@ header {
 				display:inline-block;
 			}
 			.header-logo-center {
-				padding:0 20%;
+				padding:0 10%;
 			}
 		}
-		.header-logos-bottom-wrap {
+		.header-logo-bottom-wrap {
 			display:inline-block;
 			clear:both;
-			text-align:center;
 			width:100%;	
+			img {
+				width:100%;
+			}
 		}
 	}
 
 	.urn-form {
 		vertical-align: top;
-		display:block;
+		display:inline-block;
 		float:right;
-		width:40%;
-		margin:5px 10px 15px;
+		width:33%;
+		margin:45px 10px 15px;
 		padding:0;
 
 		input {
 
-			width:60%;
-			padding:12px;
+			width:82%;
+			padding:12px 2%;
 			background:#fff;
 			float:right;
 			border:none;
