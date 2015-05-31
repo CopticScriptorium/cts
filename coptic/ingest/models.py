@@ -1,11 +1,11 @@
-
+import pdb
 import datetime
 from django.db import models
 from django.forms import ValidationError
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from ingest.ingest import fetch_texts
 from ingest.expire import expire_ingest 
+from ingest.tasks import shared_task_spawn_ingest
 import logging
 
 
@@ -62,7 +62,8 @@ class ExpireIngest(models.Model):
 
 # Method for performing ingest
 def post_save_ingest(sender, instance, **kwargs):
-	fetch_texts( instance )
+	result = shared_task_spawn_ingest.delay(instance.id)
+
 # Method for expiring ingest
 def post_save_expire_ingest(sender, instance, **kwargs):
 	expire_ingest( instance )

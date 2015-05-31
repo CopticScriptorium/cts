@@ -67,6 +67,10 @@ angular.module("coptic")
       when('/filter/:filters', {
         controller: 'TextController'
       }).
+      // Filter with search tools
+      when('/urn*coptic_urn', {
+        controller: 'TextController'
+      }).
       // Otherwise, index
       otherwise({
         redirectTo: '/'
@@ -107,9 +111,6 @@ $("#lastupdate").html("Page last updated: " + showAs);
  */ 
 angular.module('coptic')
 	.controller('TextController', ['$scope', '$http', '$route', '$location', function($scope, $http, $route, $location) {
-
-	// Set the environment to development or production 
-	$scope.coptic_env = "development";
 
 	// Persistent location Path
 	$scope.path = location.pathname.split("/");
@@ -214,7 +215,7 @@ angular.module('coptic')
 
 
 		// If the application location is /texts index
-		}else if ( $scope.path.length === 2 ) {
+		}else if ( $scope.path.length === 2 && $scope.path[1] !== "404") {
 
 			// /texts index
 			$scope.show_loading_modal();
@@ -296,9 +297,7 @@ angular.module('coptic')
 	 */
 	$scope.get_corpora = function( query ){
 
-		if ( $scope.coptic_env === "development" ){
-			console.log("Corpora Query:", query);
-		}
+		//console.log("Corpora Query:", query);
 
 		$scope.selected_text = null;
 		$(".text-subwork").removeClass("hidden");
@@ -315,9 +314,7 @@ angular.module('coptic')
 			.success(function(data, status, headers, config){
 
 				// Log relevant data
-				if ( $scope.coptic_env === "development" ){
-						console.log("Corpora Response:", data);
-				}
+				//console.log("Corpora Response:", data);
 
 				// Update the texts with the returned data
 				$scope.update_texts( data );
@@ -334,7 +331,7 @@ angular.module('coptic')
 
 			})
 			.error(function(error, status, headers, config){
-				console.log('Error with API Query:', error);
+				//console.log('Error with API Query:', error);
 			});
 
 	};
@@ -349,7 +346,7 @@ angular.module('coptic')
 	$scope.get_texts = function( query ){
 
 		// Log relevant details (for development only)
-		console.log("Texts Query", query);
+		//console.log("Texts Query", query);
 
 		$http({
 				url : "/api/", 
@@ -359,14 +356,14 @@ angular.module('coptic')
 			.success(function(data, status, headers, config){
 
 				// Log the response data
-				console.log( "Response", data);
+				//console.log( "Response", data);
 
 				// Update texts with the response data
 				$scope.update_texts( data );
 
 			})
 			.error(function(error, status, headers, config){
-				console.log('Error with API Query:', error);
+				//console.log('Error with API Query:', error);
 			});
 
 	};
@@ -431,10 +428,10 @@ angular.module('coptic')
 						} 
 					})
 					.success(function(data, status, headers, config){
-						console.log('Single Text Ingest:', data);
+						//console.log('Single Text Ingest:', data);
 					})
 					.error(function(error, status, headers, config){
-						console.log('Error with Single Text Ingest:', error);
+						//console.log('Error with Single Text Ingest:', error);
 					});
 
 			}

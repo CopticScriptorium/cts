@@ -25,6 +25,10 @@ angular.module("coptic")
       when('/filter/:filters', {
         controller: 'TextController'
       }).
+      // Filter with search tools
+      when('/urn*coptic_urn', {
+        controller: 'TextController'
+      }).
       // Otherwise, index
       otherwise({
         redirectTo: '/'

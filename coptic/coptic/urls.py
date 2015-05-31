@@ -10,7 +10,5 @@ urlpatterns = patterns('',
 	url(r'^urn', include('urn.urls')),
 	url(r'^collections/.+$', 'coptic.views.home', name='home'),
 	url(r'^filter/.+$', 'coptic.views.home', name='home'),
-	# reinstate the 404 error page after wrapping up primary development
-	# url(r'^.+$', 'coptic.views.not_found', name='not_found'),
 	url(r'^$', 'coptic.views.home', name='home'),
 )

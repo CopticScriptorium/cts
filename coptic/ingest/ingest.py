@@ -19,7 +19,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from xvfbwrapper import Xvfb
 
-def fetch_texts( ingest ):
+
+def fetch_texts( ingest_id ):
 	"""
 	For all corpora specified in the database, query the document names and ingest
 	specified html visualizations for all document names
@@ -42,8 +43,14 @@ def fetch_texts( ingest ):
 
 	# Define HTML Formats and the ANNIS server to query 
 	annis_server = AnnisServer.objects.all()[:1] 
+
+	# Get the Ingest by the ingest id
+	ingest = Ingest.objects.get(id=ingest_id)
+
+	logger.info(" -- Ingest: Starting virtual framebuffer")
 	vdisplay = Xvfb()
 	vdisplay.start()
+	logger.info(" -- Ingest: Starting Firefox")
 	driver = webdriver.Firefox()
 
 	if len(annis_server) > 0:
@@ -68,6 +75,7 @@ def fetch_texts( ingest ):
 	# doc_name_annotations = soup.find_all("annotation")
 
 	# For each corpus defined in the database, fetch results from ANNIS
+	logger.info(" -- Ingest: querying corpora")
 	for corpus in Corpus.objects.all():
 
 		# Query ANNIS for the metadata for the corpus

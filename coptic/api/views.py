@@ -2,7 +2,7 @@ import json
 from api.json import json_view
 from api.encoder import coptic_encoder
 from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
-from ingest.expire import ingest_expired_text
+from ingest.tasks import shared_task_spawn_single_ingest
 import pdb
 
 ALLOWED_MODELS = ['texts', 'corpus']
@@ -209,7 +209,8 @@ def _query( params={} ):
 
 	# If ingest is in the params, reingest the specifed text id 
 	elif 'ingest' in params:
-		objects['ingest_res'] = ingest_expired_text( params['text_id'] )
+		shared_task_spawn_single_ingest.delay( params['text_id'] )
+		objects['ingest_res'] = params['text_id'] 
 
 
 	# Otherwise, no query is specified

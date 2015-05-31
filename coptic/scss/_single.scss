@@ -65,8 +65,10 @@
 
 .single {
 	padding:50px 0;
+	color:$coptic-brown;
 }
 .single h1.title {
+	color:$coptic-brown;
 	display:inline-block;
 	vertical-align:middle;
 	font-size:32px;
@@ -108,6 +110,7 @@
 .single .page-content {
 	width:90%;
 	margin:0 auto;
+	color:$coptic-brown;
 	.text-format {
 		padding:10px 0;
 	}
