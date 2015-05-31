@@ -846,6 +846,3 @@ angular.module('coptic')
 	};
 
 }]);
-/*
- * Client-side application tests
- */
