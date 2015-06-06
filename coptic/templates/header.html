@@ -17,8 +17,23 @@
       </ul>
       </li>
     <li><a id="kellia" href="http://copticscriptorium.org/kellia">KELLIA</a>  </li>
+  <li><a id="about" href="http://copticscriptorium.org/about">ABOUT</a></li>
 </ul>
 
+<script>
+      if($(document).find("title").text().toLowerCase().indexOf("workshop")>=0){
+        $("#indexpage").attr("href", "../index.html");
+        $("#tools").attr("href", "../tools.html");
+        $("#corpora").attr("href", "../corpora.html");
+        $("#documentation").attr("href", "../documentation.html");
+        $("#documentation").attr("href", "../documentation.html");
+        $("#faq").attr("href", "../FAQ.html");
+        $("#news").attr("href", "../news.html");
+        $("#ws2015").attr("href", "../workshop2015/index.html");
+        $("#ws2013").attr("href", "../workshop2013/workshop2013.html");
+        $("#about").attr("href", "../about.html");
+      }
+</script>
 <header >
   <div class="header-row header-row-top header-info-wrap clearfix">
 
