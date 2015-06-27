@@ -114,6 +114,7 @@ angular.module('coptic')
 
 	// Persistent location Path
 	$scope.path = location.pathname.split("/");
+	console.log($scope.path);
 
 	// Filters for the search tools 
 	$scope.filters = [];
@@ -193,6 +194,7 @@ angular.module('coptic')
 	 */
 	$scope.update = function() {
 		$scope.path = location.pathname.split("/");
+		console.log($scope.path);
 
 		// If the application location is index
 		if( $scope.path.length == 0 || ( $scope.path.length > 1 && $scope.path[1] === "" ) ){
@@ -236,15 +238,30 @@ angular.module('coptic')
 
 
 		// If the application location is at /filters/:filters
-		}else if ( $scope.path.length === 3 ) {
+		}else if ( $scope.path.length === 3  ) {
 
-			// load filters
-			$scope.load_filters();
 
-			// Ensure single is null
-			$scope.is_single = false;
-			$scope.selected_text = null;
-			$scope.selected_text_format = null;
+			if ( $scope.path[2].length !== 0 ){ 
+				// load filters
+				$scope.load_filters();
+
+				// Ensure single is null
+				$scope.is_single = false;
+				$scope.selected_text = null;
+				$scope.selected_text_format = null;
+			}else {
+				// Default to displaying no texts, only show the landing page description text
+				$scope.texts = [];
+
+				// Wipe Search Terms / Filters
+				$scope.filters = [];
+				$(".selected").removeClass("selected");
+				$("meta[name=corpus_urn]").attr("content", "" );
+				$("meta[name=document_urn]").attr("content", "" ); 
+				$("meta[name=mss_urn]").attr("content", "" ); 
+
+
+			}
 
 
 		// If the application location is at /text/:corpus_slug/:text_slug
