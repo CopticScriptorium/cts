@@ -1,0 +1,86 @@
+--- # roles/scriptorium/tasks/main.yml
+
+# do we need redis-server?
+#      - redis-server
+# As of 2015-07-04 - xvfb & firefox required by ingest process so that we can invoke
+# firefox to fetch visualizations from the server.
+- name: Install key packages
+  apt: name={{ item }} state=latest
+  sudo: yes
+  with_items:
+    - apache2
+    - apache2-dev
+    - git
+    - mysql-server-5.6
+    - python-mysqldb
+    - libapache2-mod-wsgi-py3
+    - python3-pip
+    - redis-server
+    - redis-tools
+    - xvfb
+    - firefox
+
+- name: Ensure services are enabled
+  sudo: yes
+  service: name={{ item }} enabled=yes
+  with_items:
+    - apache2
+    - redis-server
+
+# Due to the many non-US characters we're capturing in this database, we need to
+# make sure UTF8 is on!
+- name: Configure MySQL for utf8
+  sudo: yes
+  lineinfile: state=present dest=/etc/mysql/my.cnf insertafter="\[mysqld\]" line="character_set_server=utf8"
+
+# On the off chance that the previous action changed MySQL config, restart the server.
+- name: Restart MySQL
+  sudo: yes
+  service: name=mysql state=restarted
+  
+# Grab everything for the site from GitHub and pull it over.
+# "debug_machine" used to all for sharing of the same Git repository on both the
+# host machine, and a target virtual machine, for debugging purposes.
+- name: Copy over key files
+  git: repo=https://github.com/OneEricJohnson/cts.git dest=/var/www/cts
+  sudo: yes
+  when: not debug_machine
+    
+- name: Copy over Django settings
+  template: src=settings.py.j2 dest=/var/www/cts/coptic/coptic/settings.py
+  sudo: yes
+
+- name: Create folder for logging items from Django
+  file: path=/var/log/django/ owner="www-data" group="www-data" state=directory
+  sudo: yes
+
+- name: Install Python packages via pip3
+  pip: requirements=/var/www/cts/coptic/requirements.txt executable=pip3
+  sudo: yes
+
+- name: Copy over Apache2 config
+  copy: src=scriptorium.conf dest=/etc/apache2/conf-enabled/scriptorium.conf
+  sudo: yes
+
+- name: Create MySQL DB
+  mysql_db: name=coptic state=present
+  sudo: yes
+
+# TODO - stick this password into a vault file.
+- name: Create MySQL User
+  mysql_user: name=coptic password={{ mysql_password }} priv=coptic.*:ALL
+  sudo: yes
+
+- name: Ensure Services are started
+  sudo: yes
+  service: name={{ item }} state=started
+  with_items:
+    - apache2
+    - redis-server
+
+# Invoke Django to create/migrate database to the current version.
+- name: Create database tables
+  command: python3 manage.py migrate
+  args:
+    chdir: /var/www/cts/coptic/
+  sudo: yes
