@@ -14,40 +14,23 @@ def do_config():
 
     django.setup()
 
-    print ("Loading Corpora")
-    from texts.models import Corpus
+    import helper
 
-    print ("Loading AnnisServer")
-    from annis.models import AnnisServer
+    # create the annis server configuration
+    helper.create_annis_server()
+
+    # predefine the known corpora
+    helper.load_known_corpora()
+    
+    # define the known visualizations
+    helper.define_visualizations()
+    
+    # now find the visualizations available for the corpora
+    helper.find_corpora_visualizations()
+    
     from ingest import ingest
-
-    print ("Looping through AnnisServers...")
-    try:
-        annis = AnnisServer.objects.get(base_domain__exact='https://corpling.uis.georgetown.edu')
-    except AnnisServer.DoesNotExist:
-        print("Saving a new instance of ANNIS Server")
-        annis = AnnisServer.objects.create()
-        annis.title = 'Georgetown Annis'
-        annis.base_domain = 'https://corpling.uis.georgetown.edu'
-        annis.corpus_metadata_url = "annis-service/annis/meta/corpus/:corpus_name"
-        annis.corpus_docname_url = "annis-service/annis/meta/docnames/:corpus_name"
-        annis.document_metadata_url = "annis-service/annis/meta/doc/:corpus_name/:document_name"
-        annis.html_visualization_url = "annis/embeddedvis/htmldoc/:corpus_name/:document_name?config=:html_visualization_format"
-        annis.save()
-
-    known_corpora = ["shenoute.a22", "apophthegmata.patrum", "shenoute.abraham.our.father",
-        "besa.letters", "shenoute.fox", "sahidica.mark", "sahidica.1corinthians",
-        "sahidica.nt", "shenoute.eagerness"]
-
-    for one_corpora in known_corpora:
-        try:
-            Corpus.objects.get(annis_corpus_name__exact='one_corpora')
-        except Corpus.DoesNotExist:
-            corpus = Corpus.objects.create()
-            corpus.annis_corpus_name = one_corpora
-            corpus.save()
-
-    from ingest.models import Ingest    
+    from ingest.models import Ingest
+    
     new_ingest = Ingest.objects.create()
     new_ingest.save()
 
