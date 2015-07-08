@@ -3,10 +3,10 @@ information."""
 
 import os
 import sys
-from django.core.exceptions import ObjectDoesNotExist
 import django
 
 def do_config():
+    """Does the initial configuration of the database."""
     sys.path.insert(0, '/var/www/cts/coptic/')
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "coptic.settings")
@@ -21,16 +21,16 @@ def do_config():
 
     # predefine the known corpora
     helper.load_known_corpora()
-    
+
     # define the known visualizations
     helper.define_visualizations()
-    
+
     # now find the visualizations available for the corpora
     helper.find_corpora_visualizations()
-    
+
     from ingest import ingest
     from ingest.models import Ingest
-    
+
     new_ingest = Ingest.objects.create()
     new_ingest.save()
 
