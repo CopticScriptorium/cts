@@ -19,7 +19,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from xvfbwrapper import Xvfb
 
-
 def fetch_texts( ingest_id ):
     """
     For all corpora specified in the database, query the document names and ingest
@@ -229,8 +228,36 @@ def fetch_texts( ingest_id ):
     #
     # Then query ANNIS for text meta values and document metadata
     #
-    # Define meta_xml list and the ANNIS server to query 
+    # Define meta_xml list and the ANNIS server to query
+    #
+    # search_fields is a list of maps, where the map is itself a map
+    # of name --> annis_name, and "values" --> list of maps of
+    # 'texts' --> text, 'value' --> the value from annis.
+    # Example:
+    # [
+    #   { name: "author",
+    #     values: [
+    #       { texts: [textObj1, textObj2],
+    #           value: "shenoute"
+    #       }
+    #   ]}
     search_fields = []
+
+    # Loop through the search fields here, so we can capture
+    # which ones are split, and how (comma, or other separator)
+    # also preserve, for delete and restore later.
+    # contains a map of annis_names to split character
+    splittable_fields = {}
+    original_search_fields = []
+    for sf in SearchField.objects.all():
+        original_search_fields.append({
+                'title' : sf.title,
+                'annis_name' : sf.annis_name,
+                'order' : sf.order,
+                'splittable' : sf.splittable
+            })
+        if sf.splittable and len(sf.splittable) > 0:
+            splittable_fields[sf.annis_name] = sf.splittable
 
     # For each text defined in the database, fetch results from ANNIS
     for text in Text.objects.all():
@@ -251,44 +278,38 @@ def fetch_texts( ingest_id ):
 
         for annotation in annotations:
             name = annotation.find("name").text
-            value = annotation.find("value").text
+            raw_value = annotation.find("value").text
 
-            is_in_search_fields = False
+            # some search values are "splittable" (separated by commas)
+            # and need to be split before stored. "values" array holds
+            # either a single value, or a split value....
+            values = []
+            if name in splittable_fields:
+                for one_value in raw_value.split(splittable_fields[name]):
+                    values.append(one_value.strip())
+            else:
+                values.append(raw_value)
+
+            found_search_field = None            
             for search_field in search_fields:
                 if search_field['name'] == name:
-                    is_in_search_fields = True
+                    found_search_field = search_field
+            if not found_search_field:
+                found_search_field = { 'name' : name, 'values' : [] }
+                search_fields.append(found_search_field)
+            
+            # loop through the values (may be one, may be split)
+            for value in values:
+                found_value = None
+                for sfc in found_search_field['values']:
+                    if value == sfc['value']:
+                        found_value = sfc
 
-                    is_in_search_field_texts = False
-                    for sfc in search_field['values']:
-                        if value == sfc['value']:
-                            is_in_search_field_texts = True
-                            sfc['texts'].append(text.id)
-
-                    if not is_in_search_field_texts:
-                        search_field['values'].append({
-                                'value' : value,
-                                'texts' : [text.id]
-                            })
-
-
-            if not is_in_search_fields:
-                search_fields.append({
-                        'name' : name,
-                        'values' : [{
-                                'value' : value,
-                                'texts' : [text.id]
-                            }]
-                    })
-
-    # Make a shadow copy of all Search Fields
-    original_search_fields = []
-    for sf in SearchField.objects.all():
-        original_search_fields.append({
-                'title' : sf.title,
-                'annis_name' : sf.annis_name,
-                'order' : sf.order,
-                'splittable' : sf.splittable
-            })  
+                if not found_value:
+                    found_value = {'value': value, 'texts': []}
+                    found_search_field['values'].append(found_value)
+                
+                found_value['texts'].append(text.id)
 
     # And delete all former searchfield values
     logger.info(" -- Ingest: Deleting all SearchFields and SearchFieldValues")
@@ -312,11 +333,9 @@ def fetch_texts( ingest_id ):
                 matched_original_searchfield = True
                 original_search_field = orig_sf
 
-
         if matched_original_searchfield:
             sf.order = original_search_field['order']
             sf.splittable = original_search_field['splittable']
-
         else:
             sf.order = 10 
             sf.splittable = ""
@@ -325,17 +344,17 @@ def fetch_texts( ingest_id ):
         # search field value search_field foreign key attribute 
         sf.save()
 
-        # Save value data
-        for value in search_field['values']:
-
+        # Save value data - note some are split fields, so we need
+        # to split and then save those values.
+        for value_map in search_field['values']:
             sfv = SearchFieldValue()
             sfv.search_field = sf
-            sfv.value = value['value']
-            sfv.title = value['value']
+            sfv.value = value_map['value']
+            sfv.title = value_map['value']
             sfv.save()
-
+            
             # Search field texts
-            for text_id in value['texts']:
+            for text_id in value_map['texts']:
 
                 sfv_texts = Text.objects.filter(id=text_id)
 

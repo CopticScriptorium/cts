@@ -28,6 +28,9 @@ def do_config():
     # now find the visualizations available for the corpora
     helper.find_corpora_visualizations()
 
+    # pre-load the critical search fields.
+    helper.load_searchfields()
+    
     from ingest import ingest
     from ingest.models import Ingest
 
