@@ -158,10 +158,10 @@ class SearchFieldValue(models.Model):
 		return self.search_field.title  + ": " + self.title 
 
 # Method for performing ingest once there's an ingest.id 
-def post_save_search_field(sender, instance, **kwargs):
-	''' On save, populate the values field with SeachFieldValues based off the unique values in the texts'''
-	populate_values( instance )
-
-# Register the post save signal 
-post_save.connect(post_save_search_field, sender=SearchField, dispatch_uid="")	
+# def post_save_search_field(sender, instance, **kwargs):
+# 	''' On save, populate the values field with SeachFieldValues based off the unique values in the texts'''
+# 	populate_values( instance )
+# 
+# # Register the post save signal 
+# post_save.connect(post_save_search_field, sender=SearchField, dispatch_uid="")	
 
