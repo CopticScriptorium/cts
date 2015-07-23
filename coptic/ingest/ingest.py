@@ -45,7 +45,10 @@ def fetch_texts( ingest_id ):
 	annis_server = AnnisServer.objects.all()[:1] 
 
 	# Get the Ingest by the ingest id
-	ingest = Ingest.objects.get(id=ingest_id)
+	try:
+		ingest = Ingest.objects.get(id=ingest_id)
+	except:
+		ingest = Ingest.objects.find()[0]
 
 	logger.info(" -- Ingest: Starting virtual framebuffer")
 	vdisplay = Xvfb()
@@ -164,11 +167,11 @@ def fetch_texts( ingest_id ):
 				# Add the corpus corpus name to the URL
 				corpora_url = annis_server.base_domain + annis_server.html_visualization_url.replace(":corpus_name", corpus.annis_corpus_name).replace(":document_name", doc_name.find("name").text ).replace(":html_visualization_format", html_format.slug)
 
-				# Fetch the HTML for the corpus/document/html_format from ANNIS
-				driver.get( corpora_url )
 
 				# Wait for visualization to load in browser
 				try:
+					# Fetch the HTML for the corpus/document/html_format from ANNIS
+					driver.get( corpora_url )
 					element = WebDriverWait(driver, 20).until(
 						EC.presence_of_element_located((By.CLASS_NAME, "htmlvis"))
 					)

@@ -238,14 +238,26 @@ angular.module('coptic')
 		// If the application location is at /filters/:filters
 		}else if ( $scope.path.length === 3 ) {
 
-			// load filters
-			$scope.load_filters();
+			if( $scope.path[2].length !== 0 ) {
+				// load filters
+				$scope.load_filters();
 
-			// Ensure single is null
-			$scope.is_single = false;
-			$scope.selected_text = null;
-			$scope.selected_text_format = null;
+				// Ensure single is null
+				$scope.is_single = false;
+				$scope.selected_text = null;
+				$scope.selected_text_format = null;
 
+			}else{
+				// Default to displaying no texts, only show the landing page description text
+				$scope.texts = [];
+
+				// Wipe Search Terms / Filters
+				$scope.filters = [];
+				$(".selected").removeClass("selected");
+				$("meta[name=corpus_urn]").attr("content", "" );
+				$("meta[name=document_urn]").attr("content", "" ); 
+				$("meta[name=mss_urn]").attr("content", "" ); 
+			}
 
 		// If the application location is at /text/:corpus_slug/:text_slug
 		}else if ( $scope.path.length === 4 ) {
