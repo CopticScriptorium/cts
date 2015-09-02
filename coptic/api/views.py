@@ -134,19 +134,15 @@ def _query(params={}):
 
         objects['urns'] = []
 
-        # Get the urns for all corpus
-        for i, corpus in enumerate(corpora):
+        # Get the urns for all corpora
+        for corpus in corpora:
 
             # Add a nested list for the urns related to this corpus
-            objects['urns'].append([])
+            urn_list = []
+            objects['urns'].append(urn_list)
 
-            # Set the initial corpus_urn
-            corpus_urn = "urn:cts:copticLit:" + corpus.urn_code
-
-            urn_list = objects['urns'][i]
-
-            # Add the corpus urn to the corpus urn list
-            urn_list.append(corpus_urn)
+            # Add the initial corpus_urn
+            urn_list.append("urn:cts:copticLit:" + corpus.urn_code)
 
             # Get the texts for the corpus to find their URNs
             corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
@@ -155,10 +151,8 @@ def _query(params={}):
             for text in corpus.texts:
 
                 # Fetch the text meta to look for an msName
-                text_meta = text.text_meta.all()
-
                 # If the meta_item is msName, add it to the text urn
-                for meta_item in text_meta:
+                for meta_item in text.text_meta.all():
 
                     if meta_item.name == "document_cts_urn":
                         text_urn = meta_item.value
@@ -167,8 +161,7 @@ def _query(params={}):
                 urn_list.append(text_urn)
 
                 # Add the URNs for the HTML visualizations
-                html_visualizations = text.html_visualizations.all()
-                for visualization in html_visualizations:
+                for visualization in text.html_visualizations.all():
                     urn_list.append(text_urn + "/" + visualization.visualization_format.slug + "/html")
 
                 # Add TEI, Paula, reIANNIS, and ANNIS UI
@@ -189,10 +182,9 @@ def _query(params={}):
 
 # ready a django queryset for json serialization
 def jsonproof_queryset(objects, model_name, queryset):
-    try:
-        objects[model_name]
-    except KeyError:
+    if not model_name in objects:
         objects[model_name] = []
+    model_objects = objects[model_name]
 
     for item in queryset:
 
@@ -202,7 +194,7 @@ def jsonproof_queryset(objects, model_name, queryset):
             item = coptic_encoder(item)
 
         # Finally, add the item to the objects response at the model
-        objects[model_name].append(item)
+        model_objects.append(item)
 
     return objects
 
