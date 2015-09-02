@@ -27,66 +27,49 @@ def _query(params={}):
     Query the database with the sanitized params
     """
 
-    search_filter = {}
     objects = {}
 
-    # If there's a model to query, such as corpus or texts
     if 'model' in params:
         selected_texts = []
 
-        # If this is a query to the corpus model
         if params['model'] == 'corpus':
 
-            # If there are search filters included with the sanitized params
             if "filters" in params:
 
                 corpus_ids = []
                 text_ids = []
 
                 # Process the filters and find the corpus based on the ID
-                for f in params['filters']:
+                for filter in params['filters']:
 
                     # Look up by corpus URN data from ANNIS
-                    if f['field'] == "corpus_urn":
-                        corpus_ids, selected_texts = get_corpus_texts(f['filter'], corpus_ids, selected_texts)
+                    if filter['field'] == "corpus_urn":
+                        get_corpus_texts(filter['filter'], corpus_ids, selected_texts)
 
                     # Look up by textgroup URN data from ANNIS
-                    elif f['field'] == "textgroup_urn":
-                        corpus_ids, selected_texts = get_textgroup_texts(f['filter'], corpus_ids, selected_texts)
+                    elif filter['field'] == "textgroup_urn":
+                        get_textgroup_texts(filter['filter'], corpus_ids, selected_texts)
 
                     # Otherwise, treat it as a general meta query to the ANNIS metadata ingested
                     # as searchfields
                     else:
-                        sfv = SearchFieldValue.objects.filter(id=f['id'])
-                        text_ids = text_ids + list(sfv.values_list('texts__id', flat=True))
-                        search_texts = Text.objects.filter(id__in=text_ids)
-                        for text in search_texts:
-                            corpus_ids.append(text.corpus.id)
+                        sfv = SearchFieldValue.objects.filter(id=filter['id'])
+                        text_ids += list(sfv.values_list('texts__id', flat=True))
+                        corpus_ids += [text.corpus.id for text in Text.objects.filter(id__in=text_ids)]
+
+                corpora = Corpus.objects.filter(id__in=set(corpus_ids))
 
                 # If we have selected texts to filter and join
-                if len(selected_texts):
-
-                    # Get unique values from the ids
-                    cid_set = set(corpus_ids)
-                    corpus_ids = set(cid_set)
+                if selected_texts:
 
                     # Query corpus and texts
-                    corpora = Corpus.objects.filter(id__in=corpus_ids)
                     for corpus in corpora:
-                        corpus.texts = []
-                        for text in selected_texts:
-                            if text.corpus.id == corpus.id:
-                                corpus.texts.append(text)
+                        corpus.texts = [text for text in selected_texts if text.corpus.id == corpus.id]
 
                 # If we have other texts to filter and join
-                elif len(text_ids):
-
-                    # Get unique values from the ids
-                    cid_set = set(corpus_ids)
-                    corpus_ids = set(cid_set)
+                elif text_ids:
 
                     # query corpus and texts
-                    corpora = Corpus.objects.filter(id__in=corpus_ids)
                     for corpus in corpora:
                         corpus.texts = Text.objects.filter(id__in=text_ids,
                                                            corpus=corpus.id).prefetch_related().order_by('slug')
@@ -94,12 +77,7 @@ def _query(params={}):
                 # Otherwise, get all the texts for each corpus/corpus
                 else:
 
-                    # Get unique values from the ids
-                    cid_set = set(corpus_ids)
-                    corpus_ids = set(cid_set)
-
                     # query corpus and texts
-                    corpora = Corpus.objects.filter(id__in=corpus_ids)
                     for corpus in corpora:
                         corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
@@ -124,19 +102,13 @@ def _query(params={}):
         # Otherwise, if this is a query to the texts model
         elif params['model'] == 'texts':
 
-            if ((
-                                "corpus" in params
-                        and "slug" in params['corpus']
-                )
-                and (
-                                "text" in params
-                        and "slug" in params['text']
-                )):
+            if "corpus" in params and "slug" in params['corpus'] and \
+               "text"   in params and "slug" in params['text']:
                 corpus = Corpus.objects.get(slug=params['corpus']['slug'])
                 texts = Text.objects.filter(slug=params['text']['slug'], corpus=corpus.id).prefetch_related()
 
             else:
-                objects['error'] = "No Text Query specified--missing corpus slug or text slug";
+                objects['error'] = "No Text Query specified--missing corpus slug or text slug"
                 return objects
 
             # fetch the results and add to the objects dict
@@ -171,8 +143,10 @@ def _query(params={}):
             # Set the initial corpus_urn
             corpus_urn = "urn:cts:copticLit:" + corpus.urn_code
 
+            urn_list = objects['urns'][i]
+
             # Add the corpus urn to the corpus urn list
-            objects['urns'][i].append(corpus_urn)
+            urn_list.append(corpus_urn)
 
             # Get the texts for the corpus to find their URNs
             corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
@@ -189,28 +163,26 @@ def _query(params={}):
                     if meta_item.name == "document_cts_urn":
                         text_urn = meta_item.value
 
-                # Add the text URN with the doc name from ANNIS to the collecition urns
-                objects['urns'][i].append(text_urn)
+                # Add the text URN with the doc name from ANNIS to the collection urns
+                urn_list.append(text_urn)
 
                 # Add the URNs for the HTML visualizations
                 html_visualizations = text.html_visualizations.all()
                 for visualization in html_visualizations:
-                    objects['urns'][i].append(text_urn + "/" + visualization.visualization_format.slug + "/html")
+                    urn_list.append(text_urn + "/" + visualization.visualization_format.slug + "/html")
 
                 # Add TEI, Paula, reIANNIS, and ANNIS UI
-                objects['urns'][i].append(text_urn + "/tei/xml")
-                objects['urns'][i].append(text_urn + "/paula/xml")
-                objects['urns'][i].append(text_urn + "/relannis")
-                objects['urns'][i].append(text_urn + "/annis")
+                for suffix in ("/tei/xml", "/paula/xml", "/relannis", "/annis"):
+                    urn_list.append(text_urn + suffix)
 
-    # If ingest is in the params, reingest the specified text id
+    # If ingest is in the params, re-ingest the specified text id
     elif 'ingest' in params:
         shared_task_spawn_single_ingest.delay(params['text_id'])
         objects['ingest_res'] = params['text_id']
 
     # Otherwise, no query is specified
     else:
-        objects['error'] = "No Query specified";
+        objects['error'] = "No Query specified"
 
     return objects
 
@@ -292,23 +264,19 @@ def get_corpus_texts(filter_value, corpus_ids, selected_texts):
 
     # Compare document_cts_urn meta values to the filter_value from the search params
     for text_meta_object in TextMeta.objects.filter(name="document_cts_urn"):
-
         parsed_urn = text_meta_object.value.split(":")
         parsed_urn = parsed_urn[3].split(".")
-
         if parsed_urn[0] == filter_value[0] and parsed_urn[1] == filter_value[1]:
             matched_text_meta_objects.append(text_meta_object)
 
     # Get the textMeta msName items
     for matched_text_meta_object in matched_text_meta_objects:
-        selected_texts = selected_texts + list(Text.objects.filter(text_meta=matched_text_meta_object.id))
+        selected_texts += list(Text.objects.filter(text_meta=matched_text_meta_object.id))
 
     # Aggregate the corpus ids for each text
     for sel_text in selected_texts:
         if sel_text.corpus.id not in corpus_ids:
             corpus_ids.append(sel_text.corpus.id)
-
-    return corpus_ids, selected_texts
 
 
 def get_textgroup_texts(filter_value, corpus_ids, selected_texts):
@@ -326,11 +294,9 @@ def get_textgroup_texts(filter_value, corpus_ids, selected_texts):
 
     # Get the textMeta msName items
     for matched_text_meta_object in matched_text_meta_objects:
-        selected_texts = selected_texts + list(Text.objects.filter(text_meta=matched_text_meta_object.id))
+        selected_texts += list(Text.objects.filter(text_meta=matched_text_meta_object.id))
 
     # Aggregate the corpus ids for each text
     for sel_text in selected_texts:
         if sel_text.corpus.id not in corpus_ids:
             corpus_ids.append(sel_text.corpus.id)
-
-    return corpus_ids, selected_texts
