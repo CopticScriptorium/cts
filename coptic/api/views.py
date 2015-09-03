@@ -3,7 +3,7 @@ from api.json import json_view
 from api.encoder import coptic_encoder
 from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
 from ingest.tasks import shared_task_spawn_single_ingest
-import pdb
+import functools
 
 ALLOWED_MODELS = ['texts', 'corpus']
 CLASSES = (Text, Corpus)
@@ -11,108 +11,64 @@ CLASSES = (Text, Corpus)
 
 @json_view()
 def api(request, params):
-    """
-    Search with the search params from the client-side application
-    """
+    'Search with the search params from the client-side application'
     get = request.GET
     params = params.split("/")
-    params = process_param_values(params, get)
+    params = _process_param_values(params, get)
 
     return _query(params)
 
 
-# Basic search implementation for returning data via the JSON API
 def _query(params={}):
-    """
-    Query the database with the sanitized params
-    """
+    'Search and return data via the JSON API'
 
     objects = {}
 
     if 'model' in params:
-        selected_texts = []
+        model = params['model']
 
-        if params['model'] == 'corpus':
+        if model == 'corpus':
+            if 'filters' in params:
 
-            if "filters" in params:
-
-                corpus_ids = []
-                text_ids = []
-
-                # Process the filters and find the corpus based on the ID
-                for filter in params['filters']:
-
-                    # Look up by corpus URN data from ANNIS
-                    if filter['field'] == "corpus_urn":
-                        get_corpus_texts(filter['filter'], corpus_ids, selected_texts)
-
-                    # Look up by textgroup URN data from ANNIS
-                    elif filter['field'] == "textgroup_urn":
-                        get_textgroup_texts(filter['filter'], corpus_ids, selected_texts)
-
-                    # Otherwise, treat it as a general meta query to the ANNIS metadata ingested
-                    # as searchfields
-                    else:
-                        sfv = SearchFieldValue.objects.filter(id=filter['id'])
-                        text_ids += list(sfv.values_list('texts__id', flat=True))
-                        corpus_ids += [text.corpus.id for text in Text.objects.filter(id__in=text_ids)]
-
+                corpus_ids, text_ids, selected_texts = _find_ids_by_field(params['filters'])
                 corpora = Corpus.objects.filter(id__in=set(corpus_ids))
 
-                # If we have selected texts to filter and join
                 if selected_texts:
-
-                    # Query corpus and texts
                     for corpus in corpora:
                         corpus.texts = [text for text in selected_texts if text.corpus.id == corpus.id]
-
-                # If we have other texts to filter and join
                 elif text_ids:
-
-                    # query corpus and texts
                     for corpus in corpora:
                         corpus.texts = Text.objects.filter(id__in=text_ids,
                                                            corpus=corpus.id).prefetch_related().order_by('slug')
-
-                # Otherwise, get all the texts for each corpus/corpus
-                else:
-
-                    # query corpus and texts
+                else:  # Get all the texts for each corpus
                     for corpus in corpora:
                         corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
-            # There are no filters, check for specific corpus
-            else:
 
-                # If there's a slug to query a specific corpus
-                if "corpus" in params and "slug" in params['corpus']:
+            else:  # There are no filters. Check for specific corpus.
+                if 'corpus' in params and 'slug' in params['corpus']:
                     corpora = Corpus.objects.filter(slug=params['corpus']['slug'])
                 else:
-                    # establish all the queries to be run
                     corpora = Corpus.objects.all()
 
-                # Query texts for the corpus
                 for corpus in corpora:
-                    # Ensure prefetch related
                     corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
             # fetch the results and add to the objects dict
-            jsonproof_queryset(objects, 'corpus', corpora)
+            _json_prepare_queryset(objects, 'corpus', corpora)
 
         # Otherwise, if this is a query to the texts model
-        elif params['model'] == 'texts':
-
-            if "corpus" in params and "slug" in params['corpus'] and \
-               "text"   in params and "slug" in params['text']:
+        elif model == 'texts':
+            if 'corpus' in params and 'slug' in params['corpus'] and \
+               'text'   in params and 'slug' in params['text']:
                 corpus = Corpus.objects.get(slug=params['corpus']['slug'])
                 texts = Text.objects.filter(slug=params['text']['slug'], corpus=corpus.id).prefetch_related()
-
             else:
-                objects['error'] = "No Text Query specified--missing corpus slug or text slug"
+                objects['error'] = 'No Text Query specified--missing corpus slug or text slug'
                 return objects
 
             # fetch the results and add to the objects dict
-            jsonproof_queryset(objects, 'texts', texts)
+            _json_prepare_queryset(objects, 'texts', texts)
 
     # If the manifest is set in the params, render site manifest
     elif 'manifest' in params:
@@ -125,24 +81,22 @@ def _query(params={}):
             corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
         # fetch the results and add to the objects dict
-        jsonproof_queryset(objects, 'corpus', corpora)
+        _json_prepare_queryset(objects, 'corpus', corpora)
 
     # If urns is set in the params, return index of urns
     elif 'urns' in params:
 
         corpora = Corpus.objects.all()
-
         objects['urns'] = []
 
         # Get the urns for all corpora
         for corpus in corpora:
-
             # Add a nested list for the urns related to this corpus
             urn_list = []
             objects['urns'].append(urn_list)
 
             # Add the initial corpus_urn
-            urn_list.append("urn:cts:copticLit:" + corpus.urn_code)
+            urn_list.append('urn:cts:copticLit:' + corpus.urn_code)
 
             # Get the texts for the corpus to find their URNs
             corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
@@ -154,7 +108,7 @@ def _query(params={}):
                 # If the meta_item is msName, add it to the text urn
                 for meta_item in text.text_meta.all():
 
-                    if meta_item.name == "document_cts_urn":
+                    if meta_item.name == 'document_cts_urn':
                         text_urn = meta_item.value
 
                 # Add the text URN with the doc name from ANNIS to the collection urns
@@ -162,10 +116,10 @@ def _query(params={}):
 
                 # Add the URNs for the HTML visualizations
                 for visualization in text.html_visualizations.all():
-                    urn_list.append(text_urn + "/" + visualization.visualization_format.slug + "/html")
+                    urn_list.append(text_urn + '/' + visualization.visualization_format.slug + '/html')
 
                 # Add TEI, Paula, reIANNIS, and ANNIS UI
-                for suffix in ("/tei/xml", "/paula/xml", "/relannis", "/annis"):
+                for suffix in ('/tei/xml', '/paula/xml', '/relannis', '/annis'):
                     urn_list.append(text_urn + suffix)
 
     # If ingest is in the params, re-ingest the specified text id
@@ -175,13 +129,44 @@ def _query(params={}):
 
     # Otherwise, no query is specified
     else:
-        objects['error'] = "No Query specified"
+        objects['error'] = 'No Query specified'
 
     return objects
 
 
-# ready a django queryset for json serialization
-def jsonproof_queryset(objects, model_name, queryset):
+def _find_ids_by_field(filters):
+    corpus_ids_by_field = {}
+    text_ids_by_field = {}
+    selected_texts = []
+
+    for filter in filters:
+        field_name = filter['field']
+        corpus_ids = corpus_ids_by_field.get(field_name, [])
+        text_ids   = text_ids_by_field  .get(field_name, [])
+
+        if field_name == 'corpus_urn':
+            selected_texts += get_corpus_texts(filter['filter'], corpus_ids)
+        elif field_name == 'textgroup_urn':
+            selected_texts += get_textgroup_texts(filter['filter'], corpus_ids)
+        else:
+            sfv = SearchFieldValue.objects.filter(id=filter['id'])
+            text_ids += list(sfv.values_list('texts__id', flat=True))
+            corpus_ids += [text.corpus.id for text in Text.objects.filter(id__in=text_ids)]
+
+        if corpus_ids:
+            corpus_ids_by_field[field_name] = corpus_ids
+        if text_ids:
+            text_ids_by_field[field_name] = text_ids
+
+    return _intersect(corpus_ids_by_field), _intersect(text_ids_by_field), selected_texts
+
+
+def _intersect(ids_dict):
+    ids_sets = [set(values) for values in ids_dict.values()]
+    return functools.reduce(lambda a, b: a & b, ids_sets)
+
+
+def _json_prepare_queryset(objects, model_name, queryset):
     if not model_name in objects:
         objects[model_name] = []
     model_objects = objects[model_name]
@@ -199,65 +184,61 @@ def jsonproof_queryset(objects, model_name, queryset):
     return objects
 
 
-# Process the param values to ensure security
-def process_param_values(params, get):
+def _process_param_values(params, query_dict):
+    'Process the param values to improve security'
     clean = {}
 
-    if get:
+    if query_dict:
         # first, process the type of query by model or manifest
-        if "model" in get:
-            if get['model'] in ALLOWED_MODELS:
-                clean['model'] = get['model']
+        if 'model' in query_dict:
+            if query_dict['model'] in ALLOWED_MODELS:
+                clean['model'] = query_dict['model']
 
-            if "corpus_slug" in get:
+            if 'corpus_slug' in query_dict:
                 clean['corpus'] = {
-                    'slug': get['corpus_slug'].strip()
+                    'slug': query_dict['corpus_slug'].strip()
                 }
 
-            if "text_slug" in get:
+            if 'text_slug' in query_dict:
                 clean['text'] = {
-                    'slug': get['text_slug'].strip()
+                    'slug': query_dict['text_slug'].strip()
                 }
 
-        elif "manifest" in get:
+        elif 'manifest' in query_dict:
             clean['manifest'] = True
 
-        elif "urns" in get:
+        elif 'urns' in query_dict:
             clean['urns'] = True
 
-        elif "ingest" in get:
+        elif 'ingest' in query_dict:
             clean['ingest'] = True
-            clean['text_id'] = get['id'].strip()
+            clean['text_id'] = query_dict['id'].strip()
 
         # Then process the supplied query
-        _filters = get.getlist("filters")
-        filters = []
-        if len(_filters):
-            for f in _filters:
-                filters.append(json.loads(f))
+        filters = [json.loads(filter) for filter in query_dict.getlist('filters')]
+        if filters:
             clean['filters'] = filters
 
     else:
-        if "manifest" in params:
+        if 'manifest' in params:
             clean['manifest'] = True
 
-        elif "urns" in params:
+        elif 'urns' in params:
             clean['urns'] = True
 
     return clean
 
 
-def get_corpus_texts(filter_value, corpus_ids, selected_texts):
-    """
-    Look up texts based on corpus URN data from the document_cts_urn
-    """
+def get_corpus_texts(filter_value, corpus_ids):
+    'Look up texts based on corpus URN data from the document_cts_urn'
+    selected_texts = []
     matched_text_meta_objects = []
-    filter_value = filter_value.split(".")
+    filter_value = filter_value.split('.')
 
     # Compare document_cts_urn meta values to the filter_value from the search params
-    for text_meta_object in TextMeta.objects.filter(name="document_cts_urn"):
-        parsed_urn = text_meta_object.value.split(":")
-        parsed_urn = parsed_urn[3].split(".")
+    for text_meta_object in TextMeta.objects.filter(name='document_cts_urn'):
+        parsed_urn = text_meta_object.value.split(':')
+        parsed_urn = parsed_urn[3].split('.')
         if parsed_urn[0] == filter_value[0] and parsed_urn[1] == filter_value[1]:
             matched_text_meta_objects.append(text_meta_object)
 
@@ -270,17 +251,18 @@ def get_corpus_texts(filter_value, corpus_ids, selected_texts):
         if sel_text.corpus.id not in corpus_ids:
             corpus_ids.append(sel_text.corpus.id)
 
+    return selected_texts
 
-def get_textgroup_texts(filter_value, corpus_ids, selected_texts):
-    """
-    Look up texts based on textgroup URN data from the document_cts_urn
-    """
+
+def get_textgroup_texts(filter_value, corpus_ids):
+    'Look up texts based on textgroup URN data from the document_cts_urn'
+    selected_texts = []
     matched_text_meta_objects = []
 
     # Compare document_cts_urn meta values to the filter_value from the search params
-    for text_meta_object in TextMeta.objects.filter(name="document_cts_urn"):
-        parsed_urn = text_meta_object.value.split(":")
-        parsed_urn = parsed_urn[3].split(".")
+    for text_meta_object in TextMeta.objects.filter(name='document_cts_urn'):
+        parsed_urn = text_meta_object.value.split(':')
+        parsed_urn = parsed_urn[3].split('.')
         if parsed_urn[0] == filter_value:
             matched_text_meta_objects.append(text_meta_object)
 
@@ -292,3 +274,5 @@ def get_textgroup_texts(filter_value, corpus_ids, selected_texts):
     for sel_text in selected_texts:
         if sel_text.corpus.id not in corpus_ids:
             corpus_ids.append(sel_text.corpus.id)
+
+    return selected_texts
