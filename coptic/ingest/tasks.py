@@ -1,12 +1,9 @@
-from celery import shared_task
+import threading
 from ingest.ingest import fetch_texts
 from ingest.expire import ingest_expired_text 
 
-# Spawn instance in background with celery
-@shared_task
-def shared_task_spawn_ingest( ingest_id ):
-    fetch_texts( ingest_id )
+def ingest_asynch( ingest_id ):
+    threading.Thread(target=fetch_texts, args=(ingest_id,)).start()
 
-@shared_task
-def shared_task_spawn_single_ingest( text_id ):
-    ingest_expired_text( text_id )
+def single_ingest_asynch( text_id ):
+    threading.Thread(target=ingest_expired_text, args=(text_id,)).start()

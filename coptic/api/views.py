@@ -2,7 +2,7 @@ import json
 from api.json import json_view
 from api.encoder import coptic_encoder
 from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
-from ingest.tasks import shared_task_spawn_single_ingest
+from ingest.tasks import ingest_asynch
 import functools
 
 ALLOWED_MODELS = ['texts', 'corpus']
@@ -124,7 +124,7 @@ def _query(params={}):
 
     # If ingest is in the params, re-ingest the specified text id
     elif 'ingest' in params:
-        shared_task_spawn_single_ingest.delay(params['text_id'])
+        single_ingest_asynch(params['text_id'])
         objects['ingest_res'] = params['text_id']
 
     # Otherwise, no query is specified

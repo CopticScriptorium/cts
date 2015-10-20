@@ -1,6 +1,5 @@
 import datetime
 from django.db import models
-from ingest.models import Ingest
 from django.db.models.signals import post_save
 from texts.search_fields import populate_values
 
@@ -103,6 +102,7 @@ class Text(models.Model):
 	Text object for a single document ingested from ANNIS, mapped to many HTML visualizations
 	"""
 
+	from ingest.models import Ingest
 	title = models.CharField(max_length=200)
 	slug = models.SlugField(max_length=40)
 	created = models.DateTimeField(editable=False)
