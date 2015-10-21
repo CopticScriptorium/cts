@@ -10,12 +10,18 @@ def process(annis_server):
 	from texts.models import SearchField, SearchFieldValue
 	from texts.models import Text
 	search_fields = _fields(annis_server)
-	original_search_fields = _database_search_fields()
+	current_order_and_splittable_by_annis_name = {sf.annis_name:
+		{
+			'order': 		sf.order,
+			'splittable': 	sf.splittable
+		}
+		for sf in SearchField.objects.all()
+	}
 
 	# todo merge rather than delete?
-	# logger.info("Deleting all SearchFields and SearchFieldValues")
-	# SearchField.objects.all().delete()
-	# SearchFieldValue.objects.all().delete()
+	logger.info("Deleting all SearchFields and SearchFieldValues")
+	SearchField.objects.all().delete()
+	SearchFieldValue.objects.all().delete()
 
 	# Add all new search fields and mappings
 	logger.info("Ingesting new SearchFields and SearchFieldValues")
@@ -24,22 +30,15 @@ def process(annis_server):
 		sf.annis_name = search_field['name']
 		sf.title = search_field['name']
 
-		# Check the search fields against the original search fields
-		# If there is a match in the original search fields, take the
-		# order and splittable values from the original search fields
-		matched_original_searchfield = False
-		original_search_field = {}
-		for orig_sf in original_search_fields:
-			if sf.annis_name == orig_sf['annis_name']:
-				matched_original_searchfield = True
-				original_search_field = orig_sf
+		# Preserve any current order and splittable values
+		current_order_and_splittable = current_order_and_splittable_by_annis_name.get(sf.annis_name)
 
-		if matched_original_searchfield:
-			sf.order = original_search_field['order']
-			sf.splittable = original_search_field['splittable']
+		if current_order_and_splittable:
+			sf.order 		= current_order_and_splittable['order']
+			sf.splittable 	= current_order_and_splittable['splittable']
 		else:
-			sf.order = 10
-			sf.splittable = ""
+			sf.order 		= 10
+			sf.splittable 	= ""
 
 		# Save the search field so that it has an id to be added to the
 		# search field value search_field foreign key attribute
@@ -55,16 +54,13 @@ def process(annis_server):
 
 			# Search field texts
 			for text_id in value['texts']:
-				sfv_texts = Text.objects.filter(id=text_id)
-
 				# Add the texts via the native add ManyToMany handling
-				if len( sfv_texts ):
-					for sfv_text in sfv_texts:
-						sfv.texts.add( sfv_text )
+				for sfv_text in Text.objects.filter(id=text_id):
+					sfv.texts.add(sfv_text)
 
 		# Resave the SearchField to apply the search field splittable to the
 		# ingested search field values
-		sf.save()
+		sf.save()  # todo understand why (if?) this is necessary
 
 
 def _fields(annis_server):
@@ -121,18 +117,3 @@ def _fields(annis_server):
 					})
 
 	return search_fields
-
-def _database_search_fields():
-	from texts.models import SearchField
-
-	original_search_fields = []
-
-	for sf in SearchField.objects.all():
-		original_search_fields.append({
-				'title' : sf.title,
-				'annis_name' : sf.annis_name,
-				'order' : sf.order,
-				'splittable' : sf.splittable
-			})
-
-	return original_search_fields
