@@ -24,19 +24,20 @@ def fetch_texts( ingest_id ):
 	# Define HTML Formats and the ANNIS server to query
 	annis_server = AnnisServer.objects.all()[:1] 
 
+	if annis_server:
+		annis_server = annis_server[0]
+		if not annis_server.base_domain.endswith("/"):
+			annis_server.base_domain += "/"
+	else:
+		logger.error("No ANNIS server found")
+		return False
+
 	ingest = _retry_getting_ingest(ingest_id)
 	if not ingest:
 		logger.error('Ingest with ID %d not found in database' % ingest_id)
 		return
 
 	corpora_ids = ingest.corpora.values_list('id', flat=True)
-
-	# Delete all former texts, textmeta, and visualizations
-	if not corpora_ids:
-		logger.info("Deleting all document values")
-		Text.objects.all().delete()
-		TextMeta.objects.all().delete()
-		HtmlVisualization.objects.all().delete()
 
 	logger.info("Starting virtual framebuffer")
 	vdisplay = Xvfb()
@@ -46,17 +47,6 @@ def fetch_texts( ingest_id ):
 		logger.error('Unable to start Xvfb: %s' % e)
 	logger.info("Starting Firefox")
 	driver = webdriver.Firefox()
-
-	if len(annis_server) > 0:
-		annis_server = annis_server[0]
-
-		# Ensure trailing slash in the annis server base domain
-		if not annis_server.base_domain.endswith("/"):
-			annis_server.base_domain += "/"
-
-	else:
-		logger.error( "Error with ingest, no ANNIS server found")
-		return False
 
 	# For each corpus defined in the database, fetch results from ANNIS
 	logger.info("Querying corpora")
@@ -76,14 +66,15 @@ def fetch_texts( ingest_id ):
 			slug = slugify( title ).__str__()
 
 			# Add exception for besa.letters corpus in ANNIS
-			if corpus.annis_corpus_name == "besa.letters":
-				if title != corpus.slug:
-					continue
+			if corpus.annis_corpus_name == "besa.letters" and title != corpus.slug:
+				continue
+
+			Text.objects.filter(title = title).delete()
 
 			text = Text()
 			text.title = title
 			text.slug = slug 
-			text.save()
+			text.save()  # Todo why save here, and again just below?
 
 			logger.info("Importing %s %s %s" % (corpus.title, text.title, text.id))
 
@@ -91,13 +82,10 @@ def fetch_texts( ingest_id ):
 			meta_query_url = corpus_name_url(annis_server.document_metadata_url).replace(":document_name", text.title)
 			metadata.collect_text_meta(meta_query_url, text)
 
-			visualizations.collect(corpus, text, title, annis_server, driver)
+			visualizations.collect(corpus, text, annis_server, driver)
 
-			# Add the corpus 
-			text.corpus = corpus 
-
-			# Add the ingest
-			text.ingest = ingest 
+			text.corpus = corpus
+			text.ingest = ingest
 			text.save()
 				
 	driver.quit()

@@ -9,19 +9,15 @@ from texts.models import HtmlVisualization
 logger = logging.getLogger(__name__)
 
 
-def collect(corpus, text, title, annis_server, driver):
-	# Query ANNIS for each HTML format of the documents
-	for html_format in corpus.html_visualization_formats.all():
+def collect(corpus, text, annis_server, driver):
 
-		# Add the corpus corpus name to the URL
+	for html_format in corpus.html_visualization_formats.all():
 		corpora_url = annis_server.base_domain + annis_server.html_visualization_url.replace(
-			":corpus_name", corpus.annis_corpus_name).replace(":document_name", title).replace(
+			":corpus_name", corpus.annis_corpus_name).replace(":document_name", text.title).replace(
 			":html_visualization_format", html_format.slug)
 
-		# Wait for visualization to load in browser
 		try:
-			# Fetch the HTML for the corpus/document/html_format from ANNIS
-			logging.info('Fetching from ' + corpora_url)
+			logger.info('Fetching from ' + corpora_url)
 			driver.get(corpora_url)
 			WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "htmlvis")))
 			driver.delete_all_cookies()
@@ -35,15 +31,11 @@ def collect(corpus, text, title, annis_server, driver):
 			driver.quit()
 			driver = webdriver.Firefox()
 
-		# Check to ensure there's html returned
-		# if "Could not query document" in text_html or "error" in text_html:
 		if "Client response status: 403" in text_html:
 			logger.error(" -- Error fetching " + corpora_url)
 			text_html = ""
 
-		# Remove Javascript from the body content
-		if len( text_html ):
-
+		if text_html:
 			# Add the styles
 			for style_elem in styles:
 				style_css = style_elem.get_attribute("innerHTML")
@@ -54,11 +46,9 @@ def collect(corpus, text, title, annis_server, driver):
 			for script_elem in script_elems:
 				text_html = text_html.replace( script_elem, "" )
 
-		# Create the new html_visualization
-		html_visualization = HtmlVisualization()
-		html_visualization.visualization_format = html_format
-		html_visualization.html = text_html
-		html_visualization.save()
+		vis = HtmlVisualization()
+		vis.visualization_format = html_format
+		vis.html = text_html
+		vis.save()
 
-		# Add the html visualization to the text
-		text.html_visualizations.add(html_visualization)
+		text.html_visualizations.add(vis)
