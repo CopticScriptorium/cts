@@ -1,5 +1,6 @@
 import logging
 from urllib import request
+from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 from texts.models import TextMeta, CorpusMeta
 
@@ -7,29 +8,30 @@ logger = logging.getLogger(__name__)
 
 
 def collect_corpus_meta(url, corpus):
-	collect(url, CorpusMeta(), corpus.corpus_meta)
+	def factory(): return CorpusMeta()
+	collect(url, factory, corpus.corpus_meta)
 
 
 def collect_text_meta(url, text):
-	collect(url, TextMeta(), text.text_meta)
+	def factory(): return TextMeta()
+	collect(url, factory, text.text_meta)
 
 
-def collect(url, meta, parent):
+def collect(url, factory, parent):
 	logger.info("Fetching and saving metadata from " + url)
-	try:
-		res = request.urlopen(url)
-		xml = res.read()
-		soup = BeautifulSoup( xml )
-		meta_items = soup.find_all("annotation")
-	except Exception as e:
-		logger.error("Error with %s: %s" % (url, e))
-		meta_items = []
 
-	for meta_item in meta_items:
-		def t(attr_name): return meta_item.find(attr_name).text
-		meta.name 		= t('name')
-		meta.value 		= t('value')
-		meta.pre 		= t('pre')
-		meta.corpus_name = t('corpusname')
+	for fields in get_selected_annotation_fields(url, ('name', 'value', 'pre', 'corpusname')):
+		meta = factory()
+		meta.name, meta.value, meta.pre, meta.corpus_name = fields
 		meta.save()
 		parent.add(meta)
+
+
+def get_selected_annotation_fields(url, fields):
+	'Fetch from the url, and return the requested fields for each annotation found, in a list of lists'
+	try:
+		soup = BeautifulSoup(request.urlopen(url).read())
+		return [[a.find(field).text for field in fields] for a in soup.find_all("annotation")]
+	except HTTPError:
+		logger.error("HTTPError with " + url)
+		return []

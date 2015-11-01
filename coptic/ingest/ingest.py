@@ -2,13 +2,11 @@
 
 from time import sleep
 import logging
-from urllib import request
-from urllib.error import HTTPError
-from bs4 import BeautifulSoup
 from django.utils.text import slugify
 from selenium import webdriver
 from xvfbwrapper import Xvfb
 from ingest import search, metadata, visualizations
+from ingest.metadata import get_selected_annotation_fields
 
 logger = logging.getLogger(__name__)
 
@@ -67,50 +65,30 @@ def fetch_texts( ingest_id ):
 
 	for corpus in corpora:
 
-		def make_url_with_corpus_name(part):
+		def corpus_name_url(part):
 			return annis_server.base_domain + part.replace(":corpus_name", corpus.annis_corpus_name)
 
-		metadata.collect_corpus_meta(make_url_with_corpus_name(annis_server.corpus_metadata_url), corpus)
+		metadata.collect_corpus_meta(corpus_name_url(annis_server.corpus_metadata_url), corpus)
 
-		# Fetch documents based on the docnames specified on the corpus object
-		doc_name_query_url = make_url_with_corpus_name(annis_server.corpus_docname_url)
+		doc_name_query_url = corpus_name_url(annis_server.corpus_docname_url)
 
-		try:
-			res = request.urlopen( doc_name_query_url )
-			xml = res.read() 
-			soup = BeautifulSoup( xml )
-			doc_name_annotations = soup.find_all("annotation")
-		except HTTPError:
-			logger.error("HTTPError with doc_name_query_url " + doc_name_query_url)
-			doc_name_annotations = [] 
-
-
-		for doc_name in doc_name_annotations:
-
-			# Create a New Text	
-			# Text: Title, slug, author, corpus, ingest, xml_tei, xml_paula, html_visualization
-
-			# First, process the slug, and title
-			title = doc_name.find("name").text
-			slug = slugify( title ).__str__() 
+		for title, in get_selected_annotation_fields(doc_name_query_url, ('name',)):
+			slug = slugify( title ).__str__()
 
 			# Add exception for besa.letters corpus in ANNIS
 			if corpus.annis_corpus_name == "besa.letters":
 				if title != corpus.slug:
 					continue
 
-			# Create a new text
 			text = Text()
-
-			# Set the title and slug on the text
 			text.title = title
 			text.slug = slug 
 			text.save()
 
-			logger.info("Importing " + corpus.title + " " + text.title + " " + str(text.id))
+			logger.info("Importing %s %s %s" % (corpus.title, text.title, text.id))
 
 			# Query ANNIS for the metadata for the document
-			meta_query_url = make_url_with_corpus_name(annis_server.document_metadata_url).replace(":document_name", text.title)
+			meta_query_url = corpus_name_url(annis_server.document_metadata_url).replace(":document_name", text.title)
 			metadata.collect_text_meta(meta_query_url, text)
 
 			visualizations.collect(corpus, text, title, annis_server, driver)

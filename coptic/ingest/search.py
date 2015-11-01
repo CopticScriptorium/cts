@@ -1,7 +1,5 @@
 import logging
-from urllib import request
-from urllib.error import HTTPError
-from bs4 import BeautifulSoup
+from ingest.metadata import get_selected_annotation_fields
 
 logger = logging.getLogger(__name__)
 
@@ -18,13 +16,11 @@ def process(annis_server):
 		for sf in SearchField.objects.all()
 	}
 
-	# todo merge rather than delete?
-	logger.info("Deleting all SearchFields and SearchFieldValues")
+	logger.info("Rebuilding %d SearchFields, and SearchFieldValues" % len(search_fields))
 	SearchField.objects.all().delete()
 	SearchFieldValue.objects.all().delete()
 
 	# Add all new search fields and mappings
-	logger.info("Ingesting new SearchFields and SearchFieldValues")
 	for search_field in search_fields:
 		sf = SearchField()
 		sf.annis_name = search_field['name']
@@ -48,8 +44,7 @@ def process(annis_server):
 		for value in search_field['values']:
 			sfv = SearchFieldValue()
 			sfv.search_field = sf
-			sfv.value = value['value']
-			sfv.title = value['value']
+			sfv.value = sfv.title = value['value']
 			sfv.save()
 
 			# Search field texts
@@ -66,54 +61,37 @@ def process(annis_server):
 def _fields(annis_server):
 	from texts.models import Text
 
-	search_fields = []
+	search_fields = []  # List of dict of 'name', 'values'
 
-	# For each text defined in the database, fetch results from ANNIS
-	for text in Text.objects.all():
+	all_texts = Text.objects.all()
+	logger.info("Fetching metadata annotations for %d texts" % len(all_texts))
 
-		# Add the text name to the URL
+	for text in all_texts:
+
 		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(
-			":corpus_name", text.corpus.annis_corpus_name ).replace(":document_name", text.title)
-		logger.info("querying " + text.title + " @ " + meta_query_url)
+			":corpus_name", text.corpus.annis_corpus_name).replace(":document_name", text.title)
+		logger.info("Querying " + text.title + " @ " + meta_query_url)
 
-		# Fetch the HTML for the corpus/document/html_format from ANNIS
-		try:
-			res = request.urlopen( meta_query_url )
-			xml = res.read()
-			soup = BeautifulSoup( xml )
-			annotations = soup.find_all("annotation")
-		except HTTPError:
-			logger.error("HTTPError with meta_query_url " + meta_query_url)
-			annotations = []
+		for name, value in get_selected_annotation_fields(meta_query_url, ('name', 'value')):
 
-		for annotation in annotations:
-			name = annotation.find("name").text
-			value = annotation.find("value").text
-
-			is_in_search_fields = False
-			for search_field in search_fields:
-				if search_field['name'] == name:
-					is_in_search_fields = True
-
-					is_in_search_field_texts = False
-					for sfc in search_field['values']:
-						if value == sfc['value']:
-							is_in_search_field_texts = True
-							sfc['texts'].append(text.id)
-
-					if not is_in_search_field_texts:
-						search_field['values'].append({
-								'value' : value,
-								'texts' : [text.id]
-							})
-
-			if not is_in_search_fields:
-				search_fields.append({
-						'name' : name,
-						'values' : [{
-								'value' : value,
-								'texts' : [text.id]
-							}]
+			matching_search_fields = [sf for sf in search_fields if sf['name'] == name]
+			if matching_search_fields:
+				values_list = matching_search_fields[0]['values']
+				matching_values_dicts = [vd for vd in values_list if vd['value'] == value]
+				if matching_values_dicts:
+					matching_values_dicts[0]['texts'].append(text.id)
+				else:
+					values_list.append({
+						'value': value,
+						'texts': [text.id]
 					})
+			else:
+				search_fields.append({
+					'name': name,
+					'values': [{
+						'value': value,
+						'texts': [text.id]
+					}]
+				})
 
 	return search_fields
