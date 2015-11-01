@@ -10,15 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 def collect(corpus, text, annis_server, driver):
+	corpus_name = corpus.annis_corpus_name
+	logger.info('Fetching for %s %s' % (corpus.title, text.title))
 
 	for html_format in corpus.html_visualization_formats.all():
-		corpora_url = annis_server.base_domain + annis_server.html_visualization_url.replace(
-			":corpus_name", corpus.annis_corpus_name).replace(":document_name", text.title).replace(
-			":html_visualization_format", html_format.slug)
+		html_vis_url = annis_server.url_html_visualization(corpus_name, text.title, html_format.slug)
 
 		try:
-			logger.info('Fetching from ' + corpora_url)
-			driver.get(corpora_url)
+			logger.info(html_format.title)
+			driver.get(html_vis_url)
 			WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "htmlvis")))
 			driver.delete_all_cookies()
 
@@ -32,7 +32,7 @@ def collect(corpus, text, annis_server, driver):
 			driver = webdriver.Firefox()
 
 		if "Client response status: 403" in text_html:
-			logger.error(" -- Error fetching " + corpora_url)
+			logger.error(" -- Error fetching " + html_vis_url)
 			text_html = ""
 
 		if text_html:

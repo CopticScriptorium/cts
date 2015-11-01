@@ -48,40 +48,28 @@ def fetch_texts( ingest_id ):
 	logger.info("Starting Firefox")
 	driver = webdriver.Firefox()
 
-	# For each corpus defined in the database, fetch results from ANNIS
-	logger.info("Querying corpora")
-	corpora = Corpus.objects.filter(id__in=(corpora_ids)) \
-		if corpora_ids else Corpus.objects.all()
+	for corpus in Corpus.objects.filter(id__in=(corpora_ids)) if corpora_ids else Corpus.objects.all():
+		corpus_name = corpus.annis_corpus_name
+		logger.info('Importing corpus ' + corpus.title)
+		metadata.collect_corpus_meta(annis_server.url_corpus_metadata(corpus_name), corpus)
 
-	for corpus in corpora:
-
-		def corpus_name_url(part):
-			return annis_server.base_domain + part.replace(":corpus_name", corpus.annis_corpus_name)
-
-		metadata.collect_corpus_meta(corpus_name_url(annis_server.corpus_metadata_url), corpus)
-
-		doc_name_query_url = corpus_name_url(annis_server.corpus_docname_url)
-
-		for title, in get_selected_annotation_fields(doc_name_query_url, ('name',)):
-			slug = slugify( title ).__str__()
+		for title, in get_selected_annotation_fields(annis_server.url_corpus_docname(corpus_name), ('name',)):
+			slug = slugify(title).__str__()
 
 			# Add exception for besa.letters corpus in ANNIS
-			if corpus.annis_corpus_name == "besa.letters" and title != corpus.slug:
+			if corpus_name == "besa.letters" and title != corpus.slug:
 				continue
 
-			Text.objects.filter(title = title).delete()
+			logger.info('Importing title ' + title)
+
+			Text.objects.filter(title=title).delete()
 
 			text = Text()
 			text.title = title
-			text.slug = slug 
+			text.slug = slug
 			text.save()  # Todo why save here, and again just below?
 
-			logger.info("Importing %s %s %s" % (corpus.title, text.title, text.id))
-
-			# Query ANNIS for the metadata for the document
-			meta_query_url = corpus_name_url(annis_server.document_metadata_url).replace(":document_name", text.title)
-			metadata.collect_text_meta(meta_query_url, text)
-
+			metadata.collect_text_meta(annis_server.url_document_metadata(corpus_name, text.title), text)
 			visualizations.collect(corpus, text, annis_server, driver)
 
 			text.corpus = corpus

@@ -67,10 +67,8 @@ def _fields(annis_server):
 	logger.info("Fetching metadata annotations for %d texts" % len(all_texts))
 
 	for text in all_texts:
-
-		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(
-			":corpus_name", text.corpus.annis_corpus_name).replace(":document_name", text.title)
-		logger.info("Querying " + text.title + " @ " + meta_query_url)
+		meta_query_url = annis_server.url_document_metadata(text.corpus.annis_corpus_name, text.title)
+		logger.info(text.title)
 
 		for name, value in get_selected_annotation_fields(meta_query_url, ('name', 'value')):
 
