@@ -1,7 +1,5 @@
 import datetime
 from django.db import models
-from django.db.models.signals import post_save
-from texts.search_fields import populate_values
 
 
 class HtmlVisualizationFormat(models.Model):
@@ -19,6 +17,7 @@ class HtmlVisualizationFormat(models.Model):
 	def __str__(self):
 		return self.title
 
+
 class HtmlVisualization(models.Model):
 	"""
 	HTML Visualization, specifying a format of visualization and the visualization HTML
@@ -32,6 +31,7 @@ class HtmlVisualization(models.Model):
 
 	def __str__(self):
 		return self.visualization_format.title
+
 
 class CorpusMeta(models.Model):
 	"""
@@ -63,8 +63,8 @@ class Corpus(models.Model):
 	annis_code = models.CharField(max_length=200)
 	annis_corpus_name = models.CharField(max_length=200)
 	github = models.CharField(max_length=200)
-	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True, null=True)
-	corpus_meta = models.ManyToManyField(CorpusMeta, blank=True, null=True)
+	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True)
+	corpus_meta = models.ManyToManyField(CorpusMeta, blank=True)
 
 	class Meta:
 		verbose_name_plural = "Corpora"
@@ -110,8 +110,8 @@ class Text(models.Model):
 	is_expired = models.BooleanField(default=False)
 	corpus = models.ForeignKey(Corpus, blank=True, null=True)
 	ingest = models.ForeignKey(Ingest, blank=True, null=True)
-	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True, null=True)
-	text_meta = models.ManyToManyField(TextMeta, blank=True, null=True)
+	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
+	text_meta = models.ManyToManyField(TextMeta, blank=True)
 
 
 	def __str__(self):
@@ -147,19 +147,10 @@ class SearchFieldValue(models.Model):
 	"""
 	title = models.CharField(max_length=200)
 	search_field = models.ForeignKey(SearchField, blank=True, null=True)
-	texts = models.ManyToManyField(Text, blank=True, null=True)
+	texts = models.ManyToManyField(Text, blank=True)
 
 	class Meta:
 		verbose_name = "Search Field Value"
 
 	def __str__(self):
 		return self.search_field.title  + ": " + self.title
-
-# Method for performing ingest once there's an ingest.id 
-# def post_save_search_field(sender, instance, **kwargs):
-# 	''' On save, populate the values field with SeachFieldValues based off the unique values in the texts'''
-# 	populate_values( instance )
-# 
-# # Register the post save signal 
-# post_save.connect(post_save_search_field, sender=SearchField, dispatch_uid="")	
-
