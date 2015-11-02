@@ -198,33 +198,28 @@ def load_searchfields():
     
     corpus = SearchField()
     corpus.title = "corpus"
-    corpus.annis_name = "corpus"
     corpus.order = 1
     
     author = SearchField()
     author.title = "author"
-    author.annis_name = "author"
     author.order = 2
 
     ms_name = SearchField()
     ms_name.title = "msName"
-    ms_name.annis_name = "msName"
     ms_name.order = 3
 
     annotation = SearchField()
     annotation.title = "annotation"
-    annotation.annis_name = "annotation"
     annotation.order = 4
     annotation.splittable = ","
 
     translation = SearchField()
     translation.title = "translation"
-    translation.annis_name = "translation"
     translation.order = 5
     translation.splittable = ","
     
     for searchfield in [corpus, author, ms_name, annotation, translation]:
         try:
-            SearchField.objects.get(annis_name__exact=searchfield.annis_name)
+            SearchField.objects.get(annis_name__exact=searchfield.title)
         except SearchField.DoesNotExist:
             searchfield.save()

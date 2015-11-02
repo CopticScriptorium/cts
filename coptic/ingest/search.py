@@ -8,7 +8,7 @@ def process(annis_server):
 	from texts.models import SearchField, SearchFieldValue
 	from texts.models import Text
 	search_fields = _fields(annis_server)
-	current_order_and_splittable_by_annis_name = {sf.annis_name:
+	current_order_and_splittable_by_title = {sf.title:
 		{
 			'order': 		sf.order,
 			'splittable': 	sf.splittable
@@ -23,11 +23,10 @@ def process(annis_server):
 	# Add all new search fields and mappings
 	for search_field in search_fields:
 		sf = SearchField()
-		sf.annis_name = search_field['name']
 		sf.title = search_field['name']
 
 		# Preserve any current order and splittable values
-		current_order_and_splittable = current_order_and_splittable_by_annis_name.get(sf.annis_name)
+		current_order_and_splittable = current_order_and_splittable_by_title.get(sf.title)
 
 		if current_order_and_splittable:
 			sf.order 		= current_order_and_splittable['order']
@@ -44,7 +43,7 @@ def process(annis_server):
 		for value in search_field['values']:
 			sfv = SearchFieldValue()
 			sfv.search_field = sf
-			sfv.value = sfv.title = value['value']
+			sfv.title = value['value']
 			sfv.save()
 
 			# Search field texts

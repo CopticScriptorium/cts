@@ -1,8 +1,8 @@
 import json
 from api.json import json_view
 from api.encoder import coptic_encoder
-from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
-from ingest.tasks import ingest_asynch
+from ingest.tasks import single_ingest_asynch
+from texts.models import Text, Corpus, SearchFieldValue, TextMeta
 import functools
 
 ALLOWED_MODELS = ['texts', 'corpus']

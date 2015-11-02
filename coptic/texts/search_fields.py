@@ -1,12 +1,8 @@
-import pdb
-
-# Retrieve a list of searchfields for the search toolbar
 def get_search_fields():
 	"""
 	Get the search fields for the search tools in the site header
 	"""
 	from texts.models import SearchField, SearchFieldValue
-
 
 	search_fields = SearchField.objects.all().order_by("order")
 	for search_field in search_fields:
@@ -18,7 +14,7 @@ def get_search_fields():
 # Populating values for the search fields
 def populate_values( instance ):
 
-	from texts.models import Text, SearchField, SearchFieldValue
+	from texts.models import SearchFieldValue
 
 	if instance.splittable:
 
@@ -64,7 +60,6 @@ def populate_values( instance ):
 			sfv.search_field = instance
 
 			# Set the split value and title
-			sfv.value = split_sfv['value'] 
 			sfv.title = split_sfv['value']
 
 			# Save so we have an pk id no for adding the manytomany field texts 
@@ -79,5 +74,4 @@ def populate_values( instance ):
 			# Save the updates
 			sfv.save()
 
-
-	return True	 
+	return True

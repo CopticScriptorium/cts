@@ -131,7 +131,6 @@ class SearchField(models.Model):
 	"""
 
 	title = models.CharField(max_length=200)
-	annis_name = models.CharField(max_length=200)
 	order = models.IntegerField()
 	splittable = models.CharField(max_length=200, blank=True, null=True)
 
@@ -141,13 +140,12 @@ class SearchField(models.Model):
 	def __str__(self):
 		return self.title
 
-# Search field value
+
 class SearchFieldValue(models.Model):
 	"""
 	Value for Search Field ingested from Metadata from ANNIS
 	"""
 	title = models.CharField(max_length=200)
-	value = models.CharField(max_length=200)
 	search_field = models.ForeignKey(SearchField, blank=True, null=True)
 	texts = models.ManyToManyField(Text, blank=True, null=True)
 
@@ -155,7 +153,7 @@ class SearchFieldValue(models.Model):
 		verbose_name = "Search Field Value"
 
 	def __str__(self):
-		return self.search_field.title  + ": " + self.title 
+		return self.search_field.title  + ": " + self.title
 
 # Method for performing ingest once there's an ingest.id 
 # def post_save_search_field(sender, instance, **kwargs):
