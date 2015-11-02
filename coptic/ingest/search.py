@@ -18,7 +18,8 @@ def process(annis_server):
 
 	logger.info("Rebuilding %d SearchFields, and SearchFieldValues" % len(search_fields))
 	SearchField.objects.all().delete()
-	SearchFieldValue.objects.all().delete()
+
+	saved_SearchFieldValues_by_title = {}  # title -> SearchFieldValue
 
 	# Add all new search fields and mappings
 	for search_field in search_fields:
@@ -41,20 +42,27 @@ def process(annis_server):
 
 		# Save value data
 		for value in search_field['values']:
-			sfv = SearchFieldValue()
-			sfv.search_field = sf
-			sfv.title = value['value']
-			sfv.save()
+			if sf.splittable:
+				split_values = value['value'].split(sf.splittable)
+			else:
+				split_values = [value['value']]
 
-			# Search field texts
-			for text_id in value['texts']:
-				# Add the texts via the native add ManyToMany handling
-				for sfv_text in Text.objects.filter(id=text_id):
-					sfv.texts.add(sfv_text)
+			for split_value in split_values:
+				title = split_value.strip()
 
-		# Resave the SearchField to apply the search field splittable to the
-		# ingested search field values
-		sf.save()  # todo understand why (if?) this is necessary
+				sfv = saved_SearchFieldValues_by_title.get(title)
+				if not sfv:
+					sfv = SearchFieldValue()
+					sfv.search_field = sf
+					sfv.title = title
+					sfv.save()
+					saved_SearchFieldValues_by_title[title] = sfv
+
+				# Search field texts
+				for text_id in value['texts']:
+					# Add the texts via the native add ManyToMany handling
+					for sfv_text in Text.objects.filter(id=text_id):
+						sfv.texts.add(sfv_text)
 
 
 def _fields(annis_server):
