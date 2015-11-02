@@ -163,7 +163,7 @@ def _find_ids_by_field(filters):
 
 def _intersect(ids_dict):
     ids_sets = [set(values) for values in ids_dict.values()]
-    return functools.reduce(lambda a, b: a & b, ids_sets)
+    return functools.reduce(lambda a, b: a & b, ids_sets) if ids_sets else []
 
 
 def _json_prepare_queryset(objects, model_name, queryset):
