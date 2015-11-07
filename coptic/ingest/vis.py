@@ -1,5 +1,6 @@
 import re
 import logging
+from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,25 +12,40 @@ logger = logging.getLogger(__name__)
 
 def collect(corpus, text, annis_server, driver):
 	corpus_name = corpus.annis_corpus_name
-	logger.info('Fetching for %s %s' % (corpus.title, text.title))
+	formats = corpus.html_visualization_formats.all()
+	logger.info('Fetching %d visualizations' % len(formats))
 
-	for html_format in corpus.html_visualization_formats.all():
+	for html_format in formats:
 		html_vis_url = annis_server.url_html_visualization(corpus_name, text.title, html_format.slug)
 
 		try:
 			logger.info(html_format.title)
-			driver.get(html_vis_url)
+			retries_left = 5
+			connection_accepted = False
+			while not connection_accepted and retries_left:
+				try:
+					driver.get(html_vis_url)
+					connection_accepted = True
+				except ConnectionRefusedError as cre:
+					logger.warning(cre)
+					driver.close()
+					retries_left -= 1
+					sleep(15)
+
+			if retries_left == 0:
+				raise VisServerRefusingConn()
+
 			WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "htmlvis")))
 			driver.delete_all_cookies()
 
 			body = driver.find_element_by_xpath("/html/body")
 			text_html = body.get_attribute("innerHTML")
 			styles = driver.find_elements_by_xpath("/html/head/style")
-		except:
+		except Exception as e:
+			logger.error('Error getting %s: %s' % (html_vis_url, e))
+			logger.error('Page source: ' + driver.page_source)
 			text_html = ""
 			styles = []
-			driver.quit()
-			driver = webdriver.Firefox()
 
 		if "Client response status: 403" in text_html:
 			logger.error(" -- Error fetching " + html_vis_url)
@@ -52,3 +68,6 @@ def collect(corpus, text, annis_server, driver):
 		vis.save()
 
 		text.html_visualizations.add(vis)
+
+class VisServerRefusingConn(Exception):
+	pass

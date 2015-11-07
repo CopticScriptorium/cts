@@ -5,8 +5,9 @@ import logging
 from django.utils.text import slugify
 from selenium import webdriver
 from xvfbwrapper import Xvfb
-from ingest import search, metadata, visualizations
+from ingest import search, metadata, vis
 from ingest.metadata import get_selected_annotation_fields
+from ingest.vis import VisServerRefusingConn
 
 logger = logging.getLogger(__name__)
 
@@ -48,33 +49,36 @@ def fetch_texts( ingest_id ):
 	logger.info("Starting Firefox")
 	driver = webdriver.Firefox()
 
-	for corpus in Corpus.objects.filter(id__in=(corpora_ids)) if corpora_ids else Corpus.objects.all():
-		corpus_name = corpus.annis_corpus_name
-		logger.info('Importing corpus ' + corpus.title)
-		metadata.collect_corpus_meta(annis_server.url_corpus_metadata(corpus_name), corpus)
+	try:
+		for corpus in Corpus.objects.filter(id__in=(corpora_ids)) if corpora_ids else Corpus.objects.all():
+			corpus_name = corpus.annis_corpus_name
+			logger.info('Importing corpus ' + corpus.title)
+			metadata.collect_corpus_meta(annis_server.url_corpus_metadata(corpus_name), corpus)
 
-		for title, in get_selected_annotation_fields(annis_server.url_corpus_docname(corpus_name), ('name',)):
-			slug = slugify(title).__str__()
+			for title, in get_selected_annotation_fields(annis_server.url_corpus_docname(corpus_name), ('name',)):
+				slug = slugify(title).__str__()
 
-			# Add exception for besa.letters corpus in ANNIS
-			if corpus_name == "besa.letters" and title != corpus.slug:
-				continue
+				# Add exception for besa.letters corpus in ANNIS
+				if corpus_name == "besa.letters" and title != corpus.slug:
+					continue
 
-			logger.info('Importing title ' + title)
+				logger.info('Importing ' + title)
 
-			Text.objects.filter(title=title).delete()
+				Text.objects.filter(title=title).delete()
 
-			text = Text()
-			text.title = title
-			text.slug = slug
-			text.save()  # Todo why save here, and again just below?
+				text = Text()
+				text.title = title
+				text.slug = slug
+				text.save()  # Todo why save here, and again just below?
 
-			metadata.collect_text_meta(annis_server.url_document_metadata(corpus_name, text.title), text)
-			visualizations.collect(corpus, text, annis_server, driver)
+				metadata.collect_text_meta(annis_server.url_document_metadata(corpus_name, text.title), text)
+				vis.collect(corpus, text, annis_server, driver)
 
-			text.corpus = corpus
-			text.ingest = ingest
-			text.save()
+				text.corpus = corpus
+				text.ingest = ingest
+				text.save()
+	except VisServerRefusingConn:
+		logger.error('Aborting ingestion because visualization server repeatedly refused connections')
 				
 	driver.quit()
 	vdisplay.stop()
