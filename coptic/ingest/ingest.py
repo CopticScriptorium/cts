@@ -1,23 +1,15 @@
-"""
-ingest.py
+'Fetch Texts from their source in ANNIS'
 
-Fetch Texts from their source in ANNIS
-
-"""
-import pdb
-import re
 from time import sleep
-import random
 import logging
-from urllib import request
-from urllib.error import HTTPError
-from bs4 import BeautifulSoup
 from django.utils.text import slugify
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from xvfbwrapper import Xvfb
+from ingest import search, metadata, vis
+from ingest.metadata import get_selected_annotation_fields
+from ingest.vis import VisServerRefusingConn
+
+logger = logging.getLogger(__name__)
 
 
 def fetch_texts( ingest_id ):
@@ -27,322 +19,84 @@ def fetch_texts( ingest_id ):
 
 	"""
 
-	# Get the text and ingest models (prevent circular import)
-	from texts.models import Corpus, Text, CorpusMeta, TextMeta, HtmlVisualization, HtmlVisualizationFormat, SearchField, SearchFieldValue
-	from ingest.models import Ingest 
+	from texts.models import Corpus, Text, TextMeta, HtmlVisualization
 	from annis.models import AnnisServer
 
-	# Set up an instance of the logger
-	logger = logging.getLogger(__name__)
-
-	# Delete all former texts, textmeta, and visualizations 
-	logger.info(" -- Ingest: Deleting all document values")
-	Text.objects.all().delete()
-	TextMeta.objects.all().delete()
-	HtmlVisualization.objects.all().delete()
-
-	# Define HTML Formats and the ANNIS server to query 
+	# Define HTML Formats and the ANNIS server to query
 	annis_server = AnnisServer.objects.all()[:1] 
 
-	# Get the Ingest by the ingest id
-	try:
-		ingest = Ingest.objects.get(id=ingest_id)
-	except:
-		ingest = Ingest.objects.find()[0]
-
-	logger.info(" -- Ingest: Starting virtual framebuffer")
-	vdisplay = Xvfb()
-	vdisplay.start()
-	logger.info(" -- Ingest: Starting Firefox")
-	driver = webdriver.Firefox()
-
-	if len(annis_server) > 0:
+	if annis_server:
 		annis_server = annis_server[0]
-
-		# Ensure trailing slash in the annis server base domain
 		if not annis_server.base_domain.endswith("/"):
 			annis_server.base_domain += "/"
-
 	else:
-		logger.error( "Error with ingest, no ANNIS server found")
+		logger.error("No ANNIS server found")
 		return False
 
-	#
-	# This is where the corpus ingest from ANNIS should be built out
-	#
-	# corpus_name_query_url = annis_server.base_domain + annis_server.
-	# res = request.urlopen( doc_name_query_url )
-	# xml = res.read() 
+	ingest = _retry_getting_ingest(ingest_id)
+	if not ingest:
+		logger.error('Ingest with ID %d not found in database' % ingest_id)
+		return
 
-	# soup = BeautifulSoup( xml )
-	# doc_name_annotations = soup.find_all("annotation")
+	corpora_ids = ingest.corpora.values_list('id', flat=True)
 
-	# For each corpus defined in the database, fetch results from ANNIS
-	logger.info(" -- Ingest: querying corpora")
-	for corpus in Corpus.objects.all():
+	logger.info("Starting virtual framebuffer")
+	vdisplay = Xvfb()
+	try:
+		vdisplay.start()
+	except Exception as e:
+		logger.error('Unable to start Xvfb: %s' % e)
+	logger.info("Starting Firefox")
+	driver = webdriver.Firefox()
 
-		# Query ANNIS for the metadata for the corpus
-		meta_query_url = annis_server.base_domain + annis_server.corpus_metadata_url.replace(":corpus_name", corpus.annis_corpus_name )
-		try:
-			res = request.urlopen( meta_query_url )
-			xml = res.read() 
-			soup = BeautifulSoup( xml )
-			meta_items = soup.find_all("annotation")
-		except HTTPError:
-			logger.error(" -- Ingest: HTTPError with meta_query_url " + meta_query_url)
-			meta_items = [] 
+	try:
+		for corpus in Corpus.objects.filter(id__in=(corpora_ids)) if corpora_ids else Corpus.objects.all():
+			corpus_name = corpus.annis_corpus_name
+			logger.info('Importing corpus ' + corpus.title)
+			metadata.collect_corpus_meta(annis_server.url_corpus_metadata(corpus_name), corpus)
 
-		# Save each meta item for the text document
-		for meta_item in meta_items:
-			corpus_meta = CorpusMeta()
-			corpus_meta.name = meta_item.find("name").text
-			corpus_meta.value = meta_item.find("value").text
-			corpus_meta.pre = meta_item.find("pre").text
-			meta_corpus_name = meta_item.find("corpusName")
-			if meta_corpus_name:
-				corpus_meta.corpus_name = meta_corpus_name.text 
-			corpus_meta.save()
-			corpus.corpus_meta.add(corpus_meta)
+			for title, in get_selected_annotation_fields(annis_server.url_corpus_docname(corpus_name), ('name',)):
+				slug = slugify(title).__str__()
 
-		# Fetch documents based on the docnames specified on the corpus object
-		doc_name_query_url = annis_server.base_domain + annis_server.corpus_docname_url.replace(":corpus_name", corpus.annis_corpus_name)
-
-		try:
-			res = request.urlopen( doc_name_query_url )
-			xml = res.read() 
-			soup = BeautifulSoup( xml )
-			doc_name_annotations = soup.find_all("annotation")
-		except HTTPError:
-			logger.error(" -- Ingest: HTTPError with meta_query_url " + meta_query_url)
-			doc_name_annotations = [] 
-
-
-		for doc_name in doc_name_annotations:
-
-			# Create a New Text	
-			# Text: Title, slug, author, corpus, ingest, xml_tei, xml_paula, html_visualization
-
-			# First, process the slug, and title
-			title = doc_name.find("name").text
-			slug = slugify( title ).__str__() 
-
-			# Add exception for besa.letters corpus in ANNIS
-			if corpus.annis_corpus_name == "besa.letters":
-				if title != corpus.slug:
+				# Add exception for besa.letters corpus in ANNIS
+				if corpus_name == "besa.letters" and title != corpus.slug:
 					continue
 
-			# Create a new text
-			text = Text()
+				logger.info('Importing ' + title)
 
-			# Set the title and slug on the text
-			text.title = title
-			text.slug = slug 
-			text.save()
+				Text.objects.filter(title=title).delete()
 
-			logger.info(" -- Importing " + corpus.title + " " + text.title + " " + str( text.id ) )
+				text = Text()
+				text.title = title
+				text.slug = slug
+				text.save()  # Todo why save here, and again just below?
 
-			# Query ANNIS for the metadata for the document
-			meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(":corpus_name", corpus.annis_corpus_name ).replace(":document_name", text.title)
-			res = request.urlopen( meta_query_url )
-			xml = res.read() 
-			soup = BeautifulSoup( xml )
-			meta_items = soup.find_all("annotation")
+				metadata.collect_text_meta(annis_server.url_document_metadata(corpus_name, text.title), text)
+				vis.collect(corpus, text, annis_server, driver)
 
-			# Save each meta item for the text document
-			for meta_item in meta_items:
-				text_meta = TextMeta()
-				text_meta.name = meta_item.find("name").text
-				text_meta.value = meta_item.find("value").text
-				text_meta.pre = meta_item.find("pre").text
-				meta_corpus_name = meta_item.find("corpusName")
-				if meta_corpus_name:
-					text_meta.corpus_name = meta_corpus_name.text 
-				text_meta.save()
-				text.text_meta.add(text_meta)
-
-
-			# Query ANNIS for each HTML format of the documents
-			for html_format in corpus.html_visualization_formats.all():
-
-				# Add the corpus corpus name to the URL
-				corpora_url = annis_server.base_domain + annis_server.html_visualization_url.replace(":corpus_name", corpus.annis_corpus_name).replace(":document_name", doc_name.find("name").text ).replace(":html_visualization_format", html_format.slug)
-
-
-				# Wait for visualization to load in browser
-				try:
-					# Fetch the HTML for the corpus/document/html_format from ANNIS
-					driver.get( corpora_url )
-					element = WebDriverWait(driver, 20).until(
-						EC.presence_of_element_located((By.CLASS_NAME, "htmlvis"))
-					)
-					driver.delete_all_cookies()
-
-					body = driver.find_element_by_xpath("/html/body")
-					text_html = body.get_attribute("innerHTML")
-					styles = driver.find_elements_by_xpath("/html/head/style")
-				except:
-					text_html = ""
-					styles = []
-					driver.quit()
-					driver = webdriver.Firefox()
-
-				# Check to ensure there's html returned
-				# if "Could not query document" in text_html or "error" in text_html:
-				if "Client response status: 403" in text_html:
-					logger.error(" -- Error fetching " + corpora_url)
-					text_html = ""
-
-				# Remove Javascript from the body content
-				if len( text_html ):
-
-					# Add the styles
-					for style_elem in styles: 
-						style_css = style_elem.get_attribute("innerHTML")
-						text_html = text_html + "<style>" + style_css + "</style>"
-
-					# For script element in the html, remove it
-					script_elems = re.findall(r'<script.*script>', text_html, re.DOTALL)
-					for script_elem in script_elems:
-						text_html = text_html.replace( script_elem, "" )
-
-				# Create the new html_visualization
-				html_visualization = HtmlVisualization()
-				html_visualization.visualization_format = html_format
-				html_visualization.html = text_html
-				html_visualization.save()
-
-				# Add the html visualization to the text
-				text.html_visualizations.add(html_visualization)
-
-
-			# Add the corpus 
-			text.corpus = corpus 
-
-			# Add the ingest
-			text.ingest = ingest 
-			text.save()
+				text.corpus = corpus
+				text.ingest = ingest
+				text.save()
+	except VisServerRefusingConn:
+		logger.error('Aborting ingestion because visualization server repeatedly refused connections')
 				
 	driver.quit()
 	vdisplay.stop()
 
-	#
-	# Then query ANNIS for text meta values and document metadata
-	#
-	# Define meta_xml list and the ANNIS server to query 
-	search_fields = []
+	search.process(annis_server)
 
-	# For each text defined in the database, fetch results from ANNIS
-	for text in Text.objects.all():
+	logger.info('Finished')
 
-		# Add the text name to the URL
-		meta_query_url = annis_server.base_domain + annis_server.document_metadata_url.replace(":corpus_name", text.corpus.annis_corpus_name ).replace(":document_name", text.title)
-		logger.info(" -- Ingest: querying " + text.title + " @ " + meta_query_url)
-
-		# Fetch the HTML for the corpus/document/html_format from ANNIS
+def _retry_getting_ingest(id):
+	'This thread is started before the Ingest save is complete. Retry get if needed.'
+	from ingest.models import Ingest
+	retries_remaining = 10
+	ingest_object = None
+	while not ingest_object and retries_remaining:
+		sleep(1)
 		try:
-			res = request.urlopen( meta_query_url )
-			xml = res.read() 
-			soup = BeautifulSoup( xml )
-			annotations = soup.find_all("annotation")
-		except HTTPError:
-			logger.error(" -- Ingest: HTTPError with meta_query_url " + meta_query_url)
-			annotations = [] 
-
-		for annotation in annotations:
-			name = annotation.find("name").text
-			value = annotation.find("value").text
-
-			is_in_search_fields = False
-			for search_field in search_fields:
-				if search_field['name'] == name:
-					is_in_search_fields = True
-
-					is_in_search_field_texts = False
-					for sfc in search_field['values']:
-						if value == sfc['value']:
-							is_in_search_field_texts = True
-							sfc['texts'].append(text.id)
-
-					if not is_in_search_field_texts:
-						search_field['values'].append({
-								'value' : value,
-								'texts' : [text.id]
-							})
-
-
-			if not is_in_search_fields:
-				search_fields.append({
-						'name' : name,
-						'values' : [{
-								'value' : value,
-								'texts' : [text.id]
-							}]
-					})
-
-	# Make a shadow copy of all Search Fields
-	original_search_fields = []
-	for sf in SearchField.objects.all():
-		original_search_fields.append({
-				'title' : sf.title,
-				'annis_name' : sf.annis_name,
-				'order' : sf.order,
-				'splittable' : sf.splittable
-			})	
-
-	# And delete all former searchfield values
-	logger.info(" -- Ingest: Deleting all SearchFields and SearchFieldValues")
-	SearchField.objects.all().delete()
-	SearchFieldValue.objects.all().delete()
-
-	# Add all new search fields and mappings
-	logger.info(" -- Ingest: Ingesting new SearchFields and SearchFieldValues")
-	for search_field in search_fields:
-		sf = SearchField()
-		sf.annis_name = search_field['name']
-		sf.title = search_field['name']
-
-		# Check the search fields against the original search fields
-		# If there is a match in the original search fields, take the 
-		# order and splittable values from the original search fields
-		matched_original_searchfield = False
-		original_search_field = {}
-		for orig_sf in original_search_fields:
-			if sf.annis_name == orig_sf['annis_name']:
-				matched_original_searchfield = True
-				original_search_field = orig_sf
-
-
-		if matched_original_searchfield:
-			sf.order = original_search_field['order']
-			sf.splittable = original_search_field['splittable']
-
-		else:
-			sf.order = 10 
-			sf.splittable = ""
-
-		# Save the search field so that it has an id to be added to the 
-		# search field value search_field foreign key attribute 
-		sf.save()
-
-		# Save value data
-		for value in search_field['values']:
-
-			sfv = SearchFieldValue()
-			sfv.search_field = sf
-			sfv.value = value['value']
-			sfv.title = value['value']
-			sfv.save()
-
-			# Search field texts
-			for text_id in value['texts']:
-
-				sfv_texts = Text.objects.filter(id=text_id)
-
-				# Add the texts via the native add ManyToMany handling
-				if len( sfv_texts ):
-					for sfv_text in sfv_texts: 
-						sfv.texts.add( sfv_text )
-
-		# Resave the SearchField to apply the search field splittable to the
-		# ingested search field values 
-		sf.save()
+			ingest_object = Ingest.objects.get(id=id)
+		except Ingest.DoesNotExist:
+			logger.info("Ingest does not (yet) exist")
+			retries_remaining -= 1
+	return ingest_object

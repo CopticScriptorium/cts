@@ -1,8 +1,8 @@
 import json
 from api.json import json_view
 from api.encoder import coptic_encoder
-from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
-from ingest.tasks import shared_task_spawn_single_ingest
+from ingest.tasks import single_ingest_asynch
+from texts.models import Text, Corpus, SearchFieldValue, TextMeta
 import functools
 
 ALLOWED_MODELS = ['texts', 'corpus']
@@ -124,7 +124,7 @@ def _query(params={}):
 
     # If ingest is in the params, re-ingest the specified text id
     elif 'ingest' in params:
-        shared_task_spawn_single_ingest.delay(params['text_id'])
+        single_ingest_asynch(params['text_id'])
         objects['ingest_res'] = params['text_id']
 
     # Otherwise, no query is specified
@@ -163,7 +163,7 @@ def _find_ids_by_field(filters):
 
 def _intersect(ids_dict):
     ids_sets = [set(values) for values in ids_dict.values()]
-    return functools.reduce(lambda a, b: a & b, ids_sets)
+    return functools.reduce(lambda a, b: a & b, ids_sets) if ids_sets else []
 
 
 def _json_prepare_queryset(objects, model_name, queryset):
