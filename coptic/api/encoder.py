@@ -1,8 +1,8 @@
 """
 Define custom encoder for the queryset model class instances
 """
-import json
-from texts.models import Text, Corpus, SearchFieldValue, HtmlVisualization, HtmlVisualizationFormat, TextMeta
+from base64 import b64encode
+from texts.models import Text, Corpus
 
 
 def coptic_encoder( obj ):
@@ -20,7 +20,7 @@ def coptic_encoder( obj ):
 		text['html_visualizations'] = []
 		text['text_meta'] = []
 
-		for text_meta in obj.text_meta.all(): 
+		for text_meta in obj.text_meta.all():
 			if text_meta.name == "msName":
 				text['msName'] = text_meta.value.replace(".", "-")
 
@@ -44,12 +44,12 @@ def coptic_encoder( obj ):
 	elif isinstance(obj, Corpus):
 		corpus = {}
 
-		corpus['title'] = obj.title 
-		corpus['urn_code'] = obj.urn_code 
-		corpus['slug'] = obj.slug 
-		corpus['annis_code'] = obj.annis_code 
+		corpus['title'] = obj.title
+		corpus['urn_code'] = obj.urn_code
+		corpus['slug'] = obj.slug
+		corpus['annis_code'] = b64encode(str.encode(obj.urn_code)).decode()
 		corpus['annis_corpus_name'] = obj.annis_corpus_name
-		corpus['github'] = obj.github 
+		corpus['github'] = obj.github
 		corpus['html_visualization_formats'] = []
 
 		for html_visualization_format in obj.html_visualization_formats.all():
@@ -77,5 +77,3 @@ def coptic_encoder( obj ):
 		encoded = corpus
 
 	return encoded 
-
-

@@ -1,7 +1,6 @@
 import logging
-
+from base64 import b64encode
 from django.shortcuts import redirect
-from texts.models import Text
 
 
 def urn_redirect(request, query):
@@ -44,7 +43,8 @@ def urn_redirect(request, query):
 					return redirect(text.corpus.github)
 
 				elif query[-1] == "annis":
-					return redirect("https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" + text.corpus.annis_code)
+					return redirect("https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" +
+							b64encode(text.corpus.urn_code))
 
 				# Redirect to the specified text passage url
 				return redirect(url)

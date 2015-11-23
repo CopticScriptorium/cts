@@ -42,7 +42,6 @@ def load_known_corpora():
     shenoute_a22.title = "Acephalous Work 22"
     shenoute_a22.slug = "acephalous_work_22"
     shenoute_a22.urn_code = "shenoute.a22"
-    shenoute_a22.annis_code = "c2hlbm91dGUuYTIy"
     shenoute_a22.github = "https://github.com/CopticScriptorium/corpora/tree/master/shenoute-a22"
 
     patrum = Corpus()
@@ -50,7 +49,6 @@ def load_known_corpora():
     patrum.title = "Apophthegmata Patrum"
     patrum.slug = "ap"
     patrum.urn_code = "ap"
-    patrum.annis_code = "YXBvcGh0aGVnbWF0YS5wYXRydW0"
     patrum.github = "https://github.com/CopticScriptorium/corpora/tree/master/AP"
 
     saof = Corpus()
@@ -58,7 +56,6 @@ def load_known_corpora():
     saof.title = "Abraham Our Father"
     saof.slug = "abraham_our_father"
     saof.urn_code = "shenoute.abraham"
-    saof.annis_code = "c2hlbm91dGUuYWJyYWhhbS5vdXIuZmF0aGVy"
     saof.github = "https://github.com/CopticScriptorium/corpora/tree/master/abraham"
 
     besa_ap = Corpus()
@@ -66,7 +63,6 @@ def load_known_corpora():
     besa_ap.title = "Letter to Aphthonia"
     besa_ap.slug = "to_aphthonia"
     besa_ap.urn_code = "besa.aphthonia"
-    besa_ap.annis_code = "YmVzYS5sZXR0ZXJz"
     besa_ap.github = "https://github.com/CopticScriptorium/corpora/tree/master/besa-letters"
 
     fox = Corpus()
@@ -74,7 +70,6 @@ def load_known_corpora():
     fox.title = "Not Because a Fox Barks"
     fox.slug = "not_because_a_fox_barks"
     fox.urn_code = "shenoute.fox"
-    fox.annis_code = "c2hlbm91dGUuZm94"
     fox.github = "https://github.com/CopticScriptorium/corpora/tree/master/shenoute-fox"
 
     mark = Corpus()
@@ -82,7 +77,6 @@ def load_known_corpora():
     mark.title = "Gospel of Mark"
     mark.slug = "gospel_of_mark"
     mark.urn_code = "nt.mark"
-    mark.annis_code = "c2FoaWRpY2EubWFyaw"
     mark.github = "https://github.com/CopticScriptorium/corpora/tree/master/bible"
 
     corinth = Corpus()
@@ -90,7 +84,6 @@ def load_known_corpora():
     corinth.title = "1 Corinthians"
     corinth.slug = "1st_corinthians"
     corinth.urn_code = "nt.1cor"
-    corinth.annis_code = "c2FoaWRpY2EuMWNvcmludGhpYW5z"
     corinth.github = "https://github.com/CopticScriptorium/corpora/tree/master/bible"
 
     snt = Corpus()
@@ -98,7 +91,6 @@ def load_known_corpora():
     snt.title = "New Testament"
     snt.slug = "new-testament"
     snt.urn_code = "nt"
-    snt.annis_code = "c2FoaWRpY2EubnQ"
     snt.github = "https://github.com/CopticScriptorium/corpora/tree/master/bible"
 
     eager = Corpus()
@@ -106,7 +98,6 @@ def load_known_corpora():
     eager.title = "I See Your Eagerness"
     eager.slug = "eagernesss"
     eager.urn_code = "shenoute.eagerness"
-    eager.annis_code = "c2hlbm91dGUuZWFnZXJuZXNz"
     eager.github = "https://github.com/CopticScriptorium/corpora/tree/master/shenoute-eagerness"
 
     besa_nuns = Corpus()
@@ -114,7 +105,6 @@ def load_known_corpora():
     besa_nuns.title = "Letter to Thieving Nuns"
     besa_nuns.slug = "to_thieving_nuns"
     besa_nuns.urn_code = "besa.thieving"
-    besa_nuns.annis_code = "YmVzYS5sZXR0ZXJz"
     besa_nuns.github = "https://github.com/CopticScriptorium/corpora/tree/master/besa-letters"
 
     known_corpora = [shenoute_a22, patrum, saof, besa_ap, fox, mark, corinth, snt, eager, besa_nuns]
