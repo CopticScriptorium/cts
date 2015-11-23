@@ -11,7 +11,7 @@
 				<h1 class="title">Coptic Scriptorium URN Resolver -- BETA version</h1>
 
 				<p class="description-text">
-					Coptic SCRIPTORIUM provides Coptic texts for reading, analysis, and complex searches.  The texts are  citable and accessible through stable <a href="http://en.wikipedia.org/wiki/Uniform_resource_name">URNs</a>, such as urn:cts:copticLit:shenoute.fox for Shenoute's work <i>Not Because a Fox Barks</i>.  This application will provide the most recent version of our documents in the formats currently available for each text.				</p>
+					Coptic SCRIPTORIUM provides Coptic texts for reading, analysis, and complex searches.  The texts are citable and accessible through stable <a href="http://en.wikipedia.org/wiki/Uniform_resource_name">URNs</a>, such as urn:cts:copticLit:shenoute.fox for Shenoute's work <i>Not Because a Fox Barks</i>.  This application will provide the most recent version of our documents in the formats currently available for each text.				</p>
 				<p class="description-text">If you wish to read Coptic texts, you can view individual documents online (in HTML). We provide HTML visualizations of texts in diplomatic transcriptions (when manuscript information is available) and normalized Coptic text with an English translation (when that translation is available). We also provide an analytical visualization of each text with the Coptic, English (when available), and part of speech information for the Coptic. <a href="download/tools/scriptorium_tagset_documentation.pdf" target="_blank" title="part of speech tagset">Documentation on our part of speech tagging</a> explains the part of speech abbreviations and our methodology.</p>
 				<p class="description-text">Documentation beneath the text provides information about it, including the version and date of publication online.</p>
 				<p class="description-text"><strong>If you know the URN for the material you seek, please enter it in the box above.</strong></p>
@@ -31,7 +31,7 @@
 
 						<div class="work-title-wrap">
 							<h2 class="work-title title">{{corpus.title}}</h2>
-							<h4 class="work-title-urn urn" ng-hide="corpus.urn_code == 'nt'">urn:cts:copticLit:{{corpus.urn_code}}</h4>
+							<h4 class="work-title-urn urn" ng-hide="corpus.urn_code == 'nt'">urn:cts:{{corpus.urn_code}}</h4>
 
 							<div class="work-meta-wrap page-tabs">
 								<a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c={{corpus.annis_code}}" class="text-item annis" target="_blank">
@@ -134,11 +134,11 @@
 					</p>
                     					<p>
 						<span class="label">Text Corpus:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}" target="_blank">urn:cts:copticLit:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}</a>
+						<a href="/urn:cts:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}" target="_blank">urn:cts:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}</a>
 					</p>
 					<p>
 						<span class="label">Author Textgroup:</span>
-						<a href="/urn:cts:copticLit:{{selected_text.textgroup_urn}}" target="_blank">urn:cts:copticLit:{{selected_text.textgroup_urn}}</a>
+						<a href="/urn:cts:{{selected_text.textgroup_urn}}" target="_blank">urn:cts:{{selected_text.textgroup_urn}}</a>
 					</p>
 
 					<p>The following links will direct you to the latest versions of data visualizations  the document.</p>

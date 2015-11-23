@@ -470,7 +470,7 @@ angular.module('coptic')
 			$target.removeClass("hidden").addClass("single-header");
 
 			// Set the HTML document meta elements
-			$("meta[name=corpus_urn]").attr("content", "urn:cts:copticLit:" + $scope.selected_text.corpus_urn );
+			$("meta[name=corpus_urn]").attr("content", "urn:cts:" + $scope.selected_text.corpus_urn );
 			$("meta[name=document_urn]").attr("content", $scope.selected_text.edition_urn ); 
 
 			// Scroll back to the top

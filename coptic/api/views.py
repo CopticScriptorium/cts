@@ -96,7 +96,7 @@ def _query(params={}):
             objects['urns'].append(urn_list)
 
             # Add the initial corpus_urn
-            urn_list.append('urn:cts:copticLit:' + corpus.urn_code)
+            urn_list.append('urn:cts:' + corpus.urn_code)
 
             # Get the texts for the corpus to find their URNs
             corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
