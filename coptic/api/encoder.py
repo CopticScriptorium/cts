@@ -11,14 +11,8 @@ def coptic_encoder( obj ):
 
 	# If we're dumping an instance of the Text class to JSON
 	if isinstance(obj, Text):
-		text = {}
-
-		text['id'] = obj.id
-		text['title'] = obj.title
-		text['slug'] = obj.slug
-		text['is_expired'] = obj.is_expired
-		text['html_visualizations'] = []
-		text['text_meta'] = []
+		text = {'id': obj.id, 'title': obj.title, 'slug': obj.slug, 'is_expired': obj.is_expired,
+				'html_visualizations': [], 'text_meta': []}
 
 		for text_meta in obj.text_meta.all():
 			if text_meta.name == "msName":
@@ -42,15 +36,9 @@ def coptic_encoder( obj ):
 
 	# If we're dumping an instance of the Corpus class to JSON
 	elif isinstance(obj, Corpus):
-		corpus = {}
-
-		corpus['title'] = obj.title
-		corpus['urn_code'] = obj.urn_code
-		corpus['slug'] = obj.slug
-		corpus['annis_code'] = b64encode(str.encode(obj.urn_code)).decode()
-		corpus['annis_corpus_name'] = obj.annis_corpus_name
-		corpus['github'] = obj.github
-		corpus['html_visualization_formats'] = []
+		corpus = {'title': obj.title, 'urn_code': obj.urn_code, 'slug': obj.slug,
+				  'annis_code': b64encode(str.encode(obj.urn_code)).decode(),
+				  'annis_corpus_name': obj.annis_corpus_name, 'github': obj.github, 'html_visualization_formats': []}
 
 		for html_visualization_format in obj.html_visualization_formats.all():
 			corpus['html_visualization_formats'].append({
