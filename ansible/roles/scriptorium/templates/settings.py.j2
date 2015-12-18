@@ -65,26 +65,39 @@ WSGI_APPLICATION = 'coptic.wsgi.application'
 LOGGING = {
 	'version': 1,
 	'disable_existing_loggers': False,
+	'formatters': {
+        'verbose': {
+            'format': '%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s'
+        },
+    },
 	'handlers': {
 		'file': {
 			'level': 'DEBUG',
 			'class': 'logging.FileHandler',
-			'filename': "/var/log/django/django_logger.log",
+			'filename': BASE_DIR + "/" + os.path.join( "django_logger.log"),
+			'formatter': 'verbose',
+		},
+		'filedb': {
+			'level': 'DEBUG',
+			'class': 'logging.FileHandler',
+			'filename': BASE_DIR + "/" + os.path.join( "django_db.log"),
+			'formatter': 'verbose',
 		},
 		'console': {
 			'class': 'logging.StreamHandler',
 			'stream': sys.stdout,
+			'formatter': 'verbose',
 		}
 	},
 	'loggers': {
-		'ingest.ingest': {
+		'ingest': {
 			'handlers': ['console','file'],
 			'level': 'DEBUG',
 		},
-		'ingest.models': {
-			'handlers': ['console','file'],
-			'level': 'DEBUG',
-		}
+		'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['filedb'],
+        },
 	}
 }
 
