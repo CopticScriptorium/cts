@@ -66,21 +66,21 @@ LOGGING = {
 	'version': 1,
 	'disable_existing_loggers': False,
 	'formatters': {
-        'verbose': {
-            'format': '%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s'
-        },
-    },
+		'verbose': {
+			'format': '%(asctime)s\t%(levelname)s\t%(process)d\t%(thread)d\t%(module)s\t%(message)s'
+		},
+	},
 	'handlers': {
 		'file': {
 			'level': 'DEBUG',
 			'class': 'logging.FileHandler',
-			'filename': BASE_DIR + "/" + os.path.join( "django_logger.log"),
+			'filename': BASE_DIR + "/" + os.path.join("django_logger.log"),
 			'formatter': 'verbose',
 		},
 		'filedb': {
 			'level': 'DEBUG',
 			'class': 'logging.FileHandler',
-			'filename': BASE_DIR + "/" + os.path.join( "django_db.log"),
+			'filename': BASE_DIR + "/" + os.path.join("django_db.log"),
 			'formatter': 'verbose',
 		},
 		'console': {
@@ -90,17 +90,24 @@ LOGGING = {
 		}
 	},
 	'loggers': {
-		'ingest': {
-			'handlers': ['console','file'],
+		'ingest.ingest': {
+			'handlers': ['console', 'file'],
 			'level': 'DEBUG',
 		},
-		'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['filedb'],
-        },
+                'ingest.models': {
+                        'handlers': ['console', 'file'],
+                        'level': 'DEBUG',
+                },
+                'ingest.search': {
+                        'handlers': ['console', 'file'],
+                        'level': 'DEBUG',
+                },
+                'django': {
+                        'handlers': ['console', 'file'],
+                        'level': 'DEBUG',
+                },
 	}
 }
-
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
