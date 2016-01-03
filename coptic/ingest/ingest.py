@@ -1,6 +1,7 @@
 'Fetch Texts from their source in ANNIS'
 
 from time import sleep
+import os
 import logging
 from django.utils.text import slugify
 from selenium import webdriver
@@ -46,8 +47,14 @@ def fetch_texts( ingest_id ):
 		vdisplay.start()
 	except Exception as e:
 		logger.error('Unable to start Xvfb: %s' % e)
-	logger.info("Starting Firefox")
-	driver = webdriver.Firefox()
+	logger.info("Starting browser")
+	try:
+		driver = webdriver.Chrome(os.environ.get('CHROMEDRIVER', '/usr/lib/chromium-browser/chromedriver'))
+	except Exception as e:
+		logger.error('Unable to start browser: %s' % e)
+		vdisplay.stop()
+		return
+	logger.info(driver)
 
 	try:
 		for corpus in Corpus.objects.filter(id__in=(corpora_ids)) if corpora_ids else Corpus.objects.all():
