@@ -19,7 +19,7 @@ def process(annis_server):
 	logger.info("Rebuilding %d SearchFields, and SearchFieldValues" % len(search_fields))
 	SearchField.objects.all().delete()
 
-	saved_SearchFieldValues_by_title = {}  # title -> SearchFieldValue
+	saved_SearchFieldValues = {}  # (search_field ID, title) -> SearchFieldValue
 
 	# Add all new search fields and mappings
 	for search_field in search_fields:
@@ -50,13 +50,13 @@ def process(annis_server):
 			for split_value in split_values:
 				title = split_value.strip()
 
-				sfv = saved_SearchFieldValues_by_title.get(title)
+				sfv = saved_SearchFieldValues.get((sf.id, title))
 				if not sfv:
 					sfv = SearchFieldValue()
 					sfv.search_field = sf
 					sfv.title = title
 					sfv.save()
-					saved_SearchFieldValues_by_title[title] = sfv
+					saved_SearchFieldValues[(sf.id, title)] = sfv
 
 				# Search field texts
 				for text_id in value['texts']:
