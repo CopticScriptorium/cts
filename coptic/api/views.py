@@ -44,7 +44,6 @@ def _query(params={}):
                     for corpus in corpora:
                         corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
-
             else:  # There are no filters. Check for specific corpus.
                 if 'corpus' in params and 'slug' in params['corpus']:
                     corpora = Corpus.objects.filter(slug=params['corpus']['slug'])
