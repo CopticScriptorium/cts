@@ -1,2 +1,4 @@
 
 django_debug: False
+
+git_repo_url: https://github.com/CopticScriptorium/cts.git

@@ -1,0 +1,11 @@
+
+# For the test server, MySql is hosted on the same machine.
+mysql_host: localhost
+
+# For the test server, we turn on debugging of Django, so that when we trigger
+# errors, we get nice reports from Django
+django_debug: True
+
+# Set up debug mode for the test machine, so that we can share the git repository between
+# the host & the test VM.
+debug_machine: False

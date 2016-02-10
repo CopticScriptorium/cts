@@ -1,7 +1,7 @@
 --- # roles/scriptorium/tasks/main.yml
 
-# do we need redis-server?
-#      - redis-server
+# steps derived from https://github.com/takac/dot-files-ansible/blob/master/googlechrome.yaml
+
 # As of 2015-07-04 - xvfb & firefox required by ingest process so that we can invoke
 # firefox to fetch visualizations from the server.
 - name: Install key packages
@@ -17,9 +17,37 @@
     - python3-pip
     - redis-server
     - redis-tools
+    - unzip
     - xvfb
-    - firefox
 
+- name: Check if mysql-connector-python is installed
+  command: dpkg-query -W mysql-connector-python-py3
+  register: mysql_connector
+  failed_when: mysql_connector.rc > 1
+  changed_when: mysql_connector.rc == 1
+
+- name: Download mysql-connector-python
+  get_url: 
+    url="http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-py3_2.0.4-1ubuntu14.04_all.deb"
+    dest="/home/{{ ansible_env.USER }}/mysql-connector-python-py3_2.0.4-1ubuntu14.04_all.deb"
+  when: mysql_connector.rc == 1
+
+- name: Install mysql-connector-python
+  apt: deb="/home/{{ ansible_env.USER }}/mysql-connector-python-py3_2.0.4-1ubuntu14.04_all.deb"
+  sudo: true
+  when: mysql_connector.rc == 1
+
+- name: Extract chrome driver
+  unarchive:
+    src="http://chromedriver.storage.googleapis.com/2.21/chromedriver_linux64.zip"
+    dest=/usr/lib/chromium-browser/
+    copy=no
+  sudo: yes
+  
+- name: Make sure we've got the right permissions on the chromedriver
+  file: path=/usr/lib/chromium-browser/chromedriver mode="u+rx,g+rx,o+rx"
+  sudo: yes
+    
 - name: Ensure services are enabled
   sudo: yes
   service: name={{ item }} enabled=yes
@@ -37,14 +65,22 @@
 - name: Restart MySQL
   sudo: yes
   service: name=mysql state=restarted
-  
+
 # Grab everything for the site from GitHub and pull it over.
 # "debug_machine" used to all for sharing of the same Git repository on both the
 # host machine, and a target virtual machine, for debugging purposes.
 - name: Copy over key files
-  git: repo=https://github.com/OneEricJohnson/cts.git dest=/var/www/cts
+  git: repo={{ git_repo_url }} dest=/var/www/cts force=no
   sudo: yes
   when: not debug_machine
+
+- name: Update permissions to allow Apache to access the data
+  file:
+    path: /var/www/cts/coptic
+    recurse: yes
+    owner: www-data
+    group: www-data
+  sudo: yes
     
 - name: Copy over Django settings
   template: src=settings.py.j2 dest=/var/www/cts/coptic/coptic/settings.py
