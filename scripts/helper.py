@@ -210,6 +210,6 @@ def load_searchfields():
     
     for searchfield in [corpus, author, ms_name, annotation, translation]:
         try:
-            SearchField.objects.get(annis_name__exact=searchfield.title)
+            SearchField.objects.get(title__exact=searchfield.title)
         except SearchField.DoesNotExist:
             searchfield.save()
