@@ -124,25 +124,24 @@
 
 				<div class="citation-help">
 					<h3 class="subtitle">Cite this Document</h3>
-                    					<p>
-						Please include the relevant URN(s) from the following list in all citations. These URNs will resolve to the latest edition of our data.   
-					</p>
-					<p>
-						Please use the following model to cite this document.
-					</p>
-					<p>
-						Author, <em>Ancient title</em> [chapter.verse if available], ed. [annotators], trans. [translation]. {{selected_text.edition_urn}}. [version number], [date]. http://data.copticscriptorium.org/[document URN].
-					</p>
-					<p>
-						Our <a href="www.copticscriptorium.org/citation-guidelines" target="new">citation guidelines</a> page provides more citation models. 
-                    </p>
-                    <p>
-                        We encourage researchers to save visualizations they use, download query results from ANNIS, and save information from document metadata.
-					</p>
-					<p>
+                    				<p>
+							When citing a corpus or document from Coptic SCRIPTORIUM, please include the relevant URN(s) (provided below) in all citations. On this site, these URNs will resolve to the latest edition of our data.  We also encourage researchers to save visualizations they use, download query results from ANNIS, and save information from document metadata.
+						</p>
+						<p>
+							Our full <a href="www.copticscriptorium.org/citation-guidelines" target="new">citation guidelines</a> page provides more models. 
+                    				</p>
+
+						<p class="label">
+							To cite this document:
+						</p>
+						<p><b>First citation:</b></p>
+						<p>Author, <em>Ancient title</em> [chapter.verse if available], ed. [annotators], trans. [translation]. {{selected_text.edition_urn}}. [version number], [date]. http://data.copticscriptorium.org/{{selected_text.edition_urn}}.</p>
+						<p></p>
+						<p><b>Subsequent citations:</b></p>
+						<p>Author, <em>Ancient title (abbreviated)</em> [chapter.verse if available], {{selected_text.edition_urn}}.</p>
+						<p>
 						<span class="label">Document Edition:</span>
 						<a href="/{{selected_text.edition_urn}}" target="_blank">{{selected_text.edition_urn}}</a>
-
 					</p>
                     					<p>
 						<span class="label">Text Corpus:</span>
@@ -153,11 +152,10 @@
 						<a href="/urn:cts:{{selected_text.textgroup_urn}}" target="_blank">urn:cts:{{selected_text.textgroup_urn}}</a>
 					</p>
 
-					<p>The following links will direct you to the latest versions of data visualizations  the document.</p>
+					<p>The following links will direct you to the latest versions of data visualizations of the document.</p>
 					<p ng-repeat="visualization in selected_text.html_visualizations">
 						<span class="label">{{visualization.title}} HTML:</span>
 						<a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html" target="_blank" >http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html</a>
-
 					</p>
 					<p>The following  links will direct you to the latest versions of the data for download.
 					</p>
