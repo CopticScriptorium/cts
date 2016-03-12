@@ -110,7 +110,7 @@ $("#lastupdate").html("Page last updated: " + showAs);
  *
  */ 
 angular.module('coptic')
-	.controller('TextController', ['$scope', '$http', '$route', '$location', function($scope, $http, $route, $location) {
+	.controller('TextController', ['$scope', '$http', '$location', function($scope, $http, $location) {
 
 	// Persistent location Path
 	$scope.path = location.pathname.split("/");
@@ -123,9 +123,6 @@ angular.module('coptic')
 
 	// The texts returned from the API
 	$scope.texts = [];
-
-	// Accepted models for the API
-	$scope.models = ["ingests", "corpus", "texts"];
 
 	// The selected text value for single text view
 	$scope.selected_text = null;
@@ -486,9 +483,6 @@ angular.module('coptic')
 
 	$scope.show_single = function( e ){
 	// Show a selected single text
-		var $target
-		;
-
 		$(".text-format").hide();
 		$scope.text_query = {
 							model : "texts",
@@ -496,8 +490,6 @@ angular.module('coptic')
 							text_slug : $scope.path[3]
 						};
 		$scope.get_texts( $scope.text_query );
-
-
 	};
 
 	$scope.load_single_iframe = function( is_expired, corpus_annis_name, selected_text_name, visualization_slug ){
@@ -652,7 +644,6 @@ angular.module('coptic')
 	// Add a textsearch to the filters
 		var has_text_search = false
 		,	filters_url = []
-		,	removed_text_search_filter = false
 		,	filters_length = $scope.filters.length
 		;
 
@@ -718,9 +709,7 @@ angular.module('coptic')
 
 	$scope.load_filters = function(){
 	// load the filters from the URL to the object
-		var search_obj = {}
-		,	filter_url = $scope.path[2].split("&")
-		;
+		var filter_url = $scope.path[2].split("&");
 
 		$scope.filters = [];
 
@@ -732,7 +721,7 @@ angular.module('coptic')
 
 			// if filter contains a key val pair demarcated by = 
 			if ( filter.length > 1 ) {
-				filter_value = filter[1].split(":")
+				filter_value = filter[1].split(":");
 
 				$scope.filters.push({
 							id : filter_value[0],

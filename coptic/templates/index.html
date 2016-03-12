@@ -21,7 +21,7 @@
 					Corpora are available for download on <a href="https://github.com/CopticScriptorium/corpora/releases/latest" target="_blank">GitHub</a> in <a href="http://www.tei-c.org/">TEI XML</a>, <a href="http://www.sfb632.uni-potsdam.de/en/paula-en.html">PAULA XML</a>, and relANNIS for use with the <a href="http://www.sfb632.uni-potsdam.de/annis/">ANNIS</a> corpus search software.  
 				This web application provides the most recent version of the data. Previous versions are available on GitHub.</p>
 				<p class="description-text"><strong>Please note: our corpus of documentary papyri from papyri.info is not currently available through this service.</strong> You can <a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c=ZG9jLnBhcHlyaQ" target="_blank">search and visualize the papyri through ANNIS</a>.   The papyri will be added to this service in future versions.</p>
-			</section><!-- .project-description -->
+			</section>
 
 			<section class="text-list list" ng-hide="!texts.length && !is_single">
 
@@ -38,9 +38,9 @@
 									<span class="urn">Search ANNIS</span>
 									<span class="fa fa-external-link"></span>
 								</a>
-							</div><!-- .work-meta-wrap -->
+							</div>
 
-						</div><!-- .work-title-wrap -->
+						</div>
 
 						
 						<div class="text-subwork" ng-repeat="text in corpus.texts" ng-class-even="'even'" data-text-slug="{{text.slug}}" data-corpus-slug="{{corpus.slug}}">
@@ -86,13 +86,13 @@
 									<span class="fa fa-times"></span>
 								</a> 
 
-						</div><!-- .text-subwork -->
+						</div>
 
-					</div><!-- .text-work -->
+					</div>
 
-				</div><!-- .text-author -->
+				</div>
 
-			</section><!-- .text-list -->
+			</section>
 
 			<section id="selected_text" class="selected-text-wrap page-content" ng-hide="!is_single">
 
@@ -166,20 +166,20 @@
 					  <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis" target="_blank" >http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis</a>
 				  </p>
 				
-				</div><!-- .citation-help -->
+				</div>
 
-			</section><!-- .selected-text-wrap.page-content -->
+			</section>
 
-		</div><!-- .grid.inner -->
+		</div>
 
-	</div><!-- .content.primary -->
+	</div>
 
 	<div id="loading_modal" class="coptic-modal">
 		<div class="loading-modal-inner">
 			<span class="fa fa-spinner fa-spin">
 			</span>
 		</div>
-	</div><!-- #loading_modal.coptic-modal -->
+	</div>
 
 	{% endverbatim %}
 {% endblock %}
