@@ -14,7 +14,7 @@ angular.module('coptic', ['csFilters', 'ngSanitize', 'ngRoute', 'headroom']).con
 
 angular.module('csFilters', [])
 
-	// Captialize filter
+	// Capitalize filter
 	.filter('capitalize', function() {
 		return function(input, all) {
 			return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) : '';
@@ -298,83 +298,36 @@ angular.module('coptic')
 	};
 
 	/*
-	 * Corpora Query to API
-	 *
-	 *    -- Sends query object params
-	 *    -- Receives object with array of corpus
-	 *
+	 * Gets corpora via the API, and processes them
 	 */
-	$scope.get_corpora = function( query ){
-
-		//console.log("Corpora Query:", query);
-
+	$scope.get_corpora = function (query) {
 		$scope.selected_text = null;
 		$(".text-subwork").removeClass("hidden");
 		$(".text-work").removeClass("hidden");
 		$(".work-title-wrap").removeClass("hidden");
 		$(".single-header").removeClass("single-header");
 
-		// query the corpus
-		$http({
-				url : "/api/", 
-				method : "GET",
-				params : query 
-			})
-			.success(function(data, status, headers, config){
-
-				// Log relevant data
-				//console.log("Corpora Response:", data);
-
-				// Update the texts with the returned data
-				$scope.update_texts( data );
-
-				// If the view is set to single text, show the single template
-				if ( $scope.is_single && $scope.path[4] !== $scope.selected_text_format ) {
-					$scope.show_single();
-
-				// Otherwise, update the texts and hide the loading modal
-				}else{
-					$scope.hide_loading_modal();
-
-				}
-
-			})
-			.error(function(error, status, headers, config){
-				//console.log('Error with API Query:', error);
-			});
-
+		$http.get("/api/", {params: query}).then(function (response) {
+			$scope.update_texts(response.data);
+			if ($scope.is_single && $scope.path[4] !== $scope.selected_text_format) {
+				$scope.show_single();
+			} else {
+				$scope.hide_loading_modal();
+			}
+		}, function (response) {
+			console.log('Error with API Query:', response);
+		});
 	};
 
 	/*
-	 * Text Query to API
-	 *
-	 *    -- Sends query object params
-	 *    -- Receives object with array of texts 
-	 *
+	 * Gets texts via the API, and processes them
 	 */
-	$scope.get_texts = function( query ){
-
-		// Log relevant details (for development only)
-		//console.log("Texts Query", query);
-
-		$http({
-				url : "/api/", 
-				method : "GET",
-				params : query 
-			})
-			.success(function(data, status, headers, config){
-
-				// Log the response data
-				//console.log( "Response", data);
-
-				// Update texts with the response data
-				$scope.update_texts( data );
-
-			})
-			.error(function(error, status, headers, config){
-				//console.log('Error with API Query:', error);
-			});
-
+	$scope.get_texts = function (query) {
+		$http.get("/api/", {params: query}).then(function (response) {
+			$scope.update_texts(response.data);
+		}, function (response) {
+			console.log('Error with API Query:', response);
+		});
 	};
 
 	/*
@@ -383,6 +336,7 @@ angular.module('coptic')
 	$scope.update_texts = function( res ){
 		var texts = []
 		,	edition_urn
+		,	$target
 		;
 
 		// If it is a corpus response 
@@ -422,28 +376,6 @@ angular.module('coptic')
 			// Should handle the possibility of multiple selected in future
 			$scope.selected_text = res.texts[0];
 			$scope.filters = [];
-
-			// If the selected text is expired, trigger an ingest for the text
-			if ($scope.selected_text.is_expired === true){
-
-
-				// Trigger the ingest for the selected text
-				$http({
-						url : "/api/", 
-						method : "GET",
-						params : {
-							ingest : true,
-							id : $scope.selected_text.id
-						} 
-					})
-					.success(function(data, status, headers, config){
-						//console.log('Single Text Ingest:', data);
-					})
-					.error(function(error, status, headers, config){
-						//console.log('Error with Single Text Ingest:', error);
-					});
-
-			}
 
 			// Set pertinent metadata directly to the selected_text object
 			$scope.selected_text.text_meta.forEach(function(meta){
@@ -592,6 +524,7 @@ angular.module('coptic')
 		,	filters_url = [] 
 		,	filter
 		,	field
+		,	id
 		;
 
 		$scope.show_loading_modal();
@@ -705,7 +638,7 @@ angular.module('coptic')
 			}
 
 		}
-	}
+	};
 
 	$scope.load_filters = function(){
 	// load the filters from the URL to the object
