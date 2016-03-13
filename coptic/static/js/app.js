@@ -166,23 +166,33 @@ angular.module('coptic')
             console.log('Update function, location path: ' + location.pathname);
             $scope.path = location.pathname.split("/");
 
-            if ($scope.path.length == 0 || ( $scope.path.length > 1 && $scope.path[1] === "" )) {
+            function wipe_search_terms_and_filters() {
+                $scope.filters = [];
+                $(".selected").removeClass("selected");
+                $("meta[name=corpus_urn]").  attr("content", "");
+                $("meta[name=document_urn]").attr("content", "");
+                $("meta[name=mss_urn]").     attr("content", "");
+            }
 
-                // Index
+            if ($scope.path.length == 0 || ( $scope.path.length > 1 && $scope.path[1] === "" )) { // Index
                 $scope.show_loading_modal();
                 $scope.is_single = false;
                 $scope.selected_text = null;
-
-                // Default to displaying no texts, only show the landing page description text
                 $scope.texts = [];
                 $scope.hide_loading_modal();
-
-                // Wipe Search Terms / Filters
-                $scope.filters = [];
-                $(".selected").removeClass("selected");
-                $("meta[name=corpus_urn]").attr("content", "");
-                $("meta[name=document_urn]").attr("content", "");
-                $("meta[name=mss_urn]").attr("content", "");
+                wipe_search_terms_and_filters();
+            } else if (location.pathname.substr(0, 5) === "/urn:") {
+                console.log("urn");
+                $http.get("/api/", {params: {model: 'urn', urn_value: location.pathname.substr(1)}}).then(function (response) {
+                    $scope.is_single = false;
+                    $scope.selected_text = null;
+                    $scope.selected_text_format = null;
+                    $scope.texts = response.data.corpus;
+                    $scope.hide_loading_modal();
+                    console.log(response);
+                }, function (response) {
+                    console.log('Error with API Query:', response);
+                });
             } else if ($scope.path.length === 2 && $scope.path[1] !== "404") {
 
                 // /texts index
@@ -190,44 +200,20 @@ angular.module('coptic')
                 $scope.is_single = false;
                 $scope.selected_text = null;
                 $scope.selected_text_format = null;
-
-                // Default to displaying no texts, only show the landing page description text
                 $scope.texts = [];
                 $scope.hide_loading_modal();
-
-                // Wipe Search Terms / Filters
-                $scope.filters = [];
-                $(".selected").removeClass("selected");
-                $("meta[name=corpus_urn]").attr("content", "");
-                $("meta[name=document_urn]").attr("content", "");
-                $("meta[name=mss_urn]").attr("content", "");
-
-            } else if ($scope.path.length === 3) {
-
-                // /filters/:filters
+                wipe_search_terms_and_filters();
+            } else if ($scope.path.length === 3) { // /filter/:filters
                 if ($scope.path[2].length !== 0) {
-                    // load filters
                     $scope.load_filters();
-
-                    // Ensure single is null
                     $scope.is_single = false;
                     $scope.selected_text = null;
                     $scope.selected_text_format = null;
                 } else {
-                    // Default to displaying no texts, only show the landing page description text
                     $scope.texts = [];
-
-                    // Wipe Search Terms / Filters
-                    $scope.filters = [];
-                    $(".selected").removeClass("selected");
-                    $("meta[name=corpus_urn]").attr("content", "");
-                    $("meta[name=document_urn]").attr("content", "");
-                    $("meta[name=mss_urn]").attr("content", "");
+                    wipe_search_terms_and_filters();
                 }
-
-            } else if ($scope.path.length === 4) {
-
-                // Single text (/text/:corpus_slug/:text_slug)
+            } else if ($scope.path.length === 4) { // Single text (/text/:corpus_slug/:text_slug)
                 $(".text-format").hide();
                 $scope.show_loading_modal();
                 $scope.is_single = true;
@@ -241,9 +227,7 @@ angular.module('coptic')
                 } else {
                     $scope.show_single();
                 }
-
-            } else if ($scope.path.length === 5) {
-                // Single text html version (/text/:corpus_slug/:text_slug/:html_version)
+            } else if ($scope.path.length === 5) { // Single text html version (/text/:corpus_slug/:text_slug/:html_version)
                 if ($scope.is_single === true) {
                     $scope.toggle_text_format($scope.path[4]);
                 } else {
@@ -273,7 +257,7 @@ angular.module('coptic')
             $(".single-header").removeClass("single-header");
 
             $http.get("/api/", {params: query}).then(function (response) {
-                $scope.update_texts(response.data);
+                $scope.update_from_api_results(response.data);
                 if ($scope.is_single && $scope.path[4] !== $scope.selected_text_format) {
                     $scope.show_single();
                 } else {
@@ -289,16 +273,16 @@ angular.module('coptic')
          */
         $scope.get_texts = function (query) {
             $http.get("/api/", {params: query}).then(function (response) {
-                $scope.update_texts(response.data);
+                $scope.update_from_api_results(response.data);
             }, function (response) {
                 console.log('Error with API Query:', response);
             });
         };
 
         /*
-         * Updates texts with returned data from API query
+         * Updates scope with API query results
          */
-        $scope.update_texts = function (res) {
+        $scope.update_from_api_results = function (res) {
             var texts = []
                 , edition_urn
                 , $target
@@ -641,7 +625,12 @@ angular.module('coptic')
         };
 
         $scope.urn_submit = function () {
-            document.location.href = "/" + $scope.entered_urn;
+            var urn = $scope.entered_urn;
+            var urn_prefix = "urn:";
+            if (urn.substr(0, urn_prefix.length) !== urn_prefix) {
+                urn = urn_prefix + urn;
+            }
+            document.location.href = "/" + urn;
         };
 
         $scope.show_loading_modal = function () {

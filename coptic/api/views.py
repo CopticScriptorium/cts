@@ -1,3 +1,5 @@
+import logging
+import re
 import json
 from api.json import json_view
 from api.encoder import coptic_encoder
@@ -5,7 +7,8 @@ from ingest.tasks import single_ingest_asynch
 from texts.models import Text, Corpus, SearchFieldValue, TextMeta
 import functools
 
-ALLOWED_MODELS = ['texts', 'corpus']
+log = logging.getLogger(__name__)
+ALLOWED_MODELS = ['texts', 'corpus', 'urn']
 CLASSES = (Text, Corpus)
 
 
@@ -27,7 +30,19 @@ def _query(params={}):
     if 'model' in params:
         model = params['model']
 
-        if model == 'corpus':
+        if model == 'urn' and 'urn' in params:
+            urn = params['urn']
+            log.info('urn: ' + urn)
+            text_metas = tuple(TextMeta.objects.filter(name='document_cts_urn', value__startswith=(urn)))
+            matching_tm_ids = [tm.id for tm in text_metas if _all_segments_match(urn, tm.value)]
+            texts = Text.objects.filter(text_meta__name='document_cts_urn',
+                text_meta__id__in=matching_tm_ids).prefetch_related().order_by('slug')
+            text_ids = [t.id for t in texts]
+            corpus_ids = [text.corpus.id for text in texts]
+            corpora = Corpus.objects.filter(id__in=set(corpus_ids))
+            _filter_corpora_texts(corpora, text_ids)
+            _json_prepare_queryset(objects, 'corpus', corpora)
+        elif model == 'corpus':
             if 'filters' in params:
 
                 corpus_ids, text_ids, selected_texts = _find_ids_by_field(params['filters'])
@@ -37,9 +52,7 @@ def _query(params={}):
                     for corpus in corpora:
                         corpus.texts = [text for text in selected_texts if text.corpus.id == corpus.id]
                 elif text_ids:
-                    for corpus in corpora:
-                        corpus.texts = Text.objects.filter(id__in=text_ids,
-                                                           corpus=corpus.id).prefetch_related().order_by('slug')
+                    _filter_corpora_texts(corpora, text_ids)
                 else:  # Get all the texts for each corpus
                     for corpus in corpora:
                         corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
@@ -133,6 +146,25 @@ def _query(params={}):
     return objects
 
 
+def _filter_corpora_texts(corpora, text_ids):
+    for corpus in corpora:
+        corpus.texts = Text.objects.filter(id__in=text_ids,
+                                           corpus=corpus.id).prefetch_related().order_by('slug')
+
+
+def _all_segments_match(subset, urn):
+    subset_segments, urn_segments = [re.split('[.:]', v) for v in (subset, urn)]
+
+    if len(subset_segments) > len(urn_segments):
+        return False
+
+    for a, b in zip(subset_segments, urn_segments):
+        if a != b:
+            return False
+
+    return True
+
+
 def _find_ids_by_field(filters):
     corpus_ids_by_field = {}
     text_ids_by_field = {}
@@ -166,7 +198,7 @@ def _intersect(ids_dict):
 
 
 def _json_prepare_queryset(objects, model_name, queryset):
-    if not model_name in objects:
+    if model_name not in objects:
         objects[model_name] = []
     model_objects = objects[model_name]
 
@@ -202,6 +234,9 @@ def _process_param_values(params, query_dict):
                 clean['text'] = {
                     'slug': query_dict['text_slug'].strip()
                 }
+
+            if 'urn_value' in query_dict:
+                clean['urn'] = query_dict['urn_value'].strip()
 
         elif 'manifest' in query_dict:
             clean['manifest'] = True

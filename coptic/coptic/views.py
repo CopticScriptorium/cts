@@ -5,8 +5,6 @@ from texts.search_fields import get_search_fields
 def home(request):
     'Home/index view'
 
-    # from texts.search_fields import get_search_fields
-
     search_fields = get_search_fields()
     context = {
         'body_class':               "text-list",
