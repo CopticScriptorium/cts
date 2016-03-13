@@ -218,30 +218,14 @@ angular.module('coptic')
                 $scope.show_loading_modal();
                 $scope.is_single = true;
                 $scope.selected_text_format = null;
-
-                if ($scope.texts.length === 0) {
-                    $scope.get_corpora({
-                        model: "corpus",
-                        filters: $scope.filters
-                    });
-                } else {
-                    $scope.show_single();
-                }
+                $scope.show_single();
             } else if ($scope.path.length === 5) { // Single text html version (/text/:corpus_slug/:text_slug/:html_version)
                 if ($scope.is_single === true) {
                     $scope.toggle_text_format($scope.path[4]);
                 } else {
                     $scope.show_loading_modal();
                     $scope.is_single = true;
-
-                    if ($scope.texts.length === 0) {
-                        $scope.get_corpora({
-                            model: "corpus",
-                            filters: $scope.filters
-                        });
-                    } else {
-                        $scope.show_single();
-                    }
+                    $scope.show_single();
                 }
             }
         };

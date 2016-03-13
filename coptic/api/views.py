@@ -1,5 +1,4 @@
 import logging
-import re
 import json
 from api.json import json_view
 from api.encoder import coptic_encoder
@@ -16,13 +15,14 @@ CLASSES = (Text, Corpus)
 def api(request, params):
     'Search with the search params from the client-side application'
     get = request.GET
+    log.info('API called with %s, %s' % (request, params))
     params = params.split("/")
     params = _process_param_values(params, get)
 
     return _query(params)
 
 
-def _query(params={}):
+def _query(params):
     'Search and return data via the JSON API'
 
     objects = {}
