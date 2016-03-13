@@ -31,17 +31,7 @@ def _query(params={}):
         model = params['model']
 
         if model == 'urn' and 'urn' in params:
-            urn = params['urn']
-            log.info('urn: ' + urn)
-            text_metas = tuple(TextMeta.objects.filter(name='document_cts_urn', value__startswith=(urn)))
-            matching_tm_ids = [tm.id for tm in text_metas if _all_segments_match(urn, tm.value)]
-            texts = Text.objects.filter(text_meta__name='document_cts_urn',
-                text_meta__id__in=matching_tm_ids).prefetch_related().order_by('slug')
-            text_ids = [t.id for t in texts]
-            corpus_ids = [text.corpus.id for text in texts]
-            corpora = Corpus.objects.filter(id__in=set(corpus_ids))
-            _filter_corpora_texts(corpora, text_ids)
-            _json_prepare_queryset(objects, 'corpus', corpora)
+            _process_urn_request(params['urn'], objects)
         elif model == 'corpus':
             if 'filters' in params:
 
@@ -52,7 +42,7 @@ def _query(params={}):
                     for corpus in corpora:
                         corpus.texts = [text for text in selected_texts if text.corpus.id == corpus.id]
                 elif text_ids:
-                    _filter_corpora_texts(corpora, text_ids)
+                    _add_selected_texts_to_corpora(corpora, text_ids)
                 else:  # Get all the texts for each corpus
                     for corpus in corpora:
                         corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
@@ -146,23 +136,28 @@ def _query(params={}):
     return objects
 
 
-def _filter_corpora_texts(corpora, text_ids):
+def _process_urn_request(urn, objects):
+
+    # Find texts matching the URN using their metadata
+    text_metas = TextMeta.objects.filter(name='document_cts_urn', value__iregex='^' + urn + r'($|[\.:])')
+    matching_tm_ids = [tm.id for tm in text_metas]
+    log.info('matching tm ids: %d' % len(matching_tm_ids))
+    texts = Text.objects.filter(text_meta__name='document_cts_urn',
+        text_meta__id__in=matching_tm_ids).prefetch_related().order_by('slug')
+    text_ids = [t.id for t in texts]
+
+    # Find the corpora containing the matching texts
+    corpus_ids = set([text.corpus.id for text in texts])
+    corpora = Corpus.objects.filter(id__in=corpus_ids)
+
+    _add_selected_texts_to_corpora(corpora, text_ids)
+    _json_prepare_queryset(objects, 'corpus', corpora)
+
+
+def _add_selected_texts_to_corpora(corpora, text_ids):
     for corpus in corpora:
         corpus.texts = Text.objects.filter(id__in=text_ids,
                                            corpus=corpus.id).prefetch_related().order_by('slug')
-
-
-def _all_segments_match(subset, urn):
-    subset_segments, urn_segments = [re.split('[.:]', v) for v in (subset, urn)]
-
-    if len(subset_segments) > len(urn_segments):
-        return False
-
-    for a, b in zip(subset_segments, urn_segments):
-        if a != b:
-            return False
-
-    return True
 
 
 def _find_ids_by_field(filters):
