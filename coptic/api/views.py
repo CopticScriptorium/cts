@@ -72,58 +72,6 @@ def _query(params={}):
             # fetch the results and add to the objects dict
             _json_prepare_queryset(objects, 'texts', texts)
 
-    # If the manifest is set in the params, render site manifest
-    elif 'manifest' in params:
-        # set up the manifest of the archive
-        # Add more in the future
-
-        corpora = Corpus.objects.all()
-
-        for corpus in corpora:
-            corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
-
-        # fetch the results and add to the objects dict
-        _json_prepare_queryset(objects, 'corpus', corpora)
-
-    # If urns is set in the params, return index of urns
-    elif 'urns' in params:
-
-        corpora = Corpus.objects.all()
-        objects['urns'] = []
-
-        # Get the urns for all corpora
-        for corpus in corpora:
-            # Add a nested list for the urns related to this corpus
-            urn_list = []
-            objects['urns'].append(urn_list)
-
-            # Add the initial corpus_urn
-            urn_list.append('urn:cts:' + corpus.urn_code)
-
-            # Get the texts for the corpus to find their URNs
-            corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
-
-            # Then add all the urns for texts related to the corpus
-            for text in corpus.texts:
-
-                # Fetch the text meta to look for an msName
-                # If the meta_item is msName, add it to the text urn
-                for meta_item in text.text_meta.all():
-
-                    if meta_item.name == 'document_cts_urn':
-                        text_urn = meta_item.value
-
-                # Add the text URN with the doc name from ANNIS to the collection urns
-                urn_list.append(text_urn)
-
-                # Add the URNs for the HTML visualizations
-                for visualization in text.html_visualizations.all():
-                    urn_list.append(text_urn + '/' + visualization.visualization_format.slug + '/html')
-
-                # Add TEI, Paula, reIANNIS, and ANNIS UI
-                for suffix in ('/tei/xml', '/paula/xml', '/relannis', '/annis'):
-                    urn_list.append(text_urn + suffix)
-
     # If ingest is in the params, re-ingest the specified text id
     elif 'ingest' in params:
         single_ingest_asynch(params['text_id'])
@@ -232,12 +180,6 @@ def _process_param_values(params, query_dict):
 
             if 'urn_value' in query_dict:
                 clean['urn'] = query_dict['urn_value'].strip()
-
-        elif 'manifest' in query_dict:
-            clean['manifest'] = True
-
-        elif 'urns' in query_dict:
-            clean['urns'] = True
 
         elif 'ingest' in query_dict:
             clean['ingest'] = True
