@@ -9,7 +9,6 @@ angular.module('coptic', ['csFilters', 'ngSanitize', 'ngRoute', 'headroom']).con
         'https://corpling.uis.georgetown.edu/**']);
 });
 
-
 angular.module('csFilters', [])
 
     // Capitalize filter
@@ -37,7 +36,6 @@ angular.module('csFilters', [])
     .filter('unsafe', function ($sce) {
         return $sce.trustAsHtml;
     });
-
 
 /*
  * Routes for client-side angular application
@@ -151,14 +149,11 @@ angular.module('coptic')
                 if ($(".text-format").length > 0) {
                     if ($scope.path.length < 4) {
                         $scope.hide_loading_modal();
-
                     } else {
                         if ($scope.path[4] !== $scope.selected_text_format) {
                             $scope.toggle_text_format($scope.path[4]);
-                            $scope.hide_loading_modal();
-                        } else {
-                            $scope.hide_loading_modal();
                         }
+                        $scope.hide_loading_modal();
                     }
                 }
             }
@@ -206,7 +201,6 @@ angular.module('coptic')
                 $("meta[name=corpus_urn]").attr("content", "");
                 $("meta[name=document_urn]").attr("content", "");
                 $("meta[name=mss_urn]").attr("content", "");
-
 
             } else if ($scope.path.length === 3) {
 
@@ -371,7 +365,6 @@ angular.module('coptic')
                 $scope.hide_loading_modal();
             }
         };
-
 
         $scope.show_single = function (e) {
             // Show a selected single text
@@ -574,7 +567,6 @@ angular.module('coptic')
 
         };
 
-
         $scope.remove_search_term = function (e) {
             var $target = $(e.target)
                 , filter
@@ -621,11 +613,9 @@ angular.module('coptic')
             }
         };
 
-
         $scope.clear_all_search_terms = function () {
             $location.path("/");
         };
-
 
         $scope.toggle_text_format = function (type) {
             // Show or hide the different text formats;
@@ -644,7 +634,6 @@ angular.module('coptic')
                 $(".selected-text-format").fadeOut().removeClass("selected-text-format");
                 $("#" + type).fadeIn().addClass("selected-text-format");
             }
-
         };
 
         $scope.raise_dropdowns = function () {
