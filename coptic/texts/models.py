@@ -1,4 +1,5 @@
 import datetime
+from base64 import b64encode
 from django.db import models
 
 
@@ -77,6 +78,9 @@ class Corpus(models.Model):
 			self.created = datetime.datetime.today()
 		self.modified = datetime.datetime.today()
 		return super(Corpus, self).save(*args, **kwargs)
+
+	def annis_corpus_name_b64encoded(self):
+		return b64encode(str.encode(self.annis_corpus_name)).decode()
 
 
 class TextMeta(models.Model):

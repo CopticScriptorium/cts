@@ -1,7 +1,6 @@
 """
 Define custom encoder for the queryset model class instances
 """
-from base64 import b64encode
 from texts.models import Text, Corpus
 
 
@@ -36,7 +35,7 @@ def coptic_encoder(obj):
     # If we're dumping an instance of the Corpus class to JSON
     elif isinstance(obj, Corpus):
         corpus = {'title': obj.title, 'urn_code': obj.urn_code, 'slug': obj.slug,
-                  'annis_code': b64encode(str.encode(obj.urn_code)).decode(),
+                  'annis_code': obj.annis_corpus_name_b64encoded(),
                   'annis_corpus_name': obj.annis_corpus_name, 'github': obj.github, 'html_visualization_formats': []}
 
         for html_visualization_format in obj.html_visualization_formats.all():

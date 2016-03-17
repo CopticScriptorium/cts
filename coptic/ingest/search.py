@@ -1,5 +1,6 @@
 import logging
 from ingest.metadata import get_selected_annotation_fields
+from texts.models import Corpus
 
 logger = logging.getLogger(__name__)
 
@@ -73,8 +74,10 @@ def _fields(annis_server):
 	all_texts = Text.objects.all()
 	logger.info("Fetching metadata annotations for %d texts" % len(all_texts))
 
+	corpus_names_by_id = {c.id: c.annis_corpus_name for c in Corpus.objects.all()}
+
 	for text in all_texts:
-		meta_query_url = annis_server.url_document_metadata(text.corpus.annis_corpus_name, text.title)
+		meta_query_url = annis_server.url_document_metadata(corpus_names_by_id[text.corpus_id], text.title)
 		logger.info(text.title)
 
 		for name, value in get_selected_annotation_fields(meta_query_url, ('name', 'value')):

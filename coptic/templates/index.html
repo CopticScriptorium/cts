@@ -167,34 +167,52 @@
                     <h3 class="subtitle">Cite this Document</h3>
 
                     <p>
-                        In order to cite this document, please include the relevant URN(s) from the following list.
-                        These URNs resolve to the latest edition of our data. Citations by scholars should include the
-                        date the data was accessed and/or version numbers and dates for the documents. We encourage
-                        researchers to save visualizations they use, download query results from ANNIS, and save
-                        information from document metadata.
+                        When citing a corpus or document from Coptic SCRIPTORIUM, please include the relevant URN(s)
+                        (provided below) in all citations. On this site, these URNs will resolve to the latest edition
+                        of our data. We also encourage researchers to save visualizations they use, download query
+                        results from ANNIS, and save information from document metadata.
                     </p>
 
                     <p>
-                        <span class="label">Edition:</span>
+                        Use the following model to cite this document. Our full <a
+                            href="www.copticscriptorium.org/citation-guidelines" target="new">citation guidelines</a>
+                        page provides more models.
+                    </p>
+
+                    <p><span class="label">First citation:</span></p>
+
+                    <p>Author, <em>Ancient title</em> [chapter.verse if available], ed. [annotators], trans.
+                        [translation]. {{selected_text.edition_urn}}. [version number], [date].
+                        http://data.copticscriptorium.org/{{selected_text.edition_urn}}.</p>
+
+                    <p></p>
+
+                    <p><span class="label">Subsequent citations:</span</p>
+
+                    <p>Author, <em>Ancient title (abbreviated)</em> [chapter.verse if available],
+                        {{selected_text.edition_urn}}.</p>
+
+                    <p>
+                        <span class="label">Document Edition:</span>
                         <a href="/{{selected_text.edition_urn}}" target="_blank">{{selected_text.edition_urn}}</a>
                     </p>
 
                     <p>
                         <span class="label">Text Corpus:</span>
-                        <a href="/urn:cts:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}" target="_blank">urn:cts:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}</a>
+                        <a href="/{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}" target="_blank">{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}</a>
                     </p>
 
                     <p>
                         <span class="label">Author Textgroup:</span>
-                        <a href="/urn:cts:{{selected_text.textgroup_urn}}" target="_blank">urn:cts:{{selected_text.textgroup_urn}}</a>
+                        <a href="/{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}" target="_blank">{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}</a>
                     </p>
 
-                    <p>The following links will direct you to the latest versions of data visualizations the
+                    <p>The following links will direct you to the latest versions of data visualizations of the
                         document.</p>
 
                     <p ng-repeat="visualization in selected_text.html_visualizations">
                         <span class="label">{{visualization.title}} HTML:</span>
-                        <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html"
+                        <a href="/{{selected_text.edition_urn}}/{{visualization.slug}}/html"
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html</a>
                     </p>
 
@@ -202,19 +220,19 @@
                     </p>
 
                     <p><span class="label">TEI XML:</span>
-                        <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/tei/xml"
+                        <a href="/{{selected_text.edition_urn}}/tei/xml"
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/tei/xml</a>
                     </p>
 
                     <p>
                         <span class="label">Paula XML:</span>
-                        <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/paula/xml"
+                        <a href="/{{selected_text.edition_urn}}/paula/xml"
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/paula/xml</a>
                     </p>
 
                     <p>
                         <span class="label">reIANNIS:</span>
-                        <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/relannis"
+                        <a href="/{{selected_text.edition_urn}}/relannis"
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/relannis</a>
                     </p>
 
@@ -223,7 +241,7 @@
                         querying in ANNIS:</p>
 
                     <p><span class="label">ANNIS UI:</span>
-                        <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis" target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis</a>
+                        <a href="/{{selected_text.edition_urn}}/annis" target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis</a>
                     </p>
 
                 </div>

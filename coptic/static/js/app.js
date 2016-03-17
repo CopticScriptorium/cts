@@ -268,9 +268,52 @@ angular.module('coptic')
          */
         $scope.update_from_api_results = function (res) {
             var texts = []
-                , edition_urn
                 , $target
                 ;
+
+            function change_dom() {
+                // Toggle the specific classes and visibility on elements
+                $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
+                    $scope.text_query.corpus_slug + "']");
+                $(".text-subwork").addClass("hidden");
+                $(".text-work").addClass("hidden");
+                $(".work-title-wrap").addClass("hidden");
+                $target.parents(".text-work").removeClass("hidden");
+                $target.removeClass("hidden").addClass("single-header");
+            }
+
+            function handle_text(text) {
+                var urn_parts;
+                var urn_dot_parts;
+
+                $scope.selected_text = text;
+                $scope.filters = [];
+
+                // Add metadata to the selected_text object
+                text.text_meta.forEach(function (meta) {
+                    if (meta.name === "document_cts_urn") {
+                        text.edition_urn = meta.value;
+                        urn_parts = meta.value.split(":");
+                        text.urn_cts_work = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
+                        urn_dot_parts = urn_parts[3].split(".");
+                        text.textgroup_urn = urn_dot_parts[0];
+                        text.corpus_urn = urn_dot_parts[1];
+                        text.text_url = "texts/" + text.corpus.slug + "/" + text.slug
+                    }
+                });
+
+                change_dom();
+
+                // Set the HTML document meta elements
+                $("meta[name=corpus_urn]").attr("content", "urn:cts:" + text.corpus_urn);
+                $("meta[name=document_urn]").attr("content", text.edition_urn);
+
+                // Scroll back to the top
+                $('html,body').scrollTop(0);
+
+                // Hide the loading modal window
+                $scope.hide_loading_modal();
+            }
 
             // If it is a corpus response
             if (typeof res.corpus !== "undefined") {
@@ -285,52 +328,13 @@ angular.module('coptic')
                     $scope.texts = texts;
 
                     if ($scope.is_single) {
-                        // Toggle the specific classes and visibility on elements
-                        $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" + $scope.text_query.corpus_slug + "']");
-                        $(".text-subwork").addClass("hidden");
-                        $(".text-work").addClass("hidden");
-                        $(".work-title-wrap").addClass("hidden");
-                        $target.parents(".text-work").removeClass("hidden");
-                        $target.removeClass("hidden").addClass("single-header");
+                        change_dom();
                     }
                 } else {
                     $scope.texts = [];
                 }
             } else if (typeof res.texts !== "undefined") {
-                // Texts response
-
-                // Should handle the possibility of multiple selected in future
-                $scope.selected_text = res.texts[0];
-                $scope.filters = [];
-
-                // Set pertinent metadata directly to the selected_text object
-                $scope.selected_text.text_meta.forEach(function (meta) {
-                    if (meta.name === "document_cts_urn") {
-                        $scope.selected_text.edition_urn = meta.value;
-                        edition_urn = meta.value.split(":");
-                        edition_urn = edition_urn[3].split(".");
-                        $scope.selected_text.textgroup_urn = edition_urn[0];
-                        $scope.selected_text.corpus_urn = edition_urn[1];
-                    }
-                });
-
-                // Toggle the specific classes and visibility on elements
-                $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" + $scope.text_query.corpus_slug + "']");
-                $(".text-subwork").addClass("hidden");
-                $(".text-work").addClass("hidden");
-                $(".work-title-wrap").addClass("hidden");
-                $target.parents(".text-work").removeClass("hidden");
-                $target.removeClass("hidden").addClass("single-header");
-
-                // Set the HTML document meta elements
-                $("meta[name=corpus_urn]").attr("content", "urn:cts:" + $scope.selected_text.corpus_urn);
-                $("meta[name=document_urn]").attr("content", $scope.selected_text.edition_urn);
-
-                // Scroll back to the top
-                $('html,body').scrollTop(0);
-
-                // Hide the loading modal window
-                $scope.hide_loading_modal();
+                handle_text(res.texts[0]);
             }
         };
 

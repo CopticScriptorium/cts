@@ -86,12 +86,7 @@ def _query(params):
 
 def _process_urn_request(urn, objects):
 
-    # Find texts matching the URN using their metadata
-    text_metas = TextMeta.objects.filter(name='document_cts_urn', value__iregex='^' + urn + r'($|[\.:])')
-    matching_tm_ids = [tm.id for tm in text_metas]
-    log.info('matching tm ids: %d' % len(matching_tm_ids))
-    texts = Text.objects.filter(text_meta__name='document_cts_urn',
-        text_meta__id__in=matching_tm_ids).prefetch_related().order_by('slug')
+    texts = texts_for_urn(urn)
     text_ids = [t.id for t in texts]
 
     # Find the corpora containing the matching texts
@@ -100,6 +95,15 @@ def _process_urn_request(urn, objects):
 
     _add_selected_texts_to_corpora(corpora, text_ids)
     _json_prepare_queryset(objects, 'corpus', corpora)
+
+
+def texts_for_urn(urn):
+    # Find texts matching the URN using their metadata
+    matching_tm_ids = TextMeta.objects.filter(name='document_cts_urn', value__iregex='^' + urn + r'($|[\.:])'
+                                              ).values_list('id', flat=True)
+    texts = Text.objects.filter(text_meta__name='document_cts_urn',
+                                text_meta__id__in=matching_tm_ids).prefetch_related().order_by('slug')
+    return texts
 
 
 def _add_selected_texts_to_corpora(corpora, text_ids):
