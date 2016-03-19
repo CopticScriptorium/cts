@@ -20,7 +20,7 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 	if len(texts) > 0:
 		text = texts[0]
 		if data_type == 'annis':
-			new_loc = "https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" + text.corpus.annis_corpus_name_b64encoded()
+			new_loc = text.corpus.annis_link()
 		elif data_type in ('relannis', 'xml'):
 			new_loc = text.corpus.github
 		elif data_type == 'html':

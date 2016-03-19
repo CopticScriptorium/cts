@@ -16,10 +16,8 @@ def api(request, params):
     'Search with the search params from the client-side application'
     get = request.GET
     log.info('API called with %s, %s' % (request, params))
-    params = params.split("/")
-    params = _process_param_values(params, get)
 
-    return _query(params)
+    return _query(_process_param_values(params.split("/"), get))
 
 
 def _query(params):
@@ -57,7 +55,7 @@ def _query(params):
                     corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
 
             # fetch the results and add to the objects dict
-            _json_prepare_queryset(objects, 'corpus', corpora)
+            objects['corpus'] = _json_from_queryset(corpora)
 
         # Otherwise, if this is a query to the texts model
         elif model == 'texts':
@@ -70,7 +68,7 @@ def _query(params):
                 return objects
 
             # fetch the results and add to the objects dict
-            _json_prepare_queryset(objects, 'texts', texts)
+            objects['texts'] = _json_from_queryset(texts)
 
     # If ingest is in the params, re-ingest the specified text id
     elif 'ingest' in params:
@@ -94,7 +92,7 @@ def _process_urn_request(urn, objects):
     corpora = Corpus.objects.filter(id__in=corpus_ids)
 
     _add_selected_texts_to_corpora(corpora, text_ids)
-    _json_prepare_queryset(objects, 'corpus', corpora)
+    objects['corpus'] = _json_from_queryset(corpora)
 
 
 def texts_for_urn(urn):
@@ -144,22 +142,8 @@ def _intersect(ids_dict):
     return functools.reduce(lambda a, b: a & b, ids_sets) if ids_sets else []
 
 
-def _json_prepare_queryset(objects, model_name, queryset):
-    if model_name not in objects:
-        objects[model_name] = []
-    model_objects = objects[model_name]
-
-    for item in queryset:
-
-        # Check if the item is an instance of our defined classes
-        if isinstance(item, CLASSES):
-            # if it is an instance of a class, append the dict
-            item = coptic_encoder(item)
-
-        # Finally, add the item to the objects response at the model
-        model_objects.append(item)
-
-    return objects
+def _json_from_queryset(queryset):
+    return [coptic_encoder(item) for item in queryset]
 
 
 def _process_param_values(params, query_dict):

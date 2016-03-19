@@ -79,8 +79,11 @@ class Corpus(models.Model):
 		self.modified = datetime.datetime.today()
 		return super(Corpus, self).save(*args, **kwargs)
 
-	def annis_corpus_name_b64encoded(self):
+	def _annis_corpus_name_b64encoded(self):
 		return b64encode(str.encode(self.annis_corpus_name)).decode()
+
+	def annis_link(self):
+		return "https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" + self._annis_corpus_name_b64encoded()
 
 
 class TextMeta(models.Model):
