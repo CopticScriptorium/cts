@@ -182,7 +182,6 @@ angular.module('coptic')
                 $scope.hide_loading_modal();
                 wipe_search_terms_and_filters();
             } else if (location.pathname.substr(0, 5) === "/urn:") {
-                console.log("urn");
                 $http.get("/api/", {params: {model: 'urn', urn_value: location.pathname.substr(1)}}).then(function (response) {
                     $scope.is_single = false;
                     $scope.selected_text = null;
@@ -218,7 +217,14 @@ angular.module('coptic')
                 $scope.show_loading_modal();
                 $scope.is_single = true;
                 $scope.selected_text_format = null;
-                $scope.show_single();
+                if ($scope.texts.length === 0) {
+                    $scope.get_corpora({
+                        model: "corpus",
+                        filters: $scope.filters
+                    });
+                } else {
+                    $scope.show_single();
+                }
             } else if ($scope.path.length === 5) { // Single text html version (/text/:corpus_slug/:text_slug/:html_version)
                 if ($scope.is_single === true) {
                     $scope.toggle_text_format($scope.path[4]);
@@ -315,9 +321,7 @@ angular.module('coptic')
                 $scope.hide_loading_modal();
             }
 
-            // If it is a corpus response
-            if (typeof res.corpus !== "undefined") {
-
+            if ('corpus' in res) {
                 // Ensure that if the path is /, no texts are added (only the project
                 // description text should be shown)
                 if ($scope.path.length > 0) {
@@ -333,7 +337,7 @@ angular.module('coptic')
                 } else {
                     $scope.texts = [];
                 }
-            } else if (typeof res.texts !== "undefined") {
+            } else if ('texts' in res) {
                 handle_text(res.texts[0]);
             }
         };
