@@ -57,10 +57,10 @@ def process(annis_server):
 					sfv.save()
 					saved_SearchFieldValues[(sf.id, title)] = sfv
 
-				# Search field texts
-				for text_id in value['texts']:
+				text_ids = value['texts']
+				if text_ids:
 					# Add the texts via the native add ManyToMany handling
-					for sfv_text in Text.objects.filter(id=text_id):
+					for sfv_text in Text.objects.filter(id__in=text_ids):
 						sfv.texts.add(sfv_text)
 
 
