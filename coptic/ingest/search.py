@@ -43,10 +43,8 @@ def process(annis_server):
 
 		# Save value data
 		for value in search_field['values']:
-			if sf.splittable:
-				split_values = value['value'].split(sf.splittable)
-			else:
-				split_values = [value['value']]
+			value_value = value['value']
+			split_values = value_value.split(sf.splittable) if sf.splittable else [value_value]
 
 			for split_value in split_values:
 				title = split_value.strip()
@@ -77,29 +75,33 @@ def _fields(annis_server):
 	corpus_names_by_id = {c.id: c.annis_corpus_name for c in Corpus.objects.all()}
 
 	for text in all_texts:
-		meta_query_url = annis_server.url_document_metadata(corpus_names_by_id[text.corpus_id], text.title)
-		logger.info(text.title)
+		corpus_name = corpus_names_by_id.get(text.corpus_id)
+		if not text.corpus_id:
+			logger.warn('No corpus ID for text %d %s' % (text.id, text.title))
+		else:
+			meta_query_url = annis_server.url_document_metadata(corpus_name, text.title)
+			logger.info(text.title)
 
-		for name, value in get_selected_annotation_fields(meta_query_url, ('name', 'value')):
+			for name, value in get_selected_annotation_fields(meta_query_url, ('name', 'value')):
 
-			matching_search_fields = [sf for sf in search_fields if sf['name'] == name]
-			if matching_search_fields:
-				values_list = matching_search_fields[0]['values']
-				matching_values_dicts = [vd for vd in values_list if vd['value'] == value]
-				if matching_values_dicts:
-					matching_values_dicts[0]['texts'].append(text.id)
+				matching_search_fields = [sf for sf in search_fields if sf['name'] == name]
+				if matching_search_fields:
+					values_list = matching_search_fields[0]['values']
+					matching_values_dicts = [vd for vd in values_list if vd['value'] == value]
+					if matching_values_dicts:
+						matching_values_dicts[0]['texts'].append(text.id)
+					else:
+						values_list.append({
+							'value': value,
+							'texts': [text.id]
+						})
 				else:
-					values_list.append({
-						'value': value,
-						'texts': [text.id]
+					search_fields.append({
+						'name': name,
+						'values': [{
+							'value': value,
+							'texts': [text.id]
+						}]
 					})
-			else:
-				search_fields.append({
-					'name': name,
-					'values': [{
-						'value': value,
-						'texts': [text.id]
-					}]
-				})
 
 	return search_fields
