@@ -1,5 +1,6 @@
 import logging
 from ingest.metadata import get_selected_annotation_fields
+from texts.models import Corpus
 
 logger = logging.getLogger(__name__)
 
@@ -42,10 +43,8 @@ def process(annis_server):
 
 		# Save value data
 		for value in search_field['values']:
-			if sf.splittable:
-				split_values = value['value'].split(sf.splittable)
-			else:
-				split_values = [value['value']]
+			value_value = value['value']
+			split_values = value_value.split(sf.splittable) if sf.splittable else [value_value]
 
 			for split_value in split_values:
 				title = split_value.strip()
@@ -58,10 +57,10 @@ def process(annis_server):
 					sfv.save()
 					saved_SearchFieldValues[(sf.id, title)] = sfv
 
-				# Search field texts
-				for text_id in value['texts']:
+				text_ids = value['texts']
+				if text_ids:
 					# Add the texts via the native add ManyToMany handling
-					for sfv_text in Text.objects.filter(id=text_id):
+					for sfv_text in Text.objects.filter(id__in=text_ids):
 						sfv.texts.add(sfv_text)
 
 
@@ -73,30 +72,36 @@ def _fields(annis_server):
 	all_texts = Text.objects.all()
 	logger.info("Fetching metadata annotations for %d texts" % len(all_texts))
 
+	corpus_names_by_id = {c.id: c.annis_corpus_name for c in Corpus.objects.all()}
+
 	for text in all_texts:
-		meta_query_url = annis_server.url_document_metadata(text.corpus.annis_corpus_name, text.title)
-		logger.info(text.title)
+		corpus_name = corpus_names_by_id.get(text.corpus_id)
+		if not text.corpus_id:
+			logger.warn('No corpus ID for text %d %s' % (text.id, text.title))
+		else:
+			meta_query_url = annis_server.url_document_metadata(corpus_name, text.title)
+			logger.info(text.title)
 
-		for name, value in get_selected_annotation_fields(meta_query_url, ('name', 'value')):
+			for name, value in get_selected_annotation_fields(meta_query_url, ('name', 'value')):
 
-			matching_search_fields = [sf for sf in search_fields if sf['name'] == name]
-			if matching_search_fields:
-				values_list = matching_search_fields[0]['values']
-				matching_values_dicts = [vd for vd in values_list if vd['value'] == value]
-				if matching_values_dicts:
-					matching_values_dicts[0]['texts'].append(text.id)
+				matching_search_fields = [sf for sf in search_fields if sf['name'] == name]
+				if matching_search_fields:
+					values_list = matching_search_fields[0]['values']
+					matching_values_dicts = [vd for vd in values_list if vd['value'] == value]
+					if matching_values_dicts:
+						matching_values_dicts[0]['texts'].append(text.id)
+					else:
+						values_list.append({
+							'value': value,
+							'texts': [text.id]
+						})
 				else:
-					values_list.append({
-						'value': value,
-						'texts': [text.id]
+					search_fields.append({
+						'name': name,
+						'values': [{
+							'value': value,
+							'texts': [text.id]
+						}]
 					})
-			else:
-				search_fields.append({
-					'name': name,
-					'values': [{
-						'value': value,
-						'texts': [text.id]
-					}]
-				})
 
 	return search_fields

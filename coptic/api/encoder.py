@@ -1,67 +1,63 @@
 """
 Define custom encoder for the queryset model class instances
 """
-from base64 import b64encode
 from texts.models import Text, Corpus
 
 
-def coptic_encoder( obj ):
+def _visualizations(obj):
+    return [{
+        "title":    v.visualization_format.title,
+        "slug":     v.visualization_format.slug,
+        "html":     v.html
+    } for v in obj.html_visualizations.all()]
 
-	encoded = {}
 
-	# If we're dumping an instance of the Text class to JSON
-	if isinstance(obj, Text):
-		text = {'id': obj.id, 'title': obj.title, 'slug': obj.slug, 'is_expired': obj.is_expired,
-				'html_visualizations': [], 'text_meta': []}
+def _vis_formats(obj):
+    return [{
+        'title':        vf.title,
+        'button_title': vf.button_title,
+        'slug':         vf.slug
+    } for vf in obj.html_visualization_formats.all()]
 
-		for text_meta in obj.text_meta.all():
-			if text_meta.name == "msName":
-				text['msName'] = text_meta.value.replace(".", "-")
 
-			text['text_meta'].append({
-					'name' : text_meta.name,
-					'value' : text_meta.value 
-				})
+def _text_meta(obj):
+    return [{
+        'name':  text_meta.name,
+        'value': text_meta.value
+    } for text_meta in obj.text_meta.all()]
 
-		for html_visualization in obj.html_visualizations.all():
-			text['html_visualizations'].append({
-					"title" : html_visualization.visualization_format.title,
-					"slug" : html_visualization.visualization_format.slug,
-					"html" : html_visualization.html
-				})
 
-		text['corpus'] = coptic_encoder( obj.corpus )
+def coptic_encoder(obj):
 
-		encoded = text
+    # If we're dumping an instance of the Text class to JSON
+    if isinstance(obj, Text):
+        return {
+            'id':           obj.id,
+            'title':        obj.title,
+            'slug':         obj.slug,
+            'is_expired':   obj.is_expired,
+            'html_visualizations': _visualizations(obj),
+            'text_meta':    _text_meta(obj),
+            'corpus':       coptic_encoder(obj.corpus)
+        }
 
-	# If we're dumping an instance of the Corpus class to JSON
-	elif isinstance(obj, Corpus):
-		corpus = {'title': obj.title, 'urn_code': obj.urn_code, 'slug': obj.slug,
-				  'annis_code': b64encode(str.encode(obj.urn_code)).decode(),
-				  'annis_corpus_name': obj.annis_corpus_name, 'github': obj.github, 'html_visualization_formats': []}
+    # If we're dumping an instance of the Corpus class to JSON
+    if isinstance(obj, Corpus):
+        corpus = {
+            'title':              obj.title,
+            'urn_code':           obj.urn_code,
+            'slug':               obj.slug,
+            'annis_link':         obj.annis_link(),
+            'annis_corpus_name':  obj.annis_corpus_name,
+            'github':             obj.github,
+            'html_visualization_formats': _vis_formats(obj)}
 
-		for html_visualization_format in obj.html_visualization_formats.all():
-			corpus['html_visualization_formats'].append({
-					'title' : html_visualization_format.title,
-					'button_title' : html_visualization_format.button_title,
-					'slug' : html_visualization_format.slug
-				}) 
+        if hasattr(obj, 'texts'):
+            corpus['texts'] = [{
+                'id':       text.id,
+                'title':    text.title,
+                'slug':     text.slug,
+                'html_visualizations': _visualizations(text)
+            } for text in obj.texts]
 
-		if hasattr(obj, 'texts'):
-			corpus['texts'] = []
-			for i, text in enumerate( obj.texts ):
-				corpus['texts'].append({
-						'id' : text.id,
-						'title' : text.title,
-						'slug' : text.slug,
-						'html_visualizations' : [] 
-					})
-				for html_visualization in text.html_visualizations.all():
-					corpus['texts'][ i ]['html_visualizations'].append({
-							"title" : html_visualization.visualization_format.title,
-							"slug" : html_visualization.visualization_format.slug
-						})
-
-		encoded = corpus
-
-	return encoded 
+        return corpus
