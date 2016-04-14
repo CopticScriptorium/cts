@@ -1,4 +1,5 @@
 import datetime
+import re
 from base64 import b64encode
 from django.db import models
 
@@ -100,7 +101,11 @@ class TextMeta(models.Model):
 		verbose_name = "Text Meta Item"
 
 	def __str__(self):
-		return self.name + ": " + self.value 
+		return self.name + ": " + self.value
+
+	def value_with_urls_wrapped(self):
+		v = self.value
+		return ('<a href="%s">%s</a>' % (v, v)) if re.match(r'https?://', v) else v
 
 
 class Text(models.Model):

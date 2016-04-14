@@ -1664,6 +1664,11 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   font-weight: bold;
 }
 
+/* Hand written. Where is scss source? Like .citation-help a */
+.meta-value a {
+  text-decoration: underline;
+}
+
 /* line 157, ../../scss/_single.scss */
 .v-panel {
   position: relative !important;

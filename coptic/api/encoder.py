@@ -23,7 +23,7 @@ def _vis_formats(obj):
 def _text_meta(obj):
     return [{
         'name':  text_meta.name,
-        'value': text_meta.value
+        'value': text_meta.value_with_urls_wrapped()
     } for text_meta in obj.text_meta.all()]
 
 
