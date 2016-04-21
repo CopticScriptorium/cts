@@ -1,6 +1,5 @@
 import logging
 from urllib import request
-from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 from texts.models import TextMeta, CorpusMeta
 
@@ -31,7 +30,11 @@ def get_selected_annotation_fields(url, fields):
 	'Fetch from the url, and return the requested fields for each annotation found, in a list of lists'
 	try:
 		soup = BeautifulSoup(request.urlopen(url).read())
-		return [[a.find(field).text for field in fields] for a in soup.find_all("annotation")]
+		fields = [[a.find(field).text for field in fields] for a in soup.find_all("annotation")]
+		ed = [f for f in fields if f[0] == 'Coptic_edition' and '(1960)' in f[1]]
+		if ed:
+			logger.info(soup)
+		return fields
 	except Exception as e:
 		logger.error(e)
 		return []
