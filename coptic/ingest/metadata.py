@@ -32,7 +32,6 @@ def get_selected_annotation_fields(url, fields):
 		markup = request.urlopen(url).read()
 		soup = BeautifulSoup(markup)
 		if '(1960)' in markup:
-			logger.info(markup)
 			logger.info(soup)
 		fields = [[a.find(field).text for field in fields] for a in soup.find_all("annotation")]
 		return fields
