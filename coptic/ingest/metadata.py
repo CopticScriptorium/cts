@@ -36,5 +36,5 @@ def get_selected_annotation_fields(url, fields):
 		fields = [[a.find(field).text for field in fields] for a in soup.find_all("annotation")]
 		return fields
 	except Exception as e:
-		logger.error(e)
+		logger.exception(e)
 		return []
