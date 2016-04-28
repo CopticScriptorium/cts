@@ -29,10 +29,10 @@ def collect(url, factory, parent):
 def get_selected_annotation_fields(url, fields):
 	'Fetch from the url, and return the requested fields for each annotation found, in a list of lists'
 	try:
-		markup = request.urlopen(url).read()
-		soup = BeautifulSoup(markup)
-		if '(1960)' in markup:
-			logger.info(soup)
+		soup = BeautifulSoup(request.urlopen(url).read())
+		ps = soup.prettify()
+		if '(1960)' in ps:
+			logger.info(ps)
 		fields = [[a.find(field).text for field in fields] for a in soup.find_all("annotation")]
 		return fields
 	except Exception as e:
