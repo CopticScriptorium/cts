@@ -36,11 +36,6 @@ def get_selected_annotation_fields(url, field_names):
 		annotations = soup.find_all("annotation")
 		annotation_sets = [[a.find(n).text for n in field_names] for a in annotations]
 		logger.info('Got %d annotation sets from %s' % (len(annotation_sets), url))
-		if url == 'https://corpling.uis.georgetown.edu/annis-service/annis/meta/doc/apophthegmata.patrum/AP.005.unid.senses':
-			logger.info(content)
-			ce = [aset[1] for aset in annotation_sets if aset[0] == 'Coptic_edition'][0]
-			logger.info('Edition: %s' % ce)
-
 		return annotation_sets
 	except Exception as e:
 		logger.exception(e)
