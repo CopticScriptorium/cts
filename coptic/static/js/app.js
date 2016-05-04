@@ -210,6 +210,7 @@ angular.module('coptic')
                     $scope.selected_text_format = null;
                 } else {
                     $scope.texts = [];
+                    $scope.hide_loading_modal();
                     wipe_search_terms_and_filters();
                 }
             } else if ($scope.path.length === 4) { // Single text (/text/:corpus_slug/:text_slug)
