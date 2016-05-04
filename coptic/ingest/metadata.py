@@ -1,6 +1,5 @@
 import logging
-from urllib import request
-from urllib.error import HTTPError
+import requests
 from bs4 import BeautifulSoup
 from texts.models import TextMeta, CorpusMeta
 
@@ -20,6 +19,7 @@ def collect_text_meta(url, text):
 
 
 def collect(url, factory, parent):
+	parent.remove()
 	for fields in get_selected_annotation_fields(url, ('name', 'value', 'pre', 'corpusname')):
 		meta = factory()
 		meta.name, meta.value, meta.pre, meta.corpus_name = fields
@@ -27,11 +27,16 @@ def collect(url, factory, parent):
 		parent.add(meta)
 
 
-def get_selected_annotation_fields(url, fields):
+def get_selected_annotation_fields(url, field_names):
 	'Fetch from the url, and return the requested fields for each annotation found, in a list of lists'
 	try:
-		soup = BeautifulSoup(request.urlopen(url).read())
-		return [[a.find(field).text for field in fields] for a in soup.find_all("annotation")]
+		response = requests.get(url)
+		content = response.content
+		soup = BeautifulSoup(content)
+		annotations = soup.find_all("annotation")
+		annotation_sets = [[a.find(n).text for n in field_names] for a in annotations]
+		logger.info('Got %d annotation sets from %s' % (len(annotation_sets), url))
+		return annotation_sets
 	except Exception as e:
-		logger.error(e)
+		logger.exception(e)
 		return []
