@@ -2144,7 +2144,6 @@ a.text-item:focus {
 /* line 22, ../../scss/_text.scss */
 div.htmlvis span {
   font-family: antinoouRegular, sans-serif;
-  width: 500px;
   white-space: normal !important;
 }
 
