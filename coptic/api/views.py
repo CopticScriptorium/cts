@@ -62,13 +62,13 @@ def _query(params):
             if 'corpus' in params and 'slug' in params['corpus'] and \
                'text'   in params and 'slug' in params['text']:
                 corpus = Corpus.objects.get(slug=params['corpus']['slug'])
-                texts = Text.objects.filter(slug=params['text']['slug'], corpus=corpus.id).prefetch_related()
+                text = Text.objects.filter(slug=params['text']['slug'], corpus=corpus.id).prefetch_related().first()
             else:
                 objects['error'] = 'No Text Query specified--missing corpus slug or text slug'
                 return objects
 
             # fetch the results and add to the objects dict
-            objects['texts'] = _json_from_queryset(texts)
+            objects['text'] = coptic_encoder(text)
 
     # If ingest is in the params, re-ingest the specified text id
     elif 'ingest' in params:

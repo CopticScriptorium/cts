@@ -319,8 +319,8 @@ angular.module('coptic')
 
             if ('corpus' in res) {
                 handle_corpora(res.corpus);
-            } else if ('texts' in res) {
-                handle_text(res.texts[0]);
+            } else if ('text' in res) {
+                handle_text(res.text);
             }
         };
 
