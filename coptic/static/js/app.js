@@ -113,8 +113,8 @@ angular.module('coptic')
         // Text Query based on filters and selected texts
         $scope.text_query = {};
 
-        // The texts returned from the API
-        $scope.texts = [];
+        // The corpora returned from the API
+        $scope.corpora = [];
 
         // The selected text value for single text view
         $scope.selected_text = null;
@@ -175,7 +175,7 @@ angular.module('coptic')
                 $scope.show_loading_modal();
                 $scope.is_single = false;
                 $scope.selected_text = null;
-                $scope.texts = [];
+                $scope.corpora = [];
                 $scope.hide_loading_modal();
                 wipe_search_terms_and_filters();
             } else if (location.pathname.substr(0, 5) === "/urn:") {
@@ -183,7 +183,7 @@ angular.module('coptic')
                     $scope.is_single = false;
                     $scope.selected_text = null;
                     $scope.selected_text_format = null;
-                    $scope.texts = response.data.corpus;
+                    $scope.corpora = response.data.corpus;
                     $scope.hide_loading_modal();
                     console.log(response);
                 }, function (response) {
@@ -194,7 +194,7 @@ angular.module('coptic')
                 $scope.is_single = false;
                 $scope.selected_text = null;
                 $scope.selected_text_format = null;
-                $scope.texts = [];
+                $scope.corpora = [];
                 $scope.hide_loading_modal();
                 wipe_search_terms_and_filters();
             } else if ($scope.path.length === 3) { // /filter/:filters
@@ -204,7 +204,7 @@ angular.module('coptic')
                     $scope.selected_text = null;
                     $scope.selected_text_format = null;
                 } else {
-                    $scope.texts = [];
+                    $scope.corpora = [];
                     $scope.hide_loading_modal();
                     wipe_search_terms_and_filters();
                 }
@@ -213,7 +213,7 @@ angular.module('coptic')
                 $scope.show_loading_modal();
                 $scope.is_single = true;
                 $scope.selected_text_format = null;
-                if ($scope.texts.length === 0) {
+                if ($scope.corpora.length === 0) {
                     $scope.get_corpora({
                         model: "corpus",
                         filters: $scope.filters
@@ -298,9 +298,9 @@ angular.module('coptic')
             }
 
             function handle_corpora(corpora) {
-                $scope.texts = [];
+                $scope.corpora = [];
                 corpora.forEach(function(corpus) {
-                    $scope.texts.push(corpus);
+                    $scope.corpora.push(corpus);
                 });
 
                 if ($scope.is_single) {
@@ -566,7 +566,7 @@ angular.module('coptic')
 
             } else {
                 $location.path("/");
-                $scope.texts = [];
+                $scope.corpora = [];
 
             }
         };

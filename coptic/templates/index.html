@@ -6,7 +6,7 @@
 
         <div class="grid inner">
 
-            <section class="project-description entry-text" ng-hide="texts.length || is_single">
+            <section class="project-description entry-text" ng-hide="corpora.length || is_single">
 
                 <h1 class="title">Coptic Scriptorium URN Resolver -- BETA version</h1>
 
@@ -65,9 +65,9 @@
                     versions.</p>
             </section>
 
-            <section class="text-list list" ng-hide="!texts.length && !is_single">
+            <section class="text-list list" ng-hide="!corpora.length && !is_single">
 
-                <div class="text-author" ng-repeat="corpus in texts">
+                <div class="text-author" ng-repeat="corpus in corpora">
 
                     <div class="text-work">
 
