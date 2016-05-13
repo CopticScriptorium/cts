@@ -169,9 +169,6 @@ angular.module('coptic')
             function wipe_search_terms_and_filters() {
                 $scope.filters = [];
                 $(".selected").removeClass("selected");
-                $("meta[name=corpus_urn]").  attr("content", "");
-                $("meta[name=document_urn]").attr("content", "");
-                $("meta[name=mss_urn]").     attr("content", "");
             }
 
             if ($scope.path.length == 0 || ( $scope.path.length > 1 && $scope.path[1] === "" )) { // Index
@@ -192,9 +189,7 @@ angular.module('coptic')
                 }, function (response) {
                     console.log('Error with API Query:', response);
                 });
-            } else if ($scope.path.length === 2 && $scope.path[1] !== "404") {
-
-                // /texts index
+            } else if ($scope.path.length === 2 && $scope.path[1] !== "404") { // texts index
                 $scope.show_loading_modal();
                 $scope.is_single = false;
                 $scope.selected_text = null;
@@ -273,14 +268,10 @@ angular.module('coptic')
         /*
          * Updates scope with API query results
          */
-        $scope.update_from_api_results = function (res) {
-            var texts = []
-                , $target
-                ;
-
+        $scope.update_from_api_results = function(res) {
             function change_dom() {
                 // Toggle the specific classes and visibility on elements
-                $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
+                var $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
                     $scope.text_query.corpus_slug + "']");
                 $(".text-subwork").addClass("hidden");
                 $(".text-work").addClass("hidden");
@@ -289,55 +280,45 @@ angular.module('coptic')
                 $target.removeClass("hidden").addClass("single-header");
             }
 
-            function handle_text(text) {
-                var urn_parts;
-                var urn_dot_parts;
-
-                $scope.selected_text = text;
-                $scope.filters = [];
-
-                // Add metadata to the selected_text object
+            function add_properties_from_metadata(text) {
                 text.text_meta.forEach(function (meta) {
+                    var urn_parts;
+                    var urn_dot_parts;
                     if (meta.name === "document_cts_urn") {
-                        text.edition_urn = meta.value;
-                        urn_parts = meta.value.split(":");
-                        text.urn_cts_work = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
-                        urn_dot_parts = urn_parts[3].split(".");
-                        text.textgroup_urn = urn_dot_parts[0];
-                        text.corpus_urn = urn_dot_parts[1];
-                        text.text_url = "texts/" + text.corpus.slug + "/" + text.slug
+                        urn_parts       = meta.value.split(":");
+                        urn_dot_parts   = urn_parts[3].split(".");
+
+                        text.urn_cts_work   = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
+                        text.edition_urn    = meta.value;
+                        text.textgroup_urn  = urn_dot_parts[0];
+                        text.corpus_urn     = urn_dot_parts[1];
+                        text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
                     }
                 });
+            }
 
+            function handle_corpora(corpora) {
+                $scope.texts = [];
+                corpora.forEach(function(corpus) {
+                    $scope.texts.push(corpus);
+                });
+
+                if ($scope.is_single) {
+                    change_dom();
+                }
+            }
+
+            function handle_text(text) {
+                $scope.selected_text = text;
+                $scope.filters = [];
+                add_properties_from_metadata(text);
                 change_dom();
-
-                // Set the HTML document meta elements
-                $("meta[name=corpus_urn]").attr("content", "urn:cts:" + text.corpus_urn);
-                $("meta[name=document_urn]").attr("content", text.edition_urn);
-
-                // Scroll back to the top
                 $('html,body').scrollTop(0);
-
-                // Hide the loading modal window
                 $scope.hide_loading_modal();
             }
 
             if ('corpus' in res) {
-                // Ensure that if the path is /, no texts are added (only the project
-                // description text should be shown)
-                if ($scope.path.length > 0) {
-                    res.corpus.forEach(function (corpus) {
-                        texts.push(corpus);
-                    });
-
-                    $scope.texts = texts;
-
-                    if ($scope.is_single) {
-                        change_dom();
-                    }
-                } else {
-                    $scope.texts = [];
-                }
+                handle_corpora(res.corpus);
             } else if ('texts' in res) {
                 handle_text(res.texts[0]);
             }
