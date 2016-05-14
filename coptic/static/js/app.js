@@ -151,7 +151,7 @@ angular.module('coptic')
                         $scope.hide_loading_modal();
                     } else {
                         if ($scope.path[4] !== $scope.selected_text_format) {
-                            $scope.toggle_text_format($scope.path[4]);
+                            $scope.show_selected_visualization($scope.path[4]);
                         }
                         $scope.hide_loading_modal();
                     }
@@ -215,7 +215,7 @@ angular.module('coptic')
                 $scope.selected_text_format = null;
                 if ($scope.corpora.length === 0) {
                     $scope.get_corpora({
-                        model: "corpus",
+                        model:   "corpus",
                         filters: $scope.filters
                     });
                 } else {
@@ -223,7 +223,7 @@ angular.module('coptic')
                 }
             } else if ($scope.path.length === 5) { // Single text html version (/text/:corpus_slug/:text_slug/:html_version)
                 if ($scope.is_single === true) {
-                    $scope.toggle_text_format($scope.path[4]);
+                    $scope.show_selected_visualization($scope.path[4]);
                 } else {
                     $scope.show_loading_modal();
                     $scope.is_single = true;
@@ -237,10 +237,10 @@ angular.module('coptic')
          */
         $scope.get_corpora = function (query) {
             $scope.selected_text = null;
-            $(".text-subwork").removeClass("hidden");
-            $(".text-work").removeClass("hidden");
-            $(".work-title-wrap").removeClass("hidden");
-            $(".single-header").removeClass("single-header");
+            $(".text-subwork")      .removeClass("hidden");
+            $(".text-work")         .removeClass("hidden");
+            $(".work-title-wrap")   .removeClass("hidden");
+            $(".single-header")     .removeClass("single-header");
 
             $http.get("/api/", {params: query}).then(function (response) {
                 $scope.update_from_api_results(response.data);
@@ -273,28 +273,11 @@ angular.module('coptic')
                 // Toggle the specific classes and visibility on elements
                 var $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
                     $scope.text_query.corpus_slug + "']");
-                $(".text-subwork").addClass("hidden");
-                $(".text-work").addClass("hidden");
-                $(".work-title-wrap").addClass("hidden");
-                $target.parents(".text-work").removeClass("hidden");
-                $target.removeClass("hidden").addClass("single-header");
-            }
-
-            function add_properties_from_metadata(text) {
-                text.text_meta.forEach(function (meta) {
-                    var urn_parts;
-                    var urn_dot_parts;
-                    if (meta.name === "document_cts_urn") {
-                        urn_parts       = meta.value.split(":");
-                        urn_dot_parts   = urn_parts[3].split(".");
-
-                        text.urn_cts_work   = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
-                        text.edition_urn    = meta.value;
-                        text.textgroup_urn  = urn_dot_parts[0];
-                        text.corpus_urn     = urn_dot_parts[1];
-                        text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
-                    }
-                });
+                $(".text-subwork")              .addClass("hidden");
+                $(".text-work")                 .addClass("hidden");
+                $(".work-title-wrap")           .addClass("hidden");
+                $target.parents(".text-work")   .removeClass("hidden");
+                $target.removeClass("hidden")   .addClass("single-header");
             }
 
             function handle_corpora(corpora) {
@@ -309,8 +292,25 @@ angular.module('coptic')
             }
 
             function handle_text(text) {
+
+                function add_properties_from_metadata(textmeta) {
+                    var urn_parts;
+                    var urn_dot_parts;
+                    if (textmeta.name === "document_cts_urn") {
+                        urn_parts       = textmeta.value.split(":");
+                        urn_dot_parts   = urn_parts[3].split(".");
+
+                        text.urn_cts_work   = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
+                        text.edition_urn    = textmeta.value;
+                        text.textgroup_urn  = urn_dot_parts[0];
+                        text.corpus_urn     = urn_dot_parts[1];
+                        text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
+                    }
+                }
+
                 $scope.selected_text = text;
                 $scope.filters = [];
+                text.text_meta.forEach(add_properties_from_metadata);
                 add_properties_from_metadata(text);
                 change_dom();
                 $('html,body').scrollTop(0);
@@ -324,13 +324,13 @@ angular.module('coptic')
             }
         };
 
-        $scope.show_single = function (e) {
+        $scope.show_single = function () {
             // Show a selected single text
             $(".text-format").hide();
             $scope.text_query = {
-                model: "texts",
-                corpus_slug: $scope.path[2],
-                text_slug: $scope.path[3]
+                model:          "texts",
+                corpus_slug:    $scope.path[2],
+                text_slug:      $scope.path[3]
             };
             $scope.get_texts($scope.text_query);
         };
@@ -575,17 +575,10 @@ angular.module('coptic')
             $location.path("/");
         };
 
-        $scope.toggle_text_format = function (type) {
-            // Show or hide the different text formats;
-            var $target
-                ;
-
+        $scope.show_selected_visualization = function (type) {
+            var $target = $(".single-header .text-item[data-type=" + type + "]");
             $scope.selected_text_format = type;
-
-            $target = $(".single-header .text-item[data-type=" + type + "]");
             if (!$target.hasClass("selected-text-type")) {
-
-                // Update the displayed text format if not currently selected
                 $(".selected-text-type").removeClass("selected-text-type");
                 $target.addClass("selected-text-type");
 
@@ -614,5 +607,4 @@ angular.module('coptic')
         $scope.hide_loading_modal = function () {
             $("#loading_modal").fadeOut(300);
         };
-
     }]);
