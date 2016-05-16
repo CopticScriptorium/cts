@@ -281,10 +281,7 @@ angular.module('coptic')
             }
 
             function handle_corpora(corpora) {
-                $scope.corpora = [];
-                corpora.forEach(function(corpus) {
-                    $scope.corpora.push(corpus);
-                });
+                $scope.corpora = corpora;
 
                 if ($scope.is_single) {
                     change_dom();
@@ -311,7 +308,6 @@ angular.module('coptic')
                 $scope.selected_text = text;
                 $scope.filters = [];
                 text.text_meta.forEach(add_properties_from_metadata);
-                add_properties_from_metadata(text);
                 change_dom();
                 $('html,body').scrollTop(0);
                 $scope.hide_loading_modal();
