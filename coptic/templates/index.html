@@ -6,7 +6,7 @@
 
         <div class="grid inner">
 
-            <section class="project-description entry-text" ng-hide="corpora.length || is_single">
+            <section class="project-description entry-text" ng-hide="corpora.length || selected_text">
 
                 <h1 class="title">Coptic Scriptorium URN Resolver -- BETA version</h1>
 
@@ -65,7 +65,7 @@
                     versions.</p>
             </section>
 
-            <section class="text-list list" ng-hide="!corpora.length && !is_single">
+            <section class="text-list list" ng-hide="!corpora.length && !selected_text">
 
                 <div class="text-author" ng-repeat="corpus in corpora">
 
@@ -133,7 +133,7 @@
                 </div>
             </section>
 
-            <section id="selected_text" class="selected-text-wrap page-content" ng-hide="!is_single">
+            <section id="selected_text" class="selected-text-wrap page-content" ng-hide="!selected_text">
 
                 <div class="text-format" ng-repeat="visualization in selected_text.html_visualizations"
                      id="{{visualization.slug}}">
@@ -245,13 +245,6 @@
 
                 </div>
             </section>
-        </div>
-    </div>
-
-    <div id="loading_modal" class="coptic-modal">
-        <div class="loading-modal-inner">
-			<span class="fa fa-spinner fa-spin">
-			</span>
         </div>
     </div>
 

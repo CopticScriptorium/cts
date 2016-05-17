@@ -119,9 +119,6 @@ angular.module('coptic')
         // The selected text value for single text view
         $scope.selected_text = null;
 
-        // If the application is in the single text view
-        $scope.is_single = false;
-
         // The selected text HTML visualization format
         $scope.selected_text_format = "";
 
@@ -147,13 +144,10 @@ angular.module('coptic')
             },
             function (val) {
                 if ($(".text-format").length > 0) {
-                    if ($scope.path.length < 4) {
-                        $scope.hide_loading_modal();
-                    } else {
+                    if ($scope.path.length >= 4) {
                         if ($scope.path[4] !== $scope.selected_text_format) {
                             $scope.show_selected_visualization($scope.path[4]);
                         }
-                        $scope.hide_loading_modal();
                     }
                 }
             }
@@ -172,46 +166,34 @@ angular.module('coptic')
             }
 
             if ($scope.path.length == 0 || ( $scope.path.length > 1 && $scope.path[1] === "" )) { // Index
-                $scope.show_loading_modal();
-                $scope.is_single = false;
                 $scope.selected_text = null;
                 $scope.corpora = [];
-                $scope.hide_loading_modal();
                 wipe_search_terms_and_filters();
             } else if (location.pathname.substr(0, 5) === "/urn:") {
                 $http.get("/api/", {params: {model: 'urn', urn_value: location.pathname.substr(1)}}).then(function (response) {
-                    $scope.is_single = false;
                     $scope.selected_text = null;
                     $scope.selected_text_format = null;
                     $scope.corpora = response.data.corpus;
-                    $scope.hide_loading_modal();
                     console.log(response);
                 }, function (response) {
                     console.log('Error with API Query:', response);
                 });
             } else if ($scope.path.length === 2 && $scope.path[1] !== "404") { // texts index
-                $scope.show_loading_modal();
-                $scope.is_single = false;
                 $scope.selected_text = null;
                 $scope.selected_text_format = null;
                 $scope.corpora = [];
-                $scope.hide_loading_modal();
                 wipe_search_terms_and_filters();
             } else if ($scope.path.length === 3) { // /filter/:filters
                 if ($scope.path[2].length !== 0) {
                     $scope.load_filters();
-                    $scope.is_single = false;
                     $scope.selected_text = null;
                     $scope.selected_text_format = null;
                 } else {
                     $scope.corpora = [];
-                    $scope.hide_loading_modal();
                     wipe_search_terms_and_filters();
                 }
             } else if ($scope.path.length === 4) { // Single text (/text/:corpus_slug/:text_slug)
                 $(".text-format").hide();
-                $scope.show_loading_modal();
-                $scope.is_single = true;
                 $scope.selected_text_format = null;
                 if ($scope.corpora.length === 0) {
                     $scope.get_corpora({
@@ -222,11 +204,9 @@ angular.module('coptic')
                     $scope.show_single();
                 }
             } else if ($scope.path.length === 5) { // Single text html version (/text/:corpus_slug/:text_slug/:html_version)
-                if ($scope.is_single === true) {
+                if ($scope.selected_text) {
                     $scope.show_selected_visualization($scope.path[4]);
                 } else {
-                    $scope.show_loading_modal();
-                    $scope.is_single = true;
                     $scope.show_single();
                 }
             }
@@ -244,10 +224,8 @@ angular.module('coptic')
 
             $http.get("/api/", {params: query}).then(function (response) {
                 $scope.update_from_api_results(response.data);
-                if ($scope.is_single && $scope.path[4] !== $scope.selected_text_format) {
+                if ($scope.selected_text && $scope.path[4] !== $scope.selected_text_format) {
                     $scope.show_single();
-                } else {
-                    $scope.hide_loading_modal();
                 }
             }, function (response) {
                 console.log('Error with API Query:', response);
@@ -283,7 +261,7 @@ angular.module('coptic')
             function handle_corpora(corpora) {
                 $scope.corpora = corpora;
 
-                if ($scope.is_single) {
+                if ($scope.selected_text) {
                     change_dom();
                 }
             }
@@ -310,7 +288,6 @@ angular.module('coptic')
                 text.text_meta.forEach(add_properties_from_metadata);
                 change_dom();
                 $('html,body').scrollTop(0);
-                $scope.hide_loading_modal();
             }
 
             if ('corpus' in res) {
@@ -375,7 +352,6 @@ angular.module('coptic')
                 , id
                 ;
 
-            $scope.show_loading_modal();
             $scope.text_query = {};
 
             if (!$target.hasClass("tool-search-item")) {
@@ -528,7 +504,6 @@ angular.module('coptic')
                 , filters_url = []
                 ;
 
-            $scope.show_loading_modal();
             if (!$target.hasClass("filter-item")) {
                 $target = $target.parents(".filter-item");
             }
@@ -594,13 +569,5 @@ angular.module('coptic')
                 urn = urn_prefix + urn;
             }
             document.location.href = "/" + urn;
-        };
-
-        $scope.show_loading_modal = function () {
-            $("#loading_modal").fadeIn(300);
-        };
-
-        $scope.hide_loading_modal = function () {
-            $("#loading_modal").fadeOut(300);
         };
     }]);
