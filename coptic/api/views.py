@@ -1,10 +1,12 @@
 import logging
 import json
 from api.json import json_view
-from api.encoder import coptic_encoder
+from api.encoder import Encoder
 from ingest.tasks import single_ingest_asynch
 from texts.models import Text, Corpus, SearchFieldValue, TextMeta
 import functools
+
+TEXT_PREFETCH_FIELDS = 'html_visualizations'
 
 log = logging.getLogger(__name__)
 ALLOWED_MODELS = ['texts', 'corpus', 'urn']
@@ -24,12 +26,13 @@ def _query(params):
     'Search and return data via the JSON API'
 
     objects = {}
+    encoder = Encoder()
 
     if 'model' in params:
         model = params['model']
 
         if model == 'urn' and 'urn' in params:
-            _process_urn_request(params['urn'], objects)
+            _process_urn_request(encoder, params['urn'], objects)
         elif model == 'corpus':
             if 'filters' in params:
 
@@ -40,10 +43,9 @@ def _query(params):
                     for corpus in corpora:
                         corpus.texts = [text for text in selected_texts if text.corpus.id == corpus.id]
                 elif text_ids:
-                    _add_selected_texts_to_corpora(corpora, text_ids)
-                else:  # Get all the texts for each corpus
-                    for corpus in corpora:
-                        corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
+                    _add_texts_to_corpora(corpora, text_ids)
+                else:
+                    _add_texts_to_corpora(corpora)
 
             else:  # There are no filters. Check for specific corpus.
                 if 'corpus' in params and 'slug' in params['corpus']:
@@ -51,24 +53,23 @@ def _query(params):
                 else:
                     corpora = Corpus.objects.all()
 
-                for corpus in corpora:
-                    corpus.texts = Text.objects.filter(corpus=corpus.id).prefetch_related().order_by('slug')
+                _add_texts_to_corpora(corpora)
 
             # fetch the results and add to the objects dict
-            objects['corpus'] = _json_from_queryset(corpora)
+            objects['corpus'] = _json_from_queryset(encoder, corpora)
 
         # Otherwise, if this is a query to the texts model
         elif model == 'texts':
             if 'corpus' in params and 'slug' in params['corpus'] and \
                'text'   in params and 'slug' in params['text']:
                 corpus = Corpus.objects.get(slug=params['corpus']['slug'])
-                text = Text.objects.filter(slug=params['text']['slug'], corpus=corpus.id).prefetch_related().first()
+                text = Text.objects.filter(slug=params['text']['slug'], corpus=corpus.id).prefetch_related(TEXT_PREFETCH_FIELDS).first()
             else:
                 objects['error'] = 'No Text Query specified--missing corpus slug or text slug'
                 return objects
 
             # fetch the results and add to the objects dict
-            objects['text'] = coptic_encoder(text)
+            objects['text'] = encoder.encode(text)
 
     # If ingest is in the params, re-ingest the specified text id
     elif 'ingest' in params:
@@ -82,8 +83,7 @@ def _query(params):
     return objects
 
 
-def _process_urn_request(urn, objects):
-
+def _process_urn_request(encoder, urn, objects):
     texts = texts_for_urn(urn)
     text_ids = [t.id for t in texts]
 
@@ -91,8 +91,8 @@ def _process_urn_request(urn, objects):
     corpus_ids = set([text.corpus.id for text in texts])
     corpora = Corpus.objects.filter(id__in=corpus_ids)
 
-    _add_selected_texts_to_corpora(corpora, text_ids)
-    objects['corpus'] = _json_from_queryset(corpora)
+    _add_texts_to_corpora(corpora, text_ids)
+    objects['corpus'] = _json_from_queryset(encoder, corpora)
 
 
 def texts_for_urn(urn):
@@ -100,14 +100,15 @@ def texts_for_urn(urn):
     matching_tm_ids = TextMeta.objects.filter(name='document_cts_urn', value__iregex='^' + urn + r'($|[\.:])'
                                               ).values_list('id', flat=True)
     texts = Text.objects.filter(text_meta__name='document_cts_urn',
-                                text_meta__id__in=matching_tm_ids).prefetch_related().order_by('slug')
+                                text_meta__id__in=matching_tm_ids).prefetch_related(TEXT_PREFETCH_FIELDS).order_by('slug')
     return texts
 
 
-def _add_selected_texts_to_corpora(corpora, text_ids):
+def _add_texts_to_corpora(corpora, text_ids=None):
+    all_texts = (Text.objects.filter(id__in=text_ids) if text_ids else Text.objects.all()).\
+        prefetch_related(TEXT_PREFETCH_FIELDS).select_related('corpus').order_by('slug')
     for corpus in corpora:
-        corpus.texts = Text.objects.filter(id__in=text_ids,
-                                           corpus=corpus.id).prefetch_related().order_by('slug')
+        corpus.texts = [t for t in all_texts if t.corpus.id == corpus.id]
 
 
 def _find_ids_by_field(filters):
@@ -127,7 +128,7 @@ def _find_ids_by_field(filters):
         else:
             sfv = SearchFieldValue.objects.filter(id=filter['id'])
             text_ids += list(sfv.values_list('texts__id', flat=True))
-            corpus_ids += [text.corpus.id for text in Text.objects.filter(id__in=text_ids)]
+            corpus_ids += [text.corpus_id for text in Text.objects.filter(id__in=text_ids)]
 
         if corpus_ids:
             corpus_ids_by_field[field_name] = corpus_ids
@@ -142,8 +143,8 @@ def _intersect(ids_dict):
     return functools.reduce(lambda a, b: a & b, ids_sets) if ids_sets else []
 
 
-def _json_from_queryset(queryset):
-    return [coptic_encoder(item) for item in queryset]
+def _json_from_queryset(encoder, queryset):
+    return [encoder.encode(item) for item in queryset]
 
 
 def _process_param_values(params, query_dict):

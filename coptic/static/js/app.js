@@ -192,18 +192,18 @@ angular.module('coptic')
                     $scope.corpora = [];
                     wipe_search_terms_and_filters();
                 }
-            } else if ($scope.path.length === 4) { // Single text (/text/:corpus_slug/:text_slug)
+            } else if ($scope.path.length === 4) { // Single text (/texts/:corpus_slug/:text_slug)
                 $(".text-format").hide();
                 $scope.selected_text_format = null;
-                if ($scope.corpora.length === 0) {
+                if ($scope.corpora.length) {
+                    $scope.show_single();
+                } else {
                     $scope.get_corpora({
                         model:   "corpus",
                         filters: $scope.filters
                     });
-                } else {
-                    $scope.show_single();
                 }
-            } else if ($scope.path.length === 5) { // Single text html version (/text/:corpus_slug/:text_slug/:html_version)
+            } else if ($scope.path.length === 5) { // Single text html version (/texts/:corpus_slug/:text_slug/:html_version)
                 if ($scope.selected_text) {
                     $scope.show_selected_visualization($scope.path[4]);
                 } else {
@@ -216,7 +216,6 @@ angular.module('coptic')
          * Gets corpora via the API, and processes them
          */
         $scope.get_corpora = function (query) {
-            $scope.selected_text = null;
             $(".text-subwork")      .removeClass("hidden");
             $(".text-work")         .removeClass("hidden");
             $(".work-title-wrap")   .removeClass("hidden");
