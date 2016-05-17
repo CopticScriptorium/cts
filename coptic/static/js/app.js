@@ -223,7 +223,7 @@ angular.module('coptic')
             $(".single-header")     .removeClass("single-header");
 
             $http.get("/api/", {params: query}).then(function (response) {
-                $scope.update_from_api_results(response.data);
+                $scope.update_from_api_results(response);
                 if ($scope.selected_text && $scope.path[4] !== $scope.selected_text_format) {
                     $scope.show_single();
                 }
@@ -233,20 +233,11 @@ angular.module('coptic')
         };
 
         /*
-         * Gets texts via the API, and processes them
-         */
-        $scope.get_texts = function (query) {
-            $http.get("/api/", {params: query}).then(function (response) {
-                $scope.update_from_api_results(response.data);
-            }, function (response) {
-                console.log('Error with API Query:', response);
-            });
-        };
-
-        /*
          * Updates scope with API query results
          */
-        $scope.update_from_api_results = function(res) {
+        $scope.update_from_api_results = function(response) {
+            var res = response.data;
+
             function change_dom() {
                 // Toggle the specific classes and visibility on elements
                 var $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
@@ -298,14 +289,18 @@ angular.module('coptic')
         };
 
         $scope.show_single = function () {
-            // Show a selected single text
             $(".text-format").hide();
             $scope.text_query = {
                 model:          "texts",
                 corpus_slug:    $scope.path[2],
                 text_slug:      $scope.path[3]
             };
-            $scope.get_texts($scope.text_query);
+
+            $http.get("/api/", {params: $scope.text_query}).then(
+                $scope.update_from_api_results,
+                function(response) {
+                    console.log('Error with API Query:', response);
+                });
         };
 
         $scope.toggle_tool_panel = function (e) {
