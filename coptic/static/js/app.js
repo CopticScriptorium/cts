@@ -308,16 +308,6 @@ angular.module('coptic')
             $scope.get_texts($scope.text_query);
         };
 
-        $scope.load_single_iframe = function (is_expired, corpus_annis_name, selected_text_name, visualization_slug) {
-            // Load an iframe src elem
-
-            if (is_expired) {
-                return "https://corpling.uis.georgetown.edu/annis/embeddedvis/htmldoc/" + corpus_annis_name + "/" + selected_text_name + "?config=" + visualization_slug;
-            } else {
-                return "";
-            }
-        };
-
         $scope.toggle_tool_panel = function (e) {
             // Toggle the search tool panels
             var $target = $(e.target)
@@ -431,10 +421,7 @@ angular.module('coptic')
 
                 $scope.selected_text = null;
                 $scope.get_corpora($scope.text_query);
-
-
             } else {
-
                 $scope.filters = $scope.filters.filter(function (obj) {
                     return obj.field !== "text_search"
                 });
@@ -450,9 +437,7 @@ angular.module('coptic')
 
                     $scope.selected_text = null;
                     $scope.get_corpora($scope.text_query);
-
                 }
-
             }
         };
 
@@ -484,7 +469,6 @@ angular.module('coptic')
                         $scope.text_search = filter_value[1];
                     }
                 }
-
             });
 
             $scope.text_query = {
@@ -494,7 +478,6 @@ angular.module('coptic')
 
             $scope.selected_text = null;
             $scope.get_corpora($scope.text_query);
-
         };
 
         $scope.remove_search_term = function (e) {
@@ -538,7 +521,6 @@ angular.module('coptic')
             } else {
                 $location.path("/");
                 $scope.corpora = [];
-
             }
         };
 
