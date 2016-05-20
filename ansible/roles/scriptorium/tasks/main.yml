@@ -1,7 +1,5 @@
 --- # roles/scriptorium/tasks/main.yml
 
-# steps derived from https://github.com/takac/dot-files-ansible/blob/master/googlechrome.yaml
-
 # As of 2015-07-04 - xvfb & firefox required by ingest process so that we can invoke
 # firefox to fetch visualizations from the server.
 - name: Install key packages
@@ -10,6 +8,7 @@
   with_items:
     - apache2
     - apache2-dev
+    - chromium-browser
     - git
     - mysql-server-5.6
     - python-mysqldb
@@ -73,6 +72,7 @@
   git: repo={{ git_repo_url }} dest=/var/www/cts force=no
   sudo: yes
   when: not debug_machine
+  ignore_errors: True
 
 - name: Update permissions to allow Apache to access the data
   file:
@@ -120,3 +120,5 @@
   args:
     chdir: /var/www/cts/coptic/
   sudo: yes
+  sudo_user: www-data
+
