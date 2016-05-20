@@ -1,8 +1,3 @@
-/*
- * Initialize the angular application 
- * 
- */
-
 angular.module('coptic', ['csFilters', 'ngSanitize', 'ngRoute', 'headroom']).config(function ($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist([
         'self',
@@ -11,7 +6,6 @@ angular.module('coptic', ['csFilters', 'ngSanitize', 'ngRoute', 'headroom']).con
 
 angular.module('csFilters', [])
 
-    // Capitalize filter
     .filter('capitalize', function () {
         return function (input, all) {
             return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
@@ -20,7 +14,6 @@ angular.module('csFilters', [])
         }
     })
 
-    // Turn input string into slug
     .filter('slugify', function () {
         return function (input, all) {
             return (!!input) ? input
@@ -31,15 +24,11 @@ angular.module('csFilters', [])
         }
     })
 
-
     // Trust HTML for ng-bind
     .filter('unsafe', function ($sce) {
         return $sce.trustAsHtml;
     });
 
-/*
- * Routes for client-side angular application
- */
 angular.module("coptic")
     .config(function ($routeProvider, $locationProvider) {
         $locationProvider.html5Mode({
@@ -154,7 +143,7 @@ angular.module('coptic')
         );
 
         /*
-         *  Update: manages primary lifecycle for the angular application
+         *  Update: manages primary lifecycle
          */
         $scope.update = function () {
             console.log('Update function, location path: ' + location.pathname);
@@ -170,7 +159,12 @@ angular.module('coptic')
                 $scope.corpora = [];
                 wipe_search_terms_and_filters();
             } else if (location.pathname.substr(0, 5) === "/urn:") {
-                $http.get("/api/", {params: {model: 'urn', urn_value: location.pathname.substr(1)}}).then(function (response) {
+                $http.get("/api/", {
+                    params: {
+                        model:      'urn',
+                        urn_value:  location.pathname.substr(1)
+                    }
+                }).then(function (response) {
                     $scope.selected_text = null;
                     $scope.selected_text_format = null;
                     $scope.corpora = response.data.corpus;
@@ -212,9 +206,6 @@ angular.module('coptic')
             }
         };
 
-        /*
-         * Gets corpora via the API, and processes them
-         */
         $scope.get_corpora = function (query) {
             $(".text-subwork")      .removeClass("hidden");
             $(".text-work")         .removeClass("hidden");
@@ -231,9 +222,6 @@ angular.module('coptic')
             });
         };
 
-        /*
-         * Updates scope with API query results
-         */
         $scope.update_from_api_results = function(response) {
             var res = response.data;
 
@@ -327,7 +315,6 @@ angular.module('coptic')
         };
 
         $scope.toggle_search_term = function (e) {
-            // Add or remove a search term from the query
             var $target = $(e.target)
                 , search_obj = {}
                 , filters_url = []
@@ -376,7 +363,6 @@ angular.module('coptic')
         };
 
         $scope.add_text_search = function () {
-            // Add a textsearch to the filters
             var has_text_search = false
                 , filters_url = []
                 , filters_length = $scope.filters.length
