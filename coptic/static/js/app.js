@@ -354,65 +354,6 @@ angular.module('coptic')
             $scope.selected_text = null;
         };
 
-        $scope.add_text_search = function () {
-            var has_text_search = false
-                , filters_url = []
-                , filters_length = $scope.filters.length
-                ;
-
-            if ($scope.text_search.length > 0) {
-
-                $scope.filters.forEach(function (filter) {
-                    if (filter.field === "text_search") {
-                        has_text_search = true;
-                        filter.filter = $scope.text_search;
-                    }
-                });
-
-                if (!has_text_search) {
-                    $scope.filters.push({
-                        id: 0,
-                        field: "text_search",
-                        filter: $scope.text_search
-                    });
-                }
-
-                $scope.filters.forEach(function (f) {
-                    filters_url.push(f.field + "=" + f.id + ":" + f.filter);
-                });
-                filters_url = filters_url.join("&");
-
-                if ($scope.filters.length > 0) {
-                    $location.path("/filter/" + filters_url);
-                }
-
-                $scope.text_query = {
-                    model: "corpus",
-                    filters: $scope.filters
-                };
-
-                $scope.selected_text = null;
-                $scope.get_corpora($scope.text_query);
-            } else {
-                $scope.filters = $scope.filters.filter(function (obj) {
-                    return obj.field !== "text_search"
-                });
-
-                if ($scope.filters.length < filters_length) {
-                    $location.path("/");
-
-                    // Update the text_query
-                    $scope.text_query = {
-                        model: "corpus",
-                        filters: $scope.filters
-                    };
-
-                    $scope.selected_text = null;
-                    $scope.get_corpora($scope.text_query);
-                }
-            }
-        };
-
         $scope.load_filters = function () {
             // load the filters from the URL to the object
             var filter_url = $scope.path[2].split("&");
