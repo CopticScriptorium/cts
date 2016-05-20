@@ -35,7 +35,7 @@ def do_config():
     from ingest.models import Ingest
 
     new_ingest = Ingest.objects.create()
-    new_ingest.save()
+    # new_ingest.save()
 
     ingest.fetch_texts(new_ingest.id)
 

@@ -156,7 +156,7 @@ class SearchFieldValue(models.Model):
 	"""
 	Value for Search Field ingested from Metadata from ANNIS
 	"""
-	title = models.CharField(max_length=200)
+	title = models.CharField(max_length=500)
 	search_field = models.ForeignKey(SearchField, blank=True, null=True)
 	texts = models.ManyToManyField(Text, blank=True)
 
