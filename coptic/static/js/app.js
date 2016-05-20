@@ -114,39 +114,11 @@ angular.module('coptic')
         // The URN entered in the header URN input field
         $scope.entered_urn = "";
 
-        // The free text search from the search tools text search input field
-        $scope.text_search = "";
-
         /*
          * Run update after each location change for controller lifecycle logic
          */
         $scope.$on('$locationChangeSuccess', function (e) {
-            $scope.update();
-        });
-
-        /*
-         *  Watch the selected text to determine when Selected Text templating completes
-         */
-        $scope.$watch(
-            function () {
-                return document.getElementById("selected_text").innerHTML
-            },
-            function (val) {
-                if ($(".text-format").length > 0) {
-                    if ($scope.path.length >= 4) {
-                        if ($scope.path[4] !== $scope.selected_text_format) {
-                            $scope.show_selected_visualization($scope.path[4]);
-                        }
-                    }
-                }
-            }
-        );
-
-        /*
-         *  Update: manages primary lifecycle
-         */
-        $scope.update = function () {
-            console.log('Update function, location path: ' + location.pathname);
+            console.log('$locationChangeSuccess, location path: ' + location.pathname);
             $scope.path = location.pathname.split("/");
 
             function wipe_search_terms_and_filters() {
@@ -204,7 +176,7 @@ angular.module('coptic')
                     $scope.show_single();
                 }
             }
-        };
+        });
 
         $scope.get_corpora = function (query) {
             $(".text-subwork")      .removeClass("hidden");
@@ -376,11 +348,6 @@ angular.module('coptic')
                         field: filter[0]
                     });
                     $(".tool-search-item[data-searchid='" + filter_value[0] + "']").addClass("selected");
-
-                    if (filter[0] === "text_search") {
-                        $(".text-search-input").val(filter_value[1]);
-                        $scope.text_search = filter_value[1];
-                    }
                 }
             });
 
@@ -396,7 +363,6 @@ angular.module('coptic')
         $scope.remove_search_term = function (e) {
             var $target = $(e.target)
                 , filter
-                , field
                 , filters_url = []
                 ;
 
@@ -405,22 +371,11 @@ angular.module('coptic')
             }
 
             filter = $target.data().filter;
-            field = $target.data().field;
 
             $(".tool-search-item[data-filter='" + filter + "']").removeClass("selected");
             $scope.filters = $scope.filters.filter(function (obj) {
                 return obj.filter !== filter;
             });
-
-            if (field === "text_search") {
-                $(".text-search-input").val('');
-                $scope.text_search = "";
-            }
-
-            $scope.text_query = {
-                model: "corpus",
-                filters: $scope.filters
-            };
 
             $scope.filters.forEach(function (f) {
                 filters_url.push(f.field + "=" + f.id + ":" + f.filter);
