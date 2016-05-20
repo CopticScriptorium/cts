@@ -213,7 +213,7 @@ angular.module('coptic')
             $(".single-header")     .removeClass("single-header");
 
             $http.get("/api/", {params: query}).then(function (response) {
-                $scope.update_from_api_results(response);
+                $scope.handle_corpora_results(response.data.corpus);
                 if ($scope.selected_text && $scope.path[4] !== $scope.selected_text_format) {
                     $scope.show_single();
                 }
@@ -222,57 +222,47 @@ angular.module('coptic')
             });
         };
 
-        $scope.update_from_api_results = function(response) {
-            var res = response.data;
+        $scope.change_dom = function() {
+            // Toggle the specific classes and visibility on elements
+            var $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
+                $scope.text_query.corpus_slug + "']");
+            $(".text-subwork")              .addClass("hidden");
+            $(".text-work")                 .addClass("hidden");
+            $(".work-title-wrap")           .addClass("hidden");
+            $target.parents(".text-work")   .removeClass("hidden");
+            $target.removeClass("hidden")   .addClass("single-header");
+        };
 
-            function change_dom() {
-                // Toggle the specific classes and visibility on elements
-                var $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
-                    $scope.text_query.corpus_slug + "']");
-                $(".text-subwork")              .addClass("hidden");
-                $(".text-work")                 .addClass("hidden");
-                $(".work-title-wrap")           .addClass("hidden");
-                $target.parents(".text-work")   .removeClass("hidden");
-                $target.removeClass("hidden")   .addClass("single-header");
+        $scope.handle_corpora_results = function(corpora) {
+            $scope.corpora = corpora;
+
+            if ($scope.selected_text) {
+                $scope.change_dom();
             }
+        };
 
-            function handle_corpora(corpora) {
-                $scope.corpora = corpora;
+        $scope.handle_text_results = function(text) {
 
-                if ($scope.selected_text) {
-                    change_dom();
+            function add_properties_from_metadata(textmeta) {
+                var urn_parts;
+                var urn_dot_parts;
+                if (textmeta.name === "document_cts_urn") {
+                    urn_parts       = textmeta.value.split(":");
+                    urn_dot_parts   = urn_parts[3].split(".");
+
+                    text.urn_cts_work   = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
+                    text.edition_urn    = textmeta.value;
+                    text.textgroup_urn  = urn_dot_parts[0];
+                    text.corpus_urn     = urn_dot_parts[1];
+                    text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
                 }
             }
 
-            function handle_text(text) {
-
-                function add_properties_from_metadata(textmeta) {
-                    var urn_parts;
-                    var urn_dot_parts;
-                    if (textmeta.name === "document_cts_urn") {
-                        urn_parts       = textmeta.value.split(":");
-                        urn_dot_parts   = urn_parts[3].split(".");
-
-                        text.urn_cts_work   = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
-                        text.edition_urn    = textmeta.value;
-                        text.textgroup_urn  = urn_dot_parts[0];
-                        text.corpus_urn     = urn_dot_parts[1];
-                        text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
-                    }
-                }
-
-                $scope.selected_text = text;
-                $scope.filters = [];
-                text.text_meta.forEach(add_properties_from_metadata);
-                change_dom();
-                $('html,body').scrollTop(0);
-            }
-
-            if ('corpus' in res) {
-                handle_corpora(res.corpus);
-            } else if ('text' in res) {
-                handle_text(res.text);
-            }
+            $scope.selected_text = text;
+            $scope.filters = [];
+            text.text_meta.forEach(add_properties_from_metadata);
+            $scope.change_dom();
+            $('html,body').scrollTop(0);
         };
 
         $scope.show_single = function () {
@@ -284,7 +274,9 @@ angular.module('coptic')
             };
 
             $http.get("/api/", {params: $scope.text_query}).then(
-                $scope.update_from_api_results,
+                function(response) {
+                    $scope.handle_text_results(response.data.text)
+                },
                 function(response) {
                     console.log('Error with API Query:', response);
                 });
