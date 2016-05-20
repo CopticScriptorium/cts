@@ -429,8 +429,6 @@ angular.module('coptic')
 
             if ($scope.filters.length > 0) {
                 $location.path("/filter/" + filters_url);
-                $scope.get_corpora($scope.text_query);
-
             } else {
                 $location.path("/");
                 $scope.corpora = [];
