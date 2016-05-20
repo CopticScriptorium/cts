@@ -1664,6 +1664,11 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
   font-weight: bold;
 }
 
+/* Hand written. Where is scss source? Like .citation-help a */
+.meta-value a {
+  text-decoration: underline;
+}
+
 /* line 157, ../../scss/_single.scss */
 .v-panel {
   position: relative !important;
@@ -2139,7 +2144,6 @@ a.text-item:focus {
 /* line 22, ../../scss/_text.scss */
 div.htmlvis span {
   font-family: antinoouRegular, sans-serif;
-  width: 500px;
   white-space: normal !important;
 }
 
@@ -2154,7 +2158,6 @@ div.htmlvis span {
 /* line 28, ../../scss/_text.scss */
 .normalized div.htmlvis span {
   font-family: antinoouRegular, sans-serif;
-  width: 500px;
   white-space: normal !important;
 }
 /* line 33, ../../scss/_text.scss */
@@ -2455,7 +2458,6 @@ div.htmlvis span {
 /* line 117, ../../scss/_text.scss */
 .analytic div.htmlvis {
   font-family: antinoouRegular, sans-serif;
-  width: 500px;
   white-space: normal !important;
 }
 /* line 121, ../../scss/_text.scss */

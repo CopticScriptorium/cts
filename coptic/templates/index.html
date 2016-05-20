@@ -1,185 +1,259 @@
 {% extends "base.html" %}
 
 {% block content %}
-	{% verbatim %}
-	<div class="content primary" >
+    {% verbatim %}
+    <div class="content primary">
 
-		<div class="grid inner">
+        <div class="grid inner">
 
-			<section class="project-description entry-text" ng-hide="texts.length || is_single">
+            <section class="project-description entry-text" ng-hide="texts.length || is_single">
 
-				<h1 class="title">Coptic Scriptorium URN Resolver -- BETA version</h1>
+                <h1 class="title">Coptic Scriptorium URN Resolver -- BETA version</h1>
 
-				<p class="description-text">
-					Coptic SCRIPTORIUM provides Coptic texts for reading, analysis, and complex searches.  The texts are citable and accessible through stable <a href="http://en.wikipedia.org/wiki/Uniform_resource_name">URNs</a>, such as urn:cts:copticLit:shenoute.fox for Shenoute's work <i>Not Because a Fox Barks</i>.  This application will provide the most recent version of our documents in the formats currently available for each text.				</p>
-				<p class="description-text">If you wish to read Coptic texts, you can view individual documents online (in HTML). We provide HTML visualizations of texts in diplomatic transcriptions (when manuscript information is available) and normalized Coptic text with an English translation (when that translation is available). We also provide an analytical visualization of each text with the Coptic, English (when available), and part of speech information for the Coptic. <a href="download/tools/scriptorium_tagset_documentation.pdf" target="_blank" title="part of speech tagset">Documentation on our part of speech tagging</a> explains the part of speech abbreviations and our methodology.</p>
-				<p class="description-text">Documentation beneath the text provides information about it, including the version and date of publication online.</p>
-				<p class="description-text"><strong>If you know the URN for the material you seek, please enter it in the box above.</strong></p>
-                <p class="description-text"><strong>You may also find documents by using the filters on the menu above.</strong></p>
-                <p class="description-text">To search and query our texts, you may go directly to our <a href="https://corpling.uis.georgetown.edu/annis/scriptorium" target="_blank">search and visualization tool ANNIS</a>. If you use the filters or URN resolver in this webapplication, you will also see an <a href="http://www.sfb632.uni-potsdam.de/annis/" title="ANNIS">ANNIS</a> button underneath any corpus name; click on it to be taken directly to our search and visualization tool.  <strong>We have provided some <a href="http://www.copticscriptorium.org/ANNIS-tips.html" title="example queries" target="new">example queries for ANNIS to get you started</a>.  Amir Zeldes also led a <a href="https://www.youtube.com/watch?v=gGZWbPzcJPA" title="March 2015 ANNIS tutorial" target="_blank">tutorial at our March 2015 workshop</a>, and a brief <a href="https://www.youtube.com/watch?v=JZW6oWHbwQU" title="Fall 2014 tutorial" target="_blank">video tutorial explaining the texts, data model, and basic queries</a> exists from Fall 2014.  </strong></p>
-				<p class="description-text">
-					Corpora are available for download on <a href="https://github.com/CopticScriptorium/corpora/releases/latest" target="_blank">GitHub</a> in <a href="http://www.tei-c.org/">TEI XML</a>, <a href="http://www.sfb632.uni-potsdam.de/en/paula-en.html">PAULA XML</a>, and relANNIS for use with the <a href="http://www.sfb632.uni-potsdam.de/annis/">ANNIS</a> corpus search software.  
-				This web application provides the most recent version of the data. Previous versions are available on GitHub.</p>
-				<p class="description-text"><strong>Please note: our corpus of documentary papyri from papyri.info is not currently available through this service.</strong> You can <a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c=ZG9jLnBhcHlyaQ" target="_blank">search and visualize the papyri through ANNIS</a>.   The papyri will be added to this service in future versions.</p>
-			</section><!-- .project-description -->
+                <p class="description-text">
+                    Coptic SCRIPTORIUM provides Coptic texts for reading, analysis, and complex searches. The texts are
+                    citable and accessible through stable <a href="http://en.wikipedia.org/wiki/Uniform_resource_name">URNs</a>,
+                    such as urn:cts:copticLit:shenoute.fox for Shenoute's work <i>Not Because a Fox Barks</i>. This
+                    application will provide the most recent version of our documents in the formats currently available
+                    for each text. </p>
 
-			<section class="text-list list" ng-hide="!texts.length && !is_single">
+                <p class="description-text">If you wish to read Coptic texts, you can view individual documents online
+                    (in HTML). We provide HTML visualizations of texts in diplomatic transcriptions (when manuscript
+                    information is available) and normalized Coptic text with an English translation (when that
+                    translation is available). We also provide an analytical visualization of each text with the Coptic,
+                    English (when available), and part of speech information for the Coptic. <a
+                            href="download/tools/scriptorium_tagset_documentation.pdf" target="_blank"
+                            title="part of speech tagset">Documentation on our part of speech tagging</a> explains the
+                    part of speech abbreviations and our methodology.</p>
 
-				<div class="text-author" ng-repeat="corpus in texts">
+                <p class="description-text">Documentation beneath the text provides information about it, including the
+                    version and date of publication online.</p>
 
-					<div class="text-work" >
+                <p class="description-text"><strong>If you know the URN for the material you seek, please enter it in
+                    the box above.</strong></p>
 
-						<div class="work-title-wrap">
-							<h2 class="work-title title">{{corpus.title}}</h2>
-							<h4 class="work-title-urn urn" ng-hide="corpus.urn_code == 'nt'">urn:cts:{{corpus.urn_code}}</h4>
+                <p class="description-text"><strong>You may also find documents by using the filters on the menu
+                    above.</strong></p>
 
-							<div class="work-meta-wrap page-tabs">
-								<a href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c={{corpus.annis_code}}" class="text-item annis" target="_blank">
-									<span class="urn">Search ANNIS</span>
-									<span class="fa fa-external-link"></span>
-								</a>
-							</div><!-- .work-meta-wrap -->
+                <p class="description-text">To search and query our texts, you may go directly to our <a
+                        href="https://corpling.uis.georgetown.edu/annis/scriptorium" target="_blank">search and
+                    visualization tool ANNIS</a>. If you use the filters or URN resolver in this webapplication, you
+                    will also see an <a href="http://www.sfb632.uni-potsdam.de/annis/" title="ANNIS">ANNIS</a> button
+                    underneath any corpus name; click on it to be taken directly to our search and visualization tool.
+                    <strong>We have provided some <a href="http://www.copticscriptorium.org/ANNIS-tips.html"
+                                                     title="example queries" target="new">example queries for ANNIS to
+                        get you started</a>. Amir Zeldes also led a <a
+                            href="https://www.youtube.com/watch?v=gGZWbPzcJPA" title="March 2015 ANNIS tutorial"
+                            target="_blank">tutorial at our March 2015 workshop</a>, and a brief <a
+                            href="https://www.youtube.com/watch?v=JZW6oWHbwQU" title="Fall 2014 tutorial"
+                            target="_blank">video tutorial explaining the texts, data model, and basic queries</a>
+                        exists from Fall 2014. </strong></p>
 
-						</div><!-- .work-title-wrap -->
+                <p class="description-text">
+                    Corpora are available for download on <a
+                        href="https://github.com/CopticScriptorium/corpora/releases/latest" target="_blank">GitHub</a>
+                    in <a href="http://www.tei-c.org/">TEI XML</a>, <a
+                        href="http://www.sfb632.uni-potsdam.de/en/paula-en.html">PAULA XML</a>, and relANNIS for use
+                    with the <a href="http://www.sfb632.uni-potsdam.de/annis/">ANNIS</a> corpus search software.
+                    This web application provides the most recent version of the data. Previous versions are available
+                    on GitHub.</p>
 
-						
-						<div class="text-subwork" ng-repeat="text in corpus.texts" ng-class-even="'even'" data-text-slug="{{text.slug}}" data-corpus-slug="{{corpus.slug}}">
+                <p class="description-text"><strong>Please note: our corpus of documentary papyri from papyri.info is
+                    not currently available through this service.</strong> You can <a
+                        href="https://corpling.uis.georgetown.edu/annis/scriptorium#_c=ZG9jLnBhcHlyaQ" target="_blank">search
+                    and visualize the papyri through ANNIS</a>. The papyri will be added to this service in future
+                    versions.</p>
+            </section>
 
+            <section class="text-list list" ng-hide="!texts.length && !is_single">
 
-								<a href="/texts/{{corpus.slug}}/{{text.slug}}" class="item-title-wrap">
-									<span class="text-item item-title">{{text.title}}</span>
-								</a>
+                <div class="text-author" ng-repeat="corpus in texts">
 
-								<div class="html-wrap version-wrap page-tabs">
+                    <div class="text-work">
+
+                        <div class="work-title-wrap">
+                            <h2 class="work-title title">{{corpus.title}}</h2>
+                            <h4 class="work-title-urn urn" ng-hide="corpus.urn_code == 'nt'">
+                                urn:cts:{{corpus.urn_code}}</h4>
+
+                            <div class="work-meta-wrap page-tabs">
+                                <a href="{{corpus.annis_link}}" class="text-item annis" target="_blank">
+                                    <span class="urn">Search ANNIS</span>
+                                    <span class="fa fa-external-link"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="text-subwork" ng-repeat="text in corpus.texts" ng-class-even="'even'"
+                             data-text-slug="{{text.slug}}" data-corpus-slug="{{corpus.slug}}">
+
+                            <a href="/texts/{{corpus.slug}}/{{text.slug}}" class="item-title-wrap">
+                                <span class="text-item item-title">{{text.title}}</span>
+                            </a>
+
+                            <div class="html-wrap version-wrap page-tabs">
 									<span class="version-label">
 										Read:
 									</span>
-									<a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}" ng-repeat="format in corpus.html_visualization_formats" data-type="{{format.slug}}">
-										<span class="urn">{{format.button_title}}</span>
-									</a>
-								</div>
+                                <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}"
+                                   class="text-item {{format.slug}}"
+                                   ng-repeat="format in corpus.html_visualization_formats" data-type="{{format.slug}}">
+                                    <span class="urn">{{format.button_title}}</span>
+                                </a>
+                            </div>
 
-								<div class="other-versions-wrap version-wrap page-tabs">
+                            <div class="other-versions-wrap version-wrap page-tabs">
 									<span class="version-label">
 										Downloads:
 									</span>
 
+                                <a href="{{corpus.github}}" class="text-item tei" target="_blank">
+                                    <span class="urn">TEI</span>
+                                    <span class="fa fa-external-link"></span>
+                                </a>
 
-									<a href="{{corpus.github}}" class="text-item tei" target="_blank">
-										<span class="urn">TEI</span>
-										<span class="fa fa-external-link"></span>
-									</a>
+                                <a href="{{corpus.github}}" class="text-item annis" target="_blank">
+                                    <span class="urn">relANNIS</span>
+                                    <span class="fa fa-external-link"></span>
+                                </a>
 
-									<a href="{{corpus.github}}" class="text-item annis" target="_blank">
-										<span class="urn">relANNIS</span>
-										<span class="fa fa-external-link"></span>
-									</a>
+                                <a href="{{corpus.github}}" class="text-item paula" target="_blank">
+                                    <span class="urn">PAULA</span>
+                                    <span class="fa fa-external-link"></span>
+                                </a>
 
-									<a href="{{corpus.github}}" class="text-item paula" target="_blank">
-										<span class="urn">PAULA</span>
-										<span class="fa fa-external-link"></span>
-									</a>
+                            </div>
 
-								</div>
+                            <a href="/" class="close-selected-text">
+                                <span class="fa fa-times"></span>
+                            </a>
 
-								<a href="/" class="close-selected-text">
-									<span class="fa fa-times"></span>
-								</a> 
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-						</div><!-- .text-subwork -->
+            <section id="selected_text" class="selected-text-wrap page-content" ng-hide="!is_single">
 
-					</div><!-- .text-work -->
+                <div class="text-format" ng-repeat="visualization in selected_text.html_visualizations"
+                     id="{{visualization.slug}}">
+                    <h3 class="subtitle">{{visualization.title}}</h3>
 
-				</div><!-- .text-author -->
+                    <div class="coptic-text html" ng-bind-html="visualization.html | unsafe"
+                         ng-hide="selected_text.is_expired">
+                    </div>
 
-			</section><!-- .text-list -->
+                    <!-- <iframe> solution, if CS wanted to load textual content directly from ANNIS  -->
+                    <div class="coptic-text html" ng-show="selected_text.is_expired">
+                        <iframe width="900" height="900"
+                                ng-src="{{load_single_iframe( selected_text.is_expired, selected_text.corpus.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
+                    </div>
+                </div>
 
-			<section id="selected_text" class="selected-text-wrap page-content" ng-hide="!is_single">
+                <div id="information" class="meta-information">
+                    <h3 class="subtitle">ANNIS Metadata</h3>
 
-				<div class="text-format" ng-repeat="visualization in selected_text.html_visualizations" id="{{visualization.slug}}" >
-					<h3  class="subtitle">{{visualization.title}}</h3>
-					<div  class="coptic-text html" ng-bind-html="visualization.html | unsafe" ng-hide="selected_text.is_expired">
-					</div>
-
-					<!-- <iframe> solution, if CS wanted to load textual content directly from ANNIS  -->
-					<div class="coptic-text html" ng-show="selected_text.is_expired">
-						<iframe width="900" height="900" ng-src="{{load_single_iframe( selected_text.is_expired, selected_text.corpus.annis_corpus_name, selected_text.title, visualization.slug)}}"></iframe>
-
-					</div>
-
-				</div>
-
-				<div id="information" class="meta-information">
-					<h3  class="subtitle">ANNIS Metadata</h3>
-					<div class="meta-item" ng-repeat="meta_item in selected_text.text_meta">
+                    <div class="meta-item" ng-repeat="meta_item in selected_text.text_meta">
 						<span class="meta-label">
 							{{meta_item.name}}:
 						</span>
-						<span class="meta-value">
-							&nbsp;{{meta_item.value}}
-						</span>
-					</div>
-				</div>
+						<span class="meta-value" ng-bind-html="meta_item.value"></span>
+                    </div>
+                </div>
 
 
-				<div class="citation-help">
-					<h3 class="subtitle">Cite this Document</h3>
-					<p>
-						In order to cite this document, please include the relevant URN(s) from the following list. These URNs resolve to the latest edition of our data. Citations by scholars should include the date the data was accessed and/or version numbers and dates for the documents.  We encourage researchers to save visualizations they use, download query results from ANNIS, and save  information from document metadata.  
-					</p>
-					<p>
-						<span class="label">Edition:</span>
-						<a href="/{{selected_text.edition_urn}}" target="_blank">{{selected_text.edition_urn}}</a>
+                <div class="citation-help">
+                    <h3 class="subtitle">Cite this Document</h3>
 
-					</p>
-                    					<p>
-						<span class="label">Text Corpus:</span>
-						<a href="/urn:cts:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}" target="_blank">urn:cts:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}</a>
-					</p>
-					<p>
-						<span class="label">Author Textgroup:</span>
-						<a href="/urn:cts:{{selected_text.textgroup_urn}}" target="_blank">urn:cts:{{selected_text.textgroup_urn}}</a>
-					</p>
+                    <p>
+                        When citing a corpus or document from Coptic SCRIPTORIUM, please include the relevant URN(s)
+                        (provided below) in all citations. On this site, these URNs will resolve to the latest edition
+                        of our data. We also encourage researchers to save visualizations they use, download query
+                        results from ANNIS, and save information from document metadata.
+                    </p>
 
-					<p>The following links will direct you to the latest versions of data visualizations  the document.</p>
-					<p ng-repeat="visualization in selected_text.html_visualizations">
-						<span class="label">{{visualization.title}} HTML:</span>
-						<a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html" target="_blank" >http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html</a>
+                    <p>
+                        Use the following model to cite this document. Our full <a
+                            href="www.copticscriptorium.org/citation-guidelines" target="new">citation guidelines</a>
+                        page provides more models.
+                    </p>
 
-					</p>
-					<p>The following  links will direct you to the latest versions of the data for download.
-					</p>
-					<p><span class="label">TEI XML:</span>
-					  <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/tei/xml" target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/tei/xml</a>
-				  </p>
-					<p>
-						<span class="label">Paula XML:</span>
-						<a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/paula/xml" target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/paula/xml</a>
-					</p>
-					<p>
-						<span class="label">reIANNIS:</span>
-						<a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/relannis" target="_blank" >http://data.copticscriptorium.org/{{selected_text.edition_urn}}/relannis</a>
-					</p>
-					<p>
-					The	following link will direct you to the latest version of the corpus available for search and querying in ANNIS:</p>
-					<p><span class="label">ANNIS UI:</span>
-					  <a href="http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis" target="_blank" >http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis</a>
-				  </p>
-				
-				</div><!-- .citation-help -->
+                    <p><span class="label">First citation:</span></p>
 
-			</section><!-- .selected-text-wrap.page-content -->
+                    <p>Author, <em>Ancient title</em> [chapter.verse if available], ed. [annotators], trans.
+                        [translation]. {{selected_text.edition_urn}}. [version number], [date].
+                        http://data.copticscriptorium.org/{{selected_text.edition_urn}}.</p>
 
-		</div><!-- .grid.inner -->
+                    <p></p>
 
-	</div><!-- .content.primary -->
+                    <p><span class="label">Subsequent citations:</span</p>
 
-	<div id="loading_modal" class="coptic-modal">
-		<div class="loading-modal-inner">
+                    <p>Author, <em>Ancient title (abbreviated)</em> [chapter.verse if available],
+                        {{selected_text.edition_urn}}.</p>
+
+                    <p>
+                        <span class="label">Document Edition:</span>
+                        <a href="/{{selected_text.edition_urn}}" target="_blank">{{selected_text.edition_urn}}</a>
+                    </p>
+
+                    <p>
+                        <span class="label">Text Corpus:</span>
+                        <a href="/{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}" target="_blank">{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}</a>
+                    </p>
+
+                    <p>
+                        <span class="label">Author Textgroup:</span>
+                        <a href="/{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}" target="_blank">{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}</a>
+                    </p>
+
+                    <p>The following links will direct you to the latest versions of data visualizations of the
+                        document.</p>
+
+                    <p ng-repeat="visualization in selected_text.html_visualizations">
+                        <span class="label">{{visualization.title}} HTML:</span>
+                        <a href="/{{selected_text.edition_urn}}/{{visualization.slug}}/html"
+                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html</a>
+                    </p>
+
+                    <p>The following links will direct you to the latest versions of the data for download.
+                    </p>
+
+                    <p><span class="label">TEI XML:</span>
+                        <a href="/{{selected_text.edition_urn}}/tei/xml"
+                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/tei/xml</a>
+                    </p>
+
+                    <p>
+                        <span class="label">Paula XML:</span>
+                        <a href="/{{selected_text.edition_urn}}/paula/xml"
+                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/paula/xml</a>
+                    </p>
+
+                    <p>
+                        <span class="label">reIANNIS:</span>
+                        <a href="/{{selected_text.edition_urn}}/relannis"
+                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/relannis</a>
+                    </p>
+
+                    <p>
+                        The following link will direct you to the latest version of the corpus available for search and
+                        querying in ANNIS:</p>
+
+                    <p><span class="label">ANNIS UI:</span>
+                        <a href="/{{selected_text.edition_urn}}/annis" target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis</a>
+                    </p>
+
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="loading_modal" class="coptic-modal">
+        <div class="loading-modal-inner">
 			<span class="fa fa-spinner fa-spin">
 			</span>
-		</div>
-	</div><!-- #loading_modal.coptic-modal -->
+        </div>
+    </div>
 
-	{% endverbatim %}
+    {% endverbatim %}
 {% endblock %}

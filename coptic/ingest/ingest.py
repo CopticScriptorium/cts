@@ -65,10 +65,6 @@ def fetch_texts( ingest_id ):
 			for title, in get_selected_annotation_fields(annis_server.url_corpus_docname(corpus_name), ('name',)):
 				slug = slugify(title).__str__()
 
-				# Add exception for besa.letters corpus in ANNIS
-				if corpus_name == "besa.letters" and title != corpus.slug:
-					continue
-
 				logger.info('Importing ' + title)
 
 				Text.objects.filter(title=title).delete()

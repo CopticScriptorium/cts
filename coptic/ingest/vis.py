@@ -1,7 +1,7 @@
 import re
 import logging
 from time import sleep
-from selenium import webdriver
+import resource
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -35,7 +35,7 @@ def collect(corpus, text, annis_server, driver):
 			if retries_left == 0:
 				raise VisServerRefusingConn()
 
-			WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "htmlvis")))
+			WebDriverWait(driver, 60 * 2).until(EC.presence_of_element_located((By.CLASS_NAME, "htmlvis")))
 			driver.delete_all_cookies()
 
 			body = driver.find_element_by_xpath("/html/body")
@@ -68,6 +68,9 @@ def collect(corpus, text, annis_server, driver):
 		vis.save()
 
 		text.html_visualizations.add(vis)
+
+		self_max_mem, child_max_mem = [resource.getrusage(who).ru_maxrss for who in (resource.RUSAGE_SELF, resource.RUSAGE_CHILDREN)]
+		logger.info('Max mem, self: {:,}, children: {:,}'.format(self_max_mem, child_max_mem))
 
 class VisServerRefusingConn(Exception):
 	pass

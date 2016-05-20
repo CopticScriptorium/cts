@@ -1,4 +1,6 @@
 import datetime
+import re
+from base64 import b64encode
 from django.db import models
 
 
@@ -39,7 +41,7 @@ class CorpusMeta(models.Model):
 	"""
 
 	name = models.CharField(max_length=200)
-	value = models.CharField(max_length=200)
+	value = models.CharField(max_length=500)
 	pre = models.CharField(max_length=200)
 	corpus_name = models.CharField(max_length=200)
 
@@ -78,6 +80,12 @@ class Corpus(models.Model):
 		self.modified = datetime.datetime.today()
 		return super(Corpus, self).save(*args, **kwargs)
 
+	def _annis_corpus_name_b64encoded(self):
+		return b64encode(str.encode(self.annis_corpus_name)).decode()
+
+	def annis_link(self):
+		return "https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" + self._annis_corpus_name_b64encoded()
+
 
 class TextMeta(models.Model):
 	"""
@@ -85,7 +93,7 @@ class TextMeta(models.Model):
 	"""
 
 	name = models.CharField(max_length=200)
-	value = models.CharField(max_length=200)
+	value = models.CharField(max_length=500)
 	pre = models.CharField(max_length=200)
 	corpus_name = models.CharField(max_length=200)
 
@@ -93,7 +101,11 @@ class TextMeta(models.Model):
 		verbose_name = "Text Meta Item"
 
 	def __str__(self):
-		return self.name + ": " + self.value 
+		return self.name + ": " + self.value
+
+	def value_with_urls_wrapped(self):
+		v = self.value
+		return ('<a href="%s">%s</a>' % (v, v)) if re.match(r'https?://', v) else v
 
 
 class Text(models.Model):
