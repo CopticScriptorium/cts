@@ -30,7 +30,7 @@ def do_config():
 
     # pre-load the critical search fields.
     helper.load_searchfields()
-    
+
     from ingest import ingest
     from ingest.models import Ingest
 

@@ -107,7 +107,14 @@ def load_known_corpora():
     besa_nuns.urn_code = "besa.thieving"
     besa_nuns.github = "https://github.com/CopticScriptorium/corpora/tree/master/besa-letters"
 
-    known_corpora = [shenoute_a22, patrum, saof, besa_ap, fox, mark, corinth, snt, eager, besa_nuns]
+    doc_pap = Corpus()
+    doc_pap.annis_corpus_name = "doc.papyri"
+    doc_pap.title = "Documentary Papyri"
+    doc_pap.slug = "papyri"
+    doc_pap.urn_code = "copticDoc:papyri_info"
+    doc_pap.github = "https://github.com/CopticScriptorium/corpora/tree/master/doc-papyri"
+
+    known_corpora = [shenoute_a22, patrum, saof, besa_ap, fox, mark, corinth, snt, eager, besa_nuns, doc_pap]
 #    known_corpora = [shenoute_a22]
     
     for one in known_corpora:
