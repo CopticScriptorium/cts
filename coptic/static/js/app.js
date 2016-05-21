@@ -164,10 +164,7 @@ angular.module('coptic')
                 if ($scope.corpora.length) {
                     $scope.show_single();
                 } else {
-                    $scope.get_corpora({
-                        model:   "corpus",
-                        filters: $scope.filters
-                    });
+                    $scope.get_corpora();
                 }
             } else if ($scope.path.length === 5) { // Single text html version (/texts/:corpus_slug/:text_slug/:html_version)
                 if ($scope.selected_text) {
@@ -178,13 +175,13 @@ angular.module('coptic')
             }
         });
 
-        $scope.get_corpora = function (query) {
+        $scope.get_corpora = function() {
             $(".text-subwork")      .removeClass("hidden");
             $(".text-work")         .removeClass("hidden");
             $(".work-title-wrap")   .removeClass("hidden");
             $(".single-header")     .removeClass("single-header");
 
-            $http.get("/api/", {params: query}).then(function (response) {
+            $http.get("/api/", {params: $scope.text_query}).then(function (response) {
                 $scope.handle_corpora_results(response.data.corpus);
                 if ($scope.selected_text && $scope.path[4] !== $scope.selected_text_format) {
                     $scope.show_single();
@@ -202,7 +199,7 @@ angular.module('coptic')
             $(".text-work")                 .addClass("hidden");
             $(".work-title-wrap")           .addClass("hidden");
             $target.parents(".text-work")   .removeClass("hidden");
-            $target.removeClass("hidden")   .addClass("single-header");
+            $target                         .removeClass("hidden").addClass("single-header");
         };
 
         $scope.handle_corpora_results = function(corpora) {
@@ -280,11 +277,8 @@ angular.module('coptic')
 
         $scope.toggle_search_term = function (e) {
             var $target = $(e.target)
-                , search_obj = {}
-                , filters_url = []
+                , filters_url_parts = []
                 , filter
-                , field
-                , id
                 ;
 
             $scope.text_query = {};
@@ -294,36 +288,25 @@ angular.module('coptic')
             }
 
             filter = $target.data().filter;
-            id = $target.data().searchid;
-            field = $target.parents(".tool-wrap").data().field;
-            search_obj = {
-                id: id,
-                filter: filter,
-                field: field
-            };
 
             if (!$target.hasClass("selected")) {
                 $target.addClass("selected");
-                $scope.filters.push(search_obj);
+                $scope.filters.push({
+                    id:     $target.data().searchid,
+                    filter: filter,
+                    field:  $target.parents(".tool-wrap").data().field
+                });
             } else {
                 $target.removeClass("selected");
                 $scope.filters = $scope.filters.filter(function (obj) {
-                    return obj.filter !== search_obj.filter;
+                    return obj.filter !== filter;
                 });
             }
 
             $scope.filters.forEach(function (f) {
-                filters_url.push(f.field + "=" + f.id + ":" + f.filter);
+                filters_url_parts.push(f.field + "=" + f.id + ":" + f.filter);
             });
-            filters_url = filters_url.join("&");
-            $location.path("/filter/" + filters_url);
-
-            $scope.text_query = {
-                model: "corpus",
-                filters: $scope.filters
-            };
-
-            $scope.selected_text = null;
+            $location.path("/filter/" + filters_url_parts.join("&"));
         };
 
         $scope.load_filters = function () {
@@ -357,7 +340,7 @@ angular.module('coptic')
             };
 
             $scope.selected_text = null;
-            $scope.get_corpora($scope.text_query);
+            $scope.get_corpora();
         };
 
         $scope.remove_search_term = function (e) {
@@ -401,8 +384,8 @@ angular.module('coptic')
                 $(".selected-text-type").removeClass("selected-text-type");
                 $target.addClass("selected-text-type");
 
-                $(".selected-text-format").fadeOut().removeClass("selected-text-format");
-                $("#" + type).fadeIn().addClass("selected-text-format");
+                $(".selected-text-format").hide().removeClass("selected-text-format");
+                $("#" + type).show().addClass("selected-text-format");
             }
         };
 
