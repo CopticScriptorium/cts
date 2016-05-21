@@ -8,4 +8,4 @@ django_debug: True
 
 # Set up debug mode for the test machine, so that we can share the git repository between
 # the host & the test VM.
-debug_machine: True
+debug_machine: False
