@@ -32,7 +32,7 @@ def get_selected_annotation_fields(url, field_names):
 	try:
 		response = requests.get(url)
 		content = response.content
-		soup = BeautifulSoup(content)
+		soup = BeautifulSoup(content, from_encoding='utf-8')
 		annotations = soup.find_all("annotation")
 		annotation_sets = [[a.find(n).text for n in field_names] for a in annotations]
 		logger.info('Got %d annotation sets from %s' % (len(annotation_sets), url))
