@@ -1,7 +1,8 @@
 
 test-scriptorium ansible_ssh_port=2222 ansible_ssh_host=localhost ansible_ssh_user=ubuntu
-cloud-test-scriptorium ansible_ssh_host=52.35.90.194 ansible_ssh_user=ubuntu
+new-scriptorium ansible_ssh_host=52.27.80.198 ansible_ssh_user=ubuntu
 
 [servers]
 cloud-test-scriptorium
 test-scriptorium
+new-scriptorium
