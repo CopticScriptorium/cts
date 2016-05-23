@@ -1,15 +1,14 @@
 --- # roles/scriptorium/tasks/main.yml
 
-# steps derived from https://github.com/takac/dot-files-ansible/blob/master/googlechrome.yaml
-
 # As of 2015-07-04 - xvfb & firefox required by ingest process so that we can invoke
 # firefox to fetch visualizations from the server.
 - name: Install key packages
   apt: name={{ item }} state=latest
-  sudo: yes
+  become: yes
   with_items:
     - apache2
     - apache2-dev
+    - chromium-browser
     - git
     - mysql-server-5.6
     - python-mysqldb
@@ -34,7 +33,7 @@
 
 - name: Install mysql-connector-python
   apt: deb="/home/{{ ansible_env.USER }}/mysql-connector-python-py3_2.0.4-1ubuntu14.04_all.deb"
-  sudo: true
+  become: true
   when: mysql_connector.rc == 1
 
 - name: Extract chrome driver
@@ -42,14 +41,14 @@
     src="http://chromedriver.storage.googleapis.com/2.21/chromedriver_linux64.zip"
     dest=/usr/lib/chromium-browser/
     copy=no
-  sudo: yes
+  become: yes
   
 - name: Make sure we've got the right permissions on the chromedriver
   file: path=/usr/lib/chromium-browser/chromedriver mode="u+rx,g+rx,o+rx"
-  sudo: yes
+  become: yes
     
 - name: Ensure services are enabled
-  sudo: yes
+  become: yes
   service: name={{ item }} enabled=yes
   with_items:
     - apache2
@@ -58,12 +57,12 @@
 # Due to the many non-US characters we're capturing in this database, we need to
 # make sure UTF8 is on!
 - name: Configure MySQL for utf8
-  sudo: yes
+  become: yes
   lineinfile: state=present dest=/etc/mysql/my.cnf insertafter="\[mysqld\]" line="character_set_server=utf8"
 
 # On the off chance that the previous action changed MySQL config, restart the server.
 - name: Restart MySQL
-  sudo: yes
+  become: yes
   service: name=mysql state=restarted
 
 # Grab everything for the site from GitHub and pull it over.
@@ -71,8 +70,9 @@
 # host machine, and a target virtual machine, for debugging purposes.
 - name: Copy over key files
   git: repo={{ git_repo_url }} dest=/var/www/cts force=no
-  sudo: yes
+  become: yes
   when: not debug_machine
+  ignore_errors: True
 
 - name: Update permissions to allow Apache to access the data
   file:
@@ -80,35 +80,35 @@
     recurse: yes
     owner: www-data
     group: www-data
-  sudo: yes
+  become: yes
     
 - name: Copy over Django settings
   template: src=settings.py.j2 dest=/var/www/cts/coptic/coptic/settings.py
-  sudo: yes
+  become: yes
 
 - name: Create folder for logging items from Django
   file: path=/var/log/django/ owner="www-data" group="www-data" state=directory
-  sudo: yes
+  become: yes
 
 - name: Install Python packages via pip3
   pip: requirements=/var/www/cts/coptic/requirements.txt executable=pip3
-  sudo: yes
+  become: yes
 
 - name: Copy over Apache2 config
   copy: src=scriptorium.conf dest=/etc/apache2/conf-enabled/scriptorium.conf
-  sudo: yes
+  become: yes
 
 - name: Create MySQL DB
   mysql_db: name=coptic state=present
-  sudo: yes
+  become: yes
 
 # TODO - stick this password into a vault file.
 - name: Create MySQL User
   mysql_user: name=coptic password={{ mysql_password }} priv=coptic.*:ALL
-  sudo: yes
+  become: yes
 
 - name: Ensure Services are started
-  sudo: yes
+  become: yes
   service: name={{ item }} state=started
   with_items:
     - apache2
@@ -119,4 +119,15 @@
   command: python3 manage.py migrate
   args:
     chdir: /var/www/cts/coptic/
-  sudo: yes
+  become: yes
+  become_user: www-data
+
+# Useful clue from here:
+# http://source.mihelac.org/2009/10/23/django-avoiding-typing-password-for-superuser/
+- name: Create superuser if not exists
+  shell: echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'carrie@carrieschroeder.com', '{{ superuser_password }}')" | python3 ./manage.py shell
+  ignore_errors: yes
+  become: yes
+  become_user: www-data
+  args:
+    chdir: /var/www/cts/coptic

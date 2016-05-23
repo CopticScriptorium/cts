@@ -21,8 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '{{ django_secret_key }}'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = {{ django_debug }} 
-TEMPLATE_DEBUG = {{ django_debug }} 
+DEBUG = False 
+TEMPLATE_DEBUG = False 
 ALLOWED_HOSTS = ['localhost', 'coptic.dev', 'data.copticscriptorium.org', 'ec2-52-10-63-34.us-west-2.compute.amazonaws.com']
 
 
@@ -71,13 +71,13 @@ LOGGING = {
 	},
 	'handlers': {
 		'file': {
-			'level': 'DEBUG',
+			'level': 'INFO',
 			'class': 'logging.FileHandler',
 			'filename': BASE_DIR + "/" + os.path.join("django_logger.log"),
 			'formatter': 'verbose',
 		},
 		'filedb': {
-			'level': 'DEBUG',
+			'level': 'INFO',
 			'class': 'logging.FileHandler',
 			'filename': BASE_DIR + "/" + os.path.join("django_db.log"),
 			'formatter': 'verbose',
@@ -91,19 +91,19 @@ LOGGING = {
 	'loggers': {
 		'ingest.ingest': {
 			'handlers': ['console', 'file'],
-			'level': 'DEBUG',
+			'level': 'INFO',
 		},
                 'ingest.models': {
                         'handlers': ['console', 'file'],
-                        'level': 'DEBUG',
+                        'level': 'INFO',
                 },
                 'ingest.search': {
                         'handlers': ['console', 'file'],
-                        'level': 'DEBUG',
+                        'level': 'INFO',
                 },
                 'django': {
                         'handlers': ['console', 'file'],
-                        'level': 'DEBUG',
+                        'level': 'INFO',
                 },
 	}
 }

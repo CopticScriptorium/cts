@@ -30,14 +30,11 @@ def do_config():
 
     # pre-load the critical search fields.
     helper.load_searchfields()
-    
+
     from ingest import ingest
     from ingest.models import Ingest
 
     new_ingest = Ingest.objects.create()
-    new_ingest.save()
-
-    ingest.fetch_texts(new_ingest.id)
 
 if __name__ == "__main__":
     do_config()
