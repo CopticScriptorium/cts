@@ -65,7 +65,7 @@
                     versions.</p>
             </section>
 
-            <section class="text-list list" ng-hide="!corpora.length && !selected_text">
+            <section class="text-list list" ng-hide="selected_text">
 
                 <div class="text-author" ng-repeat="corpus in corpora">
 
@@ -73,7 +73,7 @@
 
                         <div class="work-title-wrap">
                             <h2 class="work-title title">{{corpus.title}}</h2>
-                            <h4 class="work-title-urn urn" ng-hide="corpus.urn_code == 'nt'">
+                            <h4 class="work-title-urn urn">
                                 urn:cts:{{corpus.urn_code}}</h4>
 
                             <div class="work-meta-wrap page-tabs">
@@ -131,6 +131,44 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section id='selected-text' class="text-list list" ng-show="selected_text">
+                <!-- There is temporarily some duplication with the section above, tolerated because it reduces complexity -->
+
+                <a href="/texts/{{selected_text.corpus.slug}}/{{selected_text.slug}}" class="item-title-wrap">
+                    <span class="text-item item-title">{{selected_text.title}}</span>
+                </a>
+
+                <div class="html-wrap version-wrap page-tabs">
+                    <a href="/texts/{{selected_text.corpus.slug}}/{{selected_text.slug}}/{{format.slug}}"
+                       class="text-item {{format.slug}}"
+                       ng-repeat="format in selected_text.corpus.html_visualization_formats" data-type="{{format.slug}}">
+                        <span class="urn">{{format.button_title}}</span>
+                    </a>
+                </div>
+
+                <div class="other-versions-wrap version-wrap page-tabs">
+                    <a href="{{selected_text.corpus.github}}" class="text-item tei" target="_blank">
+                        <span class="urn">TEI</span>
+                        <span class="fa fa-external-link"></span>
+                    </a>
+
+                    <a href="{{selected_text.corpus.github}}" class="text-item annis" target="_blank">
+                        <span class="urn">relANNIS</span>
+                        <span class="fa fa-external-link"></span>
+                    </a>
+
+                    <a href="{{selected_text.corpus.github}}" class="text-item paula" target="_blank">
+                        <span class="urn">PAULA</span>
+                        <span class="fa fa-external-link"></span>
+                    </a>
+
+                </div>
+
+                <a href="/" class="close-selected-text">
+                    <span class="fa fa-times"></span>
+                </a>
             </section>
 
             <section id="selected_text" class="selected-text-wrap page-content" ng-hide="!selected_text">

@@ -118,15 +118,18 @@ angular.module('coptic')
          * Run update after each location change for controller lifecycle logic
          */
         $scope.$on('$locationChangeSuccess', function (e) {
-            console.log('$locationChangeSuccess, location path: ' + location.pathname);
             $scope.path = location.pathname.split("/");
+            var elems = $scope.path.length;
+            console.log('$locationChangeSuccess, location path: ' + location.pathname);
+            console.log('Corpora:', $scope.corpora);
+            console.log('selected text:', $scope.selected_text);
 
             function wipe_search_terms_and_filters() {
                 $scope.filters = [];
                 $(".selected").removeClass("selected");
             }
 
-            if ($scope.path.length == 0 || ( $scope.path.length > 1 && $scope.path[1] === "" )) { // Index
+            if (elems == 0 || ( elems > 1 && $scope.path[1] === "" )) { // Index
                 $scope.selected_text = null;
                 $scope.corpora = [];
                 wipe_search_terms_and_filters();
@@ -144,12 +147,12 @@ angular.module('coptic')
                 }, function (response) {
                     console.log('Error with API Query:', response);
                 });
-            } else if ($scope.path.length === 2 && $scope.path[1] !== "404") { // texts index
+            } else if (elems === 2 && $scope.path[1] !== "404") { // texts index
                 $scope.selected_text = null;
                 $scope.selected_text_format = null;
                 $scope.corpora = [];
                 wipe_search_terms_and_filters();
-            } else if ($scope.path.length === 3) { // /filter/:filters
+            } else if (elems === 3) { // /filter/:filters
                 if ($scope.path[2].length !== 0) {
                     $scope.load_filters();
                     $scope.selected_text = null;
@@ -158,7 +161,8 @@ angular.module('coptic')
                     $scope.corpora = [];
                     wipe_search_terms_and_filters();
                 }
-            } else if ($scope.path.length === 4) { // Single text (/texts/:corpus_slug/:text_slug)
+            } else if (elems === 4) { // Single text (/texts/:corpus_slug/:text_slug)
+                console.log('Single text (/texts/:corpus_slug/:text_slug');
                 $(".text-format").hide();
                 $scope.selected_text_format = null;
                 if ($scope.corpora.length) {
@@ -166,7 +170,8 @@ angular.module('coptic')
                 } else {
                     $scope.get_corpora();
                 }
-            } else if ($scope.path.length === 5) { // Single text html version (/texts/:corpus_slug/:text_slug/:html_version)
+            } else if (elems === 5) { // Single text html version (/texts/:corpus_slug/:text_slug/:html_version)
+                console.log('Single text html version (/texts/:corpus_slug/:text_slug/:html_version');
                 if ($scope.selected_text) {
                     $scope.show_selected_visualization($scope.path[4]);
                 } else {
@@ -176,62 +181,15 @@ angular.module('coptic')
         });
 
         $scope.get_corpora = function() {
-            $(".text-subwork")      .removeClass("hidden");
-            $(".text-work")         .removeClass("hidden");
-            $(".work-title-wrap")   .removeClass("hidden");
-            $(".single-header")     .removeClass("single-header");
-
+            console.log('get_corpora', $scope.text_query);
             $http.get("/api/", {params: $scope.text_query}).then(function (response) {
-                $scope.handle_corpora_results(response.data.corpus);
+                $scope.corpora = response.data.corpus;
                 if ($scope.selected_text && $scope.path[4] !== $scope.selected_text_format) {
                     $scope.show_single();
                 }
             }, function (response) {
                 console.log('Error with API Query:', response);
             });
-        };
-
-        $scope.change_dom = function() {
-            // Toggle the specific classes and visibility on elements
-            var $target = $(".text-subwork[data-text-slug='" + $scope.text_query.text_slug + "'][data-corpus-slug='" +
-                $scope.text_query.corpus_slug + "']");
-            $(".text-subwork")              .addClass("hidden");
-            $(".text-work")                 .addClass("hidden");
-            $(".work-title-wrap")           .addClass("hidden");
-            $target.parents(".text-work")   .removeClass("hidden");
-            $target                         .removeClass("hidden").addClass("single-header");
-        };
-
-        $scope.handle_corpora_results = function(corpora) {
-            $scope.corpora = corpora;
-
-            if ($scope.selected_text) {
-                $scope.change_dom();
-            }
-        };
-
-        $scope.handle_text_results = function(text) {
-
-            function add_properties_from_metadata(textmeta) {
-                var urn_parts;
-                var urn_dot_parts;
-                if (textmeta.name === "document_cts_urn") {
-                    urn_parts       = textmeta.value.split(":");
-                    urn_dot_parts   = urn_parts[3].split(".");
-
-                    text.urn_cts_work   = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
-                    text.edition_urn    = textmeta.value;
-                    text.textgroup_urn  = urn_dot_parts[0];
-                    text.corpus_urn     = urn_dot_parts[1];
-                    text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
-                }
-            }
-
-            $scope.selected_text = text;
-            $scope.filters = [];
-            text.text_meta.forEach(add_properties_from_metadata);
-            $scope.change_dom();
-            $('html,body').scrollTop(0);
         };
 
         $scope.show_single = function () {
@@ -241,10 +199,31 @@ angular.module('coptic')
                 corpus_slug:    $scope.path[2],
                 text_slug:      $scope.path[3]
             };
+            console.log('show_single', $scope.text_query);
 
             $http.get("/api/", {params: $scope.text_query}).then(
                 function(response) {
-                    $scope.handle_text_results(response.data.text)
+                    var text = response.data.text;
+
+                    function add_properties_from_metadata(textmeta) {
+                        var urn_parts;
+                        var urn_dot_parts;
+                        if (textmeta.name === "document_cts_urn") {
+                            urn_parts       = textmeta.value.split(":");
+                            urn_dot_parts   = urn_parts[3].split(".");
+
+                            text.urn_cts_work   = urn_parts.slice(0, 3).join(":"); // e.g., "urn:cts:copticLit"
+                            text.edition_urn    = textmeta.value;
+                            text.textgroup_urn  = urn_dot_parts[0];
+                            text.corpus_urn     = urn_dot_parts[1];
+                            text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
+                        }
+                    }
+
+                    $scope.selected_text = text;
+                    $scope.filters = [];
+                    text.text_meta.forEach(add_properties_from_metadata);
+                    $('html,body').scrollTop(0);
                 },
                 function(response) {
                     console.log('Error with API Query:', response);
@@ -312,6 +291,7 @@ angular.module('coptic')
         $scope.load_filters = function () {
             // load the filters from the URL to the object
             var filter_url = $scope.path[2].split("&");
+            console.log('load_filters', filter_url);
 
             $scope.filters = [];
 
