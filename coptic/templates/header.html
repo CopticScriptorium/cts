@@ -41,7 +41,7 @@
                 <span>{{value.title}}</span>
               </div>
             {% endfor %}
-            <span class="fa fa-times raise-dropdowns" ng-click="raise_dropdowns()"></span>
+            <span class="fa fa-close raise-dropdowns" ng-click="raise_dropdowns()"></span>
           </div>
         </div>
       {% endfor %}
@@ -65,7 +65,7 @@
 
       <div class="filter-item" ng-repeat="filter in filters" data-filter="{{filter.filter}}" ng-click="remove_search_term($event)" data-field="{{filter.field}}">
         <span class="filter-text">{{filter.field}}: {{filter.filter}}</span>
-        <span class="fa fa-times"></span>
+        <span class="fa fa-close"></span>
       </div>
 
     </div>
