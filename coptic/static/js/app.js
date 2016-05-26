@@ -91,8 +91,8 @@ angular.module("coptic")
  * and search tool functionality
  */
 angular.module('coptic')
-    .controller('TextController', ['$scope', '$http', '$location', '$interval',
-        function ($scope, $http, $location, $interval) {
+    .controller('TextController', ['$scope', '$http', '$location', '$interval', '$log',
+        function ($scope, $http, $location, $interval, $log) {
 
         // Persistent location Path
         $scope.path = location.pathname.split("/");
@@ -121,9 +121,9 @@ angular.module('coptic')
         $scope.$on('$locationChangeSuccess', function (e) {
             $scope.path = location.pathname.split("/");
             var elems = $scope.path.length;
-            console.log('$locationChangeSuccess, location path: ' + location.pathname);
-            console.log('Corpora:', $scope.corpora);
-            console.log('selected text:', $scope.selected_text);
+            $log.debug('$locationChangeSuccess, location path: ' + location.pathname);
+            $log.debug('Corpora:', $scope.corpora);
+            $log.debug('selected text:', $scope.selected_text);
 
             function wipe_search_terms_and_filters() {
                 $scope.filters = [];
@@ -144,9 +144,9 @@ angular.module('coptic')
                     $scope.selected_text = null;
                     $scope.selected_text_format = null;
                     $scope.corpora = response.data.corpus;
-                    console.log(response);
+                    $log.debug(response);
                 }, function (response) {
-                    console.log('Error with API Query:', response);
+                    $log.debug('Error with API Query:', response);
                 });
             } else if (elems === 2 && $scope.path[1] !== "404") { // texts index
                 $scope.selected_text = null;
@@ -163,7 +163,7 @@ angular.module('coptic')
                     wipe_search_terms_and_filters();
                 }
             } else if (elems === 4) { // Single text (/texts/:corpus_slug/:text_slug)
-                console.log('Single text (/texts/:corpus_slug/:text_slug');
+                $log.debug('Single text (/texts/:corpus_slug/:text_slug');
                 $scope.selected_text_format = null;
                 if ($scope.corpora.length) {
                     $scope.show_single();
@@ -171,7 +171,7 @@ angular.module('coptic')
                     $scope.get_corpora();
                 }
             } else if (elems === 5) { // Single text html version (/texts/:corpus_slug/:text_slug/:html_version)
-                console.log('Single text html version (/texts/:corpus_slug/:text_slug/:html_version');
+                $log.debug('Single text html version (/texts/:corpus_slug/:text_slug/:html_version');
                 if ($scope.selected_text) {
                     $scope.show_selected_visualization($scope.path[4]);
                 } else {
@@ -181,14 +181,14 @@ angular.module('coptic')
         });
 
         $scope.get_corpora = function() {
-            console.log('get_corpora', $scope.text_query);
+            $log.debug('get_corpora', $scope.text_query);
             $http.get("/api/", {params: $scope.text_query}).then(function (response) {
                 $scope.corpora = response.data.corpus;
                 if ($scope.selected_text && $scope.path[4] !== $scope.selected_text_format) {
                     $scope.show_single();
                 }
             }, function (response) {
-                console.log('Error with API Query:', response);
+                $log.debug('Error with API Query:', response);
             });
         };
 
@@ -198,7 +198,7 @@ angular.module('coptic')
                 corpus_slug:    $scope.path[2],
                 text_slug:      $scope.path[3]
             };
-            console.log('show_single', $scope.text_query);
+            $log.debug('show_single', $scope.text_query);
 
             $http.get("/api/", {params: $scope.text_query}).then(
                 function(response) {
@@ -231,7 +231,7 @@ angular.module('coptic')
                     $('html,body').scrollTop(0);
                 },
                 function(response) {
-                    console.log('Error with API Query:', response);
+                    $log.debug('Error with API Query:', response);
                 });
         };
 
@@ -296,7 +296,7 @@ angular.module('coptic')
         $scope.load_filters = function () {
             // load the filters from the URL to the object
             var filter_url = $scope.path[2].split("&");
-            console.log('load_filters', filter_url);
+            $log.debug('load_filters', filter_url);
 
             $scope.filters = [];
 
