@@ -163,7 +163,6 @@ angular.module('coptic')
                 }
             } else if (elems === 4) { // Single text (/texts/:corpus_slug/:text_slug)
                 console.log('Single text (/texts/:corpus_slug/:text_slug');
-                $(".text-format").hide();
                 $scope.selected_text_format = null;
                 if ($scope.corpora.length) {
                     $scope.show_single();
@@ -193,7 +192,6 @@ angular.module('coptic')
         };
 
         $scope.show_single = function () {
-            $(".text-format").hide();
             $scope.text_query = {
                 model:          "texts",
                 corpus_slug:    $scope.path[2],
