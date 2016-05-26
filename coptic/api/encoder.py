@@ -30,7 +30,7 @@ class Encoder:
         cached_text = self.texts[obj.id]
         return [{
             'name':  text_meta.name,
-            'value': text_meta.value_with_urls_wrapped()
+            'value': text_meta.value_customized()
         } for text_meta in cached_text.text_meta.all()]
 
     def encode(self, obj):

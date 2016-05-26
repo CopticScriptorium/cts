@@ -37,7 +37,7 @@ class HtmlVisualization(models.Model):
 
 class CorpusMeta(models.Model):
 	"""
-	Meta corpus item ingested from ANNIS	
+	Meta corpus item ingested from ANNIS
 	"""
 
 	name = models.CharField(max_length=200)
@@ -49,12 +49,12 @@ class CorpusMeta(models.Model):
 		verbose_name = "Corpus Meta Item"
 
 	def __str__(self):
-		return self.name + ": " + self.value 
+		return self.name + ": " + self.value
 
 
 class Corpus(models.Model):
 	"""
-	Corpus model, containing pertinent information to corpora ingested from ANNIS	
+	Corpus model, containing pertinent information to corpora ingested from ANNIS
 	"""
 
 	created = models.DateTimeField(editable=False)
@@ -89,7 +89,7 @@ class Corpus(models.Model):
 
 class TextMeta(models.Model):
 	"""
-	Meta text item ingested from ANNIS	
+	Meta text item ingested from ANNIS
 	"""
 
 	name = models.CharField(max_length=200)
@@ -103,9 +103,15 @@ class TextMeta(models.Model):
 	def __str__(self):
 		return self.name + ": " + self.value
 
-	def value_with_urls_wrapped(self):
+	def value_customized(self):
 		v = self.value
-		return ('<a href="%s">%s</a>' % (v, v)) if re.match(r'https?://', v) else v
+		if re.match(r'https?://', v):  # Turn URLs into <a> tags
+			return '<a href="%s">%s</a>' % (v, v)
+
+		if v.startswith('urn:cts'):  # Turn cts URNs into <a> tags
+			return '<a href="/%s">%s</a>' % (v, v)
+
+		return v
 
 
 class Text(models.Model):
