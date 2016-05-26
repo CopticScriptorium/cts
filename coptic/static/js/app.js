@@ -165,11 +165,7 @@ angular.module('coptic')
             } else if (elems === 4) { // Single text (/texts/:corpus_slug/:text_slug)
                 $log.debug('Single text (/texts/:corpus_slug/:text_slug');
                 $scope.selected_text_format = null;
-                if ($scope.corpora.length) {
-                    $scope.show_single();
-                } else {
-                    $scope.get_corpora();
-                }
+                $scope.show_single();
             } else if (elems === 5) { // Single text html version (/texts/:corpus_slug/:text_slug/:html_version)
                 $log.debug('Single text html version (/texts/:corpus_slug/:text_slug/:html_version');
                 if ($scope.selected_text) {
