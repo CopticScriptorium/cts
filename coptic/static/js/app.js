@@ -212,6 +212,8 @@ angular.module('coptic')
                             text.textgroup_urn  = urn_dot_parts[0];
                             text.corpus_urn     = urn_dot_parts[1];
                             text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
+                        } else if (textmeta.name === "endnote") {
+                            text.endnote = textmeta.value;
                         }
                     }
 
