@@ -91,7 +91,8 @@ angular.module("coptic")
  * and search tool functionality
  */
 angular.module('coptic')
-    .controller('TextController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+    .controller('TextController', ['$scope', '$http', '$location', '$interval',
+        function ($scope, $http, $location, $interval) {
 
         // Persistent location Path
         $scope.path = location.pathname.split("/");
@@ -221,6 +222,12 @@ angular.module('coptic')
                     $scope.selected_text = text;
                     $scope.filters = [];
                     text.text_meta.forEach(add_properties_from_metadata);
+                    if ($scope.path.length === 5) {
+                        // This is a kludge coming from my Angular ignorance. Calling show_selected_visualization
+                        // synchronously doesn’t work, I presume because the DOM isn’t yet set up as expected. -- dcb
+                        // todo Find a better way.
+                        $interval(function() {$scope.show_selected_visualization($scope.path[4]);}, 1, 1);
+                    }
                     $('html,body').scrollTop(0);
                 },
                 function(response) {
