@@ -1,16 +1,13 @@
 import logging
 import json
 from api.json import json_view
-from api.encoder import Encoder
-from ingest.tasks import single_ingest_asynch
+from api.encoder import encode
 from texts.models import Text, Corpus, SearchFieldValue, TextMeta
 import functools
 
-TEXT_PREFETCH_FIELDS = 'html_visualizations'
-
 log = logging.getLogger(__name__)
-ALLOWED_MODELS = ['texts', 'corpus', 'urn']
-CLASSES = (Text, Corpus)
+TEXT_PREFETCH_FIELDS = 'html_visualizations'
+ALLOWED_MODELS = ('texts', 'corpus', 'urn')
 
 
 @json_view()
@@ -26,23 +23,18 @@ def _query(params):
     'Search and return data via the JSON API'
 
     objects = {}
-    encoder = Encoder()
 
     if 'model' in params:
         model = params['model']
 
         if model == 'urn' and 'urn' in params:
-            _process_urn_request(encoder, params['urn'], objects)
+            _process_urn_request(params['urn'], objects)
         elif model == 'corpus':
             if 'filters' in params:
-
-                corpus_ids, text_ids, selected_texts = _find_ids_by_field(params['filters'])
+                corpus_ids, text_ids = _corpus_and_text_ids_from_filters(params['filters'])
                 corpora = Corpus.objects.filter(id__in=set(corpus_ids))
 
-                if selected_texts:
-                    for corpus in corpora:
-                        corpus.texts = [text for text in selected_texts if text.corpus.id == corpus.id]
-                elif text_ids:
+                if text_ids:
                     _add_texts_to_corpora(corpora, text_ids)
                 else:
                     _add_texts_to_corpora(corpora)
@@ -56,7 +48,7 @@ def _query(params):
                 _add_texts_to_corpora(corpora)
 
             # fetch the results and add to the objects dict
-            objects['corpus'] = _json_from_queryset(encoder, corpora)
+            objects['corpus'] = _json_from_queryset(corpora)
 
         # Otherwise, if this is a query to the texts model
         elif model == 'texts':
@@ -69,12 +61,7 @@ def _query(params):
                 return objects
 
             # fetch the results and add to the objects dict
-            objects['text'] = encoder.encode(text)
-
-    # If ingest is in the params, re-ingest the specified text id
-    elif 'ingest' in params:
-        single_ingest_asynch(params['text_id'])
-        objects['ingest_res'] = params['text_id']
+            objects['text'] = encode(text)
 
     # Otherwise, no query is specified
     else:
@@ -83,68 +70,69 @@ def _query(params):
     return objects
 
 
-def _process_urn_request(encoder, urn, objects):
+def _process_urn_request(urn, objects):
     texts = texts_for_urn(urn)
-    text_ids = [t.id for t in texts]
 
     # Find the corpora containing the matching texts
-    corpus_ids = set([text.corpus.id for text in texts])
+    corpus_ids = set([text.corpus_id for text in texts])
     corpora = Corpus.objects.filter(id__in=corpus_ids)
 
-    _add_texts_to_corpora(corpora, text_ids)
-    objects['corpus'] = _json_from_queryset(encoder, corpora)
+    _add_texts_to_corpora(corpora, texts=texts)
+    objects['corpus'] = _json_from_queryset(corpora)
 
 
 def texts_for_urn(urn):
     # Find texts matching the URN using their metadata
     matching_tm_ids = TextMeta.objects.filter(name='document_cts_urn', value__iregex='^' + urn + r'($|[\.:])'
-                                              ).values_list('id', flat=True)
+    	).values_list('id', flat=True)
     texts = Text.objects.filter(text_meta__name='document_cts_urn',
-                                text_meta__id__in=matching_tm_ids).prefetch_related(TEXT_PREFETCH_FIELDS).order_by('slug')
+        text_meta__id__in=matching_tm_ids).order_by('slug')
     return texts
 
 
-def _add_texts_to_corpora(corpora, text_ids=None):
-    all_texts = (Text.objects.filter(id__in=text_ids) if text_ids else Text.objects.all()).\
-        prefetch_related(TEXT_PREFETCH_FIELDS).select_related('corpus').order_by('slug')
+def _add_texts_to_corpora(corpora, text_ids=None, texts=None):
+    adding_texts = texts if texts else \
+		(Text.objects.filter(id__in=text_ids) if text_ids else Text.objects.all()).\
+        select_related('corpus').order_by('slug')
     for corpus in corpora:
-        corpus.texts = [t for t in all_texts if t.corpus.id == corpus.id]
+        corpus.texts = [t for t in adding_texts if t.corpus_id == corpus.id]
 
 
-def _find_ids_by_field(filters):
+def _corpus_and_text_ids_from_filters(filters):
     corpus_ids_by_field = {}
     text_ids_by_field = {}
-    selected_texts = []
 
     for filter in filters:
         field_name = filter['field']
-        corpus_ids = corpus_ids_by_field.get(field_name, [])
-        text_ids   = text_ids_by_field  .get(field_name, [])
+        corpus_ids = corpus_ids_by_field.get(field_name, set())
+        text_ids   = text_ids_by_field  .get(field_name, set())
 
-        if field_name == 'corpus_urn':
-            selected_texts += get_corpus_texts(filter['filter'], corpus_ids)
-        elif field_name == 'textgroup_urn':
-            selected_texts += get_textgroup_texts(filter['filter'], corpus_ids)
-        else:
-            sfv = SearchFieldValue.objects.filter(id=filter['id'])
-            text_ids += list(sfv.values_list('texts__id', flat=True))
-            corpus_ids += [text.corpus_id for text in Text.objects.filter(id__in=text_ids)]
+        sfv = SearchFieldValue.objects.filter(id=filter['id'])
+        text_ids.update(sfv.values_list('texts__id', flat=True))
+        corpus_ids.update((text.corpus_id for text in Text.objects.filter(id__in=text_ids)))
 
         if corpus_ids:
             corpus_ids_by_field[field_name] = corpus_ids
         if text_ids:
             text_ids_by_field[field_name] = text_ids
 
-    return _intersect(corpus_ids_by_field), _intersect(text_ids_by_field), selected_texts
+    return _intersect_ids_across_fields(corpus_ids_by_field), _intersect_ids_across_fields(text_ids_by_field)
 
 
-def _intersect(ids_dict):
-    ids_sets = [set(values) for values in ids_dict.values()]
-    return functools.reduce(lambda a, b: a & b, ids_sets) if ids_sets else []
+def _intersect_ids_across_fields(id_sets_by_fieldname):
+	ids_sets = [id_set for id_set in id_sets_by_fieldname.values()]
+
+	def intersect_sets(set1, set2):
+		'Intersect IDs in successive sets to ensure the remaining IDs are in all sets'
+		intersection = set1 & set2
+		log.debug('Intersection of %s and %s is %s' % (set1, set2, intersection))
+		return intersection
+
+	return functools.reduce(intersect_sets, ids_sets) if ids_sets else []
 
 
-def _json_from_queryset(encoder, queryset):
-    return [encoder.encode(item) for item in queryset]
+def _json_from_queryset(queryset):
+    return [encode(item) for item in queryset]
 
 
 def _process_param_values(params, query_dict):
@@ -170,10 +158,6 @@ def _process_param_values(params, query_dict):
             if 'urn_value' in query_dict:
                 clean['urn'] = query_dict['urn_value'].strip()
 
-        elif 'ingest' in query_dict:
-            clean['ingest'] = True
-            clean['text_id'] = query_dict['id'].strip()
-
         # Then process the supplied query
         filters = [json.loads(filter) for filter in query_dict.getlist('filters')]
         if filters:
@@ -187,52 +171,3 @@ def _process_param_values(params, query_dict):
             clean['urns'] = True
 
     return clean
-
-
-def get_corpus_texts(filter_value, corpus_ids):
-    'Look up texts based on corpus URN data from the document_cts_urn'
-    selected_texts = []
-    matched_text_meta_objects = []
-    filter_value = filter_value.split('.')
-
-    # Compare document_cts_urn meta values to the filter_value from the search params
-    for text_meta_object in TextMeta.objects.filter(name='document_cts_urn'):
-        parsed_urn = text_meta_object.value.split(':')
-        parsed_urn = parsed_urn[3].split('.')
-        if parsed_urn[0] == filter_value[0] and parsed_urn[1] == filter_value[1]:
-            matched_text_meta_objects.append(text_meta_object)
-
-    # Get the textMeta msName items
-    for matched_text_meta_object in matched_text_meta_objects:
-        selected_texts += list(Text.objects.filter(text_meta=matched_text_meta_object.id))
-
-    # Aggregate the corpus ids for each text
-    for sel_text in selected_texts:
-        if sel_text.corpus.id not in corpus_ids:
-            corpus_ids.append(sel_text.corpus.id)
-
-    return selected_texts
-
-
-def get_textgroup_texts(filter_value, corpus_ids):
-    'Look up texts based on textgroup URN data from the document_cts_urn'
-    selected_texts = []
-    matched_text_meta_objects = []
-
-    # Compare document_cts_urn meta values to the filter_value from the search params
-    for text_meta_object in TextMeta.objects.filter(name='document_cts_urn'):
-        parsed_urn = text_meta_object.value.split(':')
-        parsed_urn = parsed_urn[3].split('.')
-        if parsed_urn[0] == filter_value:
-            matched_text_meta_objects.append(text_meta_object)
-
-    # Get the textMeta msName items
-    for matched_text_meta_object in matched_text_meta_objects:
-        selected_texts += list(Text.objects.filter(text_meta=matched_text_meta_object.id))
-
-    # Aggregate the corpus ids for each text
-    for sel_text in selected_texts:
-        if sel_text.corpus.id not in corpus_ids:
-            corpus_ids.append(sel_text.corpus.id)
-
-    return selected_texts
