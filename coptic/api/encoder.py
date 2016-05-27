@@ -57,6 +57,9 @@ class Encoder:
                 'annis_link':         obj.annis_link(),
                 'annis_corpus_name':  obj.annis_corpus_name,
                 'github':             obj.github,
+                'github_tei':         obj.github_tei,
+                'github_relannis':    obj.github_relannis,
+                'github_paula':       obj.github_paula,
                 'html_visualization_formats': self._vis_formats(obj)}
 
             if hasattr(obj, 'texts'):

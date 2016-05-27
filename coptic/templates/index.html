@@ -81,6 +81,23 @@
                                     <span class="urn">Search ANNIS</span>
                                     <span class="fa fa-external-link"></span>
                                 </a>
+                                <a ng-show="corpus.github_tei" href="{{corpus.github}}/{{corpus.annis_corpus_name}}_TEI"
+                                    class="text-item" target="_blank">
+                                    <span class="urn">TEI</span>
+                                    <span class="fa fa-external-link"></span>
+                                </a>
+
+                                <a ng-show="corpus.github_relannis" href="{{corpus.github}}/{{corpus.annis_corpus_name}}_relANNIS"
+                                    class="text-item" target="_blank">
+                                    <span class="urn">relANNIS</span>
+                                    <span class="fa fa-external-link"></span>
+                                </a>
+
+                                <a ng-show="corpus.github_paula" href="{{corpus.github}}/{{corpus.annis_corpus_name}}_PAULA"
+                                    class="text-item" target="_blank">
+                                    <span class="urn">PAULA</span>
+                                    <span class="fa fa-external-link"></span>
+                                </a>
                             </div>
                         </div>
 
@@ -92,34 +109,10 @@
                             </a>
 
                             <div class="html-wrap version-wrap page-tabs">
-									<span class="version-label">
-										Read:
-									</span>
                                 <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}"
                                    class="text-item {{format.slug}}"
                                    ng-repeat="format in corpus.html_visualization_formats" data-type="{{format.slug}}">
                                     <span class="urn">{{format.button_title}}</span>
-                                </a>
-                            </div>
-
-                            <div class="other-versions-wrap version-wrap page-tabs">
-									<span class="version-label">
-										Downloads:
-									</span>
-
-                                <a href="{{corpus.github}}" class="text-item tei" target="_blank">
-                                    <span class="urn">TEI</span>
-                                    <span class="fa fa-external-link"></span>
-                                </a>
-
-                                <a href="{{corpus.github}}" class="text-item annis" target="_blank">
-                                    <span class="urn">relANNIS</span>
-                                    <span class="fa fa-external-link"></span>
-                                </a>
-
-                                <a href="{{corpus.github}}" class="text-item paula" target="_blank">
-                                    <span class="urn">PAULA</span>
-                                    <span class="fa fa-external-link"></span>
                                 </a>
                             </div>
                         </div>
@@ -145,17 +138,24 @@
                         </div>
 
                         <div class="other-versions-wrap version-wrap page-tabs">
-                            <a href="{{selected_text.corpus.github}}" class="text-item tei" target="_blank">
+
+                            <a ng-show="selected_text.corpus.github_tei"
+                                href="{{selected_text.corpus.github}}/{{selected_text.corpus.annis_corpus_name}}_TEI"
+                                class="text-item" target="_blank">
                                 <span class="urn">TEI</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
 
-                            <a href="{{selected_text.corpus.github}}" class="text-item annis" target="_blank">
+                            <a ng-show="selected_text.corpus.github_relannis"
+                                href="{{selected_text.corpus.github}}/{{selected_text.corpus.annis_corpus_name}}_relANNIS"
+                                class="text-item" target="_blank">
                                 <span class="urn">relANNIS</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
 
-                            <a href="{{selected_text.corpus.github}}" class="text-item paula" target="_blank">
+                            <a ng-show="selected_text.corpus.github_paula"
+                                href="{{selected_text.corpus.github}}/{{selected_text.corpus.annis_corpus_name}}_PAULA"
+                                class="text-item" target="_blank">
                                 <span class="urn">PAULA</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
