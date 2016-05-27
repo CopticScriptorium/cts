@@ -4,3 +4,8 @@
     text-align: left;
     font-size: 80%;
 }
+
+.no-results {
+  font-size: 20px;
+  color: #361b01;
+}

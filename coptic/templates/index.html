@@ -6,7 +6,9 @@
 
         <div class="grid inner">
 
-            <section class="project-description entry-text" ng-hide="corpora.length || selected_text">
+            <h1 class='no-results' ng-show="filters.length && ! corpora.length">There are no results.</h1>
+
+            <section class="project-description entry-text" ng-hide="filters.length || corpora.length || selected_text">
 
                 <h1 class="title">Coptic Scriptorium URN Resolver -- BETA version</h1>
 
