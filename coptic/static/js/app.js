@@ -214,6 +214,10 @@ angular.module('coptic')
                             text.text_url       = "texts/" + text.corpus.slug + "/" + text.slug
                         } else if (textmeta.name === "endnote") {
                             text.endnote = textmeta.value;
+                        } else if (textmeta.name === "next") {
+                            text.next = textmeta.value;
+                        } else if (textmeta.name === "previous") {
+                            text.previous = textmeta.value;
                         }
                     }
 

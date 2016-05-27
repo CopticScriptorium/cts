@@ -191,6 +191,11 @@
                     {{ selected_text.endnote }}
                 </div>
 
+                <div class="prev-next page-tabs">
+                    <a ng-show="selected_text.previous" href="/{{selected_text.previous}}">Previous</a>
+                    <a ng-show="selected_text.next"     href="/{{selected_text.next}}">Next</a>
+                </div>
+
                 <div id="information" class="meta-information">
                     <h3 class="subtitle">ANNIS Metadata</h3>
 
