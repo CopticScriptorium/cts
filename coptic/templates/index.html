@@ -74,15 +74,16 @@
                             <span class="text-item item-title">{{selected_text.title}}</span>
                         </a>
 
+                        <a href="/" class="close-selected-text">
+                            <span class="fa fa-close"></span>
+                        </a>
+
                         <div class="html-wrap version-wrap page-tabs">
                             <a href="/texts/{{selected_text.corpus.slug}}/{{selected_text.slug}}/{{format.slug}}"
                                class="text-item {{format.slug}}"
                                ng-repeat="format in selected_text.corpus.html_visualization_formats" data-type="{{format.slug}}">
                                 <span class="urn">{{format.button_title}}</span>
                             </a>
-                        </div>
-
-                        <div class="other-versions-wrap version-wrap page-tabs">
 
                             <a ng-show="selected_text.corpus.github_tei"
                                 href="{{selected_text.corpus.github}}/{{selected_text.corpus.annis_corpus_name}}_TEI"
@@ -104,14 +105,6 @@
                                 <span class="urn">PAULA</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
-
-                        </div>
-
-                        <a href="/" class="close-selected-text">
-                            <span class="fa fa-close"></span>
-                        </a>
-
-                        <div class="work-meta-wrap page-tabs">
                             <a href="/{{selected_text.edition_urn}}/annis" class="text-item annis" target="_blank">
                                 <span class="urn">Search ANNIS</span>
                                 <span class="fa fa-external-link"></span>
