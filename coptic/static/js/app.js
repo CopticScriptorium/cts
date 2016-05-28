@@ -134,7 +134,7 @@ angular.module('coptic')
                 $scope.selected_text = null;
                 $scope.corpora = [];
                 wipe_search_terms_and_filters();
-            } else if (location.pathname.substr(0, 5) === "/urn:") {
+            } else if ($scope.is_urn_request()) {
                 $http.get("/api/", {
                     params: {
                         model:      'urn',
@@ -176,12 +176,17 @@ angular.module('coptic')
             }
         });
 
+        $scope.is_urn_request = function() {
+            return location.pathname.substr(0, 5) === "/urn:"
+        };
+
         $scope.are_no_expected_results = function() {
-            return $scope.filters.length && ! $scope.corpora.length
+            return ($scope.filters.length || $scope.is_urn_request()) && ! $scope.corpora.length;
         };
 
         $scope.should_show_description = function() {
-            return ! ($scope.filters.length || $scope.corpora.length || $scope.selected_text)
+            return ! ($scope.are_no_expected_results() || $scope.filters.length ||
+                $scope.corpora.length || $scope.selected_text)
         };
 
         $scope.get_corpora = function() {
