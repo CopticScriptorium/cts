@@ -27,9 +27,8 @@ def search(request):
 				for sfv in SearchFieldValue.objects.filter(search_field__title=key, title=value):
 					yield key, sfv.id, value
 
-	params = ('%s=%d:%s' % param for param in params_with_searchfieldvalue_ids(request.GET))
-	args = '&'.join(params)
-	return redirect('/filter/' + args)
+	params = [('%s=%d:%s' % param) for param in params_with_searchfieldvalue_ids(request.GET)]
+	return redirect('/filter/' + '&'.join(params) if params else '/')
 
 def _query(params):
     'Search and return data via the JSON API'
