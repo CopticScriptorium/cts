@@ -5,7 +5,7 @@
 
         <div class="grid inner">
 
-            <div class='no-results' ng-show="filters.length && ! corpora.length">There are no results matching your search.</div>
+            <div class='no-results' ng-show="are_no_expected_results()">There are no results matching your search.</div>
 
             {% include 'project-desc.html' %}
 

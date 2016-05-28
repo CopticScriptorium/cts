@@ -176,6 +176,14 @@ angular.module('coptic')
             }
         });
 
+        $scope.are_no_expected_results = function() {
+            return $scope.filters.length && ! $scope.corpora.length
+        };
+
+        $scope.should_show_description = function() {
+            return ! ($scope.filters.length || $scope.corpora.length || $scope.selected_text)
+        };
+
         $scope.get_corpora = function() {
             $log.debug('get_corpora', $scope.text_query);
             $http.get("/api/", {params: $scope.text_query}).then(function (response) {
