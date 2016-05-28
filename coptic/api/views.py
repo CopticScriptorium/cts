@@ -1,4 +1,5 @@
 import logging
+from django.shortcuts import redirect
 import json
 from api.json import json_view
 from api.encoder import encode
@@ -18,6 +19,17 @@ def api(request, params):
 
     return _query(_process_param_values(params.split("/"), get))
 
+
+def search(request):
+	def params_with_searchfieldvalue_ids(values_by_key):
+		for key, values_list in values_by_key.lists():  # Example: corpus: [c1, c2]
+			for value in values_list:
+				for sfv in SearchFieldValue.objects.filter(search_field__title=key, title=value):
+					yield key, sfv.id, value
+
+	params = ('%s=%d:%s' % param for param in params_with_searchfieldvalue_ids(request.GET))
+	args = '&'.join(params)
+	return redirect('/filter/' + args)
 
 def _query(params):
     'Search and return data via the JSON API'
