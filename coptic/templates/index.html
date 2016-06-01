@@ -23,24 +23,24 @@
 
                             <div class="work-meta-wrap page-tabs">
                                 <a href="{{corpus.annis_link}}" class="text-item annis" target="_blank">
-                                    <span class="urn">Search ANNIS</span>
+                                    <span>Search ANNIS</span>
                                     <span class="fa fa-external-link"></span>
                                 </a>
                                 <a ng-show="corpus.github_tei" href="{{corpus.github}}/{{corpus.annis_corpus_name}}_TEI"
                                     class="text-item" target="_blank">
-                                    <span class="urn">TEI</span>
+                                    <span>TEI</span>
                                     <span class="fa fa-external-link"></span>
                                 </a>
 
                                 <a ng-show="corpus.github_relannis" href="{{corpus.github}}/{{corpus.annis_corpus_name}}_relANNIS"
                                     class="text-item" target="_blank">
-                                    <span class="urn">relANNIS</span>
+                                    <span>relANNIS</span>
                                     <span class="fa fa-external-link"></span>
                                 </a>
 
                                 <a ng-show="corpus.github_paula" href="{{corpus.github}}/{{corpus.annis_corpus_name}}_PAULA"
                                     class="text-item" target="_blank">
-                                    <span class="urn">PAULA</span>
+                                    <span>PAULA</span>
                                     <span class="fa fa-external-link"></span>
                                 </a>
                             </div>
@@ -57,7 +57,7 @@
                                 <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}"
                                    class="text-item {{format.slug}}"
                                    ng-repeat="format in corpus.html_visualization_formats" data-type="{{format.slug}}">
-                                    <span class="urn">{{format.button_title}}</span>
+                                    <span>{{format.button_title}}</span>
                                 </a>
                             </div>
                         </div>
@@ -79,34 +79,42 @@
                         </a>
 
                         <div class="html-wrap version-wrap page-tabs">
+                            <a ng-show="selected_text.previous" href="/{{selected_text.previous}}" class="text-item">
+                                <span>Previous</span>
+                            </a>
+                            <a ng-show="selected_text.next"     href="/{{selected_text.next}}"     class="text-item">
+                                <span>Next</span>
+                            </a>
+
                             <a href="/texts/{{selected_text.corpus.slug}}/{{selected_text.slug}}/{{format.slug}}"
                                class="text-item {{format.slug}}"
                                ng-repeat="format in selected_text.corpus.html_visualization_formats" data-type="{{format.slug}}">
-                                <span class="urn">{{format.button_title}}</span>
+                                <span>{{format.button_title}}</span>
                             </a>
 
                             <a ng-show="selected_text.corpus.github_tei"
                                 href="{{selected_text.corpus.github}}/{{selected_text.corpus.annis_corpus_name}}_TEI"
                                 class="text-item" target="_blank">
-                                <span class="urn">TEI</span>
+                                <span>TEI</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
 
                             <a ng-show="selected_text.corpus.github_relannis"
                                 href="{{selected_text.corpus.github}}/{{selected_text.corpus.annis_corpus_name}}_relANNIS"
                                 class="text-item" target="_blank">
-                                <span class="urn">relANNIS</span>
+                                <span>relANNIS</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
 
                             <a ng-show="selected_text.corpus.github_paula"
                                 href="{{selected_text.corpus.github}}/{{selected_text.corpus.annis_corpus_name}}_PAULA"
                                 class="text-item" target="_blank">
-                                <span class="urn">PAULA</span>
+                                <span>PAULA</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
+
                             <a href="/{{selected_text.edition_urn}}/annis" class="text-item annis" target="_blank">
-                                <span class="urn">Search ANNIS</span>
+                                <span>Search ANNIS</span>
                                 <span class="fa fa-external-link"></span>
                             </a>
                         </div>
@@ -127,11 +135,6 @@
 
                 <div class="end-note">
                     {{ selected_text.endnote }}
-                </div>
-
-                <div class="prev-next page-tabs">
-                    <a ng-show="selected_text.previous" href="/{{selected_text.previous}}">Previous</a>
-                    <a ng-show="selected_text.next"     href="/{{selected_text.next}}">Next</a>
                 </div>
 
                 <div id="information" class="meta-information">
