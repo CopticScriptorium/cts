@@ -141,10 +141,15 @@ angular.module('coptic')
                         urn_value:  location.pathname.substr(1)
                     }
                 }).then(function (response) {
-                    $scope.selected_text = null;
-                    $scope.selected_text_format = null;
                     $scope.corpora = response.data.corpus;
                     $log.debug(response);
+                    $scope.selected_text_format = null;
+                    if ($scope.corpora.length == 1 && $scope.corpora[0].texts.length == 1) {
+                        $scope.selected_text = $scope.corpora[0].texts[0];
+                        $scope.show_single($scope.corpora[0].slug, $scope.selected_text.slug);
+                    } else {
+                        $scope.selected_text = null;
+                    }
                 }, function (response) {
                     $log.debug('Error with API Query:', response);
                 });
@@ -165,13 +170,13 @@ angular.module('coptic')
             } else if (elems === 4) { // Single text (/texts/:corpus_slug/:text_slug)
                 $log.debug('Single text (/texts/:corpus_slug/:text_slug');
                 $scope.selected_text_format = null;
-                $scope.show_single();
+                $scope.show_single($scope.path[2], $scope.path[3]);
             } else if (elems === 5) { // Single text html version (/texts/:corpus_slug/:text_slug/:html_version)
                 $log.debug('Single text html version (/texts/:corpus_slug/:text_slug/:html_version');
                 if ($scope.selected_text) {
                     $scope.show_selected_visualization($scope.path[4]);
                 } else {
-                    $scope.show_single();
+                    $scope.show_single($scope.path[2], $scope.path[3]);
                 }
             }
         });
@@ -194,18 +199,18 @@ angular.module('coptic')
             $http.get("/api/", {params: $scope.text_query}).then(function (response) {
                 $scope.corpora = response.data.corpus;
                 if ($scope.selected_text && $scope.path[4] !== $scope.selected_text_format) {
-                    $scope.show_single();
+                    $scope.show_single($scope.path[2], $scope.path[3]);
                 }
             }, function (response) {
                 $log.debug('Error with API Query:', response);
             });
         };
 
-        $scope.show_single = function () {
+        $scope.show_single = function(corpus_slug, text_slug) {
             $scope.text_query = {
                 model:          "texts",
-                corpus_slug:    $scope.path[2],
-                text_slug:      $scope.path[3]
+                corpus_slug:    corpus_slug,
+                text_slug:      text_slug
             };
             $log.debug('show_single', $scope.text_query);
 
