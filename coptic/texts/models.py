@@ -2,7 +2,7 @@ import datetime
 import re
 from base64 import b64encode
 from django.db import models
-from .probe_github import github_directories_exist
+from .probe_github import github_directory_names
 
 
 class HtmlVisualizationFormat(models.Model):
@@ -65,9 +65,9 @@ class Corpus(models.Model):
 	urn_code = models.CharField(max_length=200)
 	annis_corpus_name = models.CharField(max_length=200)
 	github          = models.CharField(max_length=200)
-	github_tei      = models.BooleanField(default=False)
-	github_relannis = models.BooleanField(default=False)
-	github_paula    = models.BooleanField(default=False)
+	github_tei      = models.CharField(max_length=50, blank=True)
+	github_relannis = models.CharField(max_length=50, blank=True)
+	github_paula    = models.CharField(max_length=50, blank=True)
 	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True)
 	corpus_meta = models.ManyToManyField(CorpusMeta, blank=True)
 
@@ -82,8 +82,7 @@ class Corpus(models.Model):
 		if not self.id:
 			self.created = datetime.datetime.today()
 		self.modified = datetime.datetime.today()
-		found = github_directories_exist(self)
-		self.github_tei, self.github_relannis, self.github_paula = found
+		self.github_tei, self.github_relannis, self.github_paula = github_directory_names(self)
 		super(Corpus, self).save(*args, **kwargs)
 
 	def _annis_corpus_name_b64encoded(self):
