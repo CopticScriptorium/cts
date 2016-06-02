@@ -206,21 +206,22 @@
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html</a>
                     </p>
 
-                    <p>The following links will direct you to the latest versions of the data for download.
+                    <p ng-show="selected_text.corpus.github_tei || selected_text.corpus.github_paula || selected_text.corpus.github_relannis">The
+                        following links will direct you to the latest versions of the data for download.
                     </p>
 
-                    <p><span class="label">TEI XML:</span>
+                    <p ng-show="selected_text.corpus.github_tei"><span class="label">TEI XML:</span>
                         <a href="/{{selected_text.edition_urn}}/tei/xml"
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/tei/xml</a>
                     </p>
 
-                    <p>
+                    <p ng-show="selected_text.corpus.github_paula">
                         <span class="label">Paula XML:</span>
                         <a href="/{{selected_text.edition_urn}}/paula/xml"
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/paula/xml</a>
                     </p>
 
-                    <p>
+                    <p ng-show="selected_text.corpus.github_relannis">
                         <span class="label">reIANNIS:</span>
                         <a href="/{{selected_text.edition_urn}}/relannis"
                            target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/relannis</a>
