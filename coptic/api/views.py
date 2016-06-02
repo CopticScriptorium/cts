@@ -20,16 +20,6 @@ def api(request, params):
     return _query(_process_param_values(params.split("/"), get))
 
 
-def search(request):
-	def params_with_searchfieldvalue_ids(values_by_key):
-		for key, values_list in values_by_key.lists():  # Example: corpus: [c1, c2]
-			for value in values_list:
-				for sfv in SearchFieldValue.objects.filter(search_field__title=key, title=value):
-					yield key, sfv.id, value
-
-	params = [('%s=%d:%s' % param) for param in params_with_searchfieldvalue_ids(request.GET)]
-	return redirect('/filter/' + '&'.join(params) if params else '/')
-
 def _query(params):
     'Search and return data via the JSON API'
 
@@ -118,7 +108,7 @@ def _corpus_and_text_ids_from_filters(filters):
         corpus_ids = corpus_ids_by_field.get(field_name, set())
         text_ids   = text_ids_by_field  .get(field_name, set())
 
-        sfv = SearchFieldValue.objects.filter(id=filter['id'])
+        sfv = SearchFieldValue.objects.filter(search_field__title=filter['field'], title=filter['filter'])
         text_ids.update(sfv.values_list('texts__id', flat=True))
         corpus_ids.update((text.corpus_id for text in Text.objects.filter(id__in=text_ids)))
 

@@ -314,7 +314,7 @@ angular.module('coptic')
             }
 
             $scope.filters.forEach(function (f) {
-                filters_url_parts.push(f.field + "=" + f.id + ":" + f.filter);
+                filters_url_parts.push(f.field + "=" + f.filter);
             });
             $location.path("/filter/" + filters_url_parts.join("&"));
         };
@@ -334,11 +334,10 @@ angular.module('coptic')
 
                 // if filter contains a key val pair demarcated by =
                 if (filter.length > 1) {
-                    filter_value = filter[1].split(":");
+                    filter_value = filter[1]
 
                     $scope.filters.push({
-                        id: filter_value[0],
-                        filter: filter_value[1],
+                        filter: filter_value,
                         field: filter[0]
                     });
                     $(".tool-search-item[data-searchid='" + filter_value[0] + "']").addClass("selected");
@@ -372,7 +371,7 @@ angular.module('coptic')
             });
 
             $scope.filters.forEach(function (f) {
-                filters_url.push(f.field + "=" + f.id + ":" + f.filter);
+                filters_url.push(f.field + "=" + f.filter);
             });
             filters_url = filters_url.join("&");
 
