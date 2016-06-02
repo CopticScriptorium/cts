@@ -145,8 +145,7 @@ angular.module('coptic')
                     $log.debug(response);
                     $scope.selected_text_format = null;
                     if ($scope.corpora.length == 1 && $scope.corpora[0].texts.length == 1) {
-                        $scope.selected_text = $scope.corpora[0].texts[0];
-                        $scope.show_single($scope.corpora[0].slug, $scope.selected_text.slug);
+                        $scope.show_single($scope.corpora[0].slug, $scope.corpora[0].texts[0].slug, $location.search().vis);
                     } else {
                         $scope.selected_text = null;
                     }
@@ -176,7 +175,7 @@ angular.module('coptic')
                 if ($scope.selected_text) {
                     $scope.show_selected_visualization($scope.path[4]);
                 } else {
-                    $scope.show_single($scope.path[2], $scope.path[3]);
+                    $scope.show_single($scope.path[2], $scope.path[3], $scope.path[5]);
                 }
             }
         });
@@ -206,7 +205,7 @@ angular.module('coptic')
             });
         };
 
-        $scope.show_single = function(corpus_slug, text_slug) {
+        $scope.show_single = function(corpus_slug, text_slug, vis_code) {
             $scope.text_query = {
                 model:          "texts",
                 corpus_slug:    corpus_slug,
@@ -245,12 +244,12 @@ angular.module('coptic')
                         $scope.selected_text = text;
                         $scope.filters = [];
                         text.text_meta.forEach(add_properties_from_metadata);
-                        if ($scope.path.length === 5) {
+                        if (vis_code !== undefined) {
                             // This is a kludge coming from my Angular ignorance. Calling show_selected_visualization
                             // synchronously doesn’t work, I presume because the DOM isn’t yet set up as expected. -- dcb
                             // todo Find a better way.
                             $interval(function () {
-                                $scope.show_selected_visualization($scope.path[4]);
+                                $scope.show_selected_visualization(vis_code);
                             }, 1, 1);
                         }
                         $('html,body').scrollTop(0);
