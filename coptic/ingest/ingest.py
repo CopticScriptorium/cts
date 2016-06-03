@@ -14,13 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_texts( ingest_id ):
-	"""
-	For all corpora specified in the database, query the document names and ingest
-	specified html visualizations for all document names
-
-	"""
-
-	from texts.models import Corpus, Text, TextMeta, HtmlVisualization
+	from texts.models import Corpus, Text
 	from annis.models import AnnisServer
 
 	# Define HTML Formats and the ANNIS server to query
@@ -61,8 +55,11 @@ def fetch_texts( ingest_id ):
 			corpus_name = corpus.annis_corpus_name
 			logger.info('Importing corpus ' + corpus.title)
 			metadata.collect_corpus_meta(annis_server.url_corpus_metadata(corpus_name), corpus)
+			doc_names_url = annis_server.url_corpus_docname(corpus_name)
+			titles = [fields[0] for fields in get_selected_annotation_fields(doc_names_url, ('name',))]
+			logger.info('%d documents found for corpus %s: %s' % (len(titles), corpus_name, ', '.join(titles)))
 
-			for title, in get_selected_annotation_fields(annis_server.url_corpus_docname(corpus_name), ('name',)):
+			for title in titles:
 				slug = slugify(title).__str__()
 
 				logger.info('Importing ' + title)
@@ -70,25 +67,25 @@ def fetch_texts( ingest_id ):
 				Text.objects.filter(title=title).delete()
 
 				text = Text()
-				text.title = title
-				text.slug = slug
-				text.save()  # Todo why save here, and again just below?
-
-				metadata.collect_text_meta(annis_server.url_document_metadata(corpus_name, text.title), text)
-				vis.collect(corpus, text, annis_server, driver)
-
+				text.title 	= title
+				text.slug	= slug
 				text.corpus = corpus
 				text.ingest = ingest
 				text.save()
+
+				doc_meta_url = annis_server.url_document_metadata(corpus_name, text.title)
+				metadata.collect_text_meta(doc_meta_url, text)
+				vis.collect(corpus, text, annis_server, driver)
 	except VisServerRefusingConn:
 		logger.error('Aborting ingestion because visualization server repeatedly refused connections')
-				
+
 	driver.quit()
 	vdisplay.stop()
 
 	search.process(annis_server)
 
 	logger.info('Finished')
+
 
 def _retry_getting_ingest(id):
 	'This thread is started before the Ingest save is complete. Retry get if needed.'
