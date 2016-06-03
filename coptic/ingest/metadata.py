@@ -20,9 +20,9 @@ def collect_text_meta(url, text):
 
 def collect(url, factory, parent):
 	parent.remove()
-	for fields in get_selected_annotation_fields(url, ('name', 'value', 'pre', 'corpusname')):
+	for fields in get_selected_annotation_fields(url, ('name', 'value')):
 		meta = factory()
-		meta.name, meta.value, meta.pre, meta.corpus_name = fields
+		meta.name, meta.value = fields
 		meta.save()
 		parent.add(meta)
 

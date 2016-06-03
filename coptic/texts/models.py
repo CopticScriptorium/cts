@@ -29,10 +29,8 @@ class HtmlVisualization(models.Model):
 
 
 class CorpusMeta(models.Model):
-	name = models.CharField(max_length=200)
+	name  = models.CharField(max_length=200)
 	value = models.CharField(max_length=500)
-	pre = models.CharField(max_length=200)
-	corpus_name = models.CharField(max_length=200)
 
 	class Meta:
 		verbose_name = "Corpus Meta Item"
@@ -77,10 +75,8 @@ class Corpus(models.Model):
 
 
 class TextMeta(models.Model):
-	name = models.CharField(max_length=200)
+	name  = models.CharField(max_length=200)
 	value = models.CharField(max_length=500)
-	pre = models.CharField(max_length=200)
-	corpus_name = models.CharField(max_length=200)
 
 	class Meta:
 		verbose_name = "Text Meta Item"
