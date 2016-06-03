@@ -6,10 +6,6 @@ from .probe_github import github_directory_names
 
 
 class HtmlVisualizationFormat(models.Model):
-	"""
-	Model for different types of HTML visualizations, such as "norm", "ana", "dipl", and "sahidica"
-	"""
-
 	title = models.CharField(max_length=200)
 	button_title = models.CharField(max_length=200)
 	slug = models.CharField(max_length=200)
@@ -22,10 +18,6 @@ class HtmlVisualizationFormat(models.Model):
 
 
 class HtmlVisualization(models.Model):
-	"""
-	HTML Visualization, specifying a format of visualization and the visualization HTML
-	"""
-
 	visualization_format = models.ForeignKey(HtmlVisualizationFormat, blank=True, null=True)
 	html = models.TextField()
 
@@ -37,10 +29,6 @@ class HtmlVisualization(models.Model):
 
 
 class CorpusMeta(models.Model):
-	"""
-	Meta corpus item ingested from ANNIS
-	"""
-
 	name = models.CharField(max_length=200)
 	value = models.CharField(max_length=500)
 	pre = models.CharField(max_length=200)
@@ -54,10 +42,6 @@ class CorpusMeta(models.Model):
 
 
 class Corpus(models.Model):
-	"""
-	Corpus model, containing pertinent information to corpora ingested from ANNIS
-	"""
-
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
 	title = models.CharField(max_length=200)
@@ -93,10 +77,6 @@ class Corpus(models.Model):
 
 
 class TextMeta(models.Model):
-	"""
-	Meta text item ingested from ANNIS
-	"""
-
 	name = models.CharField(max_length=200)
 	value = models.CharField(max_length=500)
 	pre = models.CharField(max_length=200)
@@ -120,10 +100,6 @@ class TextMeta(models.Model):
 
 
 class Text(models.Model):
-	"""
-	Text object for a single document ingested from ANNIS, mapped to many HTML visualizations
-	"""
-
 	from ingest.models import Ingest
 	title = models.CharField(max_length=200)
 	slug = models.SlugField(max_length=40)
@@ -148,10 +124,6 @@ class Text(models.Model):
 
 
 class SearchField(models.Model):
-	"""
-	Search Field ingested from Metadata from ANNIS
-	"""
-
 	title = models.CharField(max_length=200)
 	order = models.IntegerField()
 	splittable = models.CharField(max_length=200, blank=True, null=True)
@@ -164,9 +136,6 @@ class SearchField(models.Model):
 
 
 class SearchFieldValue(models.Model):
-	"""
-	Value for Search Field ingested from Metadata from ANNIS
-	"""
 	title = models.CharField(max_length=500)
 	search_field = models.ForeignKey(SearchField, blank=True, null=True)
 	texts = models.ManyToManyField(Text, blank=True)
