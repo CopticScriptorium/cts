@@ -107,10 +107,21 @@ class Text(models.Model):
 		return super(Text, self).save(*args, **kwargs)
 
 
+class SpecialMeta(models.Model):
+	'Metadata names that are used as “search” buttons and that may have multiple values splittable by comma'
+	name 		= models.CharField(max_length=200, unique=True)
+	order 		= models.IntegerField()
+	splittable 	= models.BooleanField(default=False)
+
+	class Meta:
+		verbose_name = "Special Metadata Name"
+
+	def __str__(self):
+		return self.name
+
+
 class SearchField(models.Model):
 	title = models.CharField(max_length=200)
-	order = models.IntegerField()
-	splittable = models.CharField(max_length=200, blank=True, null=True)
 
 	class Meta:
 		verbose_name = "Search Field"

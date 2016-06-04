@@ -6,19 +6,14 @@ logger = logging.getLogger(__name__)
 
 
 def process(annis_server):
-	from texts.models import SearchField, SearchFieldValue
+	from texts.models import SpecialMeta, SearchField, SearchFieldValue
 	from texts.models import Text
 	search_fields = _fields(annis_server)
-	current_order_and_splittable_by_title = {sf.title:
-		{
-			'order': 		sf.order,
-			'splittable': 	sf.splittable
-		}
-		for sf in SearchField.objects.all()
-	}
 
 	logger.info("Rebuilding %d SearchFields, and SearchFieldValues" % len(search_fields))
 	SearchField.objects.all().delete()
+
+	splittable_names = [sm.name for sm in SpecialMeta.objects.filter(splittable=True)]
 
 	saved_SearchFieldValues = {}  # (search_field ID, title) -> SearchFieldValue
 
@@ -27,16 +22,6 @@ def process(annis_server):
 		sf = SearchField()
 		sf.title = search_field['name']
 
-		# Preserve any current order and splittable values
-		current_order_and_splittable = current_order_and_splittable_by_title.get(sf.title)
-
-		if current_order_and_splittable:
-			sf.order 		= current_order_and_splittable['order']
-			sf.splittable 	= current_order_and_splittable['splittable']
-		else:
-			sf.order 		= 10
-			sf.splittable 	= ""
-
 		# Save the search field so that it has an id to be added to the
 		# search field value search_field foreign key attribute
 		sf.save()
@@ -44,7 +29,7 @@ def process(annis_server):
 		# Save value data
 		for value in search_field['values']:
 			value_value = value['value']
-			split_values = value_value.split(sf.splittable) if sf.splittable else [value_value]
+			split_values = value_value.split(',') if search_field['name'] in splittable_names else [value_value]
 
 			for split_value in split_values:
 				title = split_value.strip()
@@ -67,7 +52,7 @@ def process(annis_server):
 def _fields(annis_server):
 	from texts.models import Text
 
-	search_fields = []  # List of dict of 'name', 'values'
+	search_fields = []  # List of dict of 'name', 'values', where 'values' is a list of dict of 'value', 'texts'
 
 	all_texts = Text.objects.all()
 	logger.info("Fetching metadata annotations for %d texts" % len(all_texts))

@@ -8,13 +8,9 @@ logger = logging.getLogger(__name__)
 
 def collect_text_meta(url, text):
 	logger.info("Fetching and saving text metadata")
-	def factory(): return TextMeta()
-	collect(url, TextMeta, text.text_meta)
+	text.text_meta.remove()
+	all_meta = list(TextMeta.objects.all())
 
-
-def collect(url, table, parent):
-	parent.remove()
-	all_meta = list(table.objects.all())
 	for name, value in get_selected_annotation_fields(url, ('name', 'value')):
 		existing = [item for item in all_meta if item.name == name and item.value == value]
 		if existing:
@@ -22,10 +18,10 @@ def collect(url, table, parent):
 				logger.info('There are %d duplicates for %s: %s.' % (len(existing) - 1, name, value))
 			meta = existing[0]
 		else:
-			meta = table()
+			meta = TextMeta()
 			meta.name, meta.value = name, value
 			meta.save()
-		parent.add(meta)
+		text.text_meta.add(meta)
 
 
 def get_selected_annotation_fields(url, field_names):
