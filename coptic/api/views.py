@@ -1,9 +1,8 @@
 import logging
-from django.shortcuts import redirect
 import json
 from api.json import json_view
 from api.encoder import encode
-from texts.models import Text, Corpus, SearchFieldValue, TextMeta
+from texts.models import Text, Corpus, TextMeta, SpecialMeta
 import functools
 
 log = logging.getLogger(__name__)
@@ -100,22 +99,27 @@ def _add_texts_to_corpora(corpora, text_ids=None, texts=None):
 
 
 def _corpus_and_text_ids_from_filters(filters):
+    splittable = [sm.name for sm in SpecialMeta.objects.all() if sm.splittable]
     corpus_ids_by_field = {}
     text_ids_by_field = {}
 
     for filter in filters:
-        field_name = filter['field']
-        corpus_ids = corpus_ids_by_field.get(field_name, set())
-        text_ids   = text_ids_by_field  .get(field_name, set())
+        name  = filter['field']
+        value = filter['filter']
+        corpus_ids = corpus_ids_by_field.get(name, set())
+        text_ids   = text_ids_by_field  .get(name, set())
 
-        sfv = SearchFieldValue.objects.filter(search_field__title=filter['field'], title=filter['filter'])
-        text_ids.update(sfv.values_list('texts__id', flat=True))
-        corpus_ids.update((text.corpus_id for text in Text.objects.filter(id__in=text_ids)))
+        partly_filtered = Text.objects.filter(text_meta__name__iexact=name)
+        texts = partly_filtered.filter(text_meta__value__contains=value) if name in splittable else \
+			partly_filtered.filter(text_meta__value__iexact=value)
+
+        text_ids  .update([t.id        for t in texts])
+        corpus_ids.update([t.corpus_id for t in texts])
 
         if corpus_ids:
-            corpus_ids_by_field[field_name] = corpus_ids
+            corpus_ids_by_field[name] = corpus_ids
         if text_ids:
-            text_ids_by_field[field_name] = text_ids
+            text_ids_by_field[name] = text_ids
 
     return _intersect_ids_across_fields(corpus_ids_by_field), _intersect_ids_across_fields(text_ids_by_field)
 

@@ -118,25 +118,3 @@ class SpecialMeta(models.Model):
 
 	def __str__(self):
 		return self.name
-
-
-class SearchField(models.Model):
-	title = models.CharField(max_length=200)
-
-	class Meta:
-		verbose_name = "Search Field"
-
-	def __str__(self):
-		return self.title
-
-
-class SearchFieldValue(models.Model):
-	title = models.CharField(max_length=500)
-	search_field = models.ForeignKey(SearchField, blank=True, null=True)
-	texts = models.ManyToManyField(Text, blank=True)
-
-	class Meta:
-		verbose_name = "Search Field Value"
-
-	def __str__(self):
-		return self.search_field.title  + ": " + self.title

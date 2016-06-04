@@ -6,19 +6,19 @@ import logging
 from django.utils.text import slugify
 from selenium import webdriver
 from xvfbwrapper import Xvfb
-from ingest import search, metadata, vis
+from ingest import metadata, vis
 from ingest.metadata import get_selected_annotation_fields
 from ingest.vis import VisServerRefusingConn
 
 logger = logging.getLogger(__name__)
 
 
-def fetch_texts( ingest_id ):
+def fetch_texts(ingest_id):
 	from texts.models import Corpus, Text
 	from annis.models import AnnisServer
 
 	# Define HTML Formats and the ANNIS server to query
-	annis_server = AnnisServer.objects.all()[:1] 
+	annis_server = AnnisServer.objects.all()[:1]
 
 	if annis_server:
 		annis_server = annis_server[0]
@@ -32,8 +32,6 @@ def fetch_texts( ingest_id ):
 	if not ingest:
 		logger.error('Ingest with ID %d not found in database' % ingest_id)
 		return
-
-	corpora_ids = ingest.corpora.values_list('id', flat=True)
 
 	logger.info("Starting virtual framebuffer")
 	vdisplay = Xvfb()
@@ -50,24 +48,24 @@ def fetch_texts( ingest_id ):
 		return
 	logger.info(driver)
 
+	ingesting_corpora = Corpus.objects.filter(id__in=(ingest.corpora.values_list('id', flat=True)))
+
 	try:
-		for corpus in Corpus.objects.filter(id__in=(corpora_ids)) if corpora_ids else Corpus.objects.all():
+		for corpus in ingesting_corpora:
 			corpus_name = corpus.annis_corpus_name
 			logger.info('Importing corpus ' + corpus.title)
 			doc_names_url = annis_server.url_corpus_docname(corpus_name)
-			titles = [fields[0] for fields in get_selected_annotation_fields(doc_names_url, ('name',))]
-			logger.info('%d documents found for corpus %s: %s' % (len(titles), corpus_name, ', '.join(titles)))
+			doc_titles = [fields[0] for fields in get_selected_annotation_fields(doc_names_url, ('name',))]
+			logger.info('%d documents found for corpus %s: %s' % (len(doc_titles), corpus_name, ', '.join(doc_titles)))
 
-			for title in titles:
-				slug = slugify(title).__str__()
-
+			for title in doc_titles:
 				logger.info('Importing ' + title)
 
 				Text.objects.filter(title=title).delete()
 
 				text = Text()
-				text.title 	= title
-				text.slug	= slug
+				text.title = title
+				text.slug = slugify(title).__str__()
 				text.corpus = corpus
 				text.ingest = ingest
 				text.save()
@@ -80,8 +78,6 @@ def fetch_texts( ingest_id ):
 
 	driver.quit()
 	vdisplay.stop()
-
-	search.process(annis_server)
 
 	logger.info('Finished')
 
