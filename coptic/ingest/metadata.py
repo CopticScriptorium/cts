@@ -1,14 +1,9 @@
 import logging
 import requests
 from bs4 import BeautifulSoup
-from texts.models import TextMeta, CorpusMeta
+from texts.models import TextMeta
 
 logger = logging.getLogger(__name__)
-
-
-def collect_corpus_meta(url, corpus):
-	logger.info("Fetching and saving corpus metadata")
-	collect(url, CorpusMeta, corpus.corpus_meta)
 
 
 def collect_text_meta(url, text):

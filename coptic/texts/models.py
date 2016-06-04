@@ -28,17 +28,6 @@ class HtmlVisualization(models.Model):
 		return self.visualization_format.title
 
 
-class CorpusMeta(models.Model):
-	name  = models.CharField(max_length=200)
-	value = models.CharField(max_length=500)
-
-	class Meta:
-		verbose_name = "Corpus Meta Item"
-
-	def __str__(self):
-		return self.name + ": " + self.value
-
-
 class Corpus(models.Model):
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
@@ -51,7 +40,6 @@ class Corpus(models.Model):
 	github_relannis = models.CharField(max_length=50, blank=True)
 	github_paula    = models.CharField(max_length=50, blank=True)
 	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True)
-	corpus_meta = models.ManyToManyField(CorpusMeta, blank=True)
 
 	class Meta:
 		verbose_name_plural = "Corpora"

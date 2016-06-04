@@ -54,7 +54,6 @@ def fetch_texts( ingest_id ):
 		for corpus in Corpus.objects.filter(id__in=(corpora_ids)) if corpora_ids else Corpus.objects.all():
 			corpus_name = corpus.annis_corpus_name
 			logger.info('Importing corpus ' + corpus.title)
-			metadata.collect_corpus_meta(annis_server.url_corpus_metadata(corpus_name), corpus)
 			doc_names_url = annis_server.url_corpus_docname(corpus_name)
 			titles = [fields[0] for fields in get_selected_annotation_fields(doc_names_url, ('name',))]
 			logger.info('%d documents found for corpus %s: %s' % (len(titles), corpus_name, ', '.join(titles)))

@@ -20,7 +20,6 @@ def create_annis_server():
         annis = AnnisServer.objects.create()
         annis.title = 'Georgetown Annis'
         annis.base_domain = 'https://corpling.uis.georgetown.edu'
-        annis.corpus_metadata_url = "annis-service/annis/meta/corpus/:corpus_name"
         annis.corpus_docname_url = "annis-service/annis/meta/docnames/:corpus_name"
         annis.document_metadata_url = "annis-service/annis/meta/doc/:corpus_name/:document_name"
         annis.html_visualization_url = "annis/embeddedvis/htmldoc/:corpus_name/:document_name?config=:html_visualization_format"
