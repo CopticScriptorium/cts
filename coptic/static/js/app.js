@@ -175,7 +175,7 @@ angular.module('coptic')
                 if ($scope.selected_text) {
                     $scope.show_selected_visualization($scope.path[4]);
                 } else {
-                    $scope.show_single($scope.path[2], $scope.path[3], $scope.path[5]);
+                    $scope.show_single($scope.path[2], $scope.path[3], $scope.path[4]);
                 }
             }
         });
