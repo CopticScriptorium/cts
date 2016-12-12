@@ -63,6 +63,12 @@ def fetch_texts(ingest_id):
 				doc_meta_url = annis_server.url_document_metadata(corpus_name, text.title)
 				metadata.collect_text_meta(doc_meta_url, text)
 				vis.collect(corpus, text, annis_server)
+
+				ingest.num_texts_ingested += 1
+				ingest.save()
+
+			ingest.num_corpora_ingested += 1
+			ingest.save()
 	except VisServerRefusingConn:
 		logger.error('Aborting ingestion because visualization server repeatedly refused connections')
 
