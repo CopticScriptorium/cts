@@ -64,7 +64,7 @@ class Corpus(models.Model):
 
 class TextMeta(models.Model):
 	name  = models.CharField(max_length=200)
-	value = models.CharField(max_length=500)
+	value = models.CharField(max_length=10000)
 
 	class Meta:
 		verbose_name = "Text Meta Item"
