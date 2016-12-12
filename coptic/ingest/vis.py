@@ -1,7 +1,9 @@
 import re
+import os
 import logging
 from time import sleep
 import resource
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,7 +12,7 @@ from texts.models import HtmlVisualization
 logger = logging.getLogger(__name__)
 
 
-def collect(corpus, text, annis_server, driver):
+def collect(corpus, text, annis_server):
 	corpus_name = corpus.annis_corpus_name
 	formats = corpus.html_visualization_formats.all()
 	logger.info('Fetching %d visualizations' % len(formats))
@@ -18,34 +20,56 @@ def collect(corpus, text, annis_server, driver):
 	for html_format in formats:
 		html_vis_url = annis_server.url_html_visualization(corpus_name, text.title, html_format.slug)
 
-		try:
-			logger.info(html_format.title)
-			retries_left = 5
-			connection_accepted = False
-			while not connection_accepted and retries_left:
+		vis_tries_left = 3
+		vis_obtained = False
+
+		while not vis_obtained and vis_tries_left:
+			try:
+				logger.info("Starting browser")
 				try:
-					driver.get(html_vis_url)
-					connection_accepted = True
-				except ConnectionRefusedError as cre:
-					logger.warning(cre)
-					driver.close()
-					retries_left -= 1
-					sleep(15)
+					driver = webdriver.Chrome(os.environ.get('CHROMEDRIVER', '/usr/lib/chromium-browser/chromedriver'))
+				except Exception as e:
+					logger.error('Unable to start browser: %s' % e)
+					vdisplay.stop()
+					return
+				logger.info(driver)
 
-			if retries_left == 0:
-				raise VisServerRefusingConn()
+				logger.info(html_format.title)
+				retries_left = 5
+				connection_accepted = False
+				while not connection_accepted and retries_left:
+					try:
+						driver.get(html_vis_url)
+						connection_accepted = True
+					except ConnectionRefusedError as cre:
+						logger.warning(cre)
+						driver.close()
+						retries_left -= 1
+						sleep(15)
 
-			WebDriverWait(driver, 60 * 2).until(EC.presence_of_element_located((By.CLASS_NAME, "htmlvis")))
-			driver.delete_all_cookies()
+				if retries_left == 0:
+					raise VisServerRefusingConn()
 
-			body = driver.find_element_by_xpath("/html/body")
-			text_html = body.get_attribute("innerHTML")
-			styles = driver.find_elements_by_xpath("/html/head/style")
-		except Exception as e:
-			logger.error('Error getting %s: %s' % (html_vis_url, e))
-			logger.error('Page source: ' + driver.page_source)
-			text_html = ""
-			styles = []
+				logger.info('Calling WebDriverWait')
+				WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "htmlvis")))
+				logger.info('WebDriverWait returned')
+				driver.delete_all_cookies()
+
+				body = driver.find_element_by_xpath("/html/body")
+				text_html = body.get_attribute("innerHTML")
+				styles = driver.find_elements_by_xpath("/html/head/style")
+
+				vis_obtained = True
+			except Exception as e:
+				vis_tries_left -= 1
+				logger.error('Error getting %s: %s' % (html_vis_url, e))
+				logger.error('Page source: ' + driver.page_source)
+				text_html = ""
+				styles = []
+				driver.quit()
+
+		if not vis_obtained:
+			logger.error('Unable to get %s, even with retries.' % html_vis_url)
 
 		if "Client response status: 403" in text_html:
 			logger.error(" -- Error fetching " + html_vis_url)
@@ -61,6 +85,8 @@ def collect(corpus, text, annis_server, driver):
 			script_elems = re.findall(r'<script.*script>', text_html, re.DOTALL)
 			for script_elem in script_elems:
 				text_html = text_html.replace( script_elem, "" )
+
+		driver.quit()
 
 		vis = HtmlVisualization()
 		vis.visualization_format = html_format

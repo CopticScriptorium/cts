@@ -1,10 +1,8 @@
 'Fetch Texts from their source in ANNIS'
 
 from time import sleep
-import os
 import logging
 from django.utils.text import slugify
-from selenium import webdriver
 from xvfbwrapper import Xvfb
 from ingest import metadata, vis
 from ingest.metadata import get_selected_annotation_fields
@@ -39,14 +37,6 @@ def fetch_texts(ingest_id):
 		vdisplay.start()
 	except Exception as e:
 		logger.error('Unable to start Xvfb: %s' % e)
-	logger.info("Starting browser")
-	try:
-		driver = webdriver.Chrome(os.environ.get('CHROMEDRIVER', '/usr/lib/chromium-browser/chromedriver'))
-	except Exception as e:
-		logger.error('Unable to start browser: %s' % e)
-		vdisplay.stop()
-		return
-	logger.info(driver)
 
 	ingesting_corpora = Corpus.objects.filter(id__in=(ingest.corpora.values_list('id', flat=True)))
 
@@ -72,11 +62,10 @@ def fetch_texts(ingest_id):
 
 				doc_meta_url = annis_server.url_document_metadata(corpus_name, text.title)
 				metadata.collect_text_meta(doc_meta_url, text)
-				vis.collect(corpus, text, annis_server, driver)
+				vis.collect(corpus, text, annis_server)
 	except VisServerRefusingConn:
 		logger.error('Aborting ingestion because visualization server repeatedly refused connections')
 
-	driver.quit()
 	vdisplay.stop()
 
 	logger.info('Finished')
