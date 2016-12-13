@@ -94,8 +94,21 @@ def _add_texts_to_corpora(corpora, text_ids=None, texts=None):
     adding_texts = texts if texts else \
 		(Text.objects.filter(id__in=text_ids) if text_ids else Text.objects.all()).\
         select_related('corpus').order_by('slug')
+    texts_by_id = {t.id: t for t in adding_texts}
+
+    def create_order(title, order):
+        'order should be a list of zero or one element containing a string'
+        if order and len(order) == 1:
+            return order[0]
+
+        return title
+
+    text_ids_and_orders = [(text.id, create_order(text.title, [o.value for o in text.text_meta.filter(name='order')]))
+                           for text in adding_texts]  # List of id, order tuples
+    sorted_text_ids_and_orders = sorted(text_ids_and_orders, key=lambda t: t[1])
+    sorted_text_ids = [tio[0] for tio in sorted_text_ids_and_orders]
     for corpus in corpora:
-        corpus.texts = [t for t in adding_texts if t.corpus_id == corpus.id]
+        corpus.texts = [texts_by_id[i] for i in sorted_text_ids if texts_by_id[i].corpus_id == corpus.id]
 
 
 def _corpus_and_text_ids_from_filters(filters):
