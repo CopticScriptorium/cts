@@ -88,7 +88,8 @@ def collect(corpus, text, annis_server):
 		self_max_mem, child_max_mem = [resource.getrusage(who).ru_maxrss for who in (resource.RUSAGE_SELF, resource.RUSAGE_CHILDREN)]
 		logger.info('Max mem, self: {:,}, children: {:,}'.format(self_max_mem, child_max_mem))
 
-	driver.quit()
+	if driver:
+		driver.quit()
 
 class VisServerRefusingConn(Exception):
 	pass
