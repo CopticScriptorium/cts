@@ -83,6 +83,18 @@ class TextMeta(models.Model):
 		return v
 
 
+class MetaOrder(models.Model):
+	'Metadata names that are ordered ahead of the others when displayed on a text'
+	name 		= models.CharField(max_length=200, unique=True)
+	order 		= models.IntegerField()
+
+	class Meta:
+		verbose_name = "Metadata Order"
+
+	def __str__(self):
+		return self.name
+
+
 class Text(models.Model):
 	from ingest.models import Ingest
 	title = models.CharField(max_length=200)

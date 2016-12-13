@@ -1,7 +1,7 @@
 import logging
 import json
 from api.json import json_view
-from api.encoder import encode
+from api.encoder import encode_corpus, encode_text
 from texts.models import Text, Corpus, TextMeta, SpecialMeta
 import functools
 
@@ -48,7 +48,7 @@ def _query(params):
                 _add_texts_to_corpora(corpora)
 
             # fetch the results and add to the objects dict
-            objects['corpus'] = _json_from_queryset(corpora)
+            objects['corpus'] = _json_from_corpora(corpora)
 
         # Otherwise, if this is a query to the texts model
         elif model == 'texts':
@@ -61,7 +61,7 @@ def _query(params):
                 return objects
 
             # fetch the results and add to the objects dict
-            objects['text'] = encode(text)
+            objects['text'] = encode_text(text)
 
     # Otherwise, no query is specified
     else:
@@ -78,7 +78,7 @@ def _process_urn_request(urn, objects):
     corpora = Corpus.objects.filter(id__in=corpus_ids)
 
     _add_texts_to_corpora(corpora, texts=texts)
-    objects['corpus'] = _json_from_queryset(corpora)
+    objects['corpus'] = _json_from_corpora(corpora)
 
 
 def texts_for_urn(urn):
@@ -149,8 +149,8 @@ def _intersect_ids_across_fields(id_sets_by_fieldname):
 	return functools.reduce(intersect_sets, ids_sets) if ids_sets else []
 
 
-def _json_from_queryset(queryset):
-    return [encode(item) for item in queryset]
+def _json_from_corpora(queryset):
+    return [encode_corpus(item) for item in queryset]
 
 
 def _process_param_values(params, query_dict):
