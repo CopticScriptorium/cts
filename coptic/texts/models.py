@@ -6,10 +6,6 @@ from .probe_github import github_directory_names
 
 
 class HtmlVisualizationFormat(models.Model):
-	"""
-	Model for different types of HTML visualizations, such as "norm", "ana", "dipl", and "sahidica"
-	"""
-
 	title = models.CharField(max_length=200)
 	button_title = models.CharField(max_length=200)
 	slug = models.CharField(max_length=200)
@@ -22,10 +18,6 @@ class HtmlVisualizationFormat(models.Model):
 
 
 class HtmlVisualization(models.Model):
-	"""
-	HTML Visualization, specifying a format of visualization and the visualization HTML
-	"""
-
 	visualization_format = models.ForeignKey(HtmlVisualizationFormat, blank=True, null=True)
 	html = models.TextField()
 
@@ -36,28 +28,7 @@ class HtmlVisualization(models.Model):
 		return self.visualization_format.title
 
 
-class CorpusMeta(models.Model):
-	"""
-	Meta corpus item ingested from ANNIS
-	"""
-
-	name = models.CharField(max_length=200)
-	value = models.CharField(max_length=500)
-	pre = models.CharField(max_length=200)
-	corpus_name = models.CharField(max_length=200)
-
-	class Meta:
-		verbose_name = "Corpus Meta Item"
-
-	def __str__(self):
-		return self.name + ": " + self.value
-
-
 class Corpus(models.Model):
-	"""
-	Corpus model, containing pertinent information to corpora ingested from ANNIS
-	"""
-
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
 	title = models.CharField(max_length=200)
@@ -69,7 +40,6 @@ class Corpus(models.Model):
 	github_relannis = models.CharField(max_length=50, blank=True)
 	github_paula    = models.CharField(max_length=50, blank=True)
 	html_visualization_formats = models.ManyToManyField(HtmlVisualizationFormat, blank=True)
-	corpus_meta = models.ManyToManyField(CorpusMeta, blank=True)
 
 	class Meta:
 		verbose_name_plural = "Corpora"
@@ -93,14 +63,8 @@ class Corpus(models.Model):
 
 
 class TextMeta(models.Model):
-	"""
-	Meta text item ingested from ANNIS
-	"""
-
-	name = models.CharField(max_length=200)
-	value = models.CharField(max_length=500)
-	pre = models.CharField(max_length=200)
-	corpus_name = models.CharField(max_length=200)
+	name  = models.CharField(max_length=200)
+	value = models.CharField(max_length=10000)
 
 	class Meta:
 		verbose_name = "Text Meta Item"
@@ -119,11 +83,19 @@ class TextMeta(models.Model):
 		return v
 
 
-class Text(models.Model):
-	"""
-	Text object for a single document ingested from ANNIS, mapped to many HTML visualizations
-	"""
+class MetaOrder(models.Model):
+	'Metadata names that are ordered ahead of the others when displayed on a text'
+	name 		= models.CharField(max_length=200, unique=True)
+	order 		= models.IntegerField()
 
+	class Meta:
+		verbose_name = "Metadata Order"
+
+	def __str__(self):
+		return self.name
+
+
+class Text(models.Model):
 	from ingest.models import Ingest
 	title = models.CharField(max_length=200)
 	slug = models.SlugField(max_length=40)
@@ -147,32 +119,14 @@ class Text(models.Model):
 		return super(Text, self).save(*args, **kwargs)
 
 
-class SearchField(models.Model):
-	"""
-	Search Field ingested from Metadata from ANNIS
-	"""
-
-	title = models.CharField(max_length=200)
-	order = models.IntegerField()
-	splittable = models.CharField(max_length=200, blank=True, null=True)
+class SpecialMeta(models.Model):
+	'Metadata names that are used as “search” buttons and that may have multiple values splittable by comma'
+	name 		= models.CharField(max_length=200, unique=True)
+	order 		= models.IntegerField()
+	splittable 	= models.BooleanField(default=False)
 
 	class Meta:
-		verbose_name = "Search Field"
+		verbose_name = "Special Metadata Name"
 
 	def __str__(self):
-		return self.title
-
-
-class SearchFieldValue(models.Model):
-	"""
-	Value for Search Field ingested from Metadata from ANNIS
-	"""
-	title = models.CharField(max_length=500)
-	search_field = models.ForeignKey(SearchField, blank=True, null=True)
-	texts = models.ManyToManyField(Text, blank=True)
-
-	class Meta:
-		verbose_name = "Search Field Value"
-
-	def __str__(self):
-		return self.search_field.title  + ": " + self.title
+		return self.name

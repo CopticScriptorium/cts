@@ -7,7 +7,6 @@ class AnnisServer(Model):
 	modified 				= DateTimeField(editable=False)
 	title 					= CharField(max_length=200)
 	base_domain 			= CharField(max_length=200)  # https://<host>
-	corpus_metadata_url 	= CharField(max_length=200)  # <path>/:corpus_name
 	corpus_docname_url 		= CharField(max_length=200)  # <path>/:corpus_name
 	document_metadata_url 	= CharField(max_length=200)  # <path>/:corpus_name/:document_name
 	html_visualization_url 	= CharField(max_length=200)  # <path>/:corpus_name/:document_name?config=:html_visualization_format
@@ -26,9 +25,6 @@ class AnnisServer(Model):
 		self.modified = datetime.datetime.today()
 
 		return super(AnnisServer, self).save(*args, **kwargs)
-
-	def url_corpus_metadata(self, corpus_name):
-		return self._fill_corpus_url(self.corpus_metadata_url, corpus_name)
 
 	def url_corpus_docname(self, corpus_name):
 		return self._fill_corpus_url(self.corpus_docname_url, corpus_name)

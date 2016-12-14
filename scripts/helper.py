@@ -6,7 +6,7 @@ that import commands can operate at the top of the file."""
 from annis.models import AnnisServer
 from texts.models import Corpus
 from texts.models import HtmlVisualizationFormat
-from texts.models import SearchField
+from texts.models import SpecialMeta
 import xml.etree.ElementTree as ET
 from urllib import request
 
@@ -20,7 +20,6 @@ def create_annis_server():
         annis = AnnisServer.objects.create()
         annis.title = 'Georgetown Annis'
         annis.base_domain = 'https://corpling.uis.georgetown.edu'
-        annis.corpus_metadata_url = "annis-service/annis/meta/corpus/:corpus_name"
         annis.corpus_docname_url = "annis-service/annis/meta/docnames/:corpus_name"
         annis.document_metadata_url = "annis-service/annis/meta/doc/:corpus_name/:document_name"
         annis.html_visualization_url = "annis/embeddedvis/htmldoc/:corpus_name/:document_name?config=:html_visualization_format"
@@ -190,33 +189,33 @@ def load_searchfields():
     web user interface.
     
     This is essential because two of the search fields need to have the
-    splittable property properly set, or the data won't be ingested properly.
+    splittable property enabled, or the data won't be ingested properly.
     """
     
-    corpus = SearchField()
+    corpus = SpecialMeta()
     corpus.title = "corpus"
     corpus.order = 1
     
-    author = SearchField()
+    author = SpecialMeta()
     author.title = "author"
     author.order = 2
 
-    ms_name = SearchField()
+    ms_name = SpecialMeta()
     ms_name.title = "msName"
     ms_name.order = 3
 
-    annotation = SearchField()
+    annotation = SpecialMeta()
     annotation.title = "annotation"
     annotation.order = 4
-    annotation.splittable = ","
+    annotation.splittable = True
 
-    translation = SearchField()
+    translation = SpecialMeta()
     translation.title = "translation"
     translation.order = 5
-    translation.splittable = ","
+    translation.splittable = True
     
-    for searchfield in [corpus, author, ms_name, annotation, translation]:
+    for field in [corpus, author, ms_name, annotation, translation]:
         try:
-            SearchField.objects.get(title__exact=searchfield.title)
-        except SearchField.DoesNotExist:
-            searchfield.save()
+            SpecialMeta.objects.get(name=field.name)
+        except SpecialMeta.DoesNotExist:
+            field.save()

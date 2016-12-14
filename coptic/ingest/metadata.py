@@ -1,30 +1,27 @@
 import logging
 import requests
 from bs4 import BeautifulSoup
-from texts.models import TextMeta, CorpusMeta
+from texts.models import TextMeta
 
 logger = logging.getLogger(__name__)
 
 
-def collect_corpus_meta(url, corpus):
-	logger.info("Fetching and saving corpus metadata")
-	def factory(): return CorpusMeta()
-	collect(url, factory, corpus.corpus_meta)
-
-
 def collect_text_meta(url, text):
 	logger.info("Fetching and saving text metadata")
-	def factory(): return TextMeta()
-	collect(url, factory, text.text_meta)
+	text.text_meta.remove()
+	all_meta = list(TextMeta.objects.all())
 
-
-def collect(url, factory, parent):
-	parent.remove()
-	for fields in get_selected_annotation_fields(url, ('name', 'value', 'pre', 'corpusname')):
-		meta = factory()
-		meta.name, meta.value, meta.pre, meta.corpus_name = fields
-		meta.save()
-		parent.add(meta)
+	for name, value in get_selected_annotation_fields(url, ('name', 'value')):
+		existing = [item for item in all_meta if item.name == name and item.value == value]
+		if existing:
+			if len(existing) > 1:
+				logger.info('There are %d duplicates for %s: %s.' % (len(existing) - 1, name, value))
+			meta = existing[0]
+		else:
+			meta = TextMeta()
+			meta.name, meta.value = name, value
+			meta.save()
+		text.text_meta.add(meta)
 
 
 def get_selected_annotation_fields(url, field_names):

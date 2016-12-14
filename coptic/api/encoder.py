@@ -1,7 +1,7 @@
-"""
-Define custom encoder for the queryset model class instances
-"""
-from texts.models import Text, Corpus
+'Encode corpora and texts for the front end'
+
+from texts.models import MetaOrder
+
 
 def _visualizations(obj):
 	return [{
@@ -10,6 +10,7 @@ def _visualizations(obj):
 		"html":     v.html
 	} for v in obj.html_visualizations.all()]
 
+
 def _vis_formats(obj):
 	return [{
 		'title':        vf.title,
@@ -17,46 +18,52 @@ def _vis_formats(obj):
 		'slug':         vf.slug
 	} for vf in obj.html_visualization_formats.all()]
 
-def _text_meta(obj):
+
+def _text_meta(text):
+	meta_orders_by_name = {mo.name: mo.order for mo in MetaOrder.objects.all()}
+
+	def order(name):
+		return meta_orders_by_name.get(name) or 1000000
+
+	sorted_metas = sorted(text.text_meta.all(), key=lambda m: order(m.name))
+
 	return [{
 		'name':             text_meta.name,
 		'value':            text_meta.value,
 		'value_customized': text_meta.value_customized()
-	} for text_meta in obj.text_meta.all()]
+	} for text_meta in sorted_metas]
 
-def encode(obj):
 
-	# If we're dumping an instance of the Text class to JSON
-	if isinstance(obj, Text):
-		return {
-			'id':           obj.id,
-			'title':        obj.title,
-			'slug':         obj.slug,
-			'is_expired':   obj.is_expired,
-			'html_visualizations': _visualizations(obj),
-			'text_meta':    _text_meta(obj),
-			'corpus':       encode(obj.corpus)
-		}
+def encode_text(text):
+	return {
+		'id':           text.id,
+		'title':        text.title,
+		'slug':         text.slug,
+		'is_expired':   text.is_expired,
+		'html_visualizations': _visualizations(text),
+		'text_meta':    _text_meta(text),
+		'corpus':       encode_corpus(text.corpus)
+	}
 
-	# If we're dumping an instance of the Corpus class to JSON
-	if isinstance(obj, Corpus):
-		corpus = {
-			'title':              obj.title,
-			'urn_code':           obj.urn_code,
-			'slug':               obj.slug,
-			'annis_link':         obj.annis_link(),
-			'annis_corpus_name':  obj.annis_corpus_name,
-			'github':             obj.github,
-			'github_tei':         obj.github_tei,
-			'github_relannis':    obj.github_relannis,
-			'github_paula':       obj.github_paula,
-			'html_visualization_formats': _vis_formats(obj)}
 
-		if hasattr(obj, 'texts'):
-			corpus['texts'] = [{
-				'id':       text.id,
-				'title':    text.title,
-				'slug':     text.slug
-			} for text in obj.texts]
+def encode_corpus(corpus):
+	encoded = {
+		'title':              corpus.title,
+		'urn_code':           corpus.urn_code,
+		'slug':               corpus.slug,
+		'annis_link':         corpus.annis_link(),
+		'annis_corpus_name':  corpus.annis_corpus_name,
+		'github':             corpus.github,
+		'github_tei':         corpus.github_tei,
+		'github_relannis':    corpus.github_relannis,
+		'github_paula':       corpus.github_paula,
+		'html_visualization_formats': _vis_formats(corpus)}
 
-		return corpus
+	if hasattr(corpus, 'texts'):
+		encoded['texts'] = [{
+			'id':       text.id,
+			'title':    text.title,
+			'slug':     text.slug
+		} for text in corpus.texts]
+
+	return encoded

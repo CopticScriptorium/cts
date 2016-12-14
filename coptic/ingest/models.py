@@ -11,21 +11,26 @@ class Ingest(models.Model):
     Model for creating new ingests of documents and metadata
 
     """
-    created = models.DateTimeField(editable=False)
-    modified = models.DateTimeField(editable=False)
-    corpora = models.ManyToManyField(Corpus)
+    created                 = models.DateTimeField(editable=False)
+    modified                = models.DateTimeField(editable=False)
+    corpora                 = models.ManyToManyField(Corpus)
+    num_corpora_ingested    = models.PositiveIntegerField(default=0, editable=False)
+    num_texts_ingested      = models.PositiveIntegerField(default=0, editable=False)
 
     def __str__(self):
         return self.created.strftime('%H:%S %d.%b.%Y')
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
-        if not self.id:
+        first_save = not self.id
+        if first_save:
             self.created = datetime.datetime.today()
         self.modified = datetime.datetime.today()
 
         super(Ingest, self).save(*args, **kwargs)
-        ingest_asynch(self.id)
+
+        if first_save:
+            ingest_asynch(self.id)
 
 class ExpireIngest(models.Model):
     """
