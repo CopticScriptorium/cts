@@ -61,7 +61,7 @@
           <div class="{{field.title | lower}}-tool-panel tool-panel hidden">
             {% for value in field.values %}
               <div class="tool-search-item" ng-click="toggle_search_term( $event )" data-filter="{{value.title}}" data-searchid="{{value.id}}">
-                <span>{{value.title}}</span>
+                <span>{{value}}</span>
               </div>
             {% endfor %}
             <span class="fa fa-close raise-dropdowns" ng-click="raise_dropdowns()"></span>
