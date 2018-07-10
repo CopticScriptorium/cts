@@ -943,8 +943,6 @@ ul#nav {
   margin: 0;
   padding: 10px 0;
   text-align: center;
-  background: #361b01;
-  position: fixed;
   top: 0;
   left: 0;
   z-index: 10000;
@@ -959,7 +957,8 @@ ul#nav li {
 ul#nav li a {
   text-decoration: none;
   padding: 0 16px;
-  color: #F0D38E;
+  font-size: 18px;
+  color: #4A4A4A;
 }
 /* line 108, ../../scss/_global.scss */
 ul#nav li a:hover {
@@ -1003,10 +1002,7 @@ header .grid.inner {
 }
 /* line 151, ../../scss/_global.scss */
 header .header-row-top {
-  background: #e3ca9c;
-  background-image: url("/static/img/parchment.jpg");
   width: 100%;
-  padding-top: 60px;
 }
 /* line 157, ../../scss/_global.scss */
 header a {
@@ -1133,6 +1129,7 @@ header .urn-form input {
   outline: none;
   vertical-align: top;
   display: inline-block;
+  border: 1px solid #361b01;
 }
 /* line 268, ../../scss/_global.scss */
 header .urn-form span {
@@ -1830,7 +1827,7 @@ a.text-item:focus {
   clear: both;
   display: block;
   width: 100%;
-  background: #361b01;
+  background: #ada59d;
   position: relative;
   text-align: left;
 }
@@ -2531,7 +2528,7 @@ div.htmlvis span {
 
   /* line 40, ../../scss/_responsive.scss */
   header .header-row-top {
-    padding-top: 70px;
+    
   }
 }
 @media (max-width: 1000px) {
