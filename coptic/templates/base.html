@@ -47,6 +47,7 @@
   </head>
   <body ng-cloak class="text-server" data-ng-controller="TextController as text">
 
+	{% include "nav.html" %}
 	{% include "header.html" %}
 
     <!-- Primary grid-->
@@ -58,6 +59,8 @@
 		</main>
     </div>
     <footer>
+		{% include "footer.html" %}
+	<!--
       <div class="footer-text">
         <div class="footer-title-wrap">
           <p>
@@ -90,7 +93,7 @@
           <img class="footer-logo neh-logo" src="/static/img/footer_logo3.png" height="62px">
         </div>
 
-      </div>
+      </div>-->
     </footer>
   </body>
   <!-- javascripts-->

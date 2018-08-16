@@ -1,24 +1,41 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import requests, re
+"""
+Script to retrieve current nav and footer from copticscriptorium.org
+"""
 
-print("Content-type:text/html\r\n\r\n")
+
+import requests, re, io, os, sys
+
+script_dir = os.path.dirname(os.path.realpath(__file__)) + os.sep
+
 
 def get_menu():
 	head = "http://copticscriptorium.org/header.html"
 	try:
 		header = requests.get(head).text
-	except:
+	except Exception as e:
+		sys.stderr.write(str(e))
 		header = ""
 	foot = "http://copticscriptorium.org/footer.html"
 	try:
 		footer = requests.get(foot).text
-	except:
+	except Exception as e:
+		sys.stderr.write(str(e))
 		footer = ""
 	header = header.replace('href="/','href="http://copticscriptorium.org/')
 	footer = re.sub(r'<p id="lastupdate">.*?</p>.*<script>.*lastupdate.*?</script>','',footer,flags=re.DOTALL)
 
-	return header
+	return header, footer
 
-print(get_menu.encode("utf8"))
+
+nav, footer = get_menu()
+
+with io.open(script_dir+"templates"+os.sep+"nav.html",'w',encoding="utf8") as f:
+	if len(nav) > 0:
+		f.write(unicode(nav))
+
+with io.open(script_dir+"templates"+os.sep+"footer.html",'w',encoding="utf8") as f:
+	if len(footer) > 0:
+		f.write(unicode(footer))
