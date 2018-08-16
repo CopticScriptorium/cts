@@ -1829,7 +1829,7 @@ a.text-item:focus {
   width: 100%;
   background: #ada59d;
   position: relative;
-  text-align: left;
+  text-align: center;
 }
 /* line 174, ../../scss/_index.scss */
 .search-tools-wrap .search-tools {
@@ -1934,7 +1934,7 @@ a.text-item:focus {
   width: 90%;
   padding: 20px 5%;
   margin: 0 auto;
-  background: #e3ca9c;
+  background: #cbc8c2;
   -webkit-transform: translateY(100%) translateZ(0);
           transform: translateY(100%) translateZ(0);
   bottom: 0;
