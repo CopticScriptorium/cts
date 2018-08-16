@@ -27,6 +27,8 @@ def get_menu():
 	header = header.replace('href="/','href="http://copticscriptorium.org/')
 	header = header.replace('src="./','src="http://copticscriptorium.org/')
 	header = header.replace('src="/','src="http://copticscriptorium.org/')
+	footer = footer.replace('src="./','src="http://copticscriptorium.org/')
+	footer = footer.replace('src="/','src="http://copticscriptorium.org/')
 	footer = re.sub(r'<p id="lastupdate">.*?</p>.*<script>.*lastupdate.*?</script>','',footer,flags=re.DOTALL)
 
 	return header, footer
