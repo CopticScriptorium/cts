@@ -1830,7 +1830,7 @@ a.text-item:focus {
   width: 100%;
   background: #ada59d;
   position: relative;
-  text-align: center;
+  text-align: left;
 }
 /* line 174, ../../scss/_index.scss */
 .search-tools-wrap .search-tools {
