@@ -5,7 +5,27 @@
 
         <div class="grid inner">
 
-            <div class='no-results' ng-show="are_no_expected_results()">There are no results matching your search.</div>
+            <div class='no-results' ng-show="are_no_expected_results()">
+                <p>There are no results matching your search.</p>
+                <p>We deprecated some file id numbers (URNs) in corpus release 2.6.0. If you are using a specific URN to find a document in the following corpora, please visit the appropriate links:</p><br>
+                <h3>shenoute.a22 Corpus (Acephalous Work 22)</h3>
+                <p>urn:cts:copticLit:shenoute.a22.monbyb_307_320 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb:801-825">urn:cts:copticLit:shenoute.a22.monbyb:801-825</a></p>
+                <p>urn:cts:copticLit:shenoute.a22.monbzc_301_308 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc:1001-1006">urn:cts:copticLit:shenoute.a22.monbzc:1001-1006</a></p>
+                <p>urn:cts:copticLit:shenoute.a22.monbya_421_428 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya:1251-1258">urn:cts:copticLit:shenoute.a22.monbya:1251-1258</a></p>
+                <p>urn:cts:copticLit:shenoute.a22.monbya_517_518 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya:1451-1453">urn:cts:copticLit:shenoute.a22.monbya:1451-1453</a></p>
+                <h3>shenoute.abraham Corpus (Abraham Our Father)</h3>
+                <p>urn:cts:copticLit:shenoute.abraham.monbya_518_520 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:1-4">urn:cts:copticLit:shenoute.abraham.monbya:1-4</a></p>
+                <p>urn:cts:copticLit:shenoute.abraham.monbya_525_530 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:10-18">urn:cts:copticLit:shenoute.abraham.monbya:10-18</a></p>
+                <p>urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh:18-21">urn:cts:copticLit:shenoute.abraham.monbzh:18-21</a></p>
+                <p>urn:cts:copticLit:shenoute.abraham.monbya_535_540 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:21-27">urn:cts:copticLit:shenoute.abraham.monbya:21-27</a></p>
+                <p>urn:cts:copticLit:shenoute.abraham.monbxl_93_94 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl:23-24">urn:cts:copticLit:shenoute.abraham.monbxl:23-24</a></p>
+                <p>urn:cts:copticLit:shenoute.abraham.monbya_547_550 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:37-42">urn:cts:copticLit:shenoute.abraham.monbya:37-42</a></p>
+                <p>urn:cts:copticLit:shenoute.abraham.monbya_551_554 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:42-47">urn:cts:copticLit:shenoute.abraham.monbya:42-47</a></p>
+                <h3>Crosswire Coptic Old Testament Corpus</h3>
+                <p>We have replaced our Old Testament Corpus (a digital edition from Crosswire) with more extensive documents from the Coptic Old Testament project at Goettingen.<p>
+                <p>For current Coptic Old Testament documents, see <a href="http://data.copticscriptorium.org/urn:cts:copticLit:ot.*.coptot">urn:cts:copticLit:ot.*.coptot</a>.</p>
+                <p>The Crosswire document files (urn:cts:copticLit:ot.*.crosswire) are archived in our <a href="https://github.com/CopticScriptorium/corpora/tree/master/bible">GitHub repository</a>; see the OT files v.2.5.0</p>
+            </div>
 
             {% include 'project-desc.html' %}
 
