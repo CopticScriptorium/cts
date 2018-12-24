@@ -19,11 +19,15 @@ div.tool-search-item {
 	background: black;
 }
 
-div.tool-head-selected{
-	background: black;
+.search-tools-wrap .tool-wrap .tool-head.tool-head-selected{
+	background: black !important;
 }
 
 p.project-description{
+	color:black;
+}
+
+p.description-text{
 	color:black;
 }
 
