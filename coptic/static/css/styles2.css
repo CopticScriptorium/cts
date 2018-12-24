@@ -9,3 +9,24 @@
   font-size: 20px;
   color: #361b01;
 }
+
+/* overwriting scss generated styles here */
+div.search-tools-wrap{
+	background: #8E463D;
+}
+
+div.tool-search-item {
+	background: black;
+}
+
+div.tool-head-selected{
+	background: black;
+}
+
+p.project-description{
+	color:black;
+}
+
+.tool-head{
+	line-height: 1.6;
+}
