@@ -40,7 +40,7 @@
           </div>
           <div class="{{field.title | lower}}-tool-panel tool-panel hidden">
             {% for value in field.values %}
-              <div class="tool-search-item" ng-click="toggle_search_term( $event )" data-filter="{{value.title}}" data-searchid="{{value.id}}">
+              <div class="tool-search-item" ng-click="toggle_search_term( $event )" data-filter="{{value}}" data-searchid="{{value.id}}">
                 <span>{{value}}</span>
               </div>
             {% endfor %}
