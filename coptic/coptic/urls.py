@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from texts import views
 from api.views import texts_for_urn
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 def _redirect_citation_urls(request, url_except_data_type, data_type):
@@ -39,4 +41,4 @@ urlpatterns = patterns('',
 	url(r'^collections/.+$',                'coptic.views.home', name='home'),
 	url(r'^filter/.+$',                     'coptic.views.home', name='home'),
 	url(r'^$',                              'coptic.views.home', name='home'),
-	)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
