@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(serialize=False, auto_created=True, verbose_name='ID', primary_key=True)),
                 ('title', models.CharField(max_length=200)),
                 ('value', models.CharField(max_length=200)),
-                ('search_field', models.ForeignKey(blank=True, to='texts.SearchField', null=True)),
+                ('search_field', models.ForeignKey(blank=True, to='texts.SearchField', null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Search Field Value',
@@ -103,9 +103,9 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(max_length=40)),
                 ('created', models.DateTimeField(editable=False)),
                 ('modified', models.DateTimeField(editable=False)),
-                ('corpus', models.ForeignKey(blank=True, to='texts.Corpus', null=True)),
+                ('corpus', models.ForeignKey(blank=True, to='texts.Corpus', null=True, on_delete=models.CASCADE)),
                 ('html_visualizations', models.ManyToManyField(null=True, blank=True, to='texts.HtmlVisualization')),
-                ('ingest', models.ForeignKey(blank=True, to='ingest.Ingest', null=True)),
+                ('ingest', models.ForeignKey(blank=True, to='ingest.Ingest', null=True, on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -140,7 +140,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='htmlvisualization',
             name='visualization_format',
-            field=models.ForeignKey(blank=True, to='texts.HtmlVisualizationFormat', null=True),
+            field=models.ForeignKey(blank=True, to='texts.HtmlVisualizationFormat', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(

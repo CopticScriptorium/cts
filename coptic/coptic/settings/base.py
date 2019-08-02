@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import django
 import os
 import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -19,33 +20,53 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # Application definition
 INSTALLED_APPS = (
-    'grappelli',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'texts',
-    'annis',
-    'ingest',
-    'api',
-    'mod_wsgi.server'
+	'grappelli',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'texts',
+	'annis',
+	'ingest',
+	'api',
+	'mod_wsgi.server'
 )
 
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+MIDDLEWARE_CLASSES = [
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+if django.VERSION[0] < 2:
+	MIDDLEWARE_CLASSES.append('django.contrib.auth.middleware.SessionAuthenticationMiddleware')
+MIDDLEWARE = MIDDLEWARE_CLASSES # for django >= 1.10
 
+
+# for newer django
+TEMPLATES = [
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [],
+		'APP_DIRS': True,
+		'OPTIONS': {
+			'context_processors': [
+				"django.core.context_processors.request",
+				"django.contrib.auth.context_processors.auth",
+				"django.contrib.messages.context_processors.messages"
+			]
+		},
+	}
+]
+
+# for older django
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.request",
-    "django.contrib.auth.context_processors.auth"
+	"django.core.context_processors.request",
+	"django.contrib.auth.context_processors.auth"
 )
 
 ROOT_URLCONF = 'coptic.urls'
@@ -53,50 +74,50 @@ ROOT_URLCONF = 'coptic.urls'
 WSGI_APPLICATION = 'coptic.wsgi.application'
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s'
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR + "/" + os.path.join("django_logger.log"),
-            'formatter': 'verbose',
-        },
-        'filedb': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR + "/" + os.path.join("django_db.log"),
-            'formatter': 'verbose',
-        },
-        'console': {
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
-            'formatter': 'verbose',
-        }
-    },
-    'loggers': {
-        'ingest.ingest': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-        },
-        'ingest.models': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-        },
-        'ingest.search': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-        },
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-        },
-    }
+	'version': 1,
+	'disable_existing_loggers': False,
+	'formatters': {
+	    'verbose': {
+	   	 'format': '%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s'
+	    },
+	},
+	'handlers': {
+	    'file': {
+	   	 'level': 'INFO',
+	   	 'class': 'logging.FileHandler',
+	   	 'filename': BASE_DIR + "/" + os.path.join("django_logger.log"),
+	   	 'formatter': 'verbose',
+	    },
+	    'filedb': {
+	   	 'level': 'INFO',
+	   	 'class': 'logging.FileHandler',
+	   	 'filename': BASE_DIR + "/" + os.path.join("django_db.log"),
+	   	 'formatter': 'verbose',
+	    },
+	    'console': {
+	   	 'class': 'logging.StreamHandler',
+	   	 'stream': sys.stdout,
+	   	 'formatter': 'verbose',
+	    }
+	},
+	'loggers': {
+	    'ingest.ingest': {
+	   	 'handlers': ['console', 'file'],
+	   	 'level': 'INFO',
+	    },
+	    'ingest.models': {
+	   	 'handlers': ['console', 'file'],
+	   	 'level': 'INFO',
+	    },
+	    'ingest.search': {
+	   	 'handlers': ['console', 'file'],
+	   	 'level': 'INFO',
+	    },
+	    'django': {
+	   	 'handlers': ['console', 'file'],
+	   	 'level': 'INFO',
+	    },
+	}
 }
 
 # Internationalization

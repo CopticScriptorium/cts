@@ -18,7 +18,7 @@ class HtmlVisualizationFormat(models.Model):
 
 
 class HtmlVisualization(models.Model):
-	visualization_format = models.ForeignKey(HtmlVisualizationFormat, blank=True, null=True)
+	visualization_format = models.ForeignKey(HtmlVisualizationFormat, blank=True, null=True, on_delete=models.CASCADE)
 	html = models.TextField()
 
 	class Meta:
@@ -102,8 +102,8 @@ class Text(models.Model):
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
 	is_expired = models.BooleanField(default=False)
-	corpus = models.ForeignKey(Corpus, blank=True, null=True)
-	ingest = models.ForeignKey(Ingest, blank=True, null=True)
+	corpus = models.ForeignKey(Corpus, blank=True, null=True, on_delete=models.CASCADE)
+	ingest = models.ForeignKey(Ingest, blank=True, null=True, on_delete=models.CASCADE)
 	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
 	text_meta = models.ManyToManyField(TextMeta, blank=True)
 

@@ -1,7 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.shortcuts import redirect
 from texts import views
+from coptic.views import home
 from api.views import texts_for_urn
 from django.conf import settings
 from django.conf.urls.static import static
@@ -31,14 +32,29 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 	return redirect(new_loc)
 
 
-urlpatterns = patterns('',
+# django <= 1.7
+#try:
+#	from django.conf.urls import patterns
+#	urlpatterns = patterns('',
+#		url(r'^grappelli/',                     include('grappelli.urls')),
+#		url(r'^admin/',                         include(admin.site.urls)),
+#		url(r'^api/',                           include('api.urls')),
+#		url(r'^texts/.*$',                      views.list, name='list'),
+#		url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
+#		url(r'^urn',                            'coptic.views.home'),
+#		url(r'^collections/.+$',                'coptic.views.home', name='home'),
+#		url(r'^filter/.+$',                     'coptic.views.home', name='home'),
+#		url(r'^$',                              'coptic.views.home', name='home'),
+#	) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+#except ImportError:
+urlpatterns = [
 	url(r'^grappelli/',                     include('grappelli.urls')),
-	url(r'^admin/',                         include(admin.site.urls)),
+	url(r'^admin/',                         admin.site.urls),
 	url(r'^api/',                           include('api.urls')),
 	url(r'^texts/.*$',                      views.list, name='list'),
 	url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
-	url(r'^urn',                            'coptic.views.home'),
-	url(r'^collections/.+$',                'coptic.views.home', name='home'),
-	url(r'^filter/.+$',                     'coptic.views.home', name='home'),
-	url(r'^$',                              'coptic.views.home', name='home'),
-) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+	url(r'^urn',                            home),
+	url(r'^collections/.+$',                home, name='home'),
+	url(r'^filter/.+$',                     home, name='home'),
+	url(r'^$',                              home, name='home'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
