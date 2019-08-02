@@ -30,6 +30,7 @@ INSTALLED_APPS = (
 	'texts',
 	'annis',
 	'ingest',
+	'gh_ingest',
 	'api',
 	'mod_wsgi.server'
 )
@@ -129,3 +130,7 @@ USE_TZ = False
 
 # Templates
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
+# SCRIPTORIUM-specific config
+CORPUS_REPO_OWNER = "CopticScriptorium"
+CORPUS_REPO_NAME  = "corpora"
