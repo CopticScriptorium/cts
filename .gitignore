@@ -29,6 +29,7 @@ __pycache__
 */my.cnf
 */ghostdriver.log
 */django_logger.log
+coptic/settings/secrets.py
 
 # --------------------
 # Env Files
