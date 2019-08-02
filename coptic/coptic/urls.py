@@ -33,28 +33,28 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 
 
 # django <= 1.7
-#try:
-#	from django.conf.urls import patterns
-#	urlpatterns = patterns('',
-#		url(r'^grappelli/',                     include('grappelli.urls')),
-#		url(r'^admin/',                         include(admin.site.urls)),
-#		url(r'^api/',                           include('api.urls')),
-#		url(r'^texts/.*$',                      views.list, name='list'),
-#		url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
-#		url(r'^urn',                            'coptic.views.home'),
-#		url(r'^collections/.+$',                'coptic.views.home', name='home'),
-#		url(r'^filter/.+$',                     'coptic.views.home', name='home'),
-#		url(r'^$',                              'coptic.views.home', name='home'),
-#	) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-#except ImportError:
-urlpatterns = [
-	url(r'^grappelli/',                     include('grappelli.urls')),
-	url(r'^admin/',                         admin.site.urls),
-	url(r'^api/',                           include('api.urls')),
-	url(r'^texts/.*$',                      views.list, name='list'),
-	url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
-	url(r'^urn',                            home),
-	url(r'^collections/.+$',                home, name='home'),
-	url(r'^filter/.+$',                     home, name='home'),
-	url(r'^$',                              home, name='home'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+try:
+	from django.conf.urls import patterns
+	urlpatterns = patterns('',
+		url(r'^grappelli/',                     include('grappelli.urls')),
+		url(r'^admin/',                         include(admin.site.urls)),
+		url(r'^api/',                           include('api.urls')),
+		url(r'^texts/.*$',                      views.list, name='list'),
+		url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
+		url(r'^urn',                            'coptic.views.home'),
+		url(r'^collections/.+$',                'coptic.views.home', name='home'),
+		url(r'^filter/.+$',                     'coptic.views.home', name='home'),
+		url(r'^$',                              'coptic.views.home', name='home'),
+	) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+except ImportError:
+	urlpatterns = [
+		url(r'^grappelli/',                     include('grappelli.urls')),
+		url(r'^admin/',                         admin.site.urls),
+		url(r'^api/',                           include('api.urls')),
+		url(r'^texts/.*$',                      views.list, name='list'),
+		url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
+		url(r'^urn',                            home),
+		url(r'^collections/.+$',                home, name='home'),
+		url(r'^filter/.+$',                     home, name='home'),
+		url(r'^$',                              home, name='home'),
+	] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
