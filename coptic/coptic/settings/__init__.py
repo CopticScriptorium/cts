@@ -1,5 +1,5 @@
 from .base import *
-from .secrets import SECRET_KEY
+from .secrets import *
 
 # uncomment only one of these
 from .dev import *
