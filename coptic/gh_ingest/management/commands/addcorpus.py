@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from gh_ingest.scraper import GithubCorpusScraper, CorpusNotFound, EmptyCorpus, AmbiguousCorpus
-from gh_ingest.ingest import ingest_corpora
+from gh_ingest.scraper import GithubCorpusScraper, ScraperException
 
 
 class Command(BaseCommand):
@@ -18,11 +17,25 @@ class Command(BaseCommand):
 		scraper = GithubCorpusScraper()
 
 		try:
-			corpora = scraper.parse_corpora(options['corpus_dirnames'])
-		except (CorpusNotFound, EmptyCorpus, AmbiguousCorpus) as e:
+			transactions = scraper.parse_corpora(options['corpus_dirnames'])
+		except ScraperException as e:
 			raise CommandError(e) from e
 
-		ingest_corpora(corpora)
+
+		for transaction in transactions:
+			self.stdout.write(f"Prepared Django model objects for corpus {transaction.corpus_name}. "
+							  f"Executing transaction...")
+			try:
+				counts = transaction.execute()
+			except Exception as e:
+				self.stdout.write(self.style.ERROR("Something went wrong while attempting to execute the transaction. No "
+												   "changes have been committed.\nError details: "))
+				raise e
+
+			self.stdout.write(self.style.SUCCESS(f"Successfully ingested "
+												 f"{counts['texts']} texts "
+												 f"and {counts['text_metas']} pieces of metadata"
+												 f" for corpus {transaction.corpus_name}."))
 
 		self.stdout.write("Hello, world!")
 
