@@ -28,16 +28,18 @@ class Command(BaseCommand):
 			try:
 				counts = transaction.execute()
 			except Exception as e:
-				self.stdout.write(self.style.ERROR("Something went wrong while attempting to execute the transaction. No "
-												   "changes have been committed.\nError details: "))
+				self.stdout.write(self.style.ERROR("Something went wrong while attempting to execute the transaction "
+												   f"for corpus {transaction.corpus_name}. No changes have been "
+												   f"committed for corpus {transaction.corpus_name}.\nError details: "))
 				raise e
 
-			self.stdout.write(self.style.SUCCESS(f"Successfully ingested "
-												 f"{counts['texts']} texts "
+			self.stdout.write(self.style.SUCCESS(f"Successfully ingested {counts['texts']} texts "
 												 f"and {counts['text_metas']} pieces of metadata"
 												 f" for corpus {transaction.corpus_name}."))
 
-		self.stdout.write("Hello, world!")
+		# TODO: would be nice to prompt the user for human-readable names
+		self.stdout.write("Your next step should be to enter the admin interface and give each "
+						  "corpus a human-readable name.")
 
 
 

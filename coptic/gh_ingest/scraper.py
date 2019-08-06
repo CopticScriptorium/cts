@@ -82,10 +82,10 @@ class ScraperException(BaseException):
 
 class CorpusNotFound(ScraperException):
 	"""Raised when the GithubCorpusScraper attempts to read a corpus that doesn't exist."""
-	def __init__(self, corpus_slug, repo_owner, repo_name):
+	def __init__(self, corpus_dirname, repo_owner, repo_name):
 		repo = repo_owner + "/" + repo_name
 		url = f"https://github.com/{repo}/tree/master"
-		self.message = (f"Could not find corpus '{corpus_slug}' in {repo}."
+		self.message = (f"Could not find corpus '{corpus_dirname}' in {repo}."
 						f"\n\tCheck {url} to make sure you spelled it correctly.")
 		super().__init__(self, self.message)
 
@@ -95,10 +95,10 @@ class CorpusNotFound(ScraperException):
 
 class EmptyCorpus(ScraperException):
 	"""Raised when a corpus exists but doesn't have directories ending in _TEI, _ANNIS, or _PAULA"""
-	def __init__(self, corpus_slug, repo_owner, repo_name):
+	def __init__(self, corpus_dirname, repo_owner, repo_name):
 		repo = repo_owner + "/" + repo_name
 		url = f"https://github.com/{repo}/tree/master"
-		self.message = (f"Corpus '{corpus_slug}' doesn't appear to have any directories ending in "
+		self.message = (f"Corpus '{corpus_dirname}' doesn't appear to have any directories ending in "
 						f"'_TEI', '_ANNIS', or '_PAULA'."
 						f"\n\tCheck the contents of {url}.")
 		super().__init__(self, self.message)
@@ -109,10 +109,10 @@ class EmptyCorpus(ScraperException):
 
 class AmbiguousCorpus(ScraperException):
 	"""Raised when more than one dir ends with _TEI, _RELANNIS, or _PAULA"""
-	def __init__(self, corpus_slug, repo_owner, repo_name):
+	def __init__(self, corpus_dirname, repo_owner, repo_name):
 		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{corpus_slug}"
-		self.message = (f"Corpus '{corpus_slug}' has one or more directories that end with "
+		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}"
+		self.message = (f"Corpus '{corpus_dirname}' has one or more directories that end with "
 						f"_TEI, _ANNIS, or _PAULA."
 						f"\n\tCheck the contents of {url} and remove the duplicate directories.")
 
@@ -122,21 +122,33 @@ class AmbiguousCorpus(ScraperException):
 
 class InferenceError(ScraperException):
 	"""Raised when no known inference strategy works for recovering some piece of information."""
-	def __init__(self, corpus_slug, repo_owner, repo_name, attr):
+	def __init__(self, corpus_dirname, repo_owner, repo_name, attr):
 		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{corpus_slug}"
-		self.message = (f"Failed to infer '{attr}' for '{corpus_slug}'. "
+		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}"
+		self.message = (f"Failed to infer '{attr}' for '{corpus_dirname}'. "
 						f"\n\tCheck gh_ingest.scraper's implementation and either adjust the "
 						f"corpus's structure or extend the scraper's inference strategies.")
 
 
 class TTDirMissing(ScraperException):
 	"""Raised when the corpus's _TT directory is missing"""
-	def __init__(self, corpus_slug, repo_owner, repo_name, tt_dir):
+	def __init__(self, corpus_dirname, repo_owner, repo_name, tt_dir):
 		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{corpus_slug}"
-		self.message = (f"Could not find a _TT directory at {tt_dir} for corpus '{corpus_slug}'."
+		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}"
+		self.message = (f"Could not find a _TT directory at {tt_dir} for corpus '{corpus_dirname}'."
 						f"\n\tCheck the contents of {url} and make sure there's a directory called {tt_dir}.")
+
+	def __str__(self):
+		return self.message
+
+
+class NoTexts(ScraperException):
+	"""Raised when a corpus has no texts"""
+	def __init__(self, corpus_dirname, repo_owner, repo_name, tt_dir):
+		repo = repo_owner + "/" + repo_name
+		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}/{tt_dir}"
+		self.message = (f"Found a _TT directory at {tt_dir} for corpus '{corpus_dirname}', but it is empty."
+						f"\n\tCheck the contents of {url} and make sure it has some texts.")
 
 	def __str__(self):
 		return self.message
@@ -183,6 +195,8 @@ class GithubCorpusScraper:
 		self._current_transaction = None
 		# the github3.py contents object of the most recently seen text
 		self._current_text_contents = None
+		# the metadata dictionary of the most recently seen text
+		self._latest_meta_dict = None
 
 	# corpus-level methods ---------------------------------------------------------------------------------------------
 
@@ -227,10 +241,26 @@ class GithubCorpusScraper:
 	def _get_texts(self, corpus, corpus_dirname):
 		tt_dir = corpus_dirname + "/" + corpus.annis_corpus_name + "_TT"
 		try:
-			return dict([(name, contents) for name, contents
-						 in self._repo.directory_contents(tt_dir)])
+			texts = [(name, contents) for name, contents
+					 in self._repo.directory_contents(tt_dir)]
 		except NotFoundError as e:
 			raise TTDirMissing(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, tt_dir) from e
+		if len(texts) == 0:
+			raise NoTexts(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, tt_dir)
+
+		return dict(texts)
+
+	def _infer_urn_code(self, corpus_dirname):
+		meta = self._latest_meta_dict
+		if meta is None or "document_cts_urn" not in meta:
+			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
+
+		doc_urn = meta["document_cts_urn"].split(":")
+		corpus_urn = ":".join(doc_urn[2:4])
+		if corpus_urn == "":
+			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
+
+		return corpus_urn
 
 	def parse_corpus(self, corpus_dirname):
 		if corpus_dirname not in self._corpora:
@@ -249,20 +279,24 @@ class GithubCorpusScraper:
 		self._infer_github_dirs(corpus, corpus_dirname)
 		corpus.annis_corpus_name = self._infer_annis_corpus_name(corpus)
 		corpus.slug = self._infer_slug(corpus)
+		# This is the best we can do, since a human readable version is not available.
+		corpus.title = corpus.annis_corpus_name
 
 		texts = self._get_texts(corpus, corpus_dirname)
-		self._scrape_texts(texts)  # side effect: this will add more objects to self._current_transaction
+		self._scrape_texts_and_add_to_tx(texts)  # side effect: this will add more objects to self._current_transaction
+
+		corpus.urn_code = self._infer_urn_code(corpus_dirname)
 
 		return self._current_transaction
 
+	# - html_visualization_formats
+
 	# text-level methods -----------------------------------------------------------------------------------------------
 
-	def _scrape_texts(self, texts):
-		text_objs = []
+	def _scrape_texts_and_add_to_tx(self, texts):
 		for contents in texts.values():
 			self._current_text_contents = contents
-			text_objs.append(self._scrape_text(contents))
-		return text_objs
+			self._scrape_text_and_add_to_tx(contents)
 
 	def _get_meta_dict(self, tt_lines):
 		for line in tt_lines:
@@ -270,11 +304,12 @@ class GithubCorpusScraper:
 				return dict(re.findall(r'(?P<attr>\w+)="(?P<value>.*?)"', line))
 		raise MetaNotFound(self.corpus_repo_owner, self.corpus_repo_name, self._current_text_contents.path)
 
-	def _scrape_text(self, contents):
+	def _scrape_text_and_add_to_tx(self, contents):
 		contents.refresh()
 		tt_lines = contents.decoded.decode('utf-8').split("\n")
 
 		meta = self._get_meta_dict(tt_lines)
+		self._latest_meta_dict = meta
 
 		text = Text()
 		text.title = meta["title"]
@@ -284,12 +319,6 @@ class GithubCorpusScraper:
 		text_metas = [TextMeta(name=name, value=value) for name, value in meta.items()]
 
 		self._current_transaction.add_text((text, text_metas))
-
-		# need to find out:
-		# - title: Besa Letters
-		# - urn_code: copticLit:besa
-
-		# - html_visualization_formats
 
 
 
