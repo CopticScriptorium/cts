@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from gh_ingest.scraper import GithubCorpusScraper, ScraperException
+from gh_ingest.scraper import GithubCorpusScraper
+from gh_ingest.scraper_exceptions import ScraperException
 
 
 class Command(BaseCommand):
@@ -39,7 +40,7 @@ class Command(BaseCommand):
 
 		# TODO: would be nice to prompt the user for human-readable names
 		self.stdout.write("Your next step should be to enter the admin interface and give each "
-						  "corpus a human-readable name.")
+						  "corpus a human-readable name and an appropriate URN code.")
 
 
 

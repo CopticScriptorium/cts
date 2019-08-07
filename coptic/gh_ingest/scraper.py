@@ -8,7 +8,8 @@ from django.utils.text import slugify
 from github3.exceptions import NotFoundError
 from github3 import GitHub
 
-from texts.models import Corpus, Text, TextMeta
+from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualizationFormat
+from .scraper_exceptions import *
 
 KNOWN_SLUGS = {
 	"apophthegmata.patrum": "ap",
@@ -43,13 +44,18 @@ class CorpusTransaction:
 		self.corpus_name = corpus_name
 		self._corpus = corpus
 		self._text_pairs = []
+		self._vis_formats = []
 
 	def add_text(self, text_pair):
 		self._text_pairs.append(text_pair)
 
+	def add_vis_formats(self, formats):
+		self._vis_formats = formats
+
 	@transaction.atomic
 	def execute(self):
-
+		self._corpus.save()
+		self._corpus.html_visualization_formats.set(self._vis_formats)
 		self._corpus.save()
 
 		for text, text_metas in self._text_pairs:
@@ -73,97 +79,6 @@ class CorpusTransaction:
 
 		return {"texts": len(self._text_pairs),
 				"text_metas": sum(map(lambda x: len(x[1]), self._text_pairs))}
-
-
-class ScraperException(BaseException):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-
-
-class CorpusNotFound(ScraperException):
-	"""Raised when the GithubCorpusScraper attempts to read a corpus that doesn't exist."""
-	def __init__(self, corpus_dirname, repo_owner, repo_name):
-		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master"
-		self.message = (f"Could not find corpus '{corpus_dirname}' in {repo}."
-						f"\n\tCheck {url} to make sure you spelled it correctly.")
-		super().__init__(self, self.message)
-
-	def __str__(self):
-		return self.message
-
-
-class EmptyCorpus(ScraperException):
-	"""Raised when a corpus exists but doesn't have directories ending in _TEI, _ANNIS, or _PAULA"""
-	def __init__(self, corpus_dirname, repo_owner, repo_name):
-		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master"
-		self.message = (f"Corpus '{corpus_dirname}' doesn't appear to have any directories ending in "
-						f"'_TEI', '_ANNIS', or '_PAULA'."
-						f"\n\tCheck the contents of {url}.")
-		super().__init__(self, self.message)
-
-	def __str__(self):
-		return self.message
-
-
-class AmbiguousCorpus(ScraperException):
-	"""Raised when more than one dir ends with _TEI, _RELANNIS, or _PAULA"""
-	def __init__(self, corpus_dirname, repo_owner, repo_name):
-		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}"
-		self.message = (f"Corpus '{corpus_dirname}' has one or more directories that end with "
-						f"_TEI, _ANNIS, or _PAULA."
-						f"\n\tCheck the contents of {url} and remove the duplicate directories.")
-
-	def __str__(self):
-		return self.message
-
-
-class InferenceError(ScraperException):
-	"""Raised when no known inference strategy works for recovering some piece of information."""
-	def __init__(self, corpus_dirname, repo_owner, repo_name, attr):
-		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}"
-		self.message = (f"Failed to infer '{attr}' for '{corpus_dirname}'. "
-						f"\n\tCheck gh_ingest.scraper's implementation and either adjust the "
-						f"corpus's structure or extend the scraper's inference strategies.")
-
-
-class TTDirMissing(ScraperException):
-	"""Raised when the corpus's _TT directory is missing"""
-	def __init__(self, corpus_dirname, repo_owner, repo_name, tt_dir):
-		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}"
-		self.message = (f"Could not find a _TT directory at {tt_dir} for corpus '{corpus_dirname}'."
-						f"\n\tCheck the contents of {url} and make sure there's a directory called {tt_dir}.")
-
-	def __str__(self):
-		return self.message
-
-
-class NoTexts(ScraperException):
-	"""Raised when a corpus has no texts"""
-	def __init__(self, corpus_dirname, repo_owner, repo_name, tt_dir):
-		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{corpus_dirname}/{tt_dir}"
-		self.message = (f"Found a _TT directory at {tt_dir} for corpus '{corpus_dirname}', but it is empty."
-						f"\n\tCheck the contents of {url} and make sure it has some texts.")
-
-	def __str__(self):
-		return self.message
-
-
-class MetaNotFound(ScraperException):
-	"""Raised when text metadata couldn't be found"""
-	def __init__(self, repo_owner, repo_name, file_path):
-		repo = repo_owner + "/" + repo_name
-		url = f"https://github.com/{repo}/tree/master/{file_path}"
-		self.message = (f"Could not find metadata in text '{file_path}'."
-						f"\n\tCheck the contents of {url} and make sure the text has a <meta> element.")
-
-	def __str__(self):
-		return self.message
 
 
 class GithubCorpusScraper:
@@ -198,6 +113,12 @@ class GithubCorpusScraper:
 		# the metadata dictionary of the most recently seen text
 		self._latest_meta_dict = None
 
+		# the 5 known visualization formats
+		self._known_visualization_formats = HtmlVisualizationFormat.objects.all().values_list('button_title', flat=True)
+		# a map from the visualization subtype (identical to a val of HtmlVisualizationFormat's button_title field)
+		# to the file in ExtData that contains information about it
+		self._vis_configs = {}
+
 	# corpus-level methods ---------------------------------------------------------------------------------------------
 
 	def parse_corpora(self, corpus_dirnames):
@@ -216,11 +137,12 @@ class GithubCorpusScraper:
 		dirs = [name for name, contents
 				in self._repo.directory_contents(corpus_dirname)
 				if contents.type == 'dir']
-		corpus.github_tei = self._infer_dir(corpus, dirs, "_TEI")
-		corpus.github_relannis = self._infer_dir(corpus, dirs, "_RELANNIS", "_ANNIS")
-		corpus.github_paula = self._infer_dir(corpus, dirs, "_PAULA")
-		if not any(str(x) and x != '' for x in [corpus.github_tei, corpus.github_paula, corpus.github_relannis]):
+		github_tei = self._infer_dir(corpus, dirs, "_TEI")
+		github_relannis = self._infer_dir(corpus, dirs, "_RELANNIS", "_ANNIS")
+		github_paula = self._infer_dir(corpus, dirs, "_PAULA")
+		if not any(str(x) and x != '' for x in [github_tei, github_paula, github_relannis]):
 			raise EmptyCorpus(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name)
+		return github_tei, github_relannis, github_paula
 
 	def _infer_annis_corpus_name(self, corpus):
 		if corpus.github_tei != '':
@@ -256,11 +178,55 @@ class GithubCorpusScraper:
 			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
 
 		doc_urn = meta["document_cts_urn"].split(":")
-		corpus_urn = ":".join(doc_urn[2:4])
+		corpus_urn = doc_urn[2] + ":" + doc_urn[3].split(".")[0]
 		if corpus_urn == "":
 			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
 
 		return corpus_urn
+
+	def _parse_resolver_vis_map(self, text, corpus, corpus_dirname):
+		lines = text.strip().split("\n")
+		lines = [line.split("\t") for line in lines]
+		if not all(len(line) == 9 for line in lines):
+			raise ResolverVisMapIssue(
+				corpus_dirname,
+				self.corpus_repo_owner,
+				self.corpus_repo_name,
+				corpus.github_relannis
+			)
+		return lines
+
+	def _infer_html_visualization_formats_and_add_to_tx(self, corpus, corpus_dirname):
+		try:
+			vm = self._repo.file_contents("/".join([corpus_dirname, corpus.github_relannis, "resolver_vis_map.annis"]))
+		except NotFoundError as e:
+			raise ResolverVisMapIssue(
+				corpus_dirname,
+				self.corpus_repo_owner,
+				self.corpus_repo_name,
+				corpus.github_relannis
+			) from e
+
+		vis_lines = self._parse_resolver_vis_map(vm.decoded.decode('utf-8'), corpus, corpus_dirname)
+		formats = []
+		already_seen = []
+		for _, _, _, _, type, vis_type, _, _, config_file in vis_lines:
+			if type != "htmldoc":
+				continue
+			vis_type = vis_type.split(" ")[0]
+			if not vis_type in self._known_visualization_formats or vis_type in already_seen:
+				raise ResolverVisMapIssue(
+					corpus_dirname,
+					self.corpus_repo_owner,
+					self.corpus_repo_name,
+					corpus.github_relannis
+				)
+			self._vis_configs[vis_type] = re.findall(r'config:(?P<fname>.*)', config_file)[0]
+			format = HtmlVisualizationFormat.objects.get(button_title=vis_type)
+			formats.append(format)
+			already_seen.append(vis_type)
+
+		return formats
 
 	def parse_corpus(self, corpus_dirname):
 		if corpus_dirname not in self._corpora:
@@ -276,16 +242,19 @@ class GithubCorpusScraper:
 
 		corpus.slug = corpus_dirname # provisionally, until we find the real one, so we can use this in errors
 		corpus.github = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
-		self._infer_github_dirs(corpus, corpus_dirname)
+		corpus.github_tei, corpus.github_relannis, corpus.github_paula = self._infer_github_dirs(corpus, corpus_dirname)
 		corpus.annis_corpus_name = self._infer_annis_corpus_name(corpus)
 		corpus.slug = self._infer_slug(corpus)
-		# This is the best we can do, since a human readable version is not available.
-		corpus.title = corpus.annis_corpus_name
+		corpus.title = corpus.annis_corpus_name # User should edit this to something more appropriate
+
+		# assignment to corpus.html_visualization_formats happen during the transaction
+		self._current_transaction.add_vis_formats(self._infer_html_visualization_formats_and_add_to_tx(corpus, corpus_dirname))
 
 		texts = self._get_texts(corpus, corpus_dirname)
-		self._scrape_texts_and_add_to_tx(texts)  # side effect: this will add more objects to self._current_transaction
+		self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
 
-		corpus.urn_code = self._infer_urn_code(corpus_dirname)
+		# TODO: Revisit this once Carrie and Amir agree on a corpus URN determination scheme. For now, edit manually
+		# corpus.urn_code = self._infer_urn_code(corpus_dirname)
 
 		return self._current_transaction
 
@@ -293,10 +262,10 @@ class GithubCorpusScraper:
 
 	# text-level methods -----------------------------------------------------------------------------------------------
 
-	def _scrape_texts_and_add_to_tx(self, texts):
+	def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
 		for contents in texts.values():
 			self._current_text_contents = contents
-			self._scrape_text_and_add_to_tx(contents)
+			self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
 
 	def _get_meta_dict(self, tt_lines):
 		for line in tt_lines:
@@ -304,7 +273,18 @@ class GithubCorpusScraper:
 				return dict(re.findall(r'(?P<attr>\w+)="(?P<value>.*?)"', line))
 		raise MetaNotFound(self.corpus_repo_owner, self.corpus_repo_name, self._current_text_contents.path)
 
-	def _scrape_text_and_add_to_tx(self, contents):
+	def _get_vis_config_file(self, corpus, corpus_dirname, config_file):
+		path = corpus_dirname + "/" + corpus.annis_corpus_name + "/ExtData/" + config_file
+		try:
+			f = self._repo.file_contents(path)
+		except NotFoundError as e:
+			raise VisConfigIssue(path, self.corpus_repo_owner, self.corpus_repo_name) from e
+
+	def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname):
+		for name, config_file in self._vis_configs.items():
+			pass
+
+	def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents):
 		contents.refresh()
 		tt_lines = contents.decoded.decode('utf-8').split("\n")
 
@@ -317,6 +297,8 @@ class GithubCorpusScraper:
 		text.corpus = self._current_corpus
 
 		text_metas = [TextMeta(name=name, value=value) for name, value in meta.items()]
+
+		self._generate_visualizations_and_add_to_tx(corpus, corpus_dirname)
 
 		self._current_transaction.add_text((text, text_metas))
 
