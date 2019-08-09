@@ -4,12 +4,14 @@ from django.db.models import Model
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
+from django.db.models import ObjectDoesNotExist
 from django.utils.text import slugify
 from github3.exceptions import NotFoundError
 from github3 import GitHub
 
 from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualizationFormat
 from .scraper_exceptions import *
+from .htmlvis import generate_visualization
 
 KNOWN_SLUGS = {
 	"apophthegmata.patrum": "ap",
@@ -45,6 +47,7 @@ class CorpusTransaction:
 		self._corpus = corpus
 		self._text_pairs = []
 		self._vis_formats = []
+		self._vises = []
 
 	def add_text(self, text_pair):
 		self._text_pairs.append(text_pair)
@@ -52,11 +55,17 @@ class CorpusTransaction:
 	def add_vis_formats(self, formats):
 		self._vis_formats = formats
 
+	def add_vis(self, text_and_vis):
+		self._vises.append(text_and_vis)
+
 	@transaction.atomic
 	def execute(self):
 		self._corpus.save()
 		self._corpus.html_visualization_formats.set(self._vis_formats)
 		self._corpus.save()
+
+		# sort the texts according to prev and next values
+		# if urn sorting doesn't work, then use alphabetical by title
 
 		for text, text_metas in self._text_pairs:
 			# save all the metas
@@ -77,8 +86,14 @@ class CorpusTransaction:
 				text.text_meta.add(text_meta)
 			text.save()
 
+		for text, vis in self._vises:
+			vis.save()
+			text.html_visualizations.add(vis)
+			text.save()
+
 		return {"texts": len(self._text_pairs),
-				"text_metas": sum(map(lambda x: len(x[1]), self._text_pairs))}
+				"text_metas": sum(map(lambda x: len(x[1]), self._text_pairs)),
+				"vises": len(self._vises)}
 
 
 class GithubCorpusScraper:
@@ -228,13 +243,25 @@ class GithubCorpusScraper:
 
 		return formats
 
+	@transaction.atomic
 	def parse_corpus(self, corpus_dirname):
 		if corpus_dirname not in self._corpora:
 			raise CorpusNotFound(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name)
 
-		# TODO: special handling for bible
+		# TODO: handling for zips
 
-		# make a Corpus object and begin inferring its attributes
+		# Delete any already-existing corpus object
+		github_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
+		try:
+			corpus = Corpus.objects.get(github=github_url)
+			# delete text_meta manually because they're not linked with foreign keys--all others will be handled by
+			# the cascading sql delete
+			for text in Text.objects.all().filter(corpus=corpus):
+				for text_meta in text.text_meta.all():
+					text_meta.delete()
+			corpus.delete()
+		except ObjectDoesNotExist:
+			pass
 		corpus = Corpus()
 		self._current_corpus = corpus
 		# All objects we make will go into this list
@@ -258,8 +285,6 @@ class GithubCorpusScraper:
 
 		return self._current_transaction
 
-	# - html_visualization_formats
-
 	# text-level methods -----------------------------------------------------------------------------------------------
 
 	def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
@@ -273,16 +298,32 @@ class GithubCorpusScraper:
 				return dict(re.findall(r'(?P<attr>\w+)="(?P<value>.*?)"', line))
 		raise MetaNotFound(self.corpus_repo_owner, self.corpus_repo_name, self._current_text_contents.path)
 
+	def _get_vis_css_file(self, corpus, corpus_dirname, config_file):
+		path = corpus_dirname + "/" + corpus.github_relannis + "/ExtData/" + config_file + ".css"
+		try:
+			f = self._repo.file_contents(path)
+			return f.decoded.decode('utf-8')
+		except NotFoundError:
+			return ""
+
 	def _get_vis_config_file(self, corpus, corpus_dirname, config_file):
-		path = corpus_dirname + "/" + corpus.annis_corpus_name + "/ExtData/" + config_file
+		path = corpus_dirname + "/" + corpus.github_relannis + "/ExtData/" + config_file + ".config"
 		try:
 			f = self._repo.file_contents(path)
 		except NotFoundError as e:
 			raise VisConfigIssue(path, self.corpus_repo_owner, self.corpus_repo_name) from e
 
-	def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname):
+		return f.decoded.decode('utf-8')
+
+	def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname, text, contents):
 		for name, config_file in self._vis_configs.items():
-			pass
+			config_text = self._get_vis_config_file(corpus, corpus_dirname, config_file)
+			config_css = self._get_vis_css_file(corpus, corpus_dirname, config_file)
+			rendered_html = generate_visualization(config_text, contents, css_text=config_css)
+			vis = HtmlVisualization()
+			vis.visualization_format = HtmlVisualizationFormat.objects.get(button_title=name)
+			vis.html = rendered_html
+			self._current_transaction.add_vis((text, vis))
 
 	def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents):
 		contents.refresh()
@@ -298,14 +339,6 @@ class GithubCorpusScraper:
 
 		text_metas = [TextMeta(name=name, value=value) for name, value in meta.items()]
 
-		self._generate_visualizations_and_add_to_tx(corpus, corpus_dirname)
+		self._generate_visualizations_and_add_to_tx(corpus, corpus_dirname, text, contents.decoded.decode('utf-8'))
 
 		self._current_transaction.add_text((text, text_metas))
-
-
-
-
-
-
-
-

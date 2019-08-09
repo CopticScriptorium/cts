@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from gh_ingest.scraper import GithubCorpusScraper
 from gh_ingest.scraper_exceptions import ScraperException
+from gh_ingest.htmlvis import HtmlGenerationException
 
 
 class Command(BaseCommand):
@@ -19,9 +20,8 @@ class Command(BaseCommand):
 
 		try:
 			transactions = scraper.parse_corpora(options['corpus_dirnames'])
-		except ScraperException as e:
+		except (ScraperException, HtmlGenerationException) as e:
 			raise CommandError(e) from e
-
 
 		for transaction in transactions:
 			self.stdout.write(f"Prepared Django model objects for corpus {transaction.corpus_name}. "
@@ -34,7 +34,8 @@ class Command(BaseCommand):
 												   f"committed for corpus {transaction.corpus_name}.\nError details: "))
 				raise e
 
-			self.stdout.write(self.style.SUCCESS(f"Successfully ingested {counts['texts']} texts "
+			self.stdout.write(self.style.SUCCESS(f"Successfully ingested {counts['texts']} texts, "
+												 f"{counts['vises']} visualizations, "
 												 f"and {counts['text_metas']} pieces of metadata"
 												 f" for corpus {transaction.corpus_name}."))
 
