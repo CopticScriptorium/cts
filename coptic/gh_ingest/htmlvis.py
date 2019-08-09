@@ -1,3 +1,7 @@
+"""A re-implementation of ANNIS's htmlvis (http://corpus-tools.org/annis/resources/ANNIS_HTML_Vis_Guide.pdf).
+`generate_visualization` consumes TreeTagger SGML text and renders it into HTML according to an ANNIS
+htmlvis config file."""
+
 import re
 from copy import deepcopy
 from enum import Enum
