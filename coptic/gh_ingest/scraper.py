@@ -139,6 +139,10 @@ class GithubCorpusScraper:
 		# to the file in ExtData that contains information about it
 		self._vis_configs = {}
 
+		# holds the actual values of dipl.config, dipl.css, etc.
+		self._vis_config_contents = {}
+		self._vis_css_contents = {}
+
 	def _get_zipfile_for_blob(self, sha):
 		blob = self._repo.blob(sha)
 		blob = base64.b64decode(blob.content)
@@ -325,13 +329,20 @@ class GithubCorpusScraper:
 		return self._current_transaction
 
 	# text-level methods -----------------------------------------------------------------------------------------------
+	def _load_config_files(self, corpus, corpus_dirname):
+		# load config and css for visualizations
+		files = dict(self._repo.directory_contents(corpus_dirname))
+		if corpus.github_relannis.endswith('zip'):
+			zip_file = self._get_zipfile_for_blob(files[corpus.github_relannis].sha)
+		else:
+			zip_file = None
+		for name, config_file in self._vis_configs.items():
+			self._vis_config_contents[name] = self._get_vis_config_file(corpus, corpus_dirname, config_file, zip_file)
+			self._vis_css_contents[name] = self._get_vis_css_file(corpus, corpus_dirname, config_file, zip_file)
+
 	def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
 		print("Processing texts...")
-		# refresh to avoid a timeout
-		self._repo = GitHub(
-			username=getattr(settings, "GITHUB_USERNAME", ""),
-			password=getattr(settings, "GITHUB_PASSWORD", "")
-		).repository(self.corpus_repo_owner, self.corpus_repo_name)
+		self._load_config_files(corpus, corpus_dirname)
 		for name, contents in tqdm(texts.items()):
 			self._current_text_contents = contents
 			self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
@@ -366,16 +377,10 @@ class GithubCorpusScraper:
 		except NotFoundError as e:
 			raise VisConfigIssue(path, self.corpus_repo_owner, self.corpus_repo_name) from e
 
-	def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname, text, contents):
-		files = dict(self._repo.directory_contents(corpus_dirname))
-		if corpus.github_relannis.endswith('zip'):
-			zip_file = self._get_zipfile_for_blob(files[corpus.github_relannis].sha)
-		else:
-			zip_file = None
-
+	def _generate_visualizations_and_add_to_tx(self, text, contents):
 		for name, config_file in self._vis_configs.items():
-			config_text = self._get_vis_config_file(corpus, corpus_dirname, config_file, zip_file)
-			config_css = self._get_vis_css_file(corpus, corpus_dirname, config_file, zip_file)
+			config_text = self._vis_config_contents[name]
+			config_css = self._vis_css_contents[name]
 			rendered_html = generate_visualization(config_text, contents, css_text=config_css)
 			vis = HtmlVisualization()
 			vis.visualization_format = HtmlVisualizationFormat.objects.get(button_title=name)
@@ -395,6 +400,6 @@ class GithubCorpusScraper:
 
 		text_metas = [TextMeta(name=name, value=value) for name, value in meta.items()]
 
-		self._generate_visualizations_and_add_to_tx(corpus, corpus_dirname, text, contents)
+		self._generate_visualizations_and_add_to_tx(text, contents)
 
 		self._current_transaction.add_text((text, text_metas))
