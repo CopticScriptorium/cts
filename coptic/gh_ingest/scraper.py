@@ -343,7 +343,7 @@ class GithubCorpusScraper:
 	def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
 		print(f"Preparing transaction for '{corpus_dirname}'...")
 		self._load_config_files(corpus, corpus_dirname)
-		for name, contents in tqdm(texts.items()):
+		for name, contents in tqdm(texts.items(), ncols=60):
 			self._current_text_contents = contents
 			self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
 

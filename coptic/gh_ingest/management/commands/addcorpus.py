@@ -16,10 +16,9 @@ class Command(BaseCommand):
 		)
 
 	def handle(self, *args, **options):
-		scraper = GithubCorpusScraper()
 
 		try:
-			transactions = scraper.parse_corpora(options['corpus_dirnames'])
+			transactions = GithubCorpusScraper().parse_corpora(options['corpus_dirnames'])
 		except (ScraperException, HtmlGenerationException) as e:
 			raise CommandError(e) from e
 
