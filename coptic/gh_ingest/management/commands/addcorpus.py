@@ -23,20 +23,19 @@ class Command(BaseCommand):
 			raise CommandError(e) from e
 
 		for transaction in transactions:
-			self.stdout.write(f"Prepared Django model objects for corpus {transaction.corpus_name}. "
-							  f"Executing transaction...")
+			self.stdout.write(f"Prepared transaction for corpus {transaction.corpus_name}. Executing...")
 			try:
 				counts = transaction.execute()
 			except Exception as e:
 				self.stdout.write(self.style.ERROR("Something went wrong while attempting to execute the transaction "
-												   f"for corpus {transaction.corpus_name}. No changes have been "
-												   f"committed for corpus {transaction.corpus_name}.\nError details: "))
+												   f"for corpus '{transaction.corpus_name}'. No changes have been "
+												   f"committed for corpus '{transaction.corpus_name}'.\nError details: "))
 				raise e
 
-			self.stdout.write(self.style.SUCCESS(f"Successfully ingested {counts['texts']} texts, "
-												 f"{counts['vises']} visualizations, "
-												 f"and {counts['text_metas']} pieces of metadata"
-												 f" for corpus {transaction.corpus_name}."))
+			self.stdout.write(self.style.SUCCESS(f"Successfully ingested corpus '{transaction.corpus_name}' with"
+												 f" {counts['texts']} texts,"
+												 f" {counts['vises']} visualizations,"
+												 f" and {counts['text_metas']} pieces of metadata"))
 
 		# TODO: would be nice to prompt the user for human-readable names
 		self.stdout.write("Your next step should be to enter the admin interface and give each "
