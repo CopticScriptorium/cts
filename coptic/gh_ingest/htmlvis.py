@@ -402,8 +402,13 @@ def render_html(toks, elts, directives, css_text):
 
 	# split elts into separate lists of equivalent length in order of increasing length to ensure
 	# we get the right tag order
-	elts_by_len = [[elt for elt in elts if len(elt) == span_len] for span_len in sorted(set(map(len, elts)))]
+	elt_lens = [len(elt) for elt in elts]
+	elts_by_len = [[] for i in range(max(elt_lens) + 1)]
+	for i, elt in enumerate(elts):
+		elts_by_len[elt_lens[i]].append(elt)
 	for elts in elts_by_len:
+		if len(elts) == 0:
+			continue
 		for directive in other_directives:
 			for elt in elts:
 				if directive.applies(elt):
