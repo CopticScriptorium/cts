@@ -1,4 +1,7 @@
 import re
+from io import BytesIO
+import zipfile
+import base64
 
 from django.db.models import Model
 from django.conf import settings
@@ -8,6 +11,7 @@ from django.db.models import ObjectDoesNotExist
 from django.utils.text import slugify
 from github3.exceptions import NotFoundError
 from github3 import GitHub
+from tqdm import tqdm
 
 from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualizationFormat
 from .scraper_exceptions import *
@@ -30,6 +34,7 @@ KNOWN_SLUGS = {
 	"shenoute.eagerness": "eagernesss",
 	"shenoute.fox": "not_because_a_fox_barks"
 }
+
 
 def get_setting_and_error_if_none(var_name, error_message):
 	var = getattr(settings, var_name, None)
@@ -134,6 +139,28 @@ class GithubCorpusScraper:
 		# to the file in ExtData that contains information about it
 		self._vis_configs = {}
 
+	def _get_zipfile_for_blob(self, sha):
+		blob = self._repo.blob(sha)
+		blob = base64.b64decode(blob.content)
+
+		zip_data = BytesIO()
+		zip_data.write(blob)
+		return zipfile.ZipFile(zip_data)
+
+	# misc methods for zipped files
+	def _get_blob_contents(self, sha, filename):
+		zip_file = self._get_zipfile_for_blob(sha)
+		return zip_file.open(filename).read().decode('utf-8')
+
+	def _get_all_zipped_files(self, sha):
+		zip_file = self._get_zipfile_for_blob(sha)
+
+		files_and_contents = []
+		for filename in zip_file.namelist():
+			zfile = zip_file.open(filename)
+			files_and_contents.append((filename, zfile.read().decode('utf-8')))
+		return files_and_contents
+
 	# corpus-level methods ---------------------------------------------------------------------------------------------
 
 	def parse_corpora(self, corpus_dirnames):
@@ -151,10 +178,10 @@ class GithubCorpusScraper:
 	def _infer_github_dirs(self, corpus, corpus_dirname):
 		dirs = [name for name, contents
 				in self._repo.directory_contents(corpus_dirname)
-				if contents.type == 'dir']
-		github_tei = self._infer_dir(corpus, dirs, "_TEI")
-		github_relannis = self._infer_dir(corpus, dirs, "_RELANNIS", "_ANNIS")
-		github_paula = self._infer_dir(corpus, dirs, "_PAULA")
+				if contents.type == 'dir' or name.endswith('.zip')]
+		github_tei = self._infer_dir(corpus, dirs, "_TEI", "_TEI.zip")
+		github_relannis = self._infer_dir(corpus, dirs, "_RELANNIS", "_ANNIS", "_RELANNIS.zip", "_ANNIS.zip")
+		github_paula = self._infer_dir(corpus, dirs, "_PAULA", "_PAULA.zip")
 		if not any(str(x) and x != '' for x in [github_tei, github_paula, github_relannis]):
 			raise EmptyCorpus(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name)
 		return github_tei, github_relannis, github_paula
@@ -176,12 +203,19 @@ class GithubCorpusScraper:
 			raise InferenceError(corpus.slug, self.corpus_repo_owner, self.corpus_repo_name, "slug")
 
 	def _get_texts(self, corpus, corpus_dirname):
-		tt_dir = corpus_dirname + "/" + corpus.annis_corpus_name + "_TT"
 		try:
-			texts = [(name, contents) for name, contents
-					 in self._repo.directory_contents(tt_dir)]
+			if corpus.github_paula.endswith(".zip"):
+				vm = dict(self._repo.directory_contents(corpus_dirname))
+				dir_contents = self._get_all_zipped_files(
+					vm[corpus.annis_corpus_name + "_TT.zip"].sha)
+				texts = [(name, contents) for name, contents in dir_contents]
+			else:
+				tt_dir = corpus_dirname + "/" + corpus.annis_corpus_name + "_TT"
+				dir_contents = self._repo.directory_contents(tt_dir)
+				texts = [(name, contents.refresh().decoded.decode('utf-8')) for name, contents in dir_contents]
 		except NotFoundError as e:
 			raise TTDirMissing(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, tt_dir) from e
+
 		if len(texts) == 0:
 			raise NoTexts(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, tt_dir)
 
@@ -213,8 +247,13 @@ class GithubCorpusScraper:
 
 	def _infer_html_visualization_formats_and_add_to_tx(self, corpus, corpus_dirname):
 		try:
-			vm = self._repo.file_contents("/".join([corpus_dirname, corpus.github_relannis, "resolver_vis_map.annis"]))
-		except NotFoundError as e:
+			if corpus.github_relannis.endswith("zip"):
+				vm = dict(self._repo.directory_contents(corpus_dirname))
+				vm = self._get_blob_contents(vm[corpus.github_relannis].sha, "resolver_vis_map.annis")
+			else:
+				vm = self._repo.file_contents("/".join([corpus_dirname, corpus.github_relannis, "resolver_vis_map.annis"]))
+				vm = vm.decoded.decode('utf-8')
+		except (NotFoundError, IndexError) as e:
 			raise ResolverVisMapIssue(
 				corpus_dirname,
 				self.corpus_repo_owner,
@@ -222,7 +261,7 @@ class GithubCorpusScraper:
 				corpus.github_relannis
 			) from e
 
-		vis_lines = self._parse_resolver_vis_map(vm.decoded.decode('utf-8'), corpus, corpus_dirname)
+		vis_lines = self._parse_resolver_vis_map(vm, corpus, corpus_dirname)
 		formats = []
 		already_seen = []
 		for _, _, _, _, type, vis_type, _, _, config_file in vis_lines:
@@ -286,9 +325,14 @@ class GithubCorpusScraper:
 		return self._current_transaction
 
 	# text-level methods -----------------------------------------------------------------------------------------------
-
 	def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
-		for contents in texts.values():
+		print("Processing texts...")
+		# refresh to avoid a timeout
+		self._repo = GitHub(
+			username=getattr(settings, "GITHUB_USERNAME", ""),
+			password=getattr(settings, "GITHUB_PASSWORD", "")
+		).repository(self.corpus_repo_owner, self.corpus_repo_name)
+		for name, contents in tqdm(texts.items()):
 			self._current_text_contents = contents
 			self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
 
@@ -298,27 +342,40 @@ class GithubCorpusScraper:
 				return dict(re.findall(r'(?P<attr>\w+)="(?P<value>.*?)"', line))
 		raise MetaNotFound(self.corpus_repo_owner, self.corpus_repo_name, self._current_text_contents.path)
 
-	def _get_vis_css_file(self, corpus, corpus_dirname, config_file):
-		path = corpus_dirname + "/" + corpus.github_relannis + "/ExtData/" + config_file + ".css"
+	def _get_vis_css_file(self, corpus, corpus_dirname, config_file, zip_file):
 		try:
-			f = self._repo.file_contents(path)
-			return f.decoded.decode('utf-8')
+			if zip_file:
+				path = "ExtData/" + config_file + ".css"
+				return zip_file.open(path).read().decode('utf-8')
+			else:
+				path = corpus_dirname + "/" + corpus.github_relannis + "/ExtData/" + config_file + ".css"
+				f = self._repo.file_contents(path)
+				return f.decoded.decode('utf-8')
 		except NotFoundError:
 			return ""
 
-	def _get_vis_config_file(self, corpus, corpus_dirname, config_file):
-		path = corpus_dirname + "/" + corpus.github_relannis + "/ExtData/" + config_file + ".config"
+	def _get_vis_config_file(self, corpus, corpus_dirname, config_file, zip_file):
 		try:
-			f = self._repo.file_contents(path)
+			if zip_file:
+				path = "ExtData/" + config_file + ".config"
+				return zip_file.open(path).read().decode('utf-8')
+			else:
+				path = corpus_dirname + "/" + corpus.github_relannis + "/ExtData/" + config_file + ".config"
+				f = self._repo.file_contents(path)
+				return f.decoded.decode('utf-8')
 		except NotFoundError as e:
 			raise VisConfigIssue(path, self.corpus_repo_owner, self.corpus_repo_name) from e
 
-		return f.decoded.decode('utf-8')
-
 	def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname, text, contents):
+		files = dict(self._repo.directory_contents(corpus_dirname))
+		if corpus.github_relannis.endswith('zip'):
+			zip_file = self._get_zipfile_for_blob(files[corpus.github_relannis].sha)
+		else:
+			zip_file = None
+
 		for name, config_file in self._vis_configs.items():
-			config_text = self._get_vis_config_file(corpus, corpus_dirname, config_file)
-			config_css = self._get_vis_css_file(corpus, corpus_dirname, config_file)
+			config_text = self._get_vis_config_file(corpus, corpus_dirname, config_file, zip_file)
+			config_css = self._get_vis_css_file(corpus, corpus_dirname, config_file, zip_file)
 			rendered_html = generate_visualization(config_text, contents, css_text=config_css)
 			vis = HtmlVisualization()
 			vis.visualization_format = HtmlVisualizationFormat.objects.get(button_title=name)
@@ -326,8 +383,7 @@ class GithubCorpusScraper:
 			self._current_transaction.add_vis((text, vis))
 
 	def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents):
-		contents.refresh()
-		tt_lines = contents.decoded.decode('utf-8').split("\n")
+		tt_lines = contents.split("\n")
 
 		meta = self._get_meta_dict(tt_lines)
 		self._latest_meta_dict = meta
@@ -339,6 +395,6 @@ class GithubCorpusScraper:
 
 		text_metas = [TextMeta(name=name, value=value) for name, value in meta.items()]
 
-		self._generate_visualizations_and_add_to_tx(corpus, corpus_dirname, text, contents.decoded.decode('utf-8'))
+		self._generate_visualizations_and_add_to_tx(corpus, corpus_dirname, text, contents)
 
 		self._current_transaction.add_text((text, text_metas))
