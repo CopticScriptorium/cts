@@ -3,7 +3,6 @@
 htmlvis config file."""
 
 import re
-from copy import deepcopy
 from enum import Enum
 from collections import defaultdict
 
@@ -323,13 +322,15 @@ def parse_close_tag(i, line):
 	return name[0]
 
 
+NAME_REGEX = re.compile(r'^<([^\s<>/]*)')
+ATTRS_REGEX = re.compile(r'\s([^\s]*)="([^"]*?)"')
 def parse_open_tag(i, line, tok_count):
-	name = re.findall(r'^<([^\s<>/]*)', line)
+	name = re.findall(NAME_REGEX, line)
 	if len(name) != 1:
 		raise HtmlGenerationException(f'Couldn\'t recognize an SGML element name on opening line {i}:\n\n\t{line}')
 	name = name[0]
 
-	attrs = re.findall(r'\s([^\s]*)="([^"]*?)"', line)
+	attrs = re.findall(ATTRS_REGEX, line)
 	return SgmlElement(name, attrs, tok_count)
 
 
@@ -347,13 +348,17 @@ def parse_text(text):
 			<lemma lemma="ⲕⲟⲥⲙⲟⲥ">
 		"""
 		elts = [elt]
-		for attr_name, attr_val in deepcopy(elt.attrs).items():
+		to_delete = []
+		for attr_name, attr_val in elt.attrs.items():
 			if attr_name != elt.name and ":" not in attr_name and elt.name != "meta":
-				del elt.attrs[attr_name]
-				new_elt = deepcopy(elt)
-				new_elt.name = attr_name
-				new_elt.attrs = {attr_name: attr_val}
+				to_delete.append(attr_name)
+				new_elt = SgmlElement(attr_name, [(attr_name, attr_val)])
+				new_elt.open_line = elt.open_line
+				new_elt.close_line = elt.close_line
 				elts.append(new_elt)
+
+		for attr_name in to_delete:
+			del elt.attrs[attr_name]
 
 		return elts
 
@@ -364,15 +369,19 @@ def parse_text(text):
 	tok_count = 0
 
 	for i, line in enumerate(text.strip().split("\n")):
-		if line.startswith('</'):
-			name = parse_close_tag(i, line)
-			elt = elt_stack[name].pop()
-			elt.close_line = tok_count - 1
-			complete_elts += individuate(elt)
-		elif line.startswith('<'):
-			elt = parse_open_tag(i, line, tok_count)
-			elt_stack[elt.name].append(elt)
-		else:
+		try:
+			if line[:2] == '</':
+				name = parse_close_tag(i, line)
+				elt = elt_stack[name].pop()
+				elt.close_line = tok_count - 1
+				complete_elts += individuate(elt)
+			elif line[0] == '<':
+				elt = parse_open_tag(i, line, tok_count)
+				elt_stack[elt.name].append(elt)
+			else:
+				toks.append(line)
+				tok_count += 1
+		except IndexError:
 			toks.append(line)
 			tok_count += 1
 
@@ -402,14 +411,50 @@ def render_html(toks, elts, directives, css_text):
 					toks[elt.close_line] = directive.apply_right(elt, toks[elt.close_line])
 
 	html = "<!--\n-->".join(toks)
+	html = f'<div class="htmlvis">{html}</div>'
 	html += f"<style>{css_text}</style>"
 
 	return html
 
 
+DEBUG = False
 def generate_visualization(config_text, text, css_text=""):
+	# ensure the font exists
+	css_text = """
+@font-face {
+	font-family: Antinoou;
+	src: url('/static/fonts/antinoou-webfont.woff') format('woff');
+}
+""" + css_text
+	if DEBUG:
+		with open("htmlvis_latest_config_text.txt", "w") as f:
+			f.write(config_text)
+		with open("htmlvis_latest_text.txt", "w") as f:
+			f.write(text)
 	directives = parse_config(config_text)
 	toks, elts = parse_text(text)
 
 	return render_html(toks, elts, directives, css_text)
 
+
+if __name__ == "__main__":
+	from argparse import ArgumentParser
+	import os
+	os.environ['DJANGO_SETTINGS_MODULE'] = 'coptic.settings'
+	p = ArgumentParser()
+	p.add_argument("config_text", default="htmlvis_latest_config_text.txt")
+	p.add_argument("text", default="htmlvis_latest_text.txt")
+	args = p.parse_args()
+	with open(args.config_text, 'r') as f:
+		config_text = f.read()
+	with open(args.text, 'r') as f:
+		text = f.read()
+
+	import cProfile, io, pstats
+	pr = cProfile.Profile()
+	pr.enable()
+	pr.run("output = generate_visualization(config_text, text, '')")
+	pr.disable()
+	ps = pstats.Stats(pr).sort_stats('cumtime')
+	ps.print_stats()
+	print(output)
