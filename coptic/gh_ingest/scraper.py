@@ -53,6 +53,10 @@ class CorpusTransaction:
 		self._text_pairs = []
 		self._vis_formats = []
 		self._vises = []
+		self._to_delete = []
+
+	def add_objs_to_be_deleted(self, objs):
+		self._to_delete = objs
 
 	def add_text(self, text_pair):
 		self._text_pairs.append(text_pair)
@@ -65,6 +69,12 @@ class CorpusTransaction:
 
 	@transaction.atomic
 	def execute(self):
+		if len(self._to_delete) > 0:
+			print(f"Found an already existing upload of '{self.corpus_dirname}'. Deleting... ", end="")
+			for obj in self._to_delete:
+				obj.delete()
+			print("Deleted.")
+
 		self._corpus.save()
 		self._corpus.html_visualization_formats.set(self._vis_formats)
 		self._corpus.save()
@@ -296,24 +306,25 @@ class GithubCorpusScraper:
 		if corpus_dirname not in self._corpora:
 			raise CorpusNotFound(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name)
 
-		# TODO: handling for zips
-
-		# Delete any already-existing corpus object
-		github_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
-		try:
-			corpus = Corpus.objects.get(github=github_url)
-			# delete text_meta manually because they're not linked with foreign keys--all others will be handled by
-			# the cascading sql delete
-			for text in Text.objects.all().filter(corpus=corpus):
-				for text_meta in text.text_meta.all():
-					text_meta.delete()
-			corpus.delete()
-		except ObjectDoesNotExist:
-			pass
 		corpus = Corpus()
 		self._current_corpus = corpus
 		# All objects we make will go into this list
 		self._current_transaction = CorpusTransaction(corpus_dirname, corpus)
+
+		# Delete any already-existing corpus object
+		github_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
+		try:
+			existing_corpus = Corpus.objects.get(github=github_url)
+			# delete text_meta manually because they're not linked with foreign keys--all others will be handled by
+			# the cascading sql delete
+			to_delete = []
+			for text in Text.objects.all().filter(corpus=existing_corpus):
+				for text_meta in text.text_meta.all():
+					to_delete.append(text_meta)
+			to_delete.append(existing_corpus)
+			self._current_transaction.add_objs_to_be_deleted(to_delete)
+		except ObjectDoesNotExist:
+			pass
 
 		corpus.slug = corpus_dirname # provisionally, until we find the real one, so we can use this in errors
 		corpus.github = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
