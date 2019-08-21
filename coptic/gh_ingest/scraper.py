@@ -70,7 +70,7 @@ class CorpusTransaction:
 	@transaction.atomic
 	def execute(self):
 		if len(self._to_delete) > 0:
-			print(f"Found an already existing upload of '{self.corpus_dirname}'. Deleting... ", end="")
+			print(f"Found an already existing upload of '{self.corpus_name}'. Deleting... ", end="")
 			for obj in self._to_delete:
 				obj.delete()
 			print("Deleted.")
