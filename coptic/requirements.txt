@@ -1,7 +1,7 @@
 requests
-django==2.2.4
-django-grappelli==2.6.4
-beautifulsoup4==4.3.2
+django
+django-grappelli
+beautifulsoup4
 selenium==2.45.0
 xvfbwrapper==0.2.4
 mod-wsgi==4.4.11
