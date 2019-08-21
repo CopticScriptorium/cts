@@ -168,7 +168,12 @@ class GithubCorpusScraper:
 	# corpus-level methods ---------------------------------------------------------------------------------------------
 
 	def parse_corpora(self, corpus_dirnames):
-		return [self.parse_corpus(corpus_dirname) for corpus_dirname in corpus_dirnames]
+		corpora = []
+		for corpus_dirname in corpus_dirnames:
+			# reset internal state
+			self.__init__()
+			corpora.append(self.parse_corpus(corpus_dirname))
+		return corpora
 
 	def _infer_dir(self, corpus, dirs, *exts):
 		target_dirs = []
@@ -343,7 +348,7 @@ class GithubCorpusScraper:
 	def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
 		print(f"Preparing transaction for '{corpus_dirname}'...")
 		self._load_config_files(corpus, corpus_dirname)
-		for name, contents in tqdm(texts.items(), ncols=60):
+		for name, contents in tqdm(texts.items(), ncols=80):
 			self._current_text_contents = contents
 			self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
 
