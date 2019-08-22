@@ -96,14 +96,11 @@ class MetaOrder(models.Model):
 
 
 class Text(models.Model):
-	from ingest.models import Ingest
 	title = models.CharField(max_length=200)
 	slug = models.SlugField(max_length=40)
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
-	is_expired = models.BooleanField(default=False)
 	corpus = models.ForeignKey(Corpus, blank=True, null=True, on_delete=models.CASCADE)
-	ingest = models.ForeignKey(Ingest, blank=True, null=True, on_delete=models.CASCADE)
 	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
 	text_meta = models.ManyToManyField(TextMeta, blank=True)
 

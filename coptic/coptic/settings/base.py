@@ -28,8 +28,6 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'texts',
-	'annis',
-	'ingest',
 	'gh_ingest',
 	'api',
 	'mod_wsgi.server'
@@ -101,18 +99,6 @@ LOGGING = {
 	    }
 	},
 	'loggers': {
-	    'ingest.ingest': {
-	   	 'handlers': ['console', 'file'],
-	   	 'level': 'INFO',
-	    },
-	    'ingest.models': {
-	   	 'handlers': ['console', 'file'],
-	   	 'level': 'INFO',
-	    },
-	    'ingest.search': {
-	   	 'handlers': ['console', 'file'],
-	   	 'level': 'INFO',
-	    },
 	    'django': {
 	   	 'handlers': ['console', 'file'],
 	   	 'level': 'INFO',
