@@ -1,3 +1,4 @@
+from html import unescape
 import re
 from io import BytesIO
 import zipfile
@@ -66,6 +67,11 @@ class CorpusTransaction:
 
 	def add_vis(self, text_and_vis):
 		self._vises.append(text_and_vis)
+
+	def sort_texts(self, text_next, text_prev):
+		texts = [p[0] for p in self._text_pairs]
+
+		pass
 
 	@transaction.atomic
 	def execute(self):
@@ -153,6 +159,10 @@ class GithubCorpusScraper:
 		self._vis_config_contents = {}
 		self._vis_css_contents = {}
 
+		# Text -> meta.prev, meta.next
+		self._text_next = {}
+		self._text_prev = {}
+
 	def _get_zipfile_for_blob(self, sha):
 		blob = self._repo.blob(sha)
 		blob = base64.b64decode(blob.content)
@@ -219,7 +229,7 @@ class GithubCorpusScraper:
 		if corpus.annis_corpus_name in KNOWN_SLUGS:
 			return KNOWN_SLUGS[corpus.annis_corpus_name]
 		else:
-			raise InferenceError(corpus.slug, self.corpus_repo_owner, self.corpus_repo_name, "slug")
+			corpus.title = slugify(corpus.annis_corpus_name)
 
 	def _get_texts(self, corpus, corpus_dirname):
 		try:
@@ -338,6 +348,7 @@ class GithubCorpusScraper:
 
 		texts = self._get_texts(corpus, corpus_dirname)
 		self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
+		self._current_transaction.sort_texts(self._text_next, self._text_prev)
 
 		# TODO: Revisit this once Carrie and Amir agree on a corpus URN determination scheme. For now, edit manually
 		# corpus.urn_code = self._infer_urn_code(corpus_dirname)
@@ -411,10 +422,12 @@ class GithubCorpusScraper:
 
 		text = Text()
 		text.title = meta["title"]
-		text.slug = slugify(meta["title"])
+		text.slug = slugify(meta["title"] if "title" in meta else meta["name"])
 		text.corpus = self._current_corpus
+		self._text_next[text.title] = meta["next"] if "next" in meta else None
+		self._text_prev[text.title] = meta["prev"] if "prev" in meta else None
 
-		text_metas = [TextMeta(name=name, value=value) for name, value in meta.items()]
+		text_metas = [TextMeta(name=name, value=unescape(value)) for name, value in meta.items()]
 
 		self._generate_visualizations_and_add_to_tx(text, contents)
 

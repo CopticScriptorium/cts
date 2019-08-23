@@ -31,7 +31,12 @@ def define_visualizations():
     sahidica.button_title = "chapter"
     sahidica.title = "Sahidica Chapter View"
 
-    for vis in [norm, analytic, dipl, sahidica]:
+    versified = HtmlVisualizationFormat()
+    versified.slug = "verses"
+    versified.button_title = "versified"
+    versified.title = "Versified Text"
+
+    for vis in [norm, analytic, dipl, sahidica, versified]:
         try:
             HtmlVisualizationFormat.objects.get(slug__exact=vis.slug)
         except HtmlVisualizationFormat.DoesNotExist:
@@ -46,24 +51,24 @@ def load_searchfields():
     """
     
     corpus = SpecialMeta()
-    corpus.title = "corpus"
+    corpus.name = "corpus"
     corpus.order = 1
     
     author = SpecialMeta()
-    author.title = "author"
+    author.name = "author"
     author.order = 2
 
     ms_name = SpecialMeta()
-    ms_name.title = "msName"
+    ms_name.name = "msName"
     ms_name.order = 3
 
     annotation = SpecialMeta()
-    annotation.title = "annotation"
+    annotation.name = "annotation"
     annotation.order = 4
     annotation.splittable = True
 
     translation = SpecialMeta()
-    translation.title = "translation"
+    translation.name = "translation"
     translation.order = 5
     translation.splittable = True
 

@@ -1,9 +1,9 @@
 from django.conf.urls import include, url
+from django.urls import path
 from django.contrib import admin
 from django.shortcuts import redirect
-from texts import views
-from coptic.views import home
 from api.views import texts_for_urn
+import coptic.views as views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -36,25 +36,25 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 try:
 	from django.conf.urls import patterns
 	urlpatterns = patterns('',
-		url(r'^grappelli/',                     include('grappelli.urls')),
-		url(r'^admin/',                         include(admin.site.urls)),
-		url(r'^api/',                           include('api.urls')),
-		url(r'^texts/.*$',                      views.list, name='list'),
-		url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
-		url(r'^urn',                            'coptic.views.home'),
-		url(r'^collections/.+$',                'coptic.views.home', name='home'),
-		url(r'^filter/.+$',                     'coptic.views.home', name='home'),
-		url(r'^$',                              'coptic.views.home', name='home'),
+		url(r'^grappelli/',                                  include('grappelli.urls')),
+		url(r'^admin/',                                      include(admin.site.urls)),
+		url(r'^api/',                                        include('api.urls')),
+		path(r'texts/<slug:corpus>',                         views.corpus_view, name='corpus'),
+		path(r'texts/<slug:corpus>/<slug:text>',             views.text_view, name='text'),
+		path(r'texts/<slug:corpus>/<slug:text>/<format>',    views.text_view, name='text_with_format'),
+		url(r'(.*)/(annis|relannis|xml|html)$',              _redirect_citation_urls),
+		url(r"^(?P<urn>urn:.*)$",                            views.urn),
+		url(r'^$',                                           views.home_view, name='home'),
 	) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 except ImportError:
 	urlpatterns = [
-		url(r'^grappelli/',                     include('grappelli.urls')),
-		url(r'^admin/',                         admin.site.urls),
-		url(r'^api/',                           include('api.urls')),
-		url(r'^texts/.*$',                      views.list, name='list'),
-		url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
-		url(r'^urn',                            home),
-		url(r'^collections/.+$',                home, name='home'),
-		url(r'^filter/.+$',                     home, name='home'),
-		url(r'^$',                              home, name='home'),
+		url(r'^grappelli/',                                  include('grappelli.urls')),
+		url(r'^admin/',                                      admin.site.urls),
+		url(r'^api/',                                        include('api.urls')),
+		path(r'texts/<slug:corpus>',                         views.corpus_view, name='corpus'),
+		path(r'texts/<slug:corpus>/<slug:text>',             views.text_view, name='text'),
+		path(r'texts/<slug:corpus>/<slug:text>/<format>',    views.text_view, name='text_with_format'),
+		url(r'(.*)/(annis|relannis|xml|html)$',              _redirect_citation_urls),
+		url(r"^(?P<urn>urn:.*)$",                            views.urn),
+		url(r'^$',                                           views.home_view, name='home'),
 	] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
