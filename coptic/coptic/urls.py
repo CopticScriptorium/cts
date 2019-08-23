@@ -32,29 +32,14 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 	return redirect(new_loc)
 
 
-# django <= 1.7
-try:
-	from django.conf.urls import patterns
-	urlpatterns = patterns('',
-		url(r'^grappelli/',                                  include('grappelli.urls')),
-		url(r'^admin/',                                      include(admin.site.urls)),
-		url(r'^api/',                                        include('api.urls')),
-		path(r'texts/<slug:corpus>',                         views.corpus_view, name='corpus'),
-		path(r'texts/<slug:corpus>/<slug:text>',             views.text_view, name='text'),
-		path(r'texts/<slug:corpus>/<slug:text>/<format>',    views.text_view, name='text_with_format'),
-		url(r'(.*)/(annis|relannis|xml|html)$',              _redirect_citation_urls),
-		url(r"^(?P<urn>urn:.*)$",                            views.urn),
-		url(r'^$',                                           views.home_view, name='home'),
-	) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-except ImportError:
-	urlpatterns = [
-		url(r'^grappelli/',                                  include('grappelli.urls')),
-		url(r'^admin/',                                      admin.site.urls),
-		url(r'^api/',                                        include('api.urls')),
-		path(r'texts/<slug:corpus>',                         views.corpus_view, name='corpus'),
-		path(r'texts/<slug:corpus>/<slug:text>',             views.text_view, name='text'),
-		path(r'texts/<slug:corpus>/<slug:text>/<format>',    views.text_view, name='text_with_format'),
-		url(r'(.*)/(annis|relannis|xml|html)$',              _redirect_citation_urls),
-		url(r"^(?P<urn>urn:.*)$",                            views.urn),
-		url(r'^$',                                           views.home_view, name='home'),
-	] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns = [
+url(r'^grappelli/',                                  include('grappelli.urls')),
+	url(r'^admin/',                                      admin.site.urls),
+	url(r'^api/',                                        include('api.urls')),
+	path(r'texts/<slug:corpus>',                         views.corpus_view, name='corpus'),
+	path(r'texts/<slug:corpus>/<slug:text>',             views.text_view, name='text'),
+	path(r'texts/<slug:corpus>/<slug:text>/<format>',    views.text_view, name='text_with_format'),
+	url(r'(.*)/(annis|relannis|xml|html)$',              _redirect_citation_urls),
+	url(r"^(?P<urn>urn:.*)$",                            views.urn),
+	url(r'^$',                                           views.home_view, name='home'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
