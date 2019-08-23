@@ -33,7 +33,7 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 
 
 urlpatterns = [
-    url(r'^grappelli/',                                  include('grappelli.urls')),
+	url(r'^grappelli/',                                  include('grappelli.urls')),
 	url(r'^admin/',                                      admin.site.urls),
 	url(r'^api/',                                        include('api.urls')),
 	path(r'texts/<slug:corpus>',                         views.corpus_view, name='corpus'),
