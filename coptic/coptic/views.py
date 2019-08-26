@@ -14,12 +14,49 @@ def _base_context():
 
 
 def home_view(request):
-    'Home/index view'
+    'Home'
     context = _base_context()
     context.update({
         'corpora': models.Corpus.objects.all()
     })
+    return render(request, 'home.html', context)
+
+
+def index_view(request, special_meta=None):
+    context = _base_context()
+
+    value_corpus_pairs = dict()
+
+    meta = get_object_or_404(models.SpecialMeta, name=special_meta)
+    unsplit_values = map(lambda x: x['value'], models.TextMeta.objects.filter(name__iexact=meta.name).values("value").distinct())
+    if not meta.splittable:
+        meta_values = unsplit_values
+    else:
+        split_meta_values = [v.split(", ") for v in unsplit_values]
+        meta_values = set()
+        for vals in split_meta_values:
+            meta_values = meta_values.union(set(vals))
+
+    for meta_value in meta_values:
+        if meta.splittable:
+            corpora = (models.Text.objects.filter(text_meta__name__iexact=meta.name,
+                                                  text_meta__value__contains=meta_value)
+                       .values("corpus__slug", "corpus__title")
+                       .distinct())
+        else:
+            corpora = (models.Text.objects.filter(text_meta__name__iexact=meta.name,
+                                                  text_meta__value__iexact=meta_value)
+                       .values("corpus__slug", "corpus__title")
+                       .distinct())
+        value_corpus_pairs[meta_value] = [{"slug": c['corpus__slug'], "title": c['corpus__title']} for c in corpora]
+
+    context.update({
+        'special_meta': meta.name,
+        'value_corpus_pairs': sorted(value_corpus_pairs.items(), key=lambda x: x[0]),
+        'no_lists': meta.name == "corpus"
+    })
     return render(request, 'index.html', context)
+
 
 def corpus_view(request, corpus=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)

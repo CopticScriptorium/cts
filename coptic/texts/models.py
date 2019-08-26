@@ -117,7 +117,7 @@ class Text(models.Model):
 
 
 class SpecialMeta(models.Model):
-	'Metadata names that are used as “search” buttons and that may have multiple values splittable by comma'
+	'Metadata names that are used to index texts'
 	name 		= models.CharField(max_length=200, unique=True)
 	order 		= models.IntegerField()
 	splittable 	= models.BooleanField(default=False)

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<section class="project-description entry-text">
+    <h1 class="title"><strong>Corpora</strong></h1>
+
+    <ul>
+    {% for corpus in corpora %}
+        <li> <a href="/texts/{{corpus.slug}}">{{corpus.title}}</a></li>
+    {% endfor %}
+    </ul>
+
+
+    <h1 class="title"><strong>Coptic SCRIPTORIUM Corpora &amp; URN Resolver</strong></h1>
+
+    <p class="description-text">
+        Coptic SCRIPTORIUM provides Coptic texts for reading, analysis, and complex searches. The texts are
+        citable and accessible through stable <a href="http://en.wikipedia.org/wiki/Uniform_resource_name">URNs</a>,
+        such as urn:cts:copticLit:shenoute.fox for Shenoute's work <i>Not Because a Fox Barks</i>. This
+        application will provide the most recent version of our documents in the formats currently available
+        for each text.  <strong>If you know the URN for the material you seek, please enter it in
+        the box above. You may also find documents by using the filters on the menu
+        above.</strong></p>
+
+    <p class="description-text">If you wish to read Coptic texts, you can view individual documents online
+        (in HTML) in various visualizations. We also provide links to our corpora in our <a href="https://corpling.uis.georgetown.edu/annis/scriptorium" target="_blank">search tool ANNIS</a>, as well as data files in <a href="http://www.tei-c.org/">TEI XML</a>, <a
+                href="http://www.sfb632.uni-potsdam.de/en/paula-en.html">PAULA XML</a>, and  <a href="http://www.sfb632.uni-potsdam.de/annis/">ANNIS</a> formats.
+        This web application provides the most recent version of the data. Previous versions are available
+        on GitHub. </p>
+    <p class="description-text">Documentation beneath the text provides information about it, including the
+        version and date of publication online.    </p>
+    <h3><strong>Resources</strong></h3>
+    <p class="description-text"><a
+            href="download/tools/scriptorium_tagset_documentation.pdf" target="_blank"
+            title="part of speech tagset">Documentation on our part of speech tagging</a></p>
+    <p class="description-text"><a href="http://copticscriptorium.org/citation-guidelines" target="_blank">Citation guidelines</a> for citing these documents</p>
+
+    <p class="description-text"><a href="http://www.copticscriptorium.org/ANNIS-tips.html"
+                                   title="example queries" target="new">Example queries for ANNIS</a> search tool.</p>
+    <p class="description-text">A video <a
+            href="https://www.youtube.com/watch?v=gGZWbPzcJPA" title="March 2015 ANNIS tutorial"
+            target="_blank">tutorial</a>, especially for ANNIS.</p>
+    <p class="description-text"> A brief <a
+            href="https://www.youtube.com/watch?v=JZW6oWHbwQU" title="Fall 2014 tutorial"
+            target="_blank">video tutorial explaining the texts, data model, and basic queries</a>
+        from Fall 2014.</p>
+</section>
+
+{% endblock %}

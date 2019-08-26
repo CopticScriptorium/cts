@@ -6,15 +6,9 @@
             {% for field in search_fields %}
             <div class="{{field.title | lower}}-tool-wrap tool-wrap">
                 <div class="{{field.title | lower}}-tool tool-head">
-                    <span class="tool-text"> {{field.title}} </span>
-                </div>
-                <div class="{{field.title | lower}}-tool-panel tool-panel hidden">
-                    {% for value in field.values %}
-                    <div class="tool-search-item" data-searchid="{{value.id}}">
-                        <span>{{value}}</span>
-                    </div>
-                    {% endfor %}
-                    <span class="fa fa-close raise-dropdowns"></span>
+                    <a href="/index/{{field.title}}/">
+                        <span class="tool-text"> {{field.title}} </span>
+                    </a>
                 </div>
             </div>
             {% endfor %}
