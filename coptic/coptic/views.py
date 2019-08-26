@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from texts.search_fields import get_search_fields
 import texts.models as models
+import texts.urn
 
 
 def _base_context():
@@ -42,13 +43,11 @@ def text_view(request, corpus=None, text=None, format=None):
     visualization = text_object.html_visualizations.get(visualization_format__slug=format)
 
     doc_urn = text_object.text_meta.get(name="document_cts_urn").value
-    urn_parts = doc_urn.split(":")
-    urn_dot_parts = urn_parts[3].split(".")
 
-    text_object.urn_cts_work = ":".join(urn_parts[0:3]) # e.g., "urn:cts:copticLit"
     text_object.edition_urn = doc_urn
-    text_object.textgroup_urn = urn_dot_parts[0]
-    text_object.corpus_urn = urn_dot_parts[1]
+    text_object.urn_cts_work = texts.urn.cts_work(doc_urn)
+    text_object.textgroup_urn = texts.urn.textgroup_urn(doc_urn)
+    text_object.corpus_urn = texts.urn.corpus_urn(doc_urn)
     text_object.text_url = "texts/" + text_object.corpus.slug + "/" + text_object.slug
 
     try:
@@ -56,13 +55,13 @@ def text_view(request, corpus=None, text=None, format=None):
         slug = models.Text.objects.get(text_meta__name="document_cts_urn", text_meta__value=next_text_urn).slug
         text_object.next = slug
     except models.TextMeta.DoesNotExist:
-        print("oops!")
+        pass
     try:
         previous_text_urn = text_object.text_meta.get(name="previous").value
         slug = models.Text.objects.get(text_meta__name="document_cts_urn", text_meta__value=previous_text_urn).slug
         text_object.previous = slug
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
-        print("oops!")
+        pass
     try:
         text_object.endnote = text_object.text_meta.get(name="endnote").value
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
@@ -82,5 +81,10 @@ def not_found(request):
 
 
 def urn(request, urn=None):
-    text = get_object_or_404(models.Text, text_meta__name="document_cts_urn", text_meta__value=urn)
-    return redirect(f'texts/{text.corpus.slug}/{text.slug}')
+    try:
+        text = models.Text.objects.get(text_meta__name="document_cts_urn", text_meta__value=urn)
+        return text_view(request, text=text.slug, corpus=text.corpus.slug)
+    except models.Text.DoesNotExist:
+        corpus = get_object_or_404(models.Corpus, urn_code=urn)
+        return corpus_view(request, corpus=corpus.slug)
+

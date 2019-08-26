@@ -15,6 +15,7 @@ from github3 import GitHub
 from tqdm import tqdm
 
 from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualizationFormat
+import texts.urn as urn
 from .scraper_exceptions import *
 from .htmlvis import generate_visualization
 
@@ -255,8 +256,11 @@ class GithubCorpusScraper:
 		if meta is None or "document_cts_urn" not in meta:
 			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
 
-		doc_urn = meta["document_cts_urn"].split(":")
-		corpus_urn = doc_urn[2] + ":" + doc_urn[3].split(".")[0]
+		doc_urn = meta["document_cts_urn"]
+		# TODO: for most corpora right now, it seems like the "corpus urn" actually corresponds to a Text
+		# rather than a Corpus. Use textgroup instead, revisit when the CS team makes a decision on standardizing URNs.
+		corpus_urn = urn.textgroup_urn(doc_urn)
+		# corpus_urn = urn.corpus_urn(doc_urn)
 		if corpus_urn == "":
 			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
 
@@ -350,8 +354,7 @@ class GithubCorpusScraper:
 		self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
 		self._current_transaction.sort_texts(self._text_next, self._text_prev)
 
-		# TODO: Revisit this once Carrie and Amir agree on a corpus URN determination scheme. For now, edit manually
-		# corpus.urn_code = self._infer_urn_code(corpus_dirname)
+		corpus.urn_code = self._infer_urn_code(corpus_dirname)
 
 		return self._current_transaction
 
