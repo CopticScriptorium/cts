@@ -3,6 +3,13 @@
 
         <!-- Search by text, year, author, country of origin, hagiography, bible texts-->
         <div class="search-tools">
+            <div class="tool-wrap">
+                <div class="tool-head">
+                    <a href="/">
+                        <span class="tool-text">home</span>
+                    </a>
+                </div>
+            </div>
             {% for field in search_fields %}
             <div class="{{field.title | lower}}-tool-wrap tool-wrap">
                 <div class="{{field.title | lower}}-tool tool-head">
