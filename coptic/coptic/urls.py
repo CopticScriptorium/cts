@@ -36,6 +36,7 @@ urlpatterns = [
 	url(r'^grappelli/',                                  include('grappelli.urls')),
 	url(r'^admin/',                                      admin.site.urls),
 	url(r'^api/',                                        include('api.urls')),
+	path(r'search',                      				 views.search, name='search'),
 	path(r'index/<special_meta>/',                       views.index_view, name='index'),
 	path(r'texts/<slug:corpus>/',                        views.corpus_view, name='corpus'),
 	path(r'texts/<slug:corpus>/<slug:text>/',            views.text_view, name='text'),

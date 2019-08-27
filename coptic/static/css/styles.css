@@ -1742,7 +1742,7 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
 .item-title-wrap {
   padding: 2px 10px 5px 5px;
   color: #361b01;
-  width: 25%;
+  width: 45%;
   display: inline-block;
   vertical-align: top;
   text-overflow: ellipsis;
@@ -1805,7 +1805,7 @@ footer .footer-logos-wrap .footer-logo.neh-logo {
 
 /* line 152, ../../scss/_index.scss */
 .html-wrap {
-  width: 30%;
+  width: 40%;
 }
 
 /* line 155, ../../scss/_index.scss */
@@ -1845,7 +1845,7 @@ a.text-item:focus {
 /* line 184, ../../scss/_index.scss */
 .search-tools-wrap .tool-wrap .tool-head {
   display: block;
-  padding: 15px 5px 15px 20px;
+  padding: 15px 20px 15px 20px;
   cursor: pointer;
   border-right: 1px solid white;
 }

@@ -34,3 +34,41 @@ p.description-text{
 .tool-head{
 	line-height: 1.6;
 }
+
+/* search page styles */
+.search-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 30px;
+}
+
+.search-column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.search-params {
+  max-width: 230px;
+  margin-right: 50px;
+  padding: 10px;
+  color: black;
+  background-color: #e3d9d8;
+}
+
+.search-choice-field {
+  width: 100%;
+}
+
+
+.search-results {
+
+}
+
+.search-results-row {
+  display: flex;
+}
+

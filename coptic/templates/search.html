@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %} Search - Coptic Scriptorium {% endblock %}
+{% block content %}
+
+
+<div class="search-container">
+    <div class="search-column search-params">
+        <form action="/search">
+            {{ form }}
+            <br/>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div class="search-column search-results">
+        <h4>{{ results.count }} results</h4>
+        {% for text in results %}
+        <div class="text-subwork" style="border-top: 3px solid #361b01; padding-bottom: 5px;">
+
+            <a href="/texts/{{corpus.slug}}/{{text.slug}}" class="item-title-wrap">
+                <span class="text-item item-title"><strong>{{text.corpus.title}}</strong> - {{text.title}}</span>
+            </a>
+
+            <div class="html-wrap version-wrap page-tabs">
+                {% for format in text.corpus.html_visualization_formats.all %}
+                <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}">
+                    <span>{{format.button_title}}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% empty %}
+        <h4>No results found. Please try a different query.</h4>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
