@@ -2,32 +2,48 @@
 
 {% block title %} Corpora by {{ special_meta }} - Coptic Scriptorium {% endblock %}
 {% block content %}
-<section class="text-list list">
-    <h1 style="padding-top: 1.5em">Corpora by {{ special_meta }}</h1>
-    <div class="text-author">
-        <div class="text-work">
-            {% for meta_value, corpora in value_corpus_pairs %}
-            {% if no_lists is not True %}<h2 style="padding-top: 2em">{{ meta_value }}</h2>{% endif %}
-            {% for corpus in corpora %}
-            {% if no_lists %}
-            <ul>
-                <li>
-                    <a href="/texts/{{corpus.slug}}/" class="item-title-wrap">
-                        <span class="text-item item-title">{{corpus.title}}</span>
-                    </a>
-                </li>
-            </ul>
-            {% else %}
-            <div class="text-subwork" style="border-top: 3px solid #361b01;">
-                <a href="/texts/{{corpus.slug}}/" class="item-title-wrap">
-                    <span class="text-item item-title">{{corpus.title}}</span>
-                </a>
-            </div>
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
-        </div>
-    </div>
+<section>
+    <h1 style="padding-top: 1.5em">Corpora{% if is_corpus is not True %} by {{ special_meta }}{% endif %}</h1>
+    {% for meta_value, corpora in value_corpus_pairs %}
+    {% if is_corpus is not True %}
+    <a href="/search?{{special_meta}}={{meta_value}}">
+        <h2 class="meta-value">{{ meta_value }}</h2>
+    </a>
+    {% endif %}
+    {% for corpus in corpora %}
+    {% if is_corpus %}
+    <ul class="index-list">
+        <li>
+            <a href="/texts/{{corpus.slug}}/">
+                {{corpus.title}}
+                <br>
+                <span class="index-corpus-info">
+                {% if corpus.author %} <span class="index-author">{{ corpus.author }}</span>{% endif %}
+                {% if corpus.author and corpus.urn_code %} - {% endif %}
+                {% if corpus.urn_code %} <span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}
+                </span>
+            </a>
+        </li>
+    </ul>
+    {% else %}
+    <ul class="index-list">
+        <li>
+            <a href="/texts/{{corpus.slug}}/">
+                {{corpus.title}}
+                {% if corpus.urn_code or corpus.author and special_meta != "author" %}
+                <br>
+                <span class="index-corpus-info">
+                {% if corpus.author and special_meta != "author" %} <span class="index-author">{{ corpus.author }}</span>{% endif %}
+                {% if corpus.author and special_meta != "author" and corpus.urn_code %} - {% endif %}
+                {% if corpus.urn_code %} <span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}
+                </span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
 </section>
 
 {% endblock %}

@@ -1,34 +1,25 @@
 <header>
-    <div class="header-row header-row-bottom search-tools-wrap">
+    <div class="nav">
+        <div class="nav-links">
+            <div class="nav-item">
+                <a href="/">
+                    <span class="tool-text">home</span>
+                </a>
+            </div>
+            {% for field in search_fields %}
+            <div class="nav-item">
+                <a href="/index/{{field.title}}/">
+                    <span class="tool-text"> {{field.title}} </span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
 
         <!-- Search by text, year, author, country of origin, hagiography, bible texts-->
-        <div class="search-tools">
-            <a href="/">
-                <div class="tool-wrap">
-                    <div class="tool-head">
-                        <span class="tool-text">home</span>
-                    </div>
-                </div>
-            </a>
-            {% for field in search_fields %}
-            <a href="/index/{{field.title}}/">
-                <div class="{{field.title | lower}}-tool-wrap tool-wrap">
-                    <div class="{{field.title | lower}}-tool tool-head">
-                        <span class="tool-text"> {{field.title}} </span>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
-
-            <div class="tool-wrap">
-                <div class="tool-head" style="padding: 0px;">
-                    <form name="search_box" class="urn-form" action="/search" style="padding-left: 10px; margin: 0px; min-width:200px; float:none">
-                        <input type="text" name="text" class="urn-text" placeholder="Enter URN or query" style="width: 75%";>
-                        <span class="fa fa-chevron-right" style="vertical-align: middle; padding: 10px !important; margin-top: 5px; height: 27px; background-color: inherit;"></span>
-                    </form>
-                </div>
-            </div>
-
-        </div>
+        <form name="search_box" class="search-bar" action="/search">
+            <input type="text"
+                   name="text"
+                   placeholder="Enter URN or query (&quot;besa&quot;, &quot;to aphthonia&quot;, ...)">
+        </form>
     </div>
 </header>

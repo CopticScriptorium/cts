@@ -7,31 +7,51 @@
 <div class="search-container">
     <div class="search-column search-params">
         <form action="/search">
-            {{ form }}
+            {% for field in form %}
+            <div class="search-item">
+                {{ field.label }}
+                {{ field }}
+            </div>
+            {% endfor %}
             <br/>
             <input type="submit" value="Search">
         </form>
     </div>
     <div class="search-column search-results">
-        <h4>{{ results.count }} results</h4>
-        {% for text in results %}
-        <div class="text-subwork" style="border-top: 3px solid #361b01; padding-bottom: 5px;">
-
-            <a href="/texts/{{corpus.slug}}/{{text.slug}}" class="item-title-wrap">
-                <span class="text-item item-title"><strong>{{text.corpus.title}}</strong> - {{text.title}}</span>
-            </a>
-
-            <div class="html-wrap version-wrap page-tabs">
-                {% for format in text.corpus.html_visualization_formats.all %}
-                <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}">
-                    <span>{{format.button_title}}</span>
+        {% if no_query %}
+        <h4>Please enter some criteria to search.</h4>
+        {% elif all_empty %}
+        <h4 class="explanation">No results found for {{ all_empty_explanation|safe }}. Please try a different query.</h4>
+        {% else %}
+        {% for result in results %}
+        {% if result.texts %}
+        <h4 class="explanation">{{ result.texts.count }} results for {{ result.explanation|safe }}</h4>
+        <div class="search-results-section">
+        {% endif %}
+        {% for text in result.texts %}
+            <div class="search-results-row">
+                <a href="/texts/{{text.corpus.slug}}/{{text.slug}}" class="text-link">
+                    <div>
+                        <span class="text-title">{{text.title}}</span><br>
+                        {% if text.urn_code %}<span class="text-urn">{{text.urn_code}}</span>{% endif %}
+                        <br>
+                        <br>
+                        <span class="text-corpus-info">
+                            (from <span class="text-corpus">{{text.corpus.title}}</span>
+                            {% if text.author %}
+                            by <span class="text-author">{{text.author}}</span>
+                            {% endif %} -
+                            <span class="text-urn">{{text.corpus.urn_code}}</span>)
+                        </span>
+                    </div>
                 </a>
-                {% endfor %}
             </div>
-        </div>
-        {% empty %}
-        <h4>No results found. Please try a different query.</h4>
         {% endfor %}
+        {% if result.texts %}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
     </div>
 </div>
 
