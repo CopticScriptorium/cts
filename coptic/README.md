@@ -2,7 +2,7 @@
 
 Note: this app requires Python 3.6+. 
 
-0. We recommend you [create a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands) for Xposition:
+0. We recommend you [create a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands):
 
 ```sh
 conda create --name cts python=3.7
