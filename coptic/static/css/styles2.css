@@ -136,12 +136,18 @@ p.description-text{
 }
 
 /* new navbar styles */
-.nav {
+.nav-container {
   width: 100%;
   background-color: #8e463d;
+}
+
+.nav {
+  max-width: 1200px;
   display: flex;
   flex-wrap: wrap;
+  margin: 0 auto;
 }
+
 
 @media (max-width: 800px) {
   .nav {
