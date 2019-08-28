@@ -254,16 +254,15 @@ class GithubCorpusScraper:
 	def _infer_urn_code(self, corpus_dirname):
 		meta = self._latest_meta_dict
 		if meta is None or "document_cts_urn" not in meta:
-			#raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
-			return ""
+			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
 
 		doc_urn = meta["document_cts_urn"]
 		# TODO: for most corpora right now, it seems like the "corpus urn" actually corresponds to a Text
 		# rather than a Corpus. Use textgroup instead, revisit when the CS team makes a decision on standardizing URNs.
 		corpus_urn = urn.textgroup_urn(doc_urn)
 		# corpus_urn = urn.corpus_urn(doc_urn)
-		#if corpus_urn == "":
-		#	raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
+		if corpus_urn == "":
+			raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
 
 		return corpus_urn
 
