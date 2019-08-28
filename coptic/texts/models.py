@@ -32,9 +32,9 @@ class Corpus(models.Model):
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
 	title = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=40)
-	urn_code = models.CharField(max_length=200)
-	annis_corpus_name = models.CharField(max_length=200)
+	slug = models.SlugField(max_length=40, db_index=True)
+	urn_code = models.CharField(max_length=200, db_index=True)
+	annis_corpus_name = models.CharField(max_length=200, db_index=True)
 	github          = models.CharField(max_length=200)
 	github_tei      = models.CharField(max_length=50, blank=True)
 	github_relannis = models.CharField(max_length=50, blank=True)
@@ -63,8 +63,8 @@ class Corpus(models.Model):
 
 
 class TextMeta(models.Model):
-	name  = models.CharField(max_length=200)
-	value = models.CharField(max_length=10000)
+	name  = models.CharField(max_length=200, db_index=True)
+	value = models.CharField(max_length=10000, db_index=True)
 
 	class Meta:
 		verbose_name = "Text Meta Item"
@@ -97,12 +97,12 @@ class MetaOrder(models.Model):
 
 class Text(models.Model):
 	title = models.CharField(max_length=200)
-	slug = models.SlugField(max_length=40)
+	slug = models.SlugField(max_length=40, db_index=True)
 	created = models.DateTimeField(editable=False)
 	modified = models.DateTimeField(editable=False)
 	corpus = models.ForeignKey(Corpus, blank=True, null=True, on_delete=models.CASCADE)
 	html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
-	text_meta = models.ManyToManyField(TextMeta, blank=True)
+	text_meta = models.ManyToManyField(TextMeta, blank=True, db_index=True)
 
 
 	def __str__(self):
