@@ -152,6 +152,13 @@ def index_view(request, special_meta=None):
 
 
 # search --------------------------------------------------------------------------------
+def _get_meta_names_for_query_text():
+    names = [sm.name for sm in models.SpecialMeta.objects.all()]
+    if "title" not in names:
+        names.append("title")
+    if "author" not in names:
+        names.append("author")
+    return names
 
 
 HTML_TAG_REGEX = re.compile(r'<[^>]*?>')
@@ -235,13 +242,14 @@ def _build_explanation(params):
 
 def _build_result_for_query_text(query_text, texts, params, explanation):
     results = []
-    for meta_name in [sm.name for sm in models.SpecialMeta.objects.all()]:
+    meta_names = _get_meta_names_for_query_text()
+    for meta_name in meta_names:
         complete_explanation = f'<span class="meta_pair">{params["text"][0]}</span> in "{meta_name}"'
         complete_explanation += ' with ' if explanation else ''
         complete_explanation += explanation
 
         text_results = texts.filter(text_meta__name__iexact=meta_name,
-                                  text_meta__value__contains=query_text)
+                                    text_meta__value__contains=query_text)
         add_author_and_urn(text_results)
         results.append({
             'texts': text_results,
@@ -264,6 +272,7 @@ def search(request):
 
     # preliminary results--might need to filter more if text query is present
     texts = _get_texts_for_special_metadata_query(queries)
+    print(texts)
 
     # build base explanations
     explanation = _build_explanation(params)
