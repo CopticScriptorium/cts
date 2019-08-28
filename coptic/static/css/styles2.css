@@ -190,6 +190,7 @@ input, option {
   width: 100%;
   font-size: 17px;
   font-family: 'Asul', Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
 }
 
 /* for index pages */
