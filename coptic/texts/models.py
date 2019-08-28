@@ -52,7 +52,6 @@ class Corpus(models.Model):
 		if not self.id:
 			self.created = datetime.datetime.today()
 		self.modified = datetime.datetime.today()
-		self.github_tei, self.github_relannis, self.github_paula = github_directory_names(self)
 		super(Corpus, self).save(*args, **kwargs)
 
 	def _annis_corpus_name_b64encoded(self):
