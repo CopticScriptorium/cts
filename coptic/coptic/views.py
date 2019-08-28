@@ -272,7 +272,6 @@ def search(request):
 
     # preliminary results--might need to filter more if text query is present
     texts = _get_texts_for_special_metadata_query(queries)
-    print(texts)
 
     # build base explanations
     explanation = _build_explanation(params)
