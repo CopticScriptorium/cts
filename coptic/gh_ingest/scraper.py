@@ -69,10 +69,48 @@ class CorpusTransaction:
 	def add_vis(self, text_and_vis):
 		self._vises.append(text_and_vis)
 
-	def sort_texts(self, text_next, text_prev):
-		texts = [p[0] for p in self._text_pairs]
+	def sort_texts(self, text_next, text_prev, text_urn):
+		class Node:
+			def __init__(self, text, orig_i):
+				self.text = text
+				self.orig_i = orig_i
+				self.prev = None
+				self.next = None
+				self.urn = text_urn[text.title] if text.title in text_urn else None
 
-		pass
+		nodes = [Node(p[0], i) for i, p in enumerate(self._text_pairs)]
+
+		u2t = {}
+
+		for node in nodes:
+			if node.urn:
+				u2t[node.urn] = node
+
+		n_links = 0
+		for node in nodes:
+			# assume that the other must also be true, that node_prev[u2t[text_next[node.text.title]].text.title] = node.urn
+			if node.text.title in text_next and text_next[node.text.title] in u2t:
+				next_node = u2t[text_next[node.text.title]]
+				node.next = next_node
+				next_node.prev = node
+				n_links += 1
+
+		# refuse to cooperate if we don't have a full chain
+		if n_links != len(nodes) - 1:
+			print("Insufficient data to properly order corpus based on next/prev attrs.")
+			return
+
+		start_node = nodes[0]
+		while start_node.prev is not None:
+			start_node = start_node.prev
+
+		new_text_pairs = []
+		node = start_node
+		while node is not None:
+			new_text_pairs.append(self._text_pairs[node.orig_i])
+			node = node.next
+		self._text_pairs = new_text_pairs
+		print("Successfully inferred proper ordering of corpus based on next/prev attrs.")
 
 	@transaction.atomic
 	def execute(self):
@@ -160,9 +198,10 @@ class GithubCorpusScraper:
 		self._vis_config_contents = {}
 		self._vis_css_contents = {}
 
-		# Text -> meta.prev, meta.next
+		# Text -> meta.prev, meta.next, meta.document_cts_urn
 		self._text_next = {}
 		self._text_prev = {}
+		self._text_urn = {}
 
 	def _get_zipfile_for_blob(self, sha):
 		blob = self._repo.blob(sha)
@@ -353,7 +392,7 @@ class GithubCorpusScraper:
 
 		texts = self._get_texts(corpus, corpus_dirname)
 		self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
-		self._current_transaction.sort_texts(self._text_next, self._text_prev)
+		self._current_transaction.sort_texts(self._text_next, self._text_prev, self._text_urn)
 
 		corpus.urn_code = self._infer_urn_code(corpus_dirname)
 
@@ -430,6 +469,7 @@ class GithubCorpusScraper:
 		text.corpus = self._current_corpus
 		self._text_next[text.title] = meta["next"] if "next" in meta else None
 		self._text_prev[text.title] = meta["prev"] if "prev" in meta else None
+		self._text_urn[text.title] = meta["document_cts_urn"] if "document_cts_urn" in meta else None
 
 		text_metas = [TextMeta(name=name, value=unescape(value)) for name, value in meta.items()]
 
