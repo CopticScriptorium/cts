@@ -2,6 +2,7 @@ import re
 from django import forms
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models.functions import Lower
 from texts.search_fields import get_search_fields
 import texts.models as models
 import texts.urn
@@ -19,15 +20,12 @@ def _base_context():
 def home_view(request):
     'Home'
     context = _base_context()
-    context.update({
-        'corpora': models.Corpus.objects.all()
-    })
     return render(request, 'home.html', context)
 
 
 def corpus_view(request, corpus=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)
-    texts = models.Text.objects.filter(corpus=corpus_object)
+    texts = models.Text.objects.filter(corpus=corpus_object).order_by("id")
 
     context = _base_context()
     context.update({
@@ -103,6 +101,7 @@ def get_meta_values(meta):
         for vals in split_meta_values:
             meta_values = meta_values.union(set(vals))
     meta_values = sorted(list(set(v.strip() for v in meta_values)))
+    meta_values = [re.sub(HTML_TAG_REGEX, '', meta_value) for meta_value in meta_values]
     return meta_values
 
 
@@ -165,7 +164,7 @@ HTML_TAG_REGEX = re.compile(r'<[^>]*?>')
 class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for sm in models.SpecialMeta.objects.all():
+        for sm in models.SpecialMeta.objects.all().order_by(Lower("name")):
             meta_values = get_meta_values(sm)
             choices = []
             for v in meta_values:
@@ -212,7 +211,7 @@ def _build_queries_for_special_metadata(params):
 
 
 def _get_texts_for_special_metadata_query(queries):
-    texts = models.Text.objects.all()
+    texts = models.Text.objects.all().order_by(Lower("title"))
     for query in queries:
         texts = texts.filter(query)
     add_author_and_urn(texts)

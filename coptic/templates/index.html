@@ -34,8 +34,7 @@
                 <br>
                 <span class="index-corpus-info">
                 {% if corpus.author and special_meta != "author" %} <span class="index-author">{{ corpus.author }}</span>{% endif %}
-                {% if corpus.author and special_meta != "author" and corpus.urn_code %} - {% endif %}
-                {% if corpus.urn_code %} <span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}
+                {% if corpus.author and special_meta != "author" and corpus.urn_code %} ({% endif %}{% if corpus.urn_code %}<span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}{% if corpus.author and special_meta != "author" and corpus.urn_code %}) {% endif %}
                 </span>
                 {% endif %}
             </a>

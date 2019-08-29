@@ -5,18 +5,6 @@
 
 
 <div class="search-container">
-    <div class="search-column search-params">
-        <form action="/search">
-            {% for field in form %}
-            <div class="search-item">
-                {{ field.label }}
-                {{ field }}
-            </div>
-            {% endfor %}
-            <br/>
-            <input type="submit" value="Search">
-        </form>
-    </div>
     <div class="search-column search-results">
         {% if no_query %}
         <h4>Please enter some criteria to search.</h4>
@@ -30,21 +18,22 @@
         {% endif %}
         {% for text in result.texts %}
             <div class="search-results-row">
-                <a href="/texts/{{text.corpus.slug}}/{{text.slug}}" class="text-link">
                     <div>
-                        <span class="text-title">{{text.title}}</span><br>
-                        {% if text.urn_code %}<span class="text-urn">{{text.urn_code}}</span>{% endif %}
-                        <br>
-                        <br>
-                        <span class="text-corpus-info">
-                            (from <span class="text-corpus">{{text.corpus.title}}</span>
-                            {% if text.author %}
-                            by <span class="text-author">{{text.author}}</span>
-                            {% endif %} -
-                            <span class="text-urn">{{text.corpus.urn_code}}</span>)
-                        </span>
+                        <a href="/texts/{{text.corpus.slug}}/{{text.slug}}" class="text-link">
+                            <span class="text-title">{{text.title}}</span><br>
+                        </a>
+                        <div class="text-corpus-info">
+                            {% if text.urn_code %}<span class="text-urn">{{text.urn_code}}</span>{% endif %}
+                            <br>
+                            <a href="/texts/{{text.corpus.slug}}/" class="text-link">
+                                (from <span class="text-corpus">{{text.corpus.title}}</span>
+                                {% if text.author %}
+                                by <span class="text-author">{{text.author}}</span>
+                                {% endif %} -
+                                <span class="text-urn">{{text.corpus.urn_code}}</span>)
+                            </a>
+                        </div>
                     </div>
-                </a>
             </div>
         {% endfor %}
         {% if result.texts %}
@@ -52,6 +41,18 @@
         {% endif %}
         {% endfor %}
         {% endif %}
+    </div>
+    <div class="search-column search-params">
+        <form action="/search">
+            {% for field in form %}
+            <div class="search-item">
+                {{ field.label }}
+                {{ field }}
+            </div>
+            {% endfor %}
+            <br/>
+            <input type="submit" value="Search">
+        </form>
     </div>
 </div>
 

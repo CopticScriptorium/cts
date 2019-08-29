@@ -53,7 +53,7 @@ p.description-text{
 
 .search-params {
   max-width: 230px;
-  margin-right: 50px;
+  margin-left: 50px;
   padding: 10px;
   color: black;
   background-color: #e3d9d8;
@@ -124,7 +124,7 @@ p.description-text{
 .text-corpus-info {
   color: #777;
   display: inline-block;
-  text-decoration: none;
+  padding-left: 16px;
 }
 .text-corpus {
   font-size: 16px;
@@ -138,7 +138,7 @@ p.description-text{
 /* new navbar styles */
 .nav-container {
   width: 100%;
-  background-color: #8e463d;
+  background-color: #1f1f1f;
 }
 
 .nav {
@@ -176,7 +176,7 @@ p.description-text{
 }
 
 .nav-item a:hover {
-  background: #361b01;
+  background: #8e463d;
   text-decoration: none;
 }
 
@@ -184,6 +184,18 @@ p.description-text{
   display: flex;
   flex: 1;
   padding: 8px;
+  position: relative;
+}
+
+.search-bar input {
+  height: 41px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 14px;
+  top: 15px;
+  cursor: pointer;
 }
 
 input, option {
@@ -225,5 +237,5 @@ h2.meta-value:hover {
 }
 .index-author {
   font-size: 16px;
-  color: #777;
+  color: #444;
 }
