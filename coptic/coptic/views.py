@@ -1,5 +1,6 @@
 import re
 from django import forms
+from django.urls import reverse
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Lower
@@ -82,13 +83,25 @@ def not_found(request):
     return render(request, '404.html', {})
 
 
-def urn(request, urn=None):
+def _resolve_urn(urn):
     try:
         text = models.Text.objects.get(text_meta__name="document_cts_urn", text_meta__value=urn)
-        return text_view(request, text=text.slug, corpus=text.corpus.slug)
+        return text
     except models.Text.DoesNotExist:
-        corpus = get_object_or_404(models.Corpus, urn_code=urn)
-        return corpus_view(request, corpus=corpus.slug)
+        try:
+            corpus = models.Corpus.objects.get(urn_code=urn)
+            return corpus
+        except models.Corpus.DoesNotExist:
+            return None
+
+
+def urn(request, urn=None):
+    obj = _resolve_urn(urn)
+    if obj.__class__.__name__ == "Text":
+        return text_view(request, text=obj.slug, corpus=obj.corpus.slug)
+    elif obj.__class__.__name__ == "Corpus":
+        return corpus_view(request, corpus=obj.slug)
+    return redirect(reverse(search) + "?text=" + urn)
 
 
 def get_meta_values(meta):
@@ -151,12 +164,14 @@ def index_view(request, special_meta=None):
 
 
 # search --------------------------------------------------------------------------------
-def _get_meta_names_for_query_text():
+def _get_meta_names_for_query_text(text):
     names = [sm.name for sm in models.SpecialMeta.objects.all()]
     if "title" not in names:
         names.append("title")
     if "author" not in names:
         names.append("author")
+    if text.lower().startswith('urn:'):
+        names.append("document_cts_urn")
     return names
 
 
@@ -241,7 +256,7 @@ def _build_explanation(params):
 
 def _build_result_for_query_text(query_text, texts, params, explanation):
     results = []
-    meta_names = _get_meta_names_for_query_text()
+    meta_names = _get_meta_names_for_query_text(query_text)
     for meta_name in meta_names:
         complete_explanation = f'<span class="meta_pair">{params["text"][0]}</span> in "{meta_name}"'
         complete_explanation += ' with ' if explanation else ''
@@ -264,8 +279,10 @@ def search(request):
     context = _base_context()
 
     params = dict(request.GET.lists())
-    if 'text' in params and params['text'][0].lower().startswith('urn:'):
-        return redirect(urn, urn=params['text'])
+    if "text" in params:
+        params['text'] = [x.strip() for x in params["text"]]
+        if params["text"][0].startswith("urn") and _resolve_urn(params["text"][0]):
+            return redirect(urn, urn=params["text"][0])
 
     queries = _build_queries_for_special_metadata(params)
 
