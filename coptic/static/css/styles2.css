@@ -213,13 +213,20 @@ ul.index-list {
   font-family: asul, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", Verdana, sans-serif;
   list-style-type: none;
   padding: 0;
+  margin-top: 0;
+  margin-left: 16px;
+}
+ul.index-list--corpora {
+  margin-left: 0;
 }
 
 h2.meta-value {
-  font-size: 2.4rem;
+  font-size: 2.0rem;
   font-weight: 400;
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
   color: #4A4A4A;
+  padding-bottom: 6px;
+  margin-bottom: 0px;
 }
 h2.meta-value:hover {
   color: inherit;
