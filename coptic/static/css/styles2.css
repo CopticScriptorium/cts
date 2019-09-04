@@ -1,5 +1,15 @@
 /* styles.css appears to be generated, but we don’t have the source, so perhaps we shouldn’t extend it. */
 
+.sidebar {
+    float: right;
+    background-color: #e3d9d8;
+    padding: 10px;
+    font-size: 11pt;
+    border: 1px solid darkgray;
+    margin: 10px 20px;
+    max-width: 500px;
+}
+
 .end-note {
     text-align: left;
     font-size: 80%;
