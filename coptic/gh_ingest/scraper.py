@@ -118,9 +118,11 @@ class CorpusTransaction:
 
 		scan_node = start_node
 		n_links = 0
-		while scan_node.next is not None:
+		visited = [scan_node]
+		while scan_node.next is not None and scan_node.next not in visited:
 			n_links += 1
 			scan_node = scan_node.next
+			visited.append(scan_node.next)
 
 		# refuse to cooperate if we don't have a full chain
 		if n_links != len(nodes) - 1:
