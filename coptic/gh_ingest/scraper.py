@@ -1,4 +1,5 @@
 from html import unescape
+from collections import defaultdict
 import re
 from io import BytesIO
 import zipfile
@@ -70,45 +71,68 @@ class CorpusTransaction:
 		self._vises.append(text_and_vis)
 
 	def sort_texts(self, text_next, text_prev, text_urn):
+		"""
+		Sorts texts based on next and previous metadata. Only actually changes their order if the next and previous
+		attributes form an unbroken chain within the texts, otherwise does nothing.
+
+		:param text_next: dict: text title -> text urn
+		:param text_prev: dict: text title -> text urn
+		:param text_urn: dict: text title -> text urn
+		"""
 		class Node:
-			def __init__(self, text, orig_i):
-				self.text = text
+			def __init__(self, title, orig_i):
+				self.title = title
 				self.orig_i = orig_i
 				self.prev = None
 				self.next = None
-				self.urn = text_urn[text.title] if text.title in text_urn else None
 
-		nodes = [Node(p[0], i) for i, p in enumerate(self._text_pairs)]
+			def __str__(self):
+				return f"<{self.title}, {self.orig_i}>"
 
-		u2t = {}
+			def __repr__(self):
+				return self.__str__()
+
+		urn_to_node = defaultdict(lambda: None)
+		nodes = []
+		for i, (text, _) in enumerate(self._text_pairs):
+			node = Node(text.title, i)
+			nodes.append(node)
+			urn = text_urn[text.title] if text.title in text_urn else None
+			urn_to_node[urn] = node
+
+		def get_next_node(node):
+			return urn_to_node[text_next[node.title]]
+
+		def get_prev_node(node):
+			return urn_to_node[text_prev[node.title]]
 
 		for node in nodes:
-			if node.urn:
-				u2t[node.urn] = node
-
-		n_links = 0
-		for node in nodes:
-			# assume that the other must also be true, that node_prev[u2t[text_next[node.text.title]].text.title] = node.urn
-			if node.text.title in text_next and text_next[node.text.title] in u2t:
-				next_node = u2t[text_next[node.text.title]]
+			next_node = get_next_node(node)
+			if next_node is not None: # and get_prev_node(next_node) == node:
 				node.next = next_node
 				next_node.prev = node
-				n_links += 1
+
+		start_node = nodes[0]
+		while start_node.prev is not None:
+			start_node = start_node.prev
+
+		scan_node = start_node
+		n_links = 0
+		while scan_node.next is not None:
+			n_links += 1
+			scan_node = scan_node.next
 
 		# refuse to cooperate if we don't have a full chain
 		if n_links != len(nodes) - 1:
 			print("Insufficient data to properly order corpus based on next/prev attrs.")
 			return
 
-		start_node = nodes[0]
-		while start_node.prev is not None:
-			start_node = start_node.prev
-
 		new_text_pairs = []
 		node = start_node
 		while node is not None:
 			new_text_pairs.append(self._text_pairs[node.orig_i])
 			node = node.next
+
 		self._text_pairs = new_text_pairs
 		print("Successfully inferred proper ordering of corpus based on next/prev attrs.")
 
@@ -199,9 +223,9 @@ class GithubCorpusScraper:
 		self._vis_css_contents = {}
 
 		# Text -> meta.prev, meta.next, meta.document_cts_urn
-		self._text_next = {}
-		self._text_prev = {}
-		self._text_urn = {}
+		self._text_next = defaultdict(lambda: None)
+		self._text_prev = defaultdict(lambda: None)
+		self._text_urn = defaultdict(lambda: None)
 
 	def _get_zipfile_for_blob(self, sha):
 		blob = self._repo.blob(sha)
@@ -468,7 +492,7 @@ class GithubCorpusScraper:
 		text.slug = slugify(meta["title"] if "title" in meta else meta["name"])
 		text.corpus = self._current_corpus
 		self._text_next[text.title] = meta["next"] if "next" in meta else None
-		self._text_prev[text.title] = meta["prev"] if "prev" in meta else None
+		self._text_prev[text.title] = meta["previous"] if "previous" in meta else None
 		self._text_urn[text.title] = meta["document_cts_urn"] if "document_cts_urn" in meta else None
 
 		text_metas = [TextMeta(name=name, value=unescape(value)) for name, value in meta.items()]
