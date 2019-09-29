@@ -1,8 +1,9 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
+from django.urls import path
 from django.contrib import admin
 from django.shortcuts import redirect
-from texts import views
 from api.views import texts_for_urn
+import coptic.views as views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,14 +32,16 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 	return redirect(new_loc)
 
 
-urlpatterns = patterns('',
-	url(r'^grappelli/',                     include('grappelli.urls')),
-	url(r'^admin/',                         include(admin.site.urls)),
-	url(r'^api/',                           include('api.urls')),
-	url(r'^texts/.*$',                      views.list, name='list'),
-	url(r'(.*)/(annis|relannis|xml|html)$', _redirect_citation_urls),
-	url(r'^urn',                            'coptic.views.home'),
-	url(r'^collections/.+$',                'coptic.views.home', name='home'),
-	url(r'^filter/.+$',                     'coptic.views.home', name='home'),
-	url(r'^$',                              'coptic.views.home', name='home'),
-) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns = [
+	url(r'^grappelli/',                                  include('grappelli.urls')),
+	url(r'^admin/',                                      admin.site.urls),
+	url(r'^api/',                                        include('api.urls')),
+	path(r'search',                      				 views.search, name='search'),
+	path(r'index/<special_meta>/',                       views.index_view, name='index'),
+	path(r'texts/<slug:corpus>/',                        views.corpus_view, name='corpus'),
+	path(r'texts/<slug:corpus>/<slug:text>/',            views.text_view, name='text'),
+	path(r'texts/<slug:corpus>/<slug:text>/<format>',    views.text_view, name='text_with_format'),
+	url(r'(.*)/(annis|relannis|xml|html)$',              _redirect_citation_urls),
+	url(r"^(?P<urn>urn:.*)/$",                           views.urn),
+	url(r'^$',                                           views.home_view, name='home'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -39,7 +39,6 @@ def encode_text(text):
 		'id':           text.id,
 		'title':        text.title,
 		'slug':         text.slug,
-		'is_expired':   text.is_expired,
 		'html_visualizations': _visualizations(text),
 		'text_meta':    _text_meta(text),
 		'corpus':       encode_corpus(text.corpus)
