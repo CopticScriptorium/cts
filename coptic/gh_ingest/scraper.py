@@ -275,7 +275,7 @@ class GithubCorpusScraper:
 				in self._repo.directory_contents(corpus_dirname)
 				if contents.type == 'dir' or name.endswith('.zip')]
 		github_tei = self._infer_dir(corpus, dirs, "_TEI", "_TEI.zip")
-		github_relannis = self._infer_dir(corpus, dirs, "_RELANNIS", "_ANNIS", "_RELANNIS.zip", "_ANNIS.zip")
+		github_relannis = self._infer_dir(corpus, dirs, "_ANNIS", "_RELANNIS", "_RELANNIS.zip", "_ANNIS.zip")
 		github_paula = self._infer_dir(corpus, dirs, "_PAULA", "_PAULA.zip")
 		if not any(str(x) and x != '' for x in [github_tei, github_paula, github_relannis]):
 			raise EmptyCorpus(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name)
@@ -325,7 +325,10 @@ class GithubCorpusScraper:
 		doc_urn = meta["document_cts_urn"]
 		# TODO: for most corpora right now, it seems like the "corpus urn" actually corresponds to a Text
 		# rather than a Corpus. Use textgroup instead, revisit when the CS team makes a decision on standardizing URNs.
-		corpus_urn = urn.textgroup_urn(doc_urn)
+                try:
+			corpus_urn = urn.textgroup_urn(doc_urn)
+                except:
+			return ""
 		# corpus_urn = urn.corpus_urn(doc_urn)
 		#if corpus_urn == "":
 		#	raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
