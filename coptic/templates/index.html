@@ -1,264 +1,48 @@
 {% extends "base.html" %}
 
+{% block title %} Corpora by {{ special_meta }} - Coptic Scriptorium {% endblock %}
 {% block content %}
-    <div class="content primary">
-
-        <div class="grid inner">
-
-            <div class='no-results' ng-show="are_no_expected_results()">
-                <p>There are no results matching your search.</p>
-                <p>We deprecated some file id numbers (URNs) in corpus release 2.6.0. If you are using a specific URN to find a document in the following corpora, please visit the appropriate links:</p><br>
-                <h3>shenoute.a22 Corpus (Acephalous Work 22)</h3>
-                <p>urn:cts:copticLit:shenoute.a22.monbyb_307_320 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbyb:801-825">urn:cts:copticLit:shenoute.a22.monbyb:801-825</a></p>
-                <p>urn:cts:copticLit:shenoute.a22.monbzc_301_308 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbzc:1001-1006">urn:cts:copticLit:shenoute.a22.monbzc:1001-1006</a></p>
-                <p>urn:cts:copticLit:shenoute.a22.monbya_421_428 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya:1251-1258">urn:cts:copticLit:shenoute.a22.monbya:1251-1258</a></p>
-                <p>urn:cts:copticLit:shenoute.a22.monbya_517_518 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.a22.monbya:1451-1453">urn:cts:copticLit:shenoute.a22.monbya:1451-1453</a></p>
-                <h3>shenoute.abraham Corpus (Abraham Our Father)</h3>
-                <p>urn:cts:copticLit:shenoute.abraham.monbya_518_520 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:1-4">urn:cts:copticLit:shenoute.abraham.monbya:1-4</a></p>
-                <p>urn:cts:copticLit:shenoute.abraham.monbya_525_530 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:10-18">urn:cts:copticLit:shenoute.abraham.monbya:10-18</a></p>
-                <p>urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbzh:18-21">urn:cts:copticLit:shenoute.abraham.monbzh:18-21</a></p>
-                <p>urn:cts:copticLit:shenoute.abraham.monbya_535_540 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:21-27">urn:cts:copticLit:shenoute.abraham.monbya:21-27</a></p>
-                <p>urn:cts:copticLit:shenoute.abraham.monbxl_93_94 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbxl:23-24">urn:cts:copticLit:shenoute.abraham.monbxl:23-24</a></p>
-                <p>urn:cts:copticLit:shenoute.abraham.monbya_547_550 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:37-42">urn:cts:copticLit:shenoute.abraham.monbya:37-42</a></p>
-                <p>urn:cts:copticLit:shenoute.abraham.monbya_551_554 is now <a href="http://data.copticscriptorium.org/urn:cts:copticLit:shenoute.abraham.monbya:42-47">urn:cts:copticLit:shenoute.abraham.monbya:42-47</a></p>
-                <h3>Crosswire Coptic Old Testament Corpus</h3>
-                <p>We have replaced our Old Testament Corpus (a digital edition from Crosswire) with more extensive documents from the Coptic Old Testament project at Goettingen.<p>
-                <p>For current Coptic Old Testament documents, see <a href="http://data.copticscriptorium.org/urn:cts:copticLit:ot.*.coptot">urn:cts:copticLit:ot.*.coptot</a>.</p>
-                <p>The Crosswire document files (urn:cts:copticLit:ot.*.crosswire) are archived in our <a href="https://github.com/CopticScriptorium/corpora/tree/master/bible">GitHub repository</a>; see the OT files v.2.5.0</p>
-            </div>
-
-            {% include 'project-desc.html' %}
-
-            {% verbatim %}
-            <section class="text-list list" ng-hide="selected_text">
-
-                <div class="text-author" ng-repeat="corpus in corpora">
-
-                    <div class="text-work">
-
-                        <div class="work-title-wrap">
-                            <h2 class="work-title title">{{corpus.title}}</h2>
-                            <h4 class="work-title-urn urn">
-                                urn:cts:{{corpus.urn_code}}</h4>
-
-                            <div class="work-meta-wrap page-tabs">
-                                <a href="{{corpus.annis_link}}" class="text-item annis" target="_blank">
-                                    <span>Search ANNIS</span>
-                                    <span class="fa fa-external-link"></span>
-                                </a>
-                                <a ng-show="corpus.github_tei" href="{{corpus.github}}/{{corpus.github_tei}}"
-                                    class="text-item" target="_blank">
-                                    <span>TEI</span>
-                                    <span class="fa fa-external-link"></span>
-                                </a>
-
-                                <a ng-show="corpus.github_relannis" href="{{corpus.github}}/{{corpus.github_relannis}}"
-                                    class="text-item" target="_blank">
-                                    <span>ANNIS</span>
-                                    <span class="fa fa-external-link"></span>
-                                </a>
-
-                                <a ng-show="corpus.github_paula" href="{{corpus.github}}/{{corpus.github_paula}}"
-                                    class="text-item" target="_blank">
-                                    <span>PAULA</span>
-                                    <span class="fa fa-external-link"></span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="text-subwork" ng-repeat="text in corpus.texts" ng-class-even="'even'"
-                             data-text-slug="{{text.slug}}" data-corpus-slug="{{corpus.slug}}">
-
-                            <a href="/texts/{{corpus.slug}}/{{text.slug}}" class="item-title-wrap">
-                                <span class="text-item item-title">{{text.title}}</span>
-                            </a>
-
-                            <div class="html-wrap version-wrap page-tabs">
-                                <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}"
-                                   class="text-item {{format.slug}}"
-                                   ng-repeat="format in corpus.html_visualization_formats" data-type="{{format.slug}}">
-                                    <span>{{format.button_title}}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="text-list list" ng-show="selected_text">
-                <!-- There is temporarily some duplication with the section above, tolerated because it reduces complexity -->
-
-                <div class="text-work">
-                    <div class="text-subwork single-header">
-                        <a href="/texts/{{selected_text.corpus.slug}}/{{selected_text.slug}}" class="item-title-wrap">
-                            <span class="text-item item-title">{{selected_text.title}}</span>
-                        </a>
-
-                        <a href="/" class="close-selected-text">
-                            <span class="fa fa-close"></span>
-                        </a>
-
-                        <div class="html-wrap version-wrap page-tabs">
-                            <a href="/texts/{{selected_text.corpus.slug}}/{{selected_text.slug}}/{{format.slug}}"
-                               class="text-item {{format.slug}}"
-                               ng-repeat="format in selected_text.corpus.html_visualization_formats" data-type="{{format.slug}}">
-                                <span>{{format.button_title}}</span>
-                            </a>
-
-                            <a ng-show="selected_text.corpus.github_tei"
-                                href="{{selected_text.corpus.github}}/{{selected_text.corpus.github_tei}}"
-                                class="text-item" target="_blank">
-                                <span>TEI</span>
-                                <span class="fa fa-external-link"></span>
-                            </a>
-
-                            <a ng-show="selected_text.corpus.github_relannis"
-                                href="{{selected_text.corpus.github}}/{{selected_text.corpus.github_relannis}}"
-                                class="text-item" target="_blank">
-                                <span>ANNIS</span>
-                                <span class="fa fa-external-link"></span>
-                            </a>
-
-                            <a ng-show="selected_text.corpus.github_paula"
-                                href="{{selected_text.corpus.github}}/{{selected_text.corpus.github_paula}}"
-                                class="text-item" target="_blank">
-                                <span>PAULA</span>
-                                <span class="fa fa-external-link"></span>
-                            </a>
-
-                            <a href="/{{selected_text.edition_urn}}/annis" class="text-item annis" target="_blank">
-                                <span>Search ANNIS</span>
-                                <span class="fa fa-external-link"></span>
-                            </a>
-                        </div>
-
-                        <div class="html-wrap version-wrap page-tabs" style="display: block;">
-                            <a ng-show="selected_text.previous"
-                                href="/{{selected_text.previous}}?vis={{selected_text_format}}" class="text-item">
-                                <span>Previous</span>
-                            </a>
-                            <a ng-show="selected_text.next"
-                                href="/{{selected_text.next}}?vis={{selected_text_format}}"     class="text-item">
-                                <span>Next</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="selected_text" class="selected-text-wrap page-content" ng-hide="!selected_text">
-
-                <div class="text-format" ng-repeat="visualization in selected_text.html_visualizations"
-                     id="{{visualization.slug}}">
-                    <h3 class="subtitle">{{visualization.title}}</h3>
-
-                    <div class="coptic-text html" ng-bind-html="visualization.html | unsafe"
-                         ng-hide="selected_text.is_expired">
-                    </div>
-                </div>
-
-                <div class="end-note">
-                    {{ selected_text.endnote }}
-                </div>
-
-                <div id="information" class="meta-information">
-                    <h3 class="subtitle">ANNIS Metadata</h3>
-
-                    <div class="meta-item" ng-repeat="meta_item in selected_text.text_meta">
-						<span class="meta-label">
-							{{meta_item.name}}:
-						</span>
-						<span class="meta-value" ng-bind-html="meta_item.value_customized"></span>
-                    </div>
-                </div>
-
-
-                <div class="citation-help">
-                    <h3 class="subtitle">Cite this Document</h3>
-
-                    <p>
-                        When citing a corpus or document from Coptic SCRIPTORIUM, please include the relevant URN(s)
-                        (provided below) in all citations. On this site, these URNs will resolve to the latest edition
-                        of our data. We also encourage researchers to save visualizations they use, download query
-                        results from ANNIS, and save information from document metadata.
-                    </p>
-
-                    <p>
-                        Use the following model to cite this document. Our full <a
-                            href="http://copticscriptorium.org/citation-guidelines" target="new">citation guidelines</a>
-                        page provides more models.
-                    </p>
-
-                    <p><span class="label">First citation:</span></p>
-
-                    <p>Author, <em>Ancient title</em> [chapter.verse if available], ed. [annotators], trans.
-                        [translation]. {{selected_text.edition_urn}}. [version number], [date].
-                        http://data.copticscriptorium.org/{{selected_text.edition_urn}}.</p>
-
-                    <p></p>
-
-                    <p><span class="label">Subsequent citations:</span></p>
-
-                    <p>Author, <em>Ancient title (abbreviated)</em> [chapter.verse if available],
-                        {{selected_text.edition_urn}}.</p>
-
-                    <p>
-                        <span class="label">Document Edition:</span>
-                        <a href="/{{selected_text.edition_urn}}" target="_blank">{{selected_text.edition_urn}}</a>
-                    </p>
-
-                    <p>
-                        <span class="label">Text Corpus:</span>
-                        <a href="/{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}" target="_blank">{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}.{{selected_text.corpus_urn}}</a>
-                    </p>
-
-                    <p>
-                        <span class="label">Author Textgroup:</span>
-                        <a href="/{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}" target="_blank">{{selected_text.urn_cts_work}}:{{selected_text.textgroup_urn}}</a>
-                    </p>
-
-                    <p>The following links will direct you to the latest versions of data visualizations of the
-                        document.</p>
-
-                    <p ng-repeat="visualization in selected_text.html_visualizations">
-                        <span class="label">{{visualization.title}} HTML:</span>
-                        <a href="/{{selected_text.edition_urn}}/{{visualization.slug}}/html"
-                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/{{visualization.slug}}/html</a>
-                    </p>
-
-                    <p ng-show="selected_text.corpus.github_tei || selected_text.corpus.github_paula || selected_text.corpus.github_relannis">The
-                        following links will direct you to the latest versions of the data for download.
-                    </p>
-
-                    <p ng-show="selected_text.corpus.github_tei"><span class="label">TEI XML:</span>
-                        <a href="/{{selected_text.edition_urn}}/tei/xml"
-                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/tei/xml</a>
-                    </p>
-
-                    <p ng-show="selected_text.corpus.github_paula">
-                        <span class="label">Paula XML:</span>
-                        <a href="/{{selected_text.edition_urn}}/paula/xml"
-                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/paula/xml</a>
-                    </p>
-
-                    <p ng-show="selected_text.corpus.github_relannis">
-                        <span class="label">reIANNIS:</span>
-                        <a href="/{{selected_text.edition_urn}}/relannis"
-                           target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/relannis</a>
-                    </p>
-
-                    <p>
-                        The following link will direct you to the latest version of the corpus available for search and
-                        querying in ANNIS:</p>
-
-                    <p><span class="label">ANNIS UI:</span>
-                        <a href="/{{selected_text.edition_urn}}/annis" target="_blank">http://data.copticscriptorium.org/{{selected_text.edition_urn}}/annis</a>
-                    </p>
-
-                </div>
-            </section>
-            {% endverbatim %}
-        </div>
-    </div>
+<section>
+    <h1 style="padding-top: 1.5em">Corpora{% if is_corpus is not True %} by {{ special_meta }}{% endif %}</h1>
+    {% for meta_value, corpora in value_corpus_pairs %}
+    {% if is_corpus is not True %}
+    <a href="/search?{{special_meta}}={{meta_value}}">
+        <h2 class="meta-value">{{ meta_value }}</h2>
+    </a>
+    {% endif %}
+    {% for corpus in corpora %}
+    {% if is_corpus %}
+    <ul class="index-list{% if is_corpus %} index-list--corpora{% endif %}">
+        <li>
+            <a href="/texts/{{corpus.slug}}/">
+                {{corpus.title}}
+                <br>
+                <span class="index-corpus-info">
+                {% if corpus.author %} <span class="index-author">{{ corpus.author }}</span>{% endif %}
+                {% if corpus.author and corpus.urn_code %} - {% endif %}
+                {% if corpus.urn_code %} <span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}
+                </span>
+            </a>
+        </li>
+    </ul>
+    {% else %}
+    <ul class="index-list">
+        <li>
+            <a href="/texts/{{corpus.slug}}/">
+                {{corpus.title}}
+                {% if corpus.urn_code or corpus.author and special_meta != "author" %}
+                <br>
+                <span class="index-corpus-info">
+                {% if corpus.author and special_meta != "author" %} <span class="index-author">{{ corpus.author }}</span>{% endif %}
+                {% if corpus.author and special_meta != "author" and corpus.urn_code %} ({% endif %}{% if corpus.urn_code %}<span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}{% if corpus.author and special_meta != "author" and corpus.urn_code %}) {% endif %}
+                </span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+</section>
 
 {% endblock %}

@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}{{text.title}} - Coptic Scriptorium{% endblock %}
+{% block content %}
+<section class="text-list list">
+    <div class="text-work">
+        <div class="text-subwork single-header">
+            <a href="/texts/{{text.corpus.slug}}/{{text.slug}}" class="item-title-wrap">
+                <span class="text-item item-title">{{text.title}}</span>
+            </a>
+
+            <a href="/" class="close-selected-text">
+                <span class="fa fa-close"></span>
+            </a>
+
+            <div class="html-wrap version-wrap page-tabs">
+                {% for format in text.corpus.html_visualization_formats.all %}
+                <a href="/texts/{{text.corpus.slug}}/{{text.slug}}/{{format.slug}}"
+                   class="text-item {{format.slug}}">
+                    <span>{{format.button_title}}</span>
+                </a>
+                {% endfor %}
+
+                {% if text.corpus.github_tei %}
+                <a href="{{text.corpus.github}}/{{text.corpus.github_tei}}"
+                   class="text-item" target="_blank">
+                    <span>TEI</span>
+                    <span class="fa fa-external-link"></span>
+                </a>
+                {% endif %}
+
+                {% if text.corpus.github_relannis %}
+                <a href="{{text.corpus.github}}/{{text.corpus.github_relannis}}"
+                   class="text-item" target="_blank">
+                    <span>ANNIS</span>
+                    <span class="fa fa-external-link"></span>
+                </a>
+                {% endif %}
+
+                {% if text.corpus.github_paula %}
+                <a href="{{text.corpus.github}}/{{text.corpus.github_paula}}"
+                   class="text-item" target="_blank">
+                    <span>PAULA</span>
+                    <span class="fa fa-external-link"></span>
+                </a>
+                {% endif %}
+
+                <a href="/{{text.edition_urn}}/annis" class="text-item annis" target="_blank">
+                    <span>Search ANNIS</span>
+                    <span class="fa fa-external-link"></span>
+                </a>
+            </div>
+
+            <div class="html-wrap version-wrap page-tabs" style="display: block;">
+                {% if text.previous %}
+                <a href="/texts/{{text.corpus.slug}}/{{text.previous}}/{{format}}" class="text-item">
+                    <span>Previous</span>
+                </a>
+                {% endif %}
+                {% if text.next %}
+                <a href="/texts/{{text.corpus.slug}}/{{text.next}}/{{format}}" class="text-item">
+                    <span>Next</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="text" class="selected-text-wrap page-content">
+
+    <div class="text-format">
+        <h3 class="subtitle">{{visualization.visualization_format.title}}</h3>
+
+        <div class="coptic-text html">
+            {{ visualization.html | safe }}
+        </div>
+    </div>
+
+    <div class="end-note">
+        {{ text.endnote }}
+    </div>
+
+    <div id="information" class="meta-information">
+        <h3 class="subtitle">ANNIS Metadata</h3>
+
+        {% for meta_item in text.text_meta.all %}
+        <div class="meta-item">
+			<span class="meta-label">
+			    {{meta_item.name}}:
+			</span>
+            <span class="meta-value">{{ meta_item.value | safe}}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <div class="citation-help">
+        <h3 class="subtitle">Cite this Document</h3>
+
+        <p>
+            When citing a corpus or document from Coptic SCRIPTORIUM, please include the relevant URN(s)
+            (provided below) in all citations. On this site, these URNs will resolve to the latest edition
+            of our data. We also encourage researchers to save visualizations they use, download query
+            results from ANNIS, and save information from document metadata.
+        </p>
+
+        <p>
+            Use the following model to cite this document. Our full <a
+                href="http://copticscriptorium.org/citation-guidelines" target="new">citation guidelines</a>
+            page provides more models.
+        </p>
+
+        <p><span class="label">First citation:</span></p>
+
+        <p>Author, <em>Ancient title</em> [chapter.verse if available], ed. [annotators], trans.
+            [translation]. {{text.edition_urn}}. [version number], [date].
+            http://data.copticscriptorium.org/{{text.edition_urn}}.</p>
+
+        <p></p>
+
+        <p><span class="label">Subsequent citations:</span></p>
+
+        <p>Author, <em>Ancient title (abbreviated)</em> [chapter.verse if available],
+            {{text.edition_urn}}.</p>
+
+        <p>
+            <span class="label">Document Edition:</span>
+            <a href="/{{text.edition_urn}}" target="_blank">{{text.edition_urn}}</a>
+        </p>
+
+        <p>
+            <span class="label">Text Corpus:</span>
+            <a href="/{{text.corpus_urn}}" target="_blank">{{text.corpus_urn}}</a>
+        </p>
+
+        <p>
+            <span class="label">Author Textgroup:</span>
+            <a href="/{{text.textgroup_urn}}" target="_blank">{{text.textgroup_urn}}</a>
+        </p>
+
+        <p>The following links will direct you to the latest versions of data visualizations of the
+            document.</p>
+
+        {% for visualization in text.html_visualizations.all %}
+        <p>
+            <span class="label">{{visualization.visualization_format.title}} HTML:</span>
+            <a href="/{{text.edition_urn}}/{{visualization.visualization_format.slug}}/html"
+               target="_blank">http://data.copticscriptorium.org/{{text.edition_urn}}/{{visualization.visualization_format.slug}}/html</a>
+        </p>
+        {% endfor %}
+
+        {% if text.corpus.github_tei or text.corpus.github_paula or text.corpus.github_relannis %}
+        <p>
+            The following links will direct you to the latest versions of the data for download.
+        </p>
+        {% endif %}
+
+        {% if text.corpus.github_tei %}
+        <p><span class="label">TEI XML:</span>
+            <a href="/{{text.edition_urn}}/tei/xml"
+               target="_blank">http://data.copticscriptorium.org/{{text.edition_urn}}/tei/xml</a>
+        </p>
+        {% endif %}
+
+        {% if text.corpus.github_paula %}
+        <p>
+            <span class="label">Paula XML:</span>
+            <a href="/{{text.edition_urn}}/paula/xml"
+               target="_blank">http://data.copticscriptorium.org/{{text.edition_urn}}/paula/xml</a>
+        </p>
+        {% endif %}
+
+        {% if text.corpus.github_relannis %}
+        <p>
+            <span class="label">relANNIS:</span>
+            <a href="/{{text.edition_urn}}/relannis"
+               target="_blank">http://data.copticscriptorium.org/{{text.edition_urn}}/relannis</a>
+        </p>
+        {% endif %}
+
+        <p>
+            The following link will direct you to the latest version of the corpus available for search and
+            querying in ANNIS:</p>
+
+        <p><span class="label">ANNIS UI:</span>
+            <a href="/{{text.edition_urn}}/annis" target="_blank">http://data.copticscriptorium.org/{{text.edition_urn}}/annis</a>
+        </p>
+
+    </div>
+</section>
+
+{% endblock %}

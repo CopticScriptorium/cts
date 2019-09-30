@@ -1,89 +1,35 @@
-<!--<ul id="nav">
-  <li><a href="http://copticscriptorium.org" id="indexpage">HOME</a></li>
-  <li><a href="http://copticscriptorium.org/tools" id="tools">TOOLS</a></li>
-  <li><a href="http://data.copticscriptorium.org" id="corpora">CORPORA</a></li>
-  <li><a href="http://copticscriptorium.org/documentation" id="documentation">DOCUMENTATION</a>
-    <ul>
-      <li><a href="http://copticscriptorium.org/FAQ" id="faq">FAQ</a></li>
-      <li><a href="http://copticscriptorium.org/documentation" id="documentation">QUICK START</a></li>
-      <li><a href="http://wiki.copticscriptorium.org" id="wiki">WIKI</a></li>
-      <li><a href="http://copticscriptorium.org/reports" id="reports">REPORTS</a></li>
-      <li><a href="http://copticscriptorium.org/citation-guidelines" id="citation">CITATION</a></li>
-    </ul>
-  </li>
-  <li><a id="news" href="http://blog.copticscriptorium.org">NEWS</a>
-    <ul>
-          <li><a id="blog" href="http://blog.copticscriptorium.org">BLOG</a></li>
-      <li><a id="ws2015" href="http://copticscriptorium.org/workshop2015/index.html">WORKSHOP 2015</a></li>
-      <li><a id="ws2013" href="http://copticscriptorium.org/workshop2013/workshop2013.html">WORKSHOP 2013</a></li>
-    </ul>
-    </li><li><a id="kellia" href="http://copticscriptorium.org/kellia">KELLIA</a></li>
-  <li><a id="about" href="http://copticscriptorium.org/about">ABOUT</a></li>
-</ul>
--->
-
-<!-- <ul id="nav">
-  <li><a href="http://copticscriptorium.org" id="indexpage">COPTIC SCRIPTORIUM HOME</a></li>
-  <li><a id="about" href="http://copticscriptorium.org/about">ABOUT</a></li>
-</ul> -->
-
-<header >
-  <div class="header-row header-row-bottom search-tools-wrap">
-
-    <!-- Search by text, year, author, country of origin, hagiography, bible texts-->
-    <div class="search-tools">
-      {% for field in search_fields %}
-        <div class="{{field.title | lower}}-tool-wrap tool-wrap" data-field="{{field.title | lower}}">
-          <div class="{{field.title | lower}}-tool tool-head" ng-click="toggle_tool_panel( $event )" >
-            <span class="tool-text"> {{field.title}} </span>
-            <span class="fa fa-chevron-down"></span>
-          </div>
-          <div class="{{field.title | lower}}-tool-panel tool-panel hidden">
-            {% for value in field.values %}
-              <div class="tool-search-item" ng-click="toggle_search_term( $event )" data-filter="{{value.title}}" data-searchid="{{value.id}}">
-                <span>{{value}}</span>
-              </div>
+<header class="nav-container">
+    <div class="nav">
+        <div class="nav-links">
+            <div class="nav-item">
+                <a href="/">
+                    <span class="tool-text">home</span>
+                </a>
+            </div>
+            {% for field in search_fields %}
+            <div class="nav-item">
+                <a href="/index/{{field.title}}/">
+                    <span class="tool-text"> {{field.title}} </span>
+                </a>
+            </div>
             {% endfor %}
-            <span class="fa fa-close raise-dropdowns" ng-click="raise_dropdowns()"></span>
-          </div>
+            <div class="nav-item">
+                <a href="/search">
+                    <span class="tool-text"> Advanced Search </span>
+                </a>
+            </div>
         </div>
-      {% endfor %}
 
-
-  <div class="tool-wrap">
-    <div class="tool-head" style="padding: 0px;">
-      <form name="urn_form" class="urn-form" ng-submit="urn_submit()" style="padding-left: 10px; margin: 0px; min-width:200px; float:none">
-        <span class="fa fa-chevron-right" ng-click="urn_submit()" style="vertical-align: middle; padding: 10px !important; margin-top: 5px; height: 27px; background-color: inherit;"></span>
-        <input type="text" class="urn-text" placeholder="Enter URN..." ng-model="entered_urn" style="width: 75%";>
-      </form>
+        <!-- Search by text, year, author, country of origin, hagiography, bible texts-->
+        <form name="search_box" class="search-bar" action="/search">
+            <input type="text"
+                   name="text"
+                   placeholder="Enter URN or query (&quot;besa&quot;, &quot;aphthonia&quot;, ...)">
+            <svg width="28" height="28" viewBox="0 0 490 490" class="search-icon" onclick="document.querySelector('.search-bar').submit()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="490" height="490">
+                    <path fill="none" stroke="#555" stroke-width="36" stroke-linecap="round" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
+                </svg>
+            </svg>
+        </form>
     </div>
-  </div>
-
-  
-      <div class="clear-all-tool-wrap tool-wrap" ng-hide="!filters.length">
-        <div class="{{field.title | lower}}-tool tool-head" ng-click="clear_all_search_terms()" >
-          <span class="tool-text">Clear All</span>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
 </header>
-
-{% verbatim %}
-<div class="filters-wrap" ng-hide="!filters.length">
-  <div class="grid inner">
-    <div class="filters-wrap-inner">
-
-      <h4 class="subtitle">Filters:</h4>
-
-      <div class="filter-item" ng-repeat="filter in filters" data-filter="{{filter.filter}}" ng-click="remove_search_term($event)" data-field="{{filter.field}}">
-        <span class="filter-text">{{filter.field}}: {{filter.filter}}</span>
-        <span class="fa fa-close"></span>
-      </div>
-
-    </div>
-  </div>
-</div>
-{% endverbatim %}

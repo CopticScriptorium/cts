@@ -10,7 +10,12 @@ from django.core.exceptions import PermissionDenied
 from django.core.handlers.base import BaseHandler
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.signals import got_request_exception
-from django.utils.importlib import import_module
+try:
+    # Django versions >= 1.9
+    from django.utils.module_loading import import_module
+except ImportError:
+    # Django versions < 1.9
+    from django.utils.importlib import import_module
 
 import sys
 if sys.version_info[0] == 3:
