@@ -275,7 +275,7 @@ class GithubCorpusScraper:
 				in self._repo.directory_contents(corpus_dirname)
 				if contents.type == 'dir' or name.endswith('.zip')]
 		github_tei = self._infer_dir(corpus, dirs, "_TEI", "_TEI.zip")
-		github_relannis = self._infer_dir(corpus, dirs, "_RELANNIS", "_ANNIS", "_RELANNIS.zip", "_ANNIS.zip")
+		github_relannis = self._infer_dir(corpus, dirs, "_ANNIS", "_RELANNIS", "_RELANNIS.zip", "_ANNIS.zip")
 		github_paula = self._infer_dir(corpus, dirs, "_PAULA", "_PAULA.zip")
 		if not any(str(x) and x != '' for x in [github_tei, github_paula, github_relannis]):
 			raise EmptyCorpus(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name)
@@ -295,7 +295,7 @@ class GithubCorpusScraper:
 		if corpus.annis_corpus_name in KNOWN_SLUGS:
 			return KNOWN_SLUGS[corpus.annis_corpus_name]
 		else:
-			corpus.title = slugify(corpus.annis_corpus_name)
+			return slugify(corpus.annis_corpus_name)
 
 	def _get_texts(self, corpus, corpus_dirname):
 		try:
