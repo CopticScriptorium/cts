@@ -295,7 +295,7 @@ class GithubCorpusScraper:
 		if corpus.annis_corpus_name in KNOWN_SLUGS:
 			return KNOWN_SLUGS[corpus.annis_corpus_name]
 		else:
-			corpus.title = slugify(corpus.annis_corpus_name)
+			return slugify(corpus.annis_corpus_name)
 
 	def _get_texts(self, corpus, corpus_dirname):
 		try:
@@ -325,10 +325,7 @@ class GithubCorpusScraper:
 		doc_urn = meta["document_cts_urn"]
 		# TODO: for most corpora right now, it seems like the "corpus urn" actually corresponds to a Text
 		# rather than a Corpus. Use textgroup instead, revisit when the CS team makes a decision on standardizing URNs.
-                try:
-			corpus_urn = urn.textgroup_urn(doc_urn)
-                except:
-			return ""
+		corpus_urn = urn.textgroup_urn(doc_urn)
 		# corpus_urn = urn.corpus_urn(doc_urn)
 		#if corpus_urn == "":
 		#	raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
