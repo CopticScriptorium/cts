@@ -199,8 +199,7 @@ class GithubCorpusScraper:
 		self.corpus_repo_name = corpus_repo_name
 
 		self._repo = GitHub(
-			username=getattr(settings, "GITHUB_USERNAME", ""),
-			password=getattr(settings, "GITHUB_PASSWORD", "")
+                        token=getattr(settings, "GITHUB_TOKEN", ""),
 		).repository(corpus_repo_owner, corpus_repo_name)
 		self._corpora = dict(self._repo.directory_contents(""))  # name -> github3.py contents object
 
