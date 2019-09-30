@@ -199,8 +199,7 @@ class GithubCorpusScraper:
 		self.corpus_repo_name = corpus_repo_name
 
 		self._repo = GitHub(
-			username=getattr(settings, "GITHUB_USERNAME", ""),
-			password=getattr(settings, "GITHUB_PASSWORD", "")
+                        token=getattr(settings, "GITHUB_TOKEN", ""),
 		).repository(corpus_repo_owner, corpus_repo_name)
 		self._corpora = dict(self._repo.directory_contents(""))  # name -> github3.py contents object
 
@@ -446,7 +445,7 @@ class GithubCorpusScraper:
 	def _get_meta_dict(self, tt_lines):
 		for line in tt_lines:
 			if line.startswith('<meta'):
-				return dict(re.findall(r'(?P<attr>\w+)="(?P<value>.*?)"', line))
+				return dict(re.findall(r'(?P<attr>[\w._-]+)="(?P<value>.*?)"', line))
 		raise MetaNotFound(self.corpus_repo_owner, self.corpus_repo_name, self._current_text_contents.path)
 
 	def _get_vis_css_file(self, corpus, corpus_dirname, config_file, zip_file):

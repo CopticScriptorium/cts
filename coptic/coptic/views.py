@@ -141,10 +141,18 @@ def index_view(request, special_meta=None):
         value_corpus_pairs[meta_value] = []
         for c in corpora:
             try:
-                author = (models.Text.objects
-                          .filter(corpus__id=c["corpus__id"])[0]
-                          .text_meta.get(name__iexact="author")
-                          .value)
+                authors = map(lambda x: x.text_meta.get(name__iexact="author").value,
+                        models.Text.objects.filter(corpus__id=c["corpus__id"]))
+                authors = list(set(authors))
+
+                if len(authors) == 0:
+                    author = None
+                elif len(authors) == 1:
+                    author = authors[0]
+                elif len(authors) < 3:
+                    author = ", ".join(authors)
+                else:
+                    author = "multiple"
             except models.TextMeta.DoesNotExist:
                 author = None
 
