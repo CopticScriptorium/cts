@@ -97,9 +97,14 @@ def _resolve_urn(urn):
 
 
 def urn(request, urn=None):
+    # https://github.com/CopticScriptorium/cts/issues/112
+    if re.match(r'urn:cts:copticLit:ot.*.crosswire', urn):
+        return redirect('https://github.com/CopticScriptorium/corpora/releases/tag/v2.5.0')
+
     # check to see if the URN is deprecated and redirect if so
     urn = DEPRECATED_URNS.get(urn, urn)
     obj = _resolve_urn(urn)
+
     if obj.__class__.__name__ == "Text":
         return redirect('text', corpus=obj.corpus.slug, text=obj.slug)
     elif obj.__class__.__name__ == "Corpus":
