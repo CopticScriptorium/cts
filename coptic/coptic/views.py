@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Lower
 from texts.search_fields import get_search_fields
+from coptic.settings.base import DEPRECATED_URNS
 import texts.models as models
 import texts.urn
 
@@ -96,11 +97,18 @@ def _resolve_urn(urn):
 
 
 def urn(request, urn=None):
+    # https://github.com/CopticScriptorium/cts/issues/112
+    if re.match(r'urn:cts:copticLit:ot.*.crosswire', urn):
+        return redirect('https://github.com/CopticScriptorium/corpora/releases/tag/v2.5.0')
+
+    # check to see if the URN is deprecated and redirect if so
+    urn = DEPRECATED_URNS.get(urn, urn)
     obj = _resolve_urn(urn)
+
     if obj.__class__.__name__ == "Text":
-        return text_view(request, text=obj.slug, corpus=obj.corpus.slug)
+        return redirect('text', corpus=obj.corpus.slug, text=obj.slug)
     elif obj.__class__.__name__ == "Corpus":
-        return corpus_view(request, corpus=obj.slug)
+        return redirect('corpus', corpus=obj.slug)
     return redirect(reverse(search) + "?text=" + urn)
 
 

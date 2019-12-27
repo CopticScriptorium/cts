@@ -120,3 +120,17 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 # SCRIPTORIUM-specific config
 CORPUS_REPO_OWNER = "CopticScriptorium"
 CORPUS_REPO_NAME  = "corpora"
+
+DEPRECATED_URNS = {
+	"urn:cts:copticLit:shenoute.a22.monbyb_307_320": "urn:cts:copticLit:shenoute.a22.monbyb:801-825",
+	"urn:cts:copticLit:shenoute.a22.monbzc_301_308": "urn:cts:copticLit:shenoute.a22.monbzc:1001-1006",
+	"urn:cts:copticLit:shenoute.a22.monbya_421_428": "urn:cts:copticLit:shenoute.a22.monbya:1251-1258",
+	"urn:cts:copticLit:shenoute.a22.monbya_517_518": "urn:cts:copticLit:shenoute.a22.monbya:1451-1453",
+	"urn:cts:copticLit:shenoute.abraham.monbya_518_520": "urn:cts:copticLit:shenoute.abraham.monbya:1-4",
+	"urn:cts:copticLit:shenoute.abraham.monbya_525_530": "urn:cts:copticLit:shenoute.abraham.monbya:10-18",
+	"urn:cts:copticLit:shenoute.abraham.monbzh_frg1_a_d": "urn:cts:copticLit:shenoute.abraham.monbzh:18-21",
+	"urn:cts:copticLit:shenoute.abraham.monbya_535_540": "urn:cts:copticLit:shenoute.abraham.monbya:21-27",
+	"urn:cts:copticLit:shenoute.abraham.monbxl_93_94": "urn:cts:copticLit:shenoute.abraham.monbxl:23-24",
+	"urn:cts:copticLit:shenoute.abraham.monbya_547_550": "urn:cts:copticLit:shenoute.abraham.monbya:37-42",
+	"urn:cts:copticLit:shenoute.abraham.monbya_551_554": "urn:cts:copticLit:shenoute.abraham.monbya:42-47",
+}
