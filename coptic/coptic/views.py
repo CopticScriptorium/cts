@@ -1,5 +1,6 @@
 import re
 from django import forms
+from django.http import Http404
 from django.urls import reverse
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
@@ -109,7 +110,7 @@ def urn(request, urn=None):
         return redirect('text', corpus=obj.corpus.slug, text=obj.slug)
     elif obj.__class__.__name__ == "Corpus":
         return redirect('corpus', corpus=obj.slug)
-    return redirect(reverse(search) + "?text=" + urn)
+    raise Http404("No document found for URN <code>" + urn + "</code>")
 
 
 def get_meta_values(meta):
@@ -297,7 +298,7 @@ def search(request):
     params = dict(request.GET.lists())
     if "text" in params:
         params['text'] = [x.strip() for x in params["text"]]
-        if params["text"][0].startswith("urn") and _resolve_urn(params["text"][0]):
+        if params["text"][0].startswith("urn"):
             return redirect(urn, urn=params["text"][0])
 
     queries = _build_queries_for_special_metadata(params)
