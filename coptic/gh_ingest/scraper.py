@@ -4,6 +4,7 @@ import re
 from io import BytesIO
 import zipfile
 import base64
+import requests
 
 from django.db.models import Model
 from django.conf import settings
@@ -11,7 +12,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
 from django.db.models import ObjectDoesNotExist
 from django.utils.text import slugify
-from github3.exceptions import NotFoundError
+from github3.exceptions import NotFoundError, ForbiddenError
 from github3 import GitHub
 from tqdm import tqdm
 
@@ -19,6 +20,26 @@ from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualiz
 import texts.urn as urn
 from .scraper_exceptions import *
 from .htmlvis import generate_visualization
+
+
+def get_git_blob(file_sha):
+	headers = {}
+	if getattr(settings, "GITHUB_TOKEN", "") != "":
+		headers['Authorization'] = f'token {getattr(settings, "GITHUB_TOKEN")}'
+	response = requests.get(
+		f"{settings.GITHUB_API_BASE_URL}"
+		f"/repos"
+		f"/{settings.CORPUS_REPO_OWNER}"
+		f"/{settings.CORPUS_REPO_NAME}"
+		f"/git/blobs"
+		f"/{file_sha}",
+		headers=headers
+	)
+	content = response.json().get('content')
+	content = base64.b64decode(content)
+	content = content.decode('utf-8')
+	return content
+
 
 KNOWN_SLUGS = {
 	"apophthegmata.patrum": "ap",
@@ -306,7 +327,16 @@ class GithubCorpusScraper:
 			else:
 				tt_dir = corpus_dirname + "/" + corpus.annis_corpus_name + "_TT"
 				dir_contents = self._repo.directory_contents(tt_dir)
-				texts = [(name, contents.refresh().decoded.decode('utf-8')) for name, contents in dir_contents]
+
+				#texts = [(name, contents.refresh().decoded.decode('utf-8')) for name, contents in dir_contents]
+				# had to rewrite this because github3.py relies on a GitHub API that refuses to serve blobs >1MB in size
+				texts = []
+				for name, contents in dir_contents:
+					try:
+						contents = contents.refresh().decoded.decode('utf-8')
+					except ForbiddenError:
+						contents = get_git_blob(contents.sha)
+					texts.append((name, contents))
 		except NotFoundError as e:
 			raise TTDirMissing(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, tt_dir) from e
 
