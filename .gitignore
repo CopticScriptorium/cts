@@ -30,6 +30,7 @@ __pycache__
 */ghostdriver.log
 */django_logger.log
 **/secrets.py
+**.pyc
 
 # --------------------
 # Env Files
