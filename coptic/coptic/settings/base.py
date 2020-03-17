@@ -120,6 +120,7 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 # SCRIPTORIUM-specific config
 CORPUS_REPO_OWNER = "CopticScriptorium"
 CORPUS_REPO_NAME  = "corpora"
+GITHUB_API_BASE_URL = "https://api.github.com"
 
 DEPRECATED_URNS = {
 	"urn:cts:copticLit:shenoute.a22.monbyb_307_320": "urn:cts:copticLit:shenoute.a22.monbyb:801-825",
