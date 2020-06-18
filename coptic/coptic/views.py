@@ -317,7 +317,6 @@ def _base_context():
 
 
 def search(request):
-    # todo: implement custom logic with urn-pieces, update explanation string
     context = _base_context()
 
     # possible keys are "text", which is the freetext that a user entered,
