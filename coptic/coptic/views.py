@@ -325,7 +325,7 @@ def search(request):
     params = dict(request.GET.lists())
 
     # (1) unwrap the list of length 1 in params['text'] if it exists
-    # (2) if params['text'] starts with "urn:", treat it as a special case, copying it to params['urn']
+    # (2) if params['text'] starts with "urn:", treat it as a special case, copying it to params['document_cts_urn']
     #     (it is in a list to remain symmetric with all other non-'text' fields)
     if "text" in params:
         assert len(params['text']) == 1
@@ -333,10 +333,10 @@ def search(request):
         if params['text'].startswith('urn:'):
             params['document_cts_urn'] = [params['text']]
 
-    # returns a list of queries built with Django's Q operator
+    # returns a list of queries built with Django's Q operator using non-freetext parameters
     queries = _build_queries_for_special_metadata(params)
 
-    # preliminary results--might need to filter more if text query is present
+    # preliminary results--might need to filter more if freetext query is present
     texts = _fetch_and_filter_texts_for_special_metadata_query(queries, params)
 
     # build base explanation, a string that will be displayed to the user summarizing their search parameters
