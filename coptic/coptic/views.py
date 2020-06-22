@@ -7,17 +7,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Lower
 from texts.search_fields import get_search_fields
 from coptic.settings.base import DEPRECATED_URNS
+import texts.urn as urnlib
 import texts.models as models
 import texts.urn
-
-
-def _base_context():
-    search_fields = get_search_fields()
-    context = {
-        'search_fields': search_fields[0:5],
-        'secondary_search_fields': search_fields[5:]
-    }
-    return context
 
 
 def home_view(request):
@@ -110,7 +102,7 @@ def urn(request, urn=None):
         return redirect('text', corpus=obj.corpus.slug, text=obj.slug)
     elif obj.__class__.__name__ == "Corpus":
         return redirect('corpus', corpus=obj.slug)
-    raise Http404("No document found for URN <code>" + urn + "</code>")
+    return redirect(reverse('search') + f"?text={urn}")
 
 
 def get_meta_values(meta):
@@ -138,7 +130,7 @@ def index_view(request, special_meta=None):
     for meta_value in meta_values:
         if meta.splittable:
             corpora = (models.Text.objects.filter(text_meta__name__iexact=meta.name,
-                                                  text_meta__value__contains=meta_value)
+                                                  text_meta__value__icontains=meta_value)
                        .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code")
                        .distinct())
         else:
@@ -229,12 +221,15 @@ def _build_queries_for_special_metadata(params):
     for meta_name, meta_values in params.items():
         if meta_name == 'text':
             continue
+
         meta_values = sorted([s.strip() for s in meta_values])
         meta_name_query = Q()
         for meta_value in meta_values:
             if meta_value:
-                if models.SpecialMeta.objects.get(name=meta_name).splittable:
-                    meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__contains=meta_value)
+                if meta_name == 'document_cts_urn':
+                    meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__startswith=meta_value)
+                elif models.SpecialMeta.objects.get(name=meta_name).splittable:
+                    meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__icontains=meta_value)
                 else:
                     meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__iexact=meta_value)
         queries.append(meta_name_query)
@@ -242,11 +237,25 @@ def _build_queries_for_special_metadata(params):
     return queries
 
 
-def _get_texts_for_special_metadata_query(queries):
+def _filter_by_document_cts_urn(texts, document_cts_urn):
+    to_exclude = []
+    for text in texts:
+        if not urnlib.partial_parts_match(document_cts_urn[0], text.urn_code):
+            to_exclude.append(text.id)
+    texts = texts.exclude(id__in=to_exclude)
+    return texts
+
+
+def _fetch_and_filter_texts_for_special_metadata_query(queries, params):
     texts = models.Text.objects.all().order_by(Lower("title"))
     for query in queries:
         texts = texts.filter(query)
     add_author_and_urn(texts)
+
+    # need special logic for this param. Would be nice to implement this as a Django `Lookup`, but
+    # that would require us to do parsing in SQL--not pretty.
+    if 'document_cts_urn' in params:
+        texts = _filter_by_document_cts_urn(texts, params['document_cts_urn'])
     return texts
 
 
@@ -265,53 +274,76 @@ def _build_explanation(params):
                 new_meta_values.append(meta_value)
             meta_values = new_meta_values
 
-        meta_name_explanations = ([f'<span class="meta_pair">{meta_name} = {meta_value}</span>'
-                                   for meta_value in meta_values])
+        # indicate the special logic used for document_cts_urn
+        sep = '=' if meta_name != 'document_cts_urn' else 'matching'
+        meta_name_explanations = (
+            [
+                f'<span class="meta_pair">{meta_name}</span> {sep} <span class="meta_pair">{meta_value}</span>'
+                for meta_value in meta_values
+            ]
+        )
         meta_explanations.append("(" + " OR ".join(meta_name_explanations) + ")")
     return " AND ".join(meta_explanations)
 
 
-def _build_result_for_query_text(query_text, texts, params, explanation):
+def _build_result_for_query_text(query_text, texts, explanation):
     results = []
     meta_names = _get_meta_names_for_query_text(query_text)
     for meta_name in meta_names:
-        complete_explanation = f'<span class="meta_pair">{params["text"][0]}</span> in "{meta_name}"'
+        complete_explanation = f'<span class="meta_pair">{query_text}</span> in "{meta_name}"'
         complete_explanation += ' with ' if explanation else ''
         complete_explanation += explanation
 
         text_results = texts.filter(text_meta__name__iexact=meta_name,
-                                    text_meta__value__contains=query_text)
+                                    text_meta__value__icontains=query_text)
         add_author_and_urn(text_results)
         results.append({
             'texts': text_results,
             'explanation': complete_explanation
         })
-    all_empty_explanation = f'<span class="meta_pair">{params["text"][0]}</span> in any field'
+    all_empty_explanation = f'<span class="meta_pair">{query_text}</span> in any field'
     all_empty_explanation += ' with ' if explanation else ''
     all_empty_explanation += explanation
     return results, all_empty_explanation
 
 
+def _base_context():
+    search_fields = get_search_fields()
+    context = {
+        'search_fields': search_fields[:5],
+        'secondary_search_fields': search_fields[5:]
+    }
+    return context
+
+
 def search(request):
     context = _base_context()
 
+    # possible keys are "text", which is the freetext that a user entered,
+    # and slugs corresponding to SpecialMetas (e.g. "author", "translation", ...)
+    # which the user can select in the sidebar on right-hand side of the screen
     params = dict(request.GET.lists())
-    if "text" in params:
-        params['text'] = [x.strip() for x in params["text"]]
-        if params["text"][0].startswith("urn"):
-            return redirect(urn, urn=params["text"][0])
 
+    # (1) unwrap the list of length 1 in params['text'] if it exists
+    # (2) if params['text'] starts with "urn:", treat it as a special case, copying it to params['document_cts_urn']
+    #     (it is in a list to remain symmetric with all other non-'text' fields)
+    if "text" in params:
+        assert len(params['text']) == 1
+        params['text'] = params["text"][0].strip()
+        if params['text'].startswith('urn:'):
+            params['document_cts_urn'] = [params['text']]
+
+    # returns a list of queries built with Django's Q operator using non-freetext parameters
     queries = _build_queries_for_special_metadata(params)
 
-    # preliminary results--might need to filter more if text query is present
-    texts = _get_texts_for_special_metadata_query(queries)
+    # preliminary results--might need to filter more if freetext query is present
+    texts = _fetch_and_filter_texts_for_special_metadata_query(queries, params)
 
-    # build base explanations
+    # build base explanation, a string that will be displayed to the user summarizing their search parameters
     explanation = _build_explanation(params)
 
-    query_text = params['text'][0] if 'text' in params else None
-    if query_text:
-        results, all_empty_explanation = _build_result_for_query_text(query_text, texts, params, explanation)
+    if 'text' in params:
+        results, all_empty_explanation = _build_result_for_query_text(params['text'], texts, explanation)
     else:
         results = [{
             'texts': texts,
