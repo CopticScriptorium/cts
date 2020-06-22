@@ -15,18 +15,14 @@ def corpus_urn(doc_urn):
 	return textgroup_urn(doc_urn) + "." + urn_dot_parts[1]
 
 def parts(doc_urn):
-	"""A flat list of all "parts", which are defined as top-level colon-delimited parts, and
-	dot-delimited parts in colon-piece 4. E.g.:
+	"""A flat list of all "parts", which are defined as top-level colon-delimited parts, further
+        split by dot-delimited parts, e.g.:
 
 		urn:cts:copticLit:psathanasius.matthew20.budge:1:56
 		->
-		['urn', 'cts', 'copticLit', 'psathanasius', 'matthew20', 'budge:1:56']
+		['urn', 'cts', 'copticLit', 'psathanasius', 'matthew20', 'budge', '1', '56']
 	"""
-	parts = doc_urn.split(":")
-	if len(parts) > 3:
-		parts = parts[:3] + parts[3].split(".")
-	return parts
-
+	return [part for chunk in doc_urn.split(":") for part in chunk.split(".")]
 
 def partial_parts_match(urn1, urn2):
 	""" True iff all parts of urn1 exactly match all parts of urn2.
