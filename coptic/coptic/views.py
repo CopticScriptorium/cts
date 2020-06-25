@@ -325,13 +325,25 @@ def search(request):
     params = dict(request.GET.lists())
 
     # (1) unwrap the list of length 1 in params['text'] if it exists
-    # (2) if params['text'] starts with "urn:", treat it as a special case, copying it to params['document_cts_urn']
-    #     (it is in a list to remain symmetric with all other non-'text' fields)
+    # (2) if params['text'] starts with "urn:", treat it as a special case, first checking for redirects, then
+    #     copying it to params['document_cts_urn'] (it is in a list to remain symmetric with all other non-'text' fields)
     if "text" in params:
         assert len(params['text']) == 1
         params['text'] = params["text"][0].strip()
         if params['text'].startswith('urn:'):
-            params['document_cts_urn'] = [params['text']]
+            urn = params['text']
+            # check for redirects
+            if re.match(r'urn:cts:copticLit:ot.*.crosswire', urn):
+                return redirect('https://github.com/CopticScriptorium/corpora/releases/tag/v2.5.0')
+            urn = DEPRECATED_URNS.get(urn, urn)
+            obj = _resolve_urn(urn)
+            if obj.__class__.__name__ == "Text":
+                return redirect('text', corpus=obj.corpus.slug, text=obj.slug)
+            elif obj.__class__.__name__ == "Corpus":
+                return redirect('corpus', corpus=obj.slug)
+
+            # no redirect, proceed with search
+            params['document_cts_urn'] = [urn]
 
     # returns a list of queries built with Django's Q operator using non-freetext parameters
     queries = _build_queries_for_special_metadata(params)
