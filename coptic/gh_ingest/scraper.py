@@ -150,10 +150,12 @@ class CorpusTransaction:
 			print("Insufficient data to properly order corpus based on next/prev attrs.")
 			return
 
+		visited = []
 		new_text_pairs = []
 		node = start_node
-		while node is not None:
+		while node is not None and node not in visited:
 			new_text_pairs.append(self._text_pairs[node.orig_i])
+			visited.append(node)
 			node = node.next
 
 		self._text_pairs = new_text_pairs
