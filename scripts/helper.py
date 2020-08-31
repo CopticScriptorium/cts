@@ -58,21 +58,31 @@ def load_searchfields():
     author.name = "author"
     author.order = 2
 
+    people = SpecialMeta()
+    people.name = "people"
+    people.order = 3
+    people.splittable = True
+
+    places = SpecialMeta()
+    places.name = "places"
+    places.order = 4
+    places.splittable = True
+
     ms_name = SpecialMeta()
     ms_name.name = "msName"
-    ms_name.order = 3
+    ms_name.order = 5
 
     annotation = SpecialMeta()
     annotation.name = "annotation"
-    annotation.order = 4
+    annotation.order = 6
     annotation.splittable = True
 
     translation = SpecialMeta()
     translation.name = "translation"
-    translation.order = 5
+    translation.order = 7
     translation.splittable = True
 
-    for field in [corpus, author, ms_name, annotation, translation]:
+    for field in [corpus, author, people, places, ms_name, annotation, translation]:
         try:
             SpecialMeta.objects.get(name=field.name)
         except SpecialMeta.DoesNotExist:
