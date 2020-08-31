@@ -119,6 +119,9 @@ def get_meta_values(meta):
     else:
         sep = "; " if str(meta.name) in ["places","people"] else ", "
         split_meta_values = [v.split(sep) for v in unsplit_values]
+        for i, vals in enumerate(split_meta_values):
+            if any(len(v) > 50 for v in vals) and sep == ", ":  # e.g. long translation value with comma somewhere
+                split_meta_values[i] = [", ".join(vals)]
         meta_values = set()
         for vals in split_meta_values:
             meta_values = meta_values.union(set(vals))
