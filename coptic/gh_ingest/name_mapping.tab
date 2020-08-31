@@ -1,10 +1,10 @@
 #corpus	title	urn
 apophthegmata.patrum	Apophthegmata Patrum	urn:cts:copticLit:ap
-shenoute.abraham	Abraham Our Father	urn:cts:copticLit:shenoute.abraham
 besa.letters	Besa Letters	urn:cts:copticLit:besa
 doc.papyri	Documentary Papyri	urn:cts:copticDoc:papyri_info
 dormition.john	Dormition of John	urn:cts:copticLit:misc.dormition_john
 johannes.canons	Apa Johannes Canons	urn:cts:copticLit:johannes.canons
+john.constantinople	John of Constantinople Discourse	urn:cts:copticLit:johnconst.penitence
 life.aphou	Life of Aphou	urn:cts:copticLit:lives.aphou
 life.cyrus	Life of Cyrus	urn:cts:copticLit:lives.cyrus
 life.longinus.lucius	Life of Longinus and Lucius	urn:cts:copticLit:lives.longinus_lucius
@@ -25,6 +25,10 @@ sahidica.nt	New Testament	urn:cts:copticLit:nt
 sahidica.1corinthians	1 Corinthians	urn:cts:copticLit:nt.1cor
 sahidica.mark	Gospel of Mark	urn:cts:copticLit:nt.mark
 shenoute.a22	Acephalous Work 22	urn:cts:copticLit:shenoute.a22
+shenoute.abraham	Abraham Our Father	urn:cts:copticLit:shenoute.abraham
 shenoute.dirt	Some Kinds of People Sift Dirt	urn:cts:copticLit:shenoute.dirt
 shenoute.eagerness	I See Your Eagerness	urn:cts:copticLit:shenoute.eagerness
 shenoute.fox	Not Because a Fox Barks	urn:cts:copticLit:shenoute.fox
+shenoute.seeks	Whoever Seeks God Will Find	urn:cts:copticLit:shenoute.seeks
+shenoute.those	God Says Through Those Who Are His	urn:cts:copticLit:shenoute.those
+shenoute.unknown5_1	Unknown Work 5-1	urn:cts:copticLit:shenoute.unknown5_1
