@@ -142,7 +142,7 @@
   margin-left: 20px;
 }
 /* line 80, ../../scss/_single.scss */
-.page-tabs a {
+.page-tabs a, .index-link {
   padding: 7px 12px;
   margin: 5px 5px;
   font-size: 12px;
@@ -440,6 +440,16 @@ a.text-item:focus {
   font-style: normal;
 }
 
+/*
+@font-face {
+  font-family: 'annistools';
+  src: url("/static/fonts/annistools.eot");
+  src: url("/static/fonts/annistools.eot?#iefix") format("embedded-opentype"), url("/static/fonts/annistools.woff") format("woff"), url("/static/fonts/annistools.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+*/
+
 /* line 22, ../../scss/_text.scss */
 div.htmlvis span {
   font-family: antinoouRegular, sans-serif;
@@ -447,3 +457,39 @@ div.htmlvis span {
 }
 
 
+.search_wikilink{display: inline-block}
+.search_wikilink:before{
+    font-family: FontAwesome;
+    color: gray;
+    content: "\f266";
+    vertical-align: middle;
+    position: relative;
+    top: -12px;
+    font-size: 70%;
+    margin-right: 2px;
+    text-decoration: none;
+}
+
+#infobox{display: none; position: absolute; background-color: white; border: 1px solid black; z-index:100; padding: 10px}
+#infobox img {max-width: 150px; max-height:100px; border: 1px solid black}
+.meta-value{display: inline-block;}
+.title h4{}
+.title span {display: inline-block}
+/*.annis-link:before{    font-family: annistools; 
+    color: gray;
+	content: "";
+    vertical-align: middle;
+    position: relative;
+    top: -12px;
+    font-size: 1.1rem; 
+    margin-right: 2px;
+    text-decoration: none !important; 
+	font-weight: normal !important;
+}*/
+.annis-link{text-decoration: none !important}
+
+.annis-link:hover,.search_wikilink:hover{text-decoration:none !important; color: #a4122f !important}
+.annis-link:hover:before, .search_wikilink:hover:before{text-decoration:none !important; color: #a4122f !important}
+
+.index-link {position: relative; top: -12px; padding-left: 6px; padding-right: 6px;}
+.index-low{position: relative; top: -4px !important; }
