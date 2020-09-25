@@ -21,6 +21,7 @@ pseudo.chrysostom	Pseudo-Chrysostom	urn:cts:copticLit:pschrysostom
 pseudo.ephrem	Pseudo-Ephrem Writings	urn:cts:copticLit:psephrem
 pseudo.theophilus	Pseudo-Theophilus On the Cross and the Thief	urn:cts:copticLit:pstheophilus.cross
 sahidic.ot	Old Testament	urn:cts:copticLit:ot
+sahidic.ruth	Ruth	urn:cts:copticLit:ot.ruth.coptot
 sahidica.nt	New Testament	urn:cts:copticLit:nt
 sahidica.1corinthians	1 Corinthians	urn:cts:copticLit:nt.1cor
 sahidica.mark	Gospel of Mark	urn:cts:copticLit:nt.mark
