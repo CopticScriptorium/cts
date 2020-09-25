@@ -11,7 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/static/css/styles.css">
   <link rel="stylesheet" href="/static/css/styles2.css">
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -68,5 +68,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 <script>$(".m-corpora").addClass('on');</script>
+		{% if 'nalytic' in visualization.visualization_format.title %}
+				<script>
+				add_titles();
+				</script>
+           {% endif %}
+
 </body>
 </html>

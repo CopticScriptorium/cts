@@ -20,7 +20,17 @@ from texts.models import Corpus, Text, TextMeta, HtmlVisualization, HtmlVisualiz
 import texts.urn as urn
 from .scraper_exceptions import *
 from .htmlvis import generate_visualization
+import os, io
 
+script_dir = os.path.dirname(os.path.realpath(__file__)) + os.sep
+name_mapping = io.open(script_dir + "name_mapping.tab", encoding="utf8").read().strip().split("\n")
+corpus_urn_map = {}
+corpus_title_map = {}
+for line in name_mapping:
+	if line.count("\t") == 2:
+		corpus, corpus_title, corpus_urn = line.split("\t")
+		corpus_urn_map[corpus] = corpus_urn
+		corpus_title_map[corpus] = corpus_title
 
 def get_git_blob(file_sha):
 	headers = {}
@@ -442,7 +452,10 @@ class GithubCorpusScraper:
 		corpus.github_tei, corpus.github_relannis, corpus.github_paula = self._infer_github_dirs(corpus, corpus_dirname)
 		corpus.annis_corpus_name = self._infer_annis_corpus_name(corpus)
 		corpus.slug = self._infer_slug(corpus)
-		corpus.title = corpus.annis_corpus_name # User should edit this to something more appropriate
+		if corpus.annis_corpus_name in corpus_title_map:
+			corpus.title = corpus_title_map[corpus.annis_corpus_name]
+		else:
+			corpus.title = corpus.annis_corpus_name # User should edit this to something more appropriate
 
 		# assignment to corpus.html_visualization_formats happen during the transaction
 		self._current_transaction.add_vis_formats(self._infer_html_visualization_formats_and_add_to_tx(corpus, corpus_dirname))
@@ -451,7 +464,10 @@ class GithubCorpusScraper:
 		self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
 		self._current_transaction.sort_texts(self._text_next, self._text_prev, self._text_urn)
 
-		corpus.urn_code = self._infer_urn_code(corpus_dirname)
+		if corpus.annis_corpus_name in corpus_urn_map:
+			corpus.urn_code = corpus_urn_map[corpus.annis_corpus_name]
+		else:
+			corpus.urn_code = self._infer_urn_code(corpus_dirname)
 
 		return self._current_transaction
 

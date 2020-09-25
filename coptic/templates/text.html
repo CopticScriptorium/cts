@@ -71,10 +71,17 @@
 
     <div class="text-format">
         <h3 class="subtitle">{{visualization.visualization_format.title}}</h3>
-
+        
+		{% if 'nalytic' in visualization.visualization_format.title %}
+			<div id="viztoolbar">
+				{% include "vizbar.html" %}
+				</div>
+           {% endif %}
+       
         <div class="coptic-text html">
             {{ visualization.html | safe }}
         </div>
+
     </div>
 
     <div class="end-note">
@@ -130,12 +137,12 @@
         </p>
 
         <p>
-            <span class="label">Text Corpus:</span>
+            <span class="label">Work:</span>
             <a href="/{{text.corpus_urn}}" target="_blank">{{text.corpus_urn}}</a>
         </p>
 
         <p>
-            <span class="label">Author Textgroup:</span>
+            <span class="label">Text Group:</span>
             <a href="/{{text.textgroup_urn}}" target="_blank">{{text.textgroup_urn}}</a>
         </p>
 
@@ -191,3 +198,4 @@
 </section>
 
 {% endblock %}
+

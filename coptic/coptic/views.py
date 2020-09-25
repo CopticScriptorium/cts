@@ -7,10 +7,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Lower
 from texts.search_fields import get_search_fields
 from coptic.settings.base import DEPRECATED_URNS
+from collections import OrderedDict
 import texts.urn as urnlib
 import texts.models as models
 import texts.urn
+import base64
 
+from django.template.defaulttags import register
+
+@register.filter(name='keyvalue')
+def keyvalue(dict, key):
+    return dict.get(key)
 
 def home_view(request):
     'Home'
@@ -110,7 +117,11 @@ def get_meta_values(meta):
     if not meta.splittable:
         meta_values = unsplit_values
     else:
-        split_meta_values = [v.split(", ") for v in unsplit_values]
+        sep = "; " if str(meta.name) in ["places","people"] else ", "
+        split_meta_values = [v.split(sep) for v in unsplit_values]
+        for i, vals in enumerate(split_meta_values):
+            if any(len(v) > 50 for v in vals) and sep == ", ":  # e.g. long translation value with comma somewhere
+                split_meta_values[i] = [", ".join(vals)]
         meta_values = set()
         for vals in split_meta_values:
             meta_values = meta_values.union(set(vals))
@@ -122,25 +133,30 @@ def get_meta_values(meta):
 def index_view(request, special_meta=None):
     context = _base_context()
 
-    value_corpus_pairs = dict()
+    value_corpus_pairs = OrderedDict()
 
     meta = get_object_or_404(models.SpecialMeta, name=special_meta)
     meta_values = get_meta_values(meta)
 
+    b64_meta_values = {}
+    b64_corpora = {}
+    all_corpora = set([])
+
     for meta_value in meta_values:
+        b64_meta_values[meta_value] = str(base64.b64encode(('identity="'+meta_value+'"').encode("ascii")).decode("ascii"))
         if meta.splittable:
             corpora = (models.Text.objects.filter(text_meta__name__iexact=meta.name,
                                                   text_meta__value__icontains=meta_value)
-                       .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code")
+                       .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name")
                        .distinct())
         else:
             corpora = (models.Text.objects.filter(text_meta__name__iexact=meta.name,
                                                   text_meta__value__iexact=meta_value)
-                       .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code")
+                       .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name")
                        .distinct())
 
         value_corpus_pairs[meta_value] = []
-        for c in corpora:
+        for c in sorted(corpora,key=lambda x: x['corpus__title']):
             try:
                 authors = map(lambda x: x.text_meta.get(name__iexact="author").value,
                         models.Text.objects.filter(corpus__id=c["corpus__id"]))
@@ -161,13 +177,23 @@ def index_view(request, special_meta=None):
                 "slug": c['corpus__slug'],
                 "title": c['corpus__title'],
                 "urn_code": c['corpus__urn_code'],
-                "author": author
+                "author": author,
+                "annis_corpus_name": c["corpus__annis_corpus_name"]
             })
 
+            b64_corpora[c["corpus__annis_corpus_name"]] = str(base64.b64encode(c["corpus__annis_corpus_name"].encode("ascii")).decode("ascii"))
+            all_corpora.add(c["corpus__annis_corpus_name"])
+        value_corpus_pairs[meta_value].sort(key=lambda x:x["title"])
+
+    annis_corpora = ",".join(list(all_corpora))
+    annis_corpora = str(base64.b64encode(annis_corpora.encode("ascii")).decode("ascii"))
     context.update({
         'special_meta': meta.name,
-        'value_corpus_pairs': sorted(value_corpus_pairs.items(), key=lambda x: x[0]),
-        'is_corpus': meta.name == "corpus"
+        'value_corpus_pairs': sorted(value_corpus_pairs.items(), key=lambda x: x[1][0]["title"]),
+        'is_corpus': meta.name == "corpus",
+        'b64_meta_values': b64_meta_values,
+        'b64_corpora': b64_corpora,
+        'annis_corpora': annis_corpora  # """YXBvcGh0aGVnbWF0YS5wYXRydW0sYmVzYS5sZXR0ZXJzLGNvcHRpYy50cmVlYmFuayxkb2MucGFweXJpLGRvcm1pdGlvbi5qb2huLGpvaGFubmVzLmNhbm9ucyxsaWZlLmFwaG91LGxpZmUuY3lydXMsbGlmZS5sb25naW51cy5sdWNpdXMsbGlmZS5vbm5vcGhyaXVzLGxpZmUucGF1bC50YW1tYSxsaWZlLnBoaWIsbWFydHlyZG9tLnZpY3RvcixwYWNob21pdXMuaW5zdHJ1Y3Rpb25zLHByb2NsdXMuaG9taWxpZXMscHNldWRvLmF0aGFuYXNpdXMuZGlzY291cnNlcyxwc2V1ZG8uZXBocmVtLHBzZXVkby50aGVvcGhpbHVzLHNhaGlkaWNhLjFjb3JpbnRoaWFucyxzYWhpZGljYS5tYXJrLHNoZW5vdXRlLmEyMixzaGVub3V0ZS5hYnJhaGFtLHNoZW5vdXRlLmRpcnQsc2hlbm91dGUuZWFnZXJuZXNzLHNoZW5vdXRlLmZveCxzaGVub3V0ZS5zZWVrcyxzaGVub3V0ZS50aG9zZSxzaGVub3V0ZS51bmtub3duNV8x"""
     })
     return render(request, 'index.html', context)
 
