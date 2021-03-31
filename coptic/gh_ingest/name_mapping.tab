@@ -7,12 +7,15 @@ johannes.canons	Apa Johannes Canons	urn:cts:copticLit:johannes.canons
 john.constantinople	John of Constantinople Discourse	urn:cts:copticLit:johnconst.penitence
 life.aphou	Life of Aphou	urn:cts:copticLit:lives.aphou
 life.cyrus	Life of Cyrus	urn:cts:copticLit:lives.cyrus
+life.john.kalybites	Life of John the Kalybites	urn:cts:copticLit:lives.john_kalybites
 life.longinus.lucius	Life of Longinus and Lucius	urn:cts:copticLit:lives.longinus_lucius
 life.onnophrius	Life of Onnophrius	urn:cts:copticLit:lives.onnophrius
 life.paul.tamma	Life of Paul of Tamma	urn:cts:copticLit:lives.paul_tamma
 life.phib	Life of Phib	urn:cts:copticLit:lives.phib
 life.pisentius	Life of Pisentius	urn:cts:copticLit:lives.pisentius
+magical.papyri	Magical Papyri	urn:cts:copticMag:kyprianos
 martyrdom.victor	Martyrdom of Victor the General	urn:cts:copticLit:martyrdoms.victor
+mysteries.john	Mysteries of John the Evangelist	urn:cts:copticLit:misc.mysteries_john
 pachomius.instructions	Instructions of Apa Pachomius	urn:cts:copticLit:pachomius.instructions
 proclus.homilies	Proclus Homilies	urn:cts:copticLit:proclus
 pseudo.athanasius.discourses	Pseudo-Athanasius Discourses	urn:cts:copticLit:psathanasius.discourses
@@ -20,6 +23,7 @@ pseudo.basil	Pseudo-Basil of Caesarea Discourse	urn:cts:copticLit:psbasilcaesare
 pseudo.chrysostom	Pseudo-Chrysostom	urn:cts:copticLit:pschrysostom
 pseudo.ephrem	Pseudo-Ephrem Writings	urn:cts:copticLit:psephrem
 pseudo.theophilus	Pseudo-Theophilus On the Cross and the Thief	urn:cts:copticLit:pstheophilus.cross
+pseudo.timothy	Pseudo-Timothy of Alexandria Discourses	urn:cts:copticLit:pstimothy
 sahidic.ot	Old Testament	urn:cts:copticLit:ot
 sahidic.ruth	Ruth	urn:cts:copticLit:ot.ruth.coptot
 sahidica.nt	New Testament	urn:cts:copticLit:nt
