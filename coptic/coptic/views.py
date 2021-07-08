@@ -86,7 +86,7 @@ def text_view(request, corpus=None, text=None, format=None):
         next_text_urn = text_object.text_meta.get(name="next").value.strip()
         slug = models.Text.objects.get(text_meta__name="document_cts_urn", text_meta__value=next_text_urn).slug
         text_object.next = slug
-    except models.TextMeta.DoesNotExist:
+    except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
         pass
     try:
         previous_text_urn = text_object.text_meta.get(name="previous").value.strip()
