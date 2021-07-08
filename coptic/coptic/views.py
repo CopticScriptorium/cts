@@ -2,7 +2,7 @@ import re
 from django import forms
 from django.http import Http404
 from django.urls import reverse
-from django.db.models import Q
+from django.db.models import Q, Case, When, IntegerField, F
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Lower
 from texts.search_fields import get_search_fields
@@ -27,7 +27,35 @@ def home_view(request):
 
 def corpus_view(request, corpus=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)
-    texts = models.Text.objects.filter(corpus=corpus_object).order_by("id")
+
+    # This is almost what we need, but because of some ORM quirks (LEFT OUTER JOINs where we needed INNER JOINs)
+    # every text with a valid `order` metadatum will appear twice in these results: once with an "order" annotation,
+    # and once without.
+    texts = (
+        models.Text.objects
+        .filter(corpus=corpus_object)
+        .annotate(order=Case(
+            When(text_meta__name="order", then="text_meta__value"),
+            output_field=IntegerField()
+        ))
+        .distinct()
+        .order_by("order", "id")
+    )
+
+    # to handle this, for every id, take the one with an "order" if it has one, else fall back to the one without order
+    ids = set([t.id for t in texts])
+    results = []
+    for tid in ids:
+        no_order_match = [t for t in texts if t.id == tid and t.order is None]
+        order_match = [t for t in texts if t.id == tid and t.order is not None]
+        if len(order_match) == 0:
+            # Some corpora, like urn:cts:copticLit:shenoute.those, have only partial orderings--in this case, put the unordered ones last
+            no_order_match[0].order = 999999
+            results += no_order_match
+        else:
+            results += order_match
+    results = sorted(results, key=lambda t: (t.order, t.id))
+    texts = results
 
     context = _base_context()
     context.update({
