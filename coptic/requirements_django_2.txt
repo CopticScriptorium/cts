@@ -1,5 +1,5 @@
 requests
-django==2.2.13
+django==2.2.27
 django-grappelli==2.13.1
 beautifulsoup4==4.8.0
 selenium==3.141.0
