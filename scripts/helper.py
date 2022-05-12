@@ -82,8 +82,14 @@ def load_searchfields():
     translation.order = 7
     translation.splittable = True
 
+    arabic_translation = SpecialMeta()
+    translation.name = "arabic_translation"
+    translation.order = 8
+    translation.splittable = True
+
     for field in [corpus, author, people, places, ms_name, annotation, translation]:
         try:
             SpecialMeta.objects.get(name=field.name)
         except SpecialMeta.DoesNotExist:
             field.save()
+            raise IOError("xyz")
