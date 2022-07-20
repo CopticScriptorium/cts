@@ -58,7 +58,7 @@ class Corpus(models.Model):
 		return b64encode(str.encode(self.annis_corpus_name)).decode()
 
 	def annis_link(self):
-		return "https://corpling.uis.georgetown.edu/annis/scriptorium#_c=" + self._annis_corpus_name_b64encoded()
+		return "https://annis.copticscriptorium.org/annis/scriptorium#_c=" + self._annis_corpus_name_b64encoded()
 
 
 class TextMeta(models.Model):
