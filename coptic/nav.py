@@ -12,23 +12,23 @@ script_dir = os.path.dirname(os.path.realpath(__file__)) + os.sep
 
 
 def get_menu():
-	head = "http://copticscriptorium.org/header.html"
+	head = "https://copticscriptorium.org/header.html"
 	try:
 		header = requests.get(head).text
 	except Exception as e:
 		sys.stderr.write(str(e))
 		header = ""
-	foot = "http://copticscriptorium.org/footer.html"
+	foot = "https://copticscriptorium.org/footer.html"
 	try:
 		footer = requests.get(foot).text
 	except Exception as e:
 		sys.stderr.write(str(e))
 		footer = ""
-	header = header.replace('href="/','href="http://copticscriptorium.org/')
-	header = header.replace('src="./','src="http://copticscriptorium.org/')
-	header = header.replace('src="/','src="http://copticscriptorium.org/')
-	footer = footer.replace('src="./','src="http://copticscriptorium.org/')
-	footer = footer.replace('src="/','src="http://copticscriptorium.org/')
+	header = header.replace('href="/','href="https://copticscriptorium.org/')
+	header = header.replace('src="./','src="https://copticscriptorium.org/')
+	header = header.replace('src="/','src="https://copticscriptorium.org/')
+	footer = footer.replace('src="./','src="https://copticscriptorium.org/')
+	footer = footer.replace('src="/','src="https://copticscriptorium.org/')
 	footer = re.sub(r'<p id="lastupdate">.*?</p>.*<script>.*lastupdate.*?</script>','',footer,flags=re.DOTALL)
 
 	return header, footer
