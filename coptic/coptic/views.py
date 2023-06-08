@@ -254,9 +254,8 @@ def _build_queries_for_special_metadata(params):
             if meta_value:
                 if meta_name == 'document_cts_urn':
                     # Not supported by SQLite
-                    # regex = meta_value.replace("*", ".*")
-                    # meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__regex=regex)
-                    meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__startswith=meta_value)
+                    regex = "^" + meta_value.replace(".", r"\.").replace("*", ".*")
+                    meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__regex=regex)
                 elif models.SpecialMeta.objects.get(name=meta_name).splittable:
                     meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__icontains=meta_value)
                 else:
@@ -266,25 +265,11 @@ def _build_queries_for_special_metadata(params):
     return queries
 
 
-def _filter_by_document_cts_urn(texts, document_cts_urn):
-    to_exclude = []
-    for text in texts:
-        if not urnlib.partial_parts_match(document_cts_urn[0], text.urn_code):
-            to_exclude.append(text.id)
-    texts = texts.exclude(id__in=to_exclude)
-    return texts
-
-
-def _fetch_and_filter_texts_for_special_metadata_query(queries, params):
+def _fetch_and_filter_texts_for_special_metadata_query(queries):
     texts = models.Text.objects.all().order_by(Lower("title"))
     for query in queries:
         texts = texts.filter(query)
     add_author_and_urn(texts)
-
-    # need special logic for this param. Would be nice to implement this as a Django `Lookup`, but
-    # that would require us to do parsing in SQL--not pretty.
-    if 'document_cts_urn' in params:
-        texts = _filter_by_document_cts_urn(texts, params['document_cts_urn'])
     return texts
 
 
@@ -315,7 +300,8 @@ def _build_explanation(params):
     return " AND ".join(meta_explanations)
 
 
-def _build_result_for_query_text(query_text, texts, explanation):
+def _build_result_for_query_text(params, texts, explanation):
+    query_text = params["text"]
     results = []
     meta_names = _get_meta_names_for_query_text(query_text)
     for meta_name in meta_names:
@@ -323,8 +309,11 @@ def _build_result_for_query_text(query_text, texts, explanation):
         complete_explanation += ' with ' if explanation else ''
         complete_explanation += explanation
 
-        text_results = texts.filter(text_meta__name__iexact=meta_name,
-                                    text_meta__value__icontains=query_text)
+        if meta_name == 'document_cts_urn':
+            text_results = texts
+        else:
+            text_results = texts.filter(text_meta__name__iexact=meta_name,
+                                        text_meta__value__icontains=query_text)
         add_author_and_urn(text_results)
         results.append({
             'texts': text_results,
@@ -378,13 +367,13 @@ def search(request):
     queries = _build_queries_for_special_metadata(params)
 
     # preliminary results--might need to filter more if freetext query is present
-    texts = _fetch_and_filter_texts_for_special_metadata_query(queries, params)
+    texts = _fetch_and_filter_texts_for_special_metadata_query(queries)
 
     # build base explanation, a string that will be displayed to the user summarizing their search parameters
     explanation = _build_explanation(params)
 
     if 'text' in params:
-        results, all_empty_explanation = _build_result_for_query_text(params['text'], texts, explanation)
+        results, all_empty_explanation = _build_result_for_query_text(params, texts, explanation)
     else:
         results = [{
             'texts': texts,
