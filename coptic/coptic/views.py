@@ -253,6 +253,9 @@ def _build_queries_for_special_metadata(params):
         for meta_value in meta_values:
             if meta_value:
                 if meta_name == 'document_cts_urn':
+                    # Not supported by SQLite
+                    # regex = meta_value.replace("*", ".*")
+                    # meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__regex=regex)
                     meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__startswith=meta_value)
                 elif models.SpecialMeta.objects.get(name=meta_name).splittable:
                     meta_name_query = meta_name_query | Q(text_meta__name__iexact=meta_name, text_meta__value__icontains=meta_value)
