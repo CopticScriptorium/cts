@@ -7,6 +7,7 @@ johannes.canons	Apa Johannes Canons	urn:cts:copticLit:johannes.canons
 john.constantinople	John of Constantinople Discourse	urn:cts:copticLit:johnconst.penitence
 life.aphou	Life of Aphou	urn:cts:copticLit:lives.aphou
 life.cyrus	Life of Cyrus	urn:cts:copticLit:lives.cyrus
+life.eustathius.theopiste	The History of Eustathius and Theopiste	urn:cts:copticLit:lives.eustathius
 life.john.kalybites	Life of John the Kalybites	urn:cts:copticLit:lives.john_kalybites
 life.longinus.lucius	Life of Longinus and Lucius	urn:cts:copticLit:lives.longinus_lucius
 life.onnophrius	Life of Onnophrius	urn:cts:copticLit:lives.onnophrius
@@ -17,6 +18,7 @@ magical.papyri	Magical Papyri	urn:cts:copticMag:kyprianos
 martyrdom.victor	Martyrdom of Victor the General	urn:cts:copticLit:martyrdoms.victor
 mysteries.john	Mysteries of John the Evangelist	urn:cts:copticLit:misc.mysteries_john
 pachomius.instructions	Instructions of Apa Pachomius	urn:cts:copticLit:pachomius.instructions
+pistis.sophia	Pistis Sophia	urn:cts:copticLit:pistissophia
 proclus.homilies	Proclus Homilies	urn:cts:copticLit:proclus
 pseudo.athanasius.discourses	Pseudo-Athanasius Discourses	urn:cts:copticLit:psathanasius.discourses
 pseudo.basil	Pseudo-Basil of Caesarea Discourse	urn:cts:copticLit:psbasilcaesarea
@@ -31,13 +33,16 @@ sahidica.1corinthians	1 Corinthians	urn:cts:copticLit:nt.1cor
 sahidica.mark	Gospel of Mark	urn:cts:copticLit:nt.mark
 shenoute.a22	Acephalous Work 22	urn:cts:copticLit:shenoute.a22
 shenoute.abraham	Abraham Our Father	urn:cts:copticLit:shenoute.abraham
+shenoute.considering	I Have Been Considering	urn:cts:copticLit:shenoute.considering.amelineau
 shenoute.dirt	Some Kinds of People Sift Dirt	urn:cts:copticLit:shenoute.dirt
 shenoute.eagerness	I See Your Eagerness	urn:cts:copticLit:shenoute.eagerness
 shenoute.fox	Not Because a Fox Barks	urn:cts:copticLit:shenoute.fox
+shenoute.place	So Concerning the Little Place	urn:cts:copticLit:shenoute.place.amelineau
 shenoute.seeks	Whoever Seeks God Will Find	urn:cts:copticLit:shenoute.seeks
 shenoute.those	God Says Through Those Who Are His	urn:cts:copticLit:shenoute.those
 shenoute.unknown5_1	Unknown Work 5-1	urn:cts:copticLit:shenoute.unknown5_1
 shenoute.night	In the Night	urn:cts:copticLit:shenoute.night
 shenoute.prince	Because of You Too O Prince of Evil	urn:cts:copticLit:shenoute.prince
+shenoute.thundered	The Lord Thundered	urn:cts:copticLit:shenoute.thundered.amelineau
 pseudo.flavianus	Encomium on Demetrius Archbishop of Alexandria	urn:cts:copticLit:psflavianus.encomium
 pseudo.celestinus	Encomium on Victor	urn:cts:copticLit:pscelestinus.encomium
