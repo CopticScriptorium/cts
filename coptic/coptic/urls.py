@@ -24,24 +24,27 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 		text = texts[0]
 		if data_type == 'annis':
 			new_loc = text.corpus.annis_link()
-		elif data_type in ('relannis', 'xml'):
-			new_loc = text.corpus.github
 		elif data_type == 'html':
 			new_loc = "/texts/" + text.corpus.slug + "/" + text.slug + '/' + last_part
+		elif data_type in ('relannis', 'paula/xml', 'tei/xml'):
+			new_loc = text.corpus.github + "/" + text.corpus.annis_corpus_name + "_"
+			new_loc += (
+				'ANNIS' if data_type == 'relannis' else 'PAULA' if data_type == 'paula/xml' else 'TEI'
+			)
 
 	return redirect(new_loc)
 
 
 urlpatterns = [
-	url(r'^grappelli/',                                  include('grappelli.urls')),
-	url(r'^admin/',                                      admin.site.urls),
-	url(r'^api/',                                        include('api.urls')),
-	path(r'search',                      				 views.search, name='search'),
-	path(r'index/<special_meta>/',                       views.index_view, name='index'),
-	path(r'texts/<slug:corpus>/',                        views.corpus_view, name='corpus'),
-	path(r'texts/<slug:corpus>/<slug:text>/',            views.text_view, name='text'),
-	path(r'texts/<slug:corpus>/<slug:text>/<format>',    views.text_view, name='text_with_format'),
-	url(r'(.*)/(annis|relannis|xml|html)$',              _redirect_citation_urls),
-	url(r"^(?P<urn>urn:.*)/$",                           views.urn),
-	url(r'^$',                                           views.home_view, name='home'),
+	url(r'^grappelli/',                                     include('grappelli.urls')),
+	url(r'^admin/',                                         admin.site.urls),
+	url(r'^api/',                                           include('api.urls')),
+	path(r'search',                      				    views.search, name='search'),
+	path(r'index/<special_meta>/',                          views.index_view, name='index'),
+	path(r'texts/<slug:corpus>/',                           views.corpus_view, name='corpus'),
+	path(r'texts/<slug:corpus>/<slug:text>/',               views.text_view, name='text'),
+	path(r'texts/<slug:corpus>/<slug:text>/<format>',       views.text_view, name='text_with_format'),
+	url(r'(.*)/(annis|relannis|tei\/xml|paula\/xml|html)$', _redirect_citation_urls),
+	url(r"^(?P<urn>urn:.*)/$",                              views.urn),
+	url(r'^$',                                              views.home_view, name='home'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
