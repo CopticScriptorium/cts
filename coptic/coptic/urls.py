@@ -1,3 +1,4 @@
+import re
 from django.conf.urls import include, url
 from django.urls import path
 from django.contrib import admin
@@ -31,6 +32,8 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 			new_loc += (
 				'ANNIS' if data_type == 'relannis' else 'PAULA' if data_type == 'paula/xml' else 'TEI'
 			)
+			if re.search(r'(\.ot|\.nt)$', text.corpus.annis_corpus_name):
+				new_loc += '.zip'
 
 	return redirect(new_loc)
 
