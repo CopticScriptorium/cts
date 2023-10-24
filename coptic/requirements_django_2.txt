@@ -1,6 +1,6 @@
 requests
 django==2.2.13
-django-grappelli==2.13.1
+django-grappelli==2.15.2
 beautifulsoup4==4.8.0
 selenium==3.141.0
 xvfbwrapper==0.2.9
