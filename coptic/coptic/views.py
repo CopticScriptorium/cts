@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.db.models import Q, Case, When, IntegerField, F
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Lower
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from texts.search_fields import get_search_fields
 from coptic.settings.base import DEPRECATED_URNS
 from collections import OrderedDict
@@ -19,12 +21,13 @@ from django.template.defaulttags import register
 def keyvalue(dict, key):
     return dict.get(key)
 
+@cache_page(60 * 15)
 def home_view(request):
     'Home'
     context = _base_context()
     return render(request, 'home.html', context)
 
-
+@cache_page(60 * 15)
 def corpus_view(request, corpus=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)
 
@@ -64,7 +67,7 @@ def corpus_view(request, corpus=None):
     })
     return render(request, 'corpus.html', context)
 
-
+@cache_page(60 * 15)
 def text_view(request, corpus=None, text=None, format=None):
     text_object = get_object_or_404(models.Text, slug=text)
     if not format:
@@ -107,10 +110,9 @@ def text_view(request, corpus=None, text=None, format=None):
     })
     return render(request, 'text.html', context)
 
-
+@cache_page(60 * 15)
 def not_found(request):
     return render(request, '404.html', {})
-
 
 def _resolve_urn(urn):
     try:
@@ -123,7 +125,7 @@ def _resolve_urn(urn):
         except models.Corpus.DoesNotExist:
             return None
 
-
+@cache_page(60 * 15)
 def urn(request, urn=None):
     # https://github.com/CopticScriptorium/cts/issues/112
     if re.match(r'urn:cts:copticLit:ot.*.crosswire', urn):
@@ -138,7 +140,6 @@ def urn(request, urn=None):
     elif obj.__class__.__name__ == "Corpus":
         return redirect('corpus', corpus=obj.slug)
     return redirect(reverse('search') + f"?text={urn}")
-
 
 def get_meta_values(meta):
     unsplit_values = map(lambda x: x['value'], models.TextMeta.objects.filter(name__iexact=meta.name).values("value").distinct())
@@ -157,7 +158,7 @@ def get_meta_values(meta):
     meta_values = [re.sub(HTML_TAG_REGEX, '', meta_value) for meta_value in meta_values]
     return meta_values
 
-
+@cache_page(60 * 15)
 def index_view(request, special_meta=None):
     context = _base_context()
 
@@ -299,7 +300,6 @@ def _fetch_and_filter_texts_for_special_metadata_query(queries):
     add_author_and_urn(texts)
     return texts
 
-
 def _build_explanation(params):
     meta_explanations = []
     for meta_name, meta_values in params.items():
@@ -326,7 +326,6 @@ def _build_explanation(params):
         meta_explanations.append("(" + " OR ".join(meta_name_explanations) + ")")
     return " AND ".join(meta_explanations)
 
-
 def _build_result_for_query_text(params, texts, explanation):
     query_text = params["text"]
     results = []
@@ -351,16 +350,18 @@ def _build_result_for_query_text(params, texts, explanation):
     all_empty_explanation += explanation
     return results, all_empty_explanation
 
-
 def _base_context():
-    search_fields = get_search_fields()
-    context = {
-        'search_fields': search_fields[:5],
-        'secondary_search_fields': search_fields[5:]
-    }
+    context = cache.get('base_context')
+    if not context:
+        search_fields = get_search_fields()
+        context = {
+            'search_fields': search_fields[:5],
+            'secondary_search_fields': search_fields[5:]
+        }
+        cache.set('base_context', context, 60 * 15)  # Cache for 15 minutes
     return context
 
-
+@cache_page(60 * 15)
 def search(request):
     context = _base_context()
 
@@ -417,7 +418,6 @@ def search(request):
     })
 
     return render(request, 'search.html', context)
-
 
 def add_author_and_urn(texts):
     for text in texts:
