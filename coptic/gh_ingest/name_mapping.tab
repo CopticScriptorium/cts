@@ -1,12 +1,20 @@
 #corpus	title	urn
+acts.pilate	Acts of Pilate - Gospel of Nicodemus	urn:cts:copticLit:misc.acts_pilate.lacau_ed
 apophthegmata.patrum	Apophthegmata Patrum	urn:cts:copticLit:ap
 besa.letters	Besa Letters	urn:cts:copticLit:besa
 bohairic.1corinthians	Bohairic 1 Corinthians	urn:cts:copticLit:nt.1cor.bohairic_ed
+bohairic.habakkuk	Bohairic Habakkuk	urn:cts:copticLit:ot.hab.bohairic_ed
+bohairic.life.isaac	Bohairic Life of Isaac	urn:cts:copticLit:lives.boh_isaac
 bohairic.mark	Bohairic Mark	urn:cts:copticLit:nt.mark.bohairic_ed
+bohairic.nt	Bohairic New Testament	urn:cts:copticLit:nt.bohairic
+bohairic.ot	Bohairic Old Testament	urn:cts:copticLit:ot.bohairic_ed
 doc.papyri	Documentary Papyri	urn:cts:copticDoc:papyri_info
+book.bartholomew	Book of Bartholomew	urn:cts:copticLit:misc.blbartholomew
 dormition.john	Dormition of John	urn:cts:copticLit:misc.dormition_john
+helias	Helias	urn:cts:copticLit:helias
 johannes.canons	Apa Johannes Canons	urn:cts:copticLit:johannes.canons
 john.constantinople	John of Constantinople Discourse	urn:cts:copticLit:johnconst.penitence
+lament.mary	Lament of Mary	urn:cts:copticLit:misc.lament_mary
 life.aphou	Life of Aphou	urn:cts:copticLit:lives.aphou
 life.cyrus	Life of Cyrus	urn:cts:copticLit:lives.cyrus
 life.eustathius.theopiste	The History of Eustathius and Theopiste	urn:cts:copticLit:lives.eustathius
@@ -18,21 +26,24 @@ life.phib	Life of Phib	urn:cts:copticLit:lives.phib
 life.pisentius	Life of Pisentius	urn:cts:copticLit:lives.pisentius
 magical.papyri	Magical Papyri	urn:cts:copticMag:kyprianos
 martyrdom.victor	Martyrdom of Victor the General	urn:cts:copticLit:martyrdoms.victor
+mercurius	Mercurius Encomium, Martyrdom and Miracles	urn:cts:copticLit:mercurius
 mysteries.john	Mysteries of John the Evangelist	urn:cts:copticLit:misc.mysteries_john
 pachomius.instructions	Instructions of Apa Pachomius	urn:cts:copticLit:pachomius.instructions
 pistis.sophia	Pistis Sophia	urn:cts:copticLit:pistissophia
 proclus.homilies	Proclus Homilies	urn:cts:copticLit:proclus
 pseudo.athanasius.discourses	Pseudo-Athanasius Discourses	urn:cts:copticLit:psathanasius.discourses
 pseudo.basil	Pseudo-Basil of Caesarea Discourse	urn:cts:copticLit:psbasilcaesarea
+pseudo.celestinus	Encomium on Victor	urn:cts:copticLit:pscelestinus.encomium
 pseudo.chrysostom	Pseudo-Chrysostom	urn:cts:copticLit:pschrysostom
 pseudo.ephrem	Pseudo-Ephrem Writings	urn:cts:copticLit:psephrem
-pseudo.theophilus	Pseudo-Theophilus On the Cross and the Thief	urn:cts:copticLit:pstheophilus.cross
+pseudo.flavianus	Encomium on Demetrius Archbishop of Alexandria	urn:cts:copticLit:psflavianus.encomium
+pseudo.theophilus	Pseudo-Theophilus	urn:cts:copticLit:pstheophilus
 pseudo.timothy	Pseudo-Timothy of Alexandria Discourses	urn:cts:copticLit:pstimothy
 sahidic.ot	Old Testament	urn:cts:copticLit:ot
 sahidic.ruth	Ruth	urn:cts:copticLit:ot.ruth.coptot
-sahidica.nt	New Testament	urn:cts:copticLit:nt
-sahidica.1corinthians	1 Corinthians	urn:cts:copticLit:nt.1cor
-sahidica.mark	Gospel of Mark	urn:cts:copticLit:nt.mark
+sahidica.nt	New Testament	urn:cts:copticLit:nt.sahidica_ed
+sahidica.1corinthians	1 Corinthians	urn:cts:copticLit:nt.1cor.sahidica_ed
+sahidica.mark	Gospel of Mark	urn:cts:copticLit:nt.mark.sahidica_ed
 shenoute.a22	Acephalous Work 22	urn:cts:copticLit:shenoute.a22
 shenoute.abraham	Abraham Our Father	urn:cts:copticLit:shenoute.abraham
 shenoute.considering	I Have Been Considering	urn:cts:copticLit:shenoute.considering.amelineau
@@ -53,5 +64,4 @@ shenoute.night	In the Night	urn:cts:copticLit:shenoute.night
 shenoute.prince	Because of You Too O Prince of Evil	urn:cts:copticLit:shenoute.prince
 shenoute.thundered	The Lord Thundered	urn:cts:copticLit:shenoute.thundered.amelineau
 shenoute.witness	Who but God is the Witness	urn:cts:copticLit:shenoute.witness.amelineau
-pseudo.flavianus	Encomium on Demetrius Archbishop of Alexandria	urn:cts:copticLit:psflavianus.encomium
-pseudo.celestinus	Encomium on Victor	urn:cts:copticLit:pscelestinus.encomium
+theodosius.alexandria	Encomium on Michael the Archangel	urn:cts:copticLit:theodosiusalex.michael
