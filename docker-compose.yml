@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: coptic/Dockerfile
+    environment:
+      - DJANGO_SETTINGS_MODULE=coptic.settings.docker
+      - MYSQL_HOST=db
+      - MYSQL_USER=coptic
+      - MYSQL_PASSWORD=your_mysql_password
+      - MYSQL_DB=coptic
+    command: ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - .:/var/www/cts
+    ports:
+      - "8000:8000"
+      - "5678:5678"
+    depends_on:
+      - db
+  db:
+    image: mariadb:10.2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: coptic
+      MYSQL_USER: coptic
+      MYSQL_PASSWORD: your_mysql_password
+    ports:
+      - "3306:3306"
