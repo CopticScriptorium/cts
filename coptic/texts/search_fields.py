@@ -1,5 +1,4 @@
-from texts.models import SpecialMeta, TextMeta
-
+from texts.models import TextMeta
 
 class SearchField:
 	def __init__(self, title):

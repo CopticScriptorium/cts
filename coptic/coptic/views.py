@@ -353,10 +353,19 @@ def _build_result_for_query_text(params, texts, explanation):
 
 
 def _base_context():
-    search_fields = [SearchField("corpus"), SearchField("author"), SearchField("people"), SearchField("places"), SearchField("msName"), SearchField("annotation"), SearchField("translation"), SearchField("arabic_translation")]
     context = {
-        'search_fields': search_fields[:5],
-        'secondary_search_fields': search_fields[5:]
+        "search_fields": [
+            SearchField("corpus"),
+            SearchField("author"),
+            SearchField("people"),
+            SearchField("places"),
+            SearchField("msName"),
+            SearchField("annotation"),
+        ],
+        "secondary_search_fields": [
+            SearchField("translation"),
+            SearchField("arabic_translation"),
+        ],
     }
     return context
 
