@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.db.models import Q, Case, When, IntegerField, F
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models.functions import Lower
-from texts.search_fields import get_search_fields
+from texts.search_fields import SearchField
 from coptic.settings.base import DEPRECATED_URNS
 from collections import OrderedDict
 import texts.urn as urnlib
@@ -353,7 +353,7 @@ def _build_result_for_query_text(params, texts, explanation):
 
 
 def _base_context():
-    search_fields = get_search_fields()
+    search_fields = [SearchField("corpus"), SearchField("author"), SearchField("people"), SearchField("places"), SearchField("msName"), SearchField("annotation"), SearchField("translation"), SearchField("arabic_translation")]
     context = {
         'search_fields': search_fields[:5],
         'secondary_search_fields': search_fields[5:]
