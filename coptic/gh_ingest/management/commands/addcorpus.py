@@ -16,7 +16,7 @@ class Command(BaseCommand):
 		)
 
 	def handle(self, *args, **options):
-
+		transactions = GithubCorpusScraper().parse_corpora(options['corpus_dirnames'])
 		try:
 			transactions = GithubCorpusScraper().parse_corpora(options['corpus_dirnames'])
 		except (ScraperException, HtmlGenerationException) as e:

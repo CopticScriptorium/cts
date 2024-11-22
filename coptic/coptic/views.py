@@ -72,7 +72,8 @@ def text_view(request, corpus=None, text=None, format=None):
         format = visualization.visualization_format.slug
         return text_view(request, corpus=corpus, text=text, format=format)
 
-    visualization = text_object.html_visualizations.get(visualization_format__slug=format)
+    # Changed to use visualization_format_slug
+    visualization = text_object.html_visualizations.get(visualization_format_slug=format)
 
     doc_urn = text_object.text_meta.get(name="document_cts_urn").value
 
@@ -157,13 +158,15 @@ def get_meta_values(meta):
     meta_values = [re.sub(HTML_TAG_REGEX, '', meta_value) for meta_value in meta_values]
     return meta_values
 
-
 def index_view(request, special_meta=None):
     context = _base_context()
-
     value_corpus_pairs = OrderedDict()
 
-    meta = get_object_or_404(models.SpecialMeta, name=special_meta)
+    try:
+        meta = models.SpecialMeta.objects.get(name=special_meta)
+    except (models.SpecialMeta.DoesNotExist, ValueError):
+        raise Http404(f'Special metadata type "{special_meta}" not found')
+
     meta_values = get_meta_values(meta)
 
     b64_meta_values = {}
@@ -174,14 +177,14 @@ def index_view(request, special_meta=None):
         b64_meta_values[meta_value] = str(base64.b64encode(('identity="'+meta_value+'"').encode("ascii")).decode("ascii"))
         if meta.splittable:
             corpora = (models.Text.objects.filter(text_meta__name__iexact=meta.name,
-                                                  text_meta__value__icontains=meta_value)
-                       .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name")
-                       .distinct())
+                                              text_meta__value__icontains=meta_value)
+                   .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name")
+                   .distinct())
         else:
             corpora = (models.Text.objects.filter(text_meta__name__iexact=meta.name,
-                                                  text_meta__value__iexact=meta_value)
-                       .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name")
-                       .distinct())
+                                              text_meta__value__iexact=meta_value)
+                   .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name")
+                   .distinct())
 
         value_corpus_pairs[meta_value] = []
         for c in sorted(corpora,key=lambda x: x['corpus__title']):
@@ -221,10 +224,9 @@ def index_view(request, special_meta=None):
         'is_corpus': meta.name == "corpus",
         'b64_meta_values': b64_meta_values,
         'b64_corpora': b64_corpora,
-        'annis_corpora': annis_corpora  # """YXBvcGh0aGVnbWF0YS5wYXRydW0sYmVzYS5sZXR0ZXJzLGNvcHRpYy50cmVlYmFuayxkb2MucGFweXJpLGRvcm1pdGlvbi5qb2huLGpvaGFubmVzLmNhbm9ucyxsaWZlLmFwaG91LGxpZmUuY3lydXMsbGlmZS5sb25naW51cy5sdWNpdXMsbGlmZS5vbm5vcGhyaXVzLGxpZmUucGF1bC50YW1tYSxsaWZlLnBoaWIsbWFydHlyZG9tLnZpY3RvcixwYWNob21pdXMuaW5zdHJ1Y3Rpb25zLHByb2NsdXMuaG9taWxpZXMscHNldWRvLmF0aGFuYXNpdXMuZGlzY291cnNlcyxwc2V1ZG8uZXBocmVtLHBzZXVkby50aGVvcGhpbHVzLHNhaGlkaWNhLjFjb3JpbnRoaWFucyxzYWhpZGljYS5tYXJrLHNoZW5vdXRlLmEyMixzaGVub3V0ZS5hYnJhaGFtLHNoZW5vdXRlLmRpcnQsc2hlbm91dGUuZWFnZXJuZXNzLHNoZW5vdXRlLmZveCxzaGVub3V0ZS5zZWVrcyxzaGVub3V0ZS50aG9zZSxzaGVub3V0ZS51bmtub3duNV8x"""
+        'annis_corpora': annis_corpora
     })
     return render(request, 'index.html', context)
-
 
 # search --------------------------------------------------------------------------------
 def _get_meta_names_for_query_text(text):
@@ -242,7 +244,11 @@ HTML_TAG_REGEX = re.compile(r'<[^>]*?>')
 class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for sm in models.SpecialMeta.objects.all().order_by(Lower("name")):
+        # Get all SpecialMeta objects and sort them by name
+        special_metas = sorted(models.SpecialMeta.objects.all(), 
+                             key=lambda x: x.name.lower())
+        
+        for sm in special_metas:
             meta_values = get_meta_values(sm)
             choices = []
             for v in meta_values:
@@ -357,10 +363,10 @@ def _base_context():
         "search_fields": [
             SearchField("corpus"),
             SearchField("author"),
+            SearchField("msName"),
             SearchField("people"),
             SearchField("places"),
-            SearchField("msName"),
-            SearchField("annotation"),
+            #SearchField("annotation"),
         ],
         "secondary_search_fields": [
             SearchField("translation"),
@@ -438,3 +444,4 @@ def add_author_and_urn(texts):
             text.urn_code = text.text_meta.get(name="document_cts_urn").value
         except models.TextMeta.DoesNotExist:
             pass
+

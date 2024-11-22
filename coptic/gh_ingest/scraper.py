@@ -175,32 +175,39 @@ class CorpusTransaction:
 	def execute(self):
 		if len(self._to_delete) > 0:
 			print(f"Found an already existing upload of '{self.corpus_name}'. "
-				  f"It will be automatically deleted if this transaction succeeds.")
+				f"It will be automatically deleted if this transaction succeeds.")
 			for obj in self._to_delete:
 				obj.delete()
 
-		self._corpus.save()
-		self._corpus.html_visualization_formats.set(self._vis_formats)
+		# Set visualization formats before initial save
+		vis_format_instances = []
+		for vis_format in self._vis_formats:
+			try:
+				vis_format_instance = HtmlVisualizationFormat.objects.get(slug=vis_format.slug)
+				if vis_format_instance:
+					vis_format_instances.append(vis_format_instance)
+			except HtmlVisualizationFormat.DoesNotExist:
+				print(f"Warning: Visualization format '{vis_format.slug}' not found")
+				continue
+
+		if vis_format_instances:
+			print(f"Our instances: {vis_format_instances}")
+			self._corpus.set_visualization_formats(vis_format_instances)
+		
 		self._corpus.save()
 
-		# sort the texts according to prev and next values
-		# if urn sorting doesn't work, then use alphabetical by title
-
+		# Rest of the method remains unchanged
 		for text, text_metas in self._text_pairs:
-			# save all the metas
 			for text_meta in text_metas:
 				text_meta.save()
 
-			# get rid of corpus temporarily...
 			corpus = text.corpus
 			text.corpus = None
 			text.save()
 
-			# then write it once we've gotten an ID for the text
 			text.corpus = corpus
 			text.save()
 
-			# now add all the metas and save again
 			for text_meta in text_metas:
 				text.text_meta.add(text_meta)
 			text.save()
@@ -247,7 +254,8 @@ class GithubCorpusScraper:
 		self._latest_meta_dict = None
 
 		# the 5 known visualization formats
-		self._known_visualization_formats = HtmlVisualizationFormat.objects.all().values_list('button_title', flat=True)
+		self._known_visualization_formats = HtmlVisualizationFormat.objects.values_list('button_title', flat=True)
+
 		# a map from the visualization subtype (identical to a val of HtmlVisualizationFormat's button_title field)
 		# to the file in ExtData that contains information about it
 		self._vis_configs = {}
@@ -526,7 +534,8 @@ class GithubCorpusScraper:
 			config_css = self._vis_css_contents[name]
 			rendered_html = generate_visualization(config_text, contents, css_text=config_css)
 			vis = HtmlVisualization()
-			vis.visualization_format = HtmlVisualizationFormat.objects.get(button_title=name)
+			format = HtmlVisualizationFormat.objects.get(button_title=name)
+			vis.visualization_format_slug = format.slug  # Use the new field
 			vis.html = rendered_html
 			self._current_transaction.add_vis((text, vis))
 

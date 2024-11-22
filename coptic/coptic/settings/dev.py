@@ -1,4 +1,5 @@
 import os
+import sys
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
@@ -20,6 +21,8 @@ DATABASES = {
         'PORT': '',
     }
 }
+if 'test' in sys.argv:
+    DATABASES['default']['name'] =  'tessqlite3.db'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/

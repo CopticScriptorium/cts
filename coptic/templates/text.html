@@ -14,7 +14,8 @@
             </a>
 
             <div class="html-wrap version-wrap page-tabs">
-                {% for format in text.corpus.html_visualization_formats.all %}
+                <!-- text.html -->
+                {% for format in text.corpus.html_visualization_formats %}
                 <a href="/texts/{{text.corpus.slug}}/{{text.slug}}/{{format.slug}}"
                    class="text-item {{format.slug}}">
                     <span>{{format.button_title}}</span>

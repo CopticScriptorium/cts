@@ -45,7 +45,7 @@
                 </a>
 
                 <div class="html-wrap version-wrap page-tabs">
-                    {% for format in corpus.html_visualization_formats.all %}
+                    {% for format in corpus.html_visualization_formats %}
                     <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}">
                         <span>{{format.button_title}}</span>
                     </a>

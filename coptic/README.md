@@ -12,7 +12,7 @@ conda activate cts
 1. Install requirements:
 
 ```sh
-pip install -r requirements.txt
+pip install -r requirements_django_2.txt
 ```
 
 ## Configuration
@@ -30,11 +30,12 @@ vim coptic/settings/secrets.py
 python manage.py migrate 
 ```
 
-3. Run the script to prepopulate the DB:
+## Running tests
 
 ```sh
-python ../scripts/prepopulate.py
+python manage.py test -t .
 ```
+
 
 ## Running
 You should now be able to run the server:
