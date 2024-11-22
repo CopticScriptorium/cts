@@ -1,148 +1,80 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %} Corpora by {{ special_meta }} - Coptic Scriptorium {% endblock %}
-{% block content %}
-
-
-<script src="/static/js/wikipedia.js"></script>
-<script>
-	function wikipop(e, article_title){
-
-	position = $(e.target).offset();
-	position.top -= 3;
-	
-	// clear box
-	  $('.thumbnail').css('display',"none");
-	  $('.summary').text("");
-	$('.title').html('<h4>'+article_title+'</h4><span> (<a href="https://en.wikipedia.org/wiki/'+article_title.replace(/ /g,"_")+'" target="_blank">open in Wikipedia</a>)</span>');
-	
-	$("#infobox").css("display","block").css(position);
-	$("#infobox").on(".mouseout", hide_wiki);
-	$(".index-list, .meta-value, .index-annis, h1").on("mouseover", hide_wiki);
-	
-	article_title = "https://en.wikipedia.org/wiki/"+article_title.replace(/ /g,"_");
-	$('.summary').text(""); // pre-emptively prepare missing entry response
-
-    var display = function(info) {
-
-	if (!info){
-		$('.summary').text("[No Wikidata entry found for this entity]"); 
-		return true;
-		}
-      rawData = info.raw;
-      var summaryInfo = info.summary;
-      var properties = rawData[info.dbpediaUrl];
-
-
-	  $('.title').html('<h4>'+summaryInfo.title+'</h4><span> (<a href="'+article_title+'" target="_blank">open in Wikipedia</a>)</span>');
-	  
-	  if (summaryInfo.summary){
-		$('.summary').text(summaryInfo["summary"]);
-	  } else{
-		  $('.summary').text("[No Wikidata entry found for this entity]"); 
-		  return true;
-	  }
-	  
-	  if (summaryInfo.image){
-		$('.thumbnail').attr('src',summaryInfo.image);
-		$('.thumbnail').css('display',"inline-block");
-	  }
-
-	$("#map").css("display","none");
-	special_meta = "{{ special_meta }}";
-	  if ('location' in summaryInfo){
-		if ('lat' in summaryInfo["location"] && 'lon' in summaryInfo["location"]){
-			lon = summaryInfo["location"].lon; lat = summaryInfo["location"].lat;
-			if (lon && lat && special_meta=='places'){
-				map_url = "https://maps.google.com/maps?q=" + lat + "," + lon
-				$("#map").html('<a href="'+map_url+'"><i class="fa fa-map-marker"></i> Map</a>').css("display","inline-block");
-			}
-		}
-	  }
-      /*var dataAsJson = JSON.stringify(summaryInfo, null, '    ')
-      $('.summary .raw').val(dataAsJson);
-
-      // Raw Data Summary
-      var count = 0;
-      for (key in properties) {
-        count += 1;
-        $('.data-summary .properties').append(key + '\n');
-      }
-      $('.data-summary .count').text(count);
-		*/
-      // raw JSON
-      //var dataAsJson = JSON.stringify(rawData, null, '    ')
-      //$('.results-json').val(dataAsJson);
-
-    };
-
-    WIKIPEDIA.getData(article_title, display, function(error) {
-        console.log(error);
-      }
-    );
-
-
-};
-
-	
-	function hide_wiki(){
-		$("#infobox").css("display","none");
-	}
-	
-</script>
-<section>
-
-	<div id="infobox">
-        <img src="" class="thumbnail" />
-        <p class="title"></p>
-        <p class="map" id="map"></p>
-        <p class="summary"></p>
-        <div class="clear"></div>
-      </div>
-
-    <h1 style="padding-top: 1.5em">Corpora{% if is_corpus is not True %} by {{ special_meta }}{% endif %}</h1>
-    {% for meta_value, corpora in value_corpus_pairs|dictsort:"0.lower" %}
-    {% if is_corpus is not True and meta_value != "none" %}
-    <a href="/search?{{special_meta}}={{meta_value}}">
-        <h2 class="meta-value">{{ meta_value }}</h2> {% if special_meta == "people" or special_meta == "places" %} <a class="index-link index-annis" target="_blank" title="Search for {{meta_value}} in all corpora on ANNIS" identity="{{meta_value}}" href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value}}&_c={{annis_corpora}}"><span>ANNIS search </span><span class="fa fa-external-link"></span></a> <a onmouseover="wikipop(event, '{{meta_value}}');" class="index-link" title="{{meta_value}}" href="https://en.wikipedia.org/wiki/{{meta_value}}"><span>Wikipedia </span><span class="fa fa-external-link"></span></a>{% endif %}
-    </a>
-    {% endif %}
-    {% for corpus in corpora|dictsort:"title" %}
-    {% if is_corpus and meta_value != "none" %}
-    <ul class="index-list{% if is_corpus %} index-list--corpora{% endif %}">
-        <li>
-            <a href="/texts/{{corpus.slug}}/">
-                {{corpus.title}} 
-                <br>
-                <span class="index-corpus-info">
-                {% if corpus.author %} <span class="index-author">{{ corpus.author }}</span>{% endif %}
-                {% if corpus.author and corpus.urn_code %} - {% endif %}
-                {% if corpus.urn_code %} <span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}
-                </span>
-            </a>
-        </li>
-    </ul>
-    {% else %}
-      {% if meta_value != "none" %}
-    <ul class="index-list">
-        <li>
-            <a href="/texts/{{corpus.slug}}/">
-                {{corpus.title}}  
-				{% if special_meta == "people" or special_meta == "places" %} <a class="index-link index-annis index-low" target="_blank" title="Search for {{meta_value}} in {{corpus.title}} on ANNIS" href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value}}&_c={{b64_corpora|keyvalue:corpus.annis_corpus_name}}"><span>ANNIS search </span><span class="fa fa-external-link"></span></a> {% endif %}
-                {% if corpus.urn_code or corpus.author and special_meta != "author" %}
-                <br>
-                <span class="index-corpus-info">
-                {% if corpus.author and special_meta != "author" %} <span class="index-author">{{ corpus.author }}</span>{% endif %}
-                {% if corpus.author and special_meta != "author" and corpus.urn_code %} ({% endif %}{% if corpus.urn_code %}<span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}{% if corpus.author and special_meta != "author" and corpus.urn_code %}) {% endif %}
-                </span>
-                {% endif %}
-            </a>
-        </li>
-    </ul>
-      {% endif %}
-    {% endif %}
-    {% endfor %}
-    {% endfor %}
-</section>
-
+{% block title %}
+  Corpora by {{ special_meta }} - Coptic Scriptorium
 {% endblock %}
+{% block content %}
+  <section>
+    <div id="infobox">
+      <img src="" class="thumbnail" />
+      <p class="title"></p>
+      <p class="map" id="map"></p>
+      <p class="summary"></p>
+      <div class="clear"></div>
+    </div>
+
+    <h1 style="padding-top: 1.5em">
+      Corpora{% if is_corpus is not True %}
+        by {{ special_meta }}
+      {% endif %}
+    </h1>
+    {% for meta_value, corpora in value_corpus_pairs%}
+      {% if is_corpus is not True and meta_value != 'none' %}
+        <a href="/search?{{ special_meta }}={{ meta_value }}">
+          <h2 class="meta-value">{{ meta_value }}</h2> {% if special_meta == 'people' or special_meta == 'places' %}
+            <a class="index-link index-annis" target="_blank" title="Search for {{ meta_value }} in all corpora on ANNIS" identity="{{ meta_value }}" href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value }}&_c={{ annis_corpora }}"><span>ANNIS search</span><span class="fa fa-external-link"></span></a> <a class="index-link wiki-link" data-title="{{ meta_value }}" title="{{ meta_value }}" href="https://en.wikipedia.org/wiki/{{ meta_value }}"><span>Wikipedia</span><span class="fa fa-external-link"></span></a>
+          {% endif %}
+        </a>
+      {% endif %}
+
+      {% for corpus in corpora|dictsort:'title' %}
+        {% if is_corpus and meta_value != 'none' %}
+          <ul class="index-list{% if is_corpus %} index-list--corpora{% endif %}">
+            <li>
+              <a href="/texts/{{ corpus.slug }}/">
+                {{ corpus.title }}
+                <br />
+                <span class="index-corpus-info">
+                  {% if corpus.author %}
+                    <span class="index-author">{{ corpus.author }}</span>
+                  {% endif %}
+                  {% if corpus.author and corpus.urn_code %} - {% endif %}
+                  {% if corpus.urn_code %}
+                    <span class="index-urn">{{ corpus.urn_code }}</span>
+                  {% endif %}
+                </span>
+              </a>
+            </li>
+          </ul>
+        {% else %}
+          {% if meta_value != 'none' %}
+            <ul class="index-list">
+              <li>
+                <a href="/texts/{{ corpus.slug }}/">
+                  {{ corpus.title }}
+                  {% if special_meta == 'people' or special_meta == 'places' %}
+                    <a class="index-link index-annis index-low" target="_blank" title="Search for {{ meta_value }} in {{ corpus.title }} on ANNIS" href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value }}&_c={{ b64_corpora|keyvalue:corpus.annis_corpus_name }}"><span>ANNIS search</span><span class="fa fa-external-link"></span></a>
+                  {% endif %}
+                  {% if corpus.urn_code or corpus.author and special_meta != 'author' %}
+                    <br />
+                    <span class="index-corpus-info">
+                      {% if corpus.author and special_meta != 'author' %}
+                        <span class="index-author">{{ corpus.author }}</span>
+                      {% endif %}
+                      {% if corpus.author and special_meta != 'author' and corpus.urn_code %} ({% endif %}
+                      {% if corpus.urn_code %}
+                        <span class="index-urn">{{ corpus.urn_code }}</span>
+                      {% endif %}
+                      {% if corpus.author and special_meta != 'author' and corpus.urn_code %}) {% endif %}
+                    </span>
+                  {% endif %}
+                </a>
+              </li>
+            </ul>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </section>
+{% endblock %}
+<script src="/static/js/wikipedia.js"></script>

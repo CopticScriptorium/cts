@@ -214,5 +214,77 @@ var WIKIPEDIA = function() {
     return summaryInfo;
   };
 
+  // Function to display Wikipedia information
+  my.wikipop = function(e, article_title) {
+    var position = $(e.target).offset();
+    position.top -= 3;
+
+    // clear box
+    $('.thumbnail').css('display', "none");
+    $('.summary').text("");
+    $('.title').html('<h4>' + article_title + '</h4><span> (<a href="https://en.wikipedia.org/wiki/' + article_title.replace(/ /g, "_") + '" target="_blank">open in Wikipedia</a>)</span>');
+
+    $("#infobox").css("display", "block").css(position);
+    $("#infobox").on(".mouseout", my.hide_wiki);
+    $(".index-list, .meta-value, .index-annis, h1").on("mouseover", my.hide_wiki);
+
+    article_title = "https://en.wikipedia.org/wiki/" + article_title.replace(/ /g, "_");
+    $('.summary').text(""); // pre-emptively prepare missing entry response
+
+    var display = function(info) {
+      if (!info) {
+        $('.summary').text("[No Wikidata entry found for this entity]");
+        return true;
+      }
+      var rawData = info.raw;
+      var summaryInfo = info.summary;
+      var properties = rawData[info.dbpediaUrl];
+
+      $('.title').html('<h4>' + summaryInfo.title + '</h4><span> (<a href="' + article_title + '" target="_blank">open in Wikipedia</a>)</span>');
+
+      if (summaryInfo.summary) {
+        $('.summary').text(summaryInfo["summary"]);
+      } else {
+        $('.summary').text("[No Wikidata entry found for this entity]");
+        return true;
+      }
+
+      if (summaryInfo.image) {
+        $('.thumbnail').attr('src', summaryInfo.image);
+        $('.thumbnail').css('display', "inline-block");
+      }
+
+      $("#map").css("display", "none");
+      var special_meta = "people";
+      if ('location' in summaryInfo) {
+        if ('lat' in summaryInfo["location"] && 'lon' in summaryInfo["location"]) {
+          var lon = summaryInfo["location"].lon;
+          var lat = summaryInfo["location"].lat;
+          if (lon && lat && special_meta == 'places') {
+            var map_url = "https://maps.google.com/maps?q=" + lat + "," + lon;
+            $("#map").html('<a href="' + map_url + '"><i class="fa fa-map-marker"></i> Map</a>').css("display", "inline-block");
+          }
+        }
+      }
+    };
+
+    my.getData(article_title, display, function(error) {
+      console.log(error);
+    });
+  };
+
+  my.hide_wiki = function() {
+    $("#infobox").css("display", "none");
+  };
+
+  // Ensure the functions are called after the page content is loaded
+  $(document).ready(function() {
+    // Example usage: Attach wikipop to elements with class 'wiki-link'
+    $('.wiki-link').on('mouseover', function(e) {
+      var article_title = $(this).data('title');
+      my.wikipop(e, article_title);
+    });
+  });
+
   return my;
 }();
