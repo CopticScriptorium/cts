@@ -558,3 +558,269 @@ class GithubCorpusScraper:
 		self._generate_visualizations_and_add_to_tx(text, contents)
 
 		self._current_transaction.add_text((text, text_metas))
+
+class LocalCorpusScraper:
+
+	def __init__(self):
+		self.local_repo_path = get_setting_and_error_if_none(
+			"LOCAL_REPO_PATH",
+			"A local repository path must be specified."
+		)
+		self._corpora = [d for d in os.listdir(self.local_repo_path) if os.path.isdir(os.path.join(self.local_repo_path, d))]
+
+		self._current_corpus = None
+		self._current_transaction = None
+		self._current_text_contents = None
+		self._latest_meta_dict = None
+
+		self._known_visualization_formats = HtmlVisualizationFormat.objects.values_list('button_title', flat=True)
+		self._vis_configs = {}
+		self._vis_config_contents = {}
+		self._vis_css_contents = {}
+
+		self._text_next = defaultdict(lambda: None)
+		self._text_prev = defaultdict(lambda: None)
+		self._text_urn = defaultdict(lambda: None)
+
+	def _get_zipfile_for_blob(self, path):
+		with open(path, 'rb') as f:
+			zip_data = BytesIO(f.read())
+		return zipfile.ZipFile(zip_data)
+
+	def _get_blob_contents(self, path, filename):
+		zip_file = self._get_zipfile_for_blob(path)
+		return zip_file.open(filename).read().decode('utf-8')
+
+	def _get_all_zipped_files(self, path):
+		zip_file = self._get_zipfile_for_blob(path)
+		files_and_contents = []
+		for filename in zip_file.namelist():
+			zfile = zip_file.open(filename)
+			files_and_contents.append((filename, zfile.read().decode('utf-8')))
+		return files_and_contents
+
+	def parse_corpora(self, corpus_dirnames):
+		corpora = []
+		for corpus_dirname in corpus_dirnames:
+			self.__init__()
+			corpora.append(self.parse_corpus(corpus_dirname))
+		return corpora
+
+	def _infer_dir(self, corpus, dirs, *exts):
+		target_dirs = []
+		for ext in exts:
+			if len(target_dirs) == 0:
+				target_dirs = [x for x in dirs if x.lower().endswith(ext.lower())]
+		if len(target_dirs) > 1:
+			raise AmbiguousCorpus(corpus.slug, self.local_repo_path)
+		return target_dirs[0] if len(target_dirs) == 1 else ''
+
+	def _infer_local_dirs(self, corpus, corpus_dirname):
+		corpus_path = os.path.join(self.local_repo_path, corpus_dirname)
+		dirs = [name for name in os.listdir(corpus_path) if os.path.isdir(os.path.join(corpus_path, name)) or name.endswith('.zip')]
+		local_tei = self._infer_dir(corpus, dirs, "_TEI", "_TEI.zip")
+		local_relannis = self._infer_dir(corpus, dirs, "_ANNIS", "_RELANNIS", "_RELANNIS.zip", "_ANNIS.zip")
+		local_paula = self._infer_dir(corpus, dirs, "_PAULA", "_PAULA.zip")
+		if not any(str(x) and x != '' for x in [local_tei, local_paula, local_relannis]):
+			raise EmptyCorpus(corpus_dirname, self.local_repo_path)
+		return local_tei, local_relannis, local_paula
+
+	def _infer_annis_corpus_name(self, corpus):
+		if corpus.github_tei != '':
+			return corpus.github_tei[:corpus.github_tei.rfind("_")]
+		elif corpus.github_relannis != '':
+			return corpus.github_relannis[:corpus.github_relannis.rfind("_")]
+		elif corpus.github_paula != '':
+			return corpus.github_paula[:corpus.github_paula.rfind("_")]
+		else:
+			raise InferenceError(corpus.slug, self.local_repo_path, "annis_corpus_name")
+
+	def _infer_slug(self, corpus):
+		if corpus.annis_corpus_name in KNOWN_SLUGS:
+			return KNOWN_SLUGS[corpus.annis_corpus_name]
+		else:
+			return slugify(corpus.annis_corpus_name)
+
+	def _get_texts(self, corpus, corpus_dirname):
+		corpus_path = os.path.join(self.local_repo_path, corpus_dirname)
+		try:
+			if corpus.github_paula.endswith(".zip"):
+				dir_contents = self._get_all_zipped_files(os.path.join(corpus_path, corpus.github_paula))
+				texts = [(name, contents) for name, contents in dir_contents]
+			else:
+				tt_dir = os.path.join(corpus_path, corpus.annis_corpus_name + "_TT")
+				dir_contents = os.listdir(tt_dir)
+				texts = [(name, open(os.path.join(tt_dir, name)).read()) for name in dir_contents]
+		except FileNotFoundError as e:
+			raise TTDirMissing(corpus_dirname, self.local_repo_path, tt_dir) from e
+
+		if len(texts) == 0:
+			raise NoTexts(corpus_dirname, self.local_repo_path, tt_dir)
+
+		return dict(texts)
+
+	def _infer_urn_code(self, corpus_dirname):
+		meta = self._latest_meta_dict
+		if meta is None or "document_cts_urn" not in meta:
+			return ""
+
+		doc_urn = meta["document_cts_urn"]
+		corpus_urn = urn.textgroup_urn(doc_urn)
+		return corpus_urn
+
+	def _parse_resolver_vis_map(self, text, corpus, corpus_dirname):
+		lines = text.strip().split("\n")
+		lines = [line.split("\t") for line in lines]
+		if not all(len(line) == 9 for line in lines):
+			raise ResolverVisMapIssue(corpus_dirname, self.local_repo_path, corpus.github_relannis)
+		return lines
+
+	def _infer_html_visualization_formats_and_add_to_tx(self, corpus, corpus_dirname):
+		try:
+			if corpus.github_relannis.endswith("zip"):
+				vm = self._get_blob_contents(os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis), "resolver_vis_map.annis")
+			else:
+				vm_path = os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis, "resolver_vis_map.annis")
+				with open(vm_path, 'r') as f:
+					vm = f.read()
+		except (FileNotFoundError, IndexError) as e:
+			raise ResolverVisMapIssue(corpus_dirname, self.local_repo_path, corpus.github_relannis) from e
+
+		vis_lines = self._parse_resolver_vis_map(vm, corpus, corpus_dirname)
+		formats = []
+		already_seen = []
+		for _, _, _, _, type, vis_type, _, _, config_file in vis_lines:
+			if type != "htmldoc":
+				continue
+			vis_type = vis_type.split(" ")[0]
+			if not vis_type in self._known_visualization_formats or vis_type in already_seen:
+				raise ResolverVisMapIssue(corpus_dirname, self.local_repo_path, corpus.github_relannis)
+			self._vis_configs[vis_type] = re.findall(r'config:(?P<fname>.*)', config_file)[0]
+			format = HtmlVisualizationFormat.objects.get(button_title=vis_type)
+			formats.append(format)
+			already_seen.append(vis_type)
+
+		return formats
+
+	@transaction.atomic
+	def parse_corpus(self, corpus_dirname):
+		if corpus_dirname not in self._corpora:
+			raise CorpusNotFound(corpus_dirname, self.local_repo_path)
+
+		corpus = Corpus()
+		self._current_corpus = corpus
+		self._current_transaction = CorpusTransaction(corpus_dirname, corpus)
+
+		github_url = f"file://{os.path.join(self.local_repo_path, corpus_dirname)}"
+		try:
+			existing_corpus = Corpus.objects.get(github=github_url)
+			to_delete = []
+			for text in Text.objects.all().filter(corpus=existing_corpus):
+				for text_meta in text.text_meta.all():
+					to_delete.append(text_meta)
+			to_delete.append(existing_corpus)
+			self._current_transaction.add_objs_to_be_deleted(to_delete)
+		except ObjectDoesNotExist:
+			pass
+
+		corpus.slug = corpus_dirname
+		corpus.github = github_url
+		corpus.github_tei, corpus.github_relannis, corpus.github_paula = self._infer_local_dirs(corpus, corpus_dirname)
+		corpus.annis_corpus_name = self._infer_annis_corpus_name(corpus)
+		corpus.slug = self._infer_slug(corpus)
+		if corpus.annis_corpus_name in corpus_title_map:
+			corpus.title = corpus_title_map[corpus.annis_corpus_name]
+		else:
+			corpus.title = corpus.annis_corpus_name
+
+		self._current_transaction.add_vis_formats(self._infer_html_visualization_formats_and_add_to_tx(corpus, corpus_dirname))
+
+		texts = self._get_texts(corpus, corpus_dirname)
+		self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
+		self._current_transaction.sort_texts(self._text_next, self._text_prev, self._text_urn)
+
+		if corpus.annis_corpus_name in corpus_urn_map:
+			corpus.urn_code = corpus_urn_map[corpus.annis_corpus_name]
+		else:
+			corpus.urn_code = self._infer_urn_code(corpus_dirname)
+
+		return self._current_transaction
+
+	def _load_config_files(self, corpus, corpus_dirname):
+		corpus_path = os.path.join(self.local_repo_path, corpus_dirname)
+		files = os.listdir(corpus_path)
+		if corpus.github_relannis.endswith('zip'):
+			zip_file = self._get_zipfile_for_blob(os.path.join(corpus_path, corpus.github_relannis))
+		else:
+			zip_file = None
+		for name, config_file in self._vis_configs.items():
+			self._vis_config_contents[name] = self._get_vis_config_file(corpus, corpus_dirname, config_file, zip_file)
+			self._vis_css_contents[name] = self._get_vis_css_file(corpus, corpus_dirname, config_file, zip_file)
+
+	def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
+		print(f"Preparing transaction for '{corpus_dirname}'...")
+		self._load_config_files(corpus, corpus_dirname)
+		for name, contents in tqdm(texts.items(), ncols=80):
+			self._current_text_contents = contents
+			self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
+
+	def _get_meta_dict(self, tt_lines):
+		for line in tt_lines:
+			if line.startswith('<meta'):
+				return dict(re.findall(r'(?P<attr>[\w._-]+)="(?P<value>.*?)"', line))
+		raise MetaNotFound(self.local_repo_path, self._current_text_contents.path)
+
+	def _get_vis_css_file(self, corpus, corpus_dirname, config_file, zip_file):
+		try:
+			if zip_file:
+				path = "ExtData/" + config_file + ".css"
+				return zip_file.open(path).read().decode('utf-8')
+			else:
+				path = os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis, "ExtData", config_file + ".css")
+				with open(path, 'r') as f:
+					return f.read()
+		except FileNotFoundError:
+			return ""
+
+	def _get_vis_config_file(self, corpus, corpus_dirname, config_file, zip_file):
+		try:
+			if zip_file:
+				path = "ExtData/" + config_file + ".config"
+				return zip_file.open(path).read().decode('utf-8')
+			else:
+				path = os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis, "ExtData", config_file + ".config")
+				with open(path, 'r') as f:
+					return f.read()
+		except FileNotFoundError as e:
+			raise VisConfigIssue(path, self.local_repo_path) from e
+
+	def _generate_visualizations_and_add_to_tx(self, text, contents):
+		for name, config_file in self._vis_configs.items():
+			config_text = self._vis_config_contents[name]
+			config_css = self._vis_css_contents[name]
+			rendered_html = generate_visualization(config_text, contents, css_text=config_css)
+			vis = HtmlVisualization()
+			format = HtmlVisualizationFormat.objects.get(button_title=name)
+			vis.visualization_format_slug = format.slug
+			vis.html = rendered_html
+			self._current_transaction.add_vis((text, vis))
+
+	def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents):
+		tt_lines = contents.split("\n")
+
+		meta = self._get_meta_dict(tt_lines)
+		self._latest_meta_dict = meta
+
+		text = Text()
+		text.title = meta["title"]
+		text.slug = slugify(meta["title"] if "title" in meta else meta["name"])
+		text.corpus = self._current_corpus
+		self._text_next[text.title] = meta["next"] if "next" in meta else None
+		self._text_prev[text.title] = meta["previous"] if "previous" in meta else None
+		self._text_urn[text.title] = meta["document_cts_urn"] if "document_cts_urn" in meta else None
+
+		text_metas = [TextMeta(name=name, value=unescape(value)) for name, value in meta.items()]
+
+		self._generate_visualizations_and_add_to_tx(text, contents)
+
+		self._current_transaction.add_text((text, text_metas))

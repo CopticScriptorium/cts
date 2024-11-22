@@ -50,3 +50,8 @@ To ingest texts, use the addcorpus command, and make sure that the `GITHUB_REPO_
 python manage.py addcorpus besa-letters
 ```
 
+You can also checkout the corpora locally and do a local import which should be _much_ faster.
+
+```sh
+python manage.py addcorpus --source=local --local-repo-path=../../corpora shenoute-true
+```
