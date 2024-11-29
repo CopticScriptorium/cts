@@ -389,37 +389,38 @@ def parse_text(text):
 
 
 def render_html(toks, elts, directives, css_text):
-	tok_directives = list(reversed([d for d in directives if isinstance(d, TokDirective)]))
-	other_directives = list(reversed([d for d in directives if not isinstance(d, TokDirective)]))
+    tok_directives = list(reversed([d for d in directives if isinstance(d, TokDirective)]))
+    other_directives = list(reversed([d for d in directives if not isinstance(d, TokDirective)]))
 
-	for directive in tok_directives:
-		for i, tok in enumerate(toks):
-			if directive.applies(tok):
-				toks[i] = directive.apply_left(tok, tok)
-				toks[i] = directive.apply_right(tok, tok)
-	if len(tok_directives) == 0:
-		toks = [""] * len(toks)
+    for directive in tok_directives:
+        for i, tok in enumerate(toks):
+            if directive.applies(tok):
+                toks[i] = directive.apply_left(tok, tok)
+                toks[i] = directive.apply_right(tok, tok)
+    if len(tok_directives) == 0:
+        toks = [""] * len(toks)
 
-	# split elts into separate lists of equivalent length in order of increasing length to ensure
-	# we get the right tag order
-	elt_lens = [len(elt) for elt in elts]
-	elts_by_len = [[] for i in range(max(elt_lens) + 1)]
-	for i, elt in enumerate(elts):
-		elts_by_len[elt_lens[i]].append(elt)
-	for elts in elts_by_len:
-		if len(elts) == 0:
-			continue
-		for directive in other_directives:
-			for elt in elts:
-				if directive.applies(elt):
-					toks[elt.open_line] = directive.apply_left(elt, toks[elt.open_line])
-					toks[elt.close_line] = directive.apply_right(elt, toks[elt.close_line])
+    # split elts into separate lists of equivalent length in order of increasing length to ensure
+    # we get the right tag order
+    if elts:
+        elt_lens = [len(elt) for elt in elts]
+        elts_by_len = [[] for i in range(max(elt_lens) + 1)]
+        for i, elt in enumerate(elts):
+            elts_by_len[elt_lens[i]].append(elt)
+        for elts in elts_by_len:
+            if len(elts) == 0:
+                continue
+            for directive in other_directives:
+                for elt in elts:
+                    if directive.applies(elt):
+                        toks[elt.open_line] = directive.apply_left(elt, toks[elt.open_line])
+                        toks[elt.close_line] = directive.apply_right(elt, toks[elt.close_line])
 
-	html = "<!--\n-->".join(toks)
-	html = f'<div class="htmlvis">{html}</div>'
-	html += f"<style>{css_text}</style>"
+    html = "<!--\n-->".join(toks)
+    html = f'<div class="htmlvis">{html}</div>'
+    html += f"<style>{css_text}</style>"
 
-	return html
+    return html
 
 
 DEBUG = False
@@ -462,4 +463,3 @@ if __name__ == "__main__":
 	pr.disable()
 	ps = pstats.Stats(pr).sort_stats('cumtime')
 	ps.print_stats()
-	print(output)
