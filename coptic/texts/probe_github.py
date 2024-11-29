@@ -22,6 +22,6 @@ def github_directory_names(corpus):
 		return matches[0] if matches else ''
 
 	# Get the directory name or '' for each of the categories
-	ordered_dir_names = tuple((dir_name_or_blank(category) for category in ('TEI', 'ANNIS', 'PAULA')))
+	ordered_dir_names = tuple(dir_name_or_blank(category) for category in ('TEI', 'ANNIS', 'PAULA'))
 
 	return ordered_dir_names

@@ -123,7 +123,7 @@ class Corpus(models.Model):
         if not self.id:
             self.created = datetime.datetime.today()
         self.modified = datetime.datetime.today()
-        super(Corpus, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def _annis_corpus_name_b64encoded(self):
         return b64encode(str.encode(self.annis_corpus_name)).decode()
@@ -144,10 +144,10 @@ class TextMeta(models.Model):
     def value_customized(self):
         v = self.value
         if re.match(r'https?://', v):  # Turn URLs into <a> tags
-            return '<a href="%s">%s</a>' % (v, v)
+            return '<a href="{}">{}</a>'.format(v, v)
 
         if v.startswith('urn:cts'):  # Turn cts URNs into <a> tags
-            return '<a href="/%s">%s</a>' % (v, v)
+            return '<a href="/{}">{}</a>'.format(v, v)
 
         return v
 
@@ -179,7 +179,7 @@ class Text(models.Model):
         if not self.id:
             self.created = datetime.datetime.today()
         self.modified = datetime.datetime.today()
-        return super(Text, self).save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
 class SpecialMetaManager(models.Manager):
     def get_queryset(self):

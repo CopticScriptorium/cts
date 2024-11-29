@@ -23,7 +23,7 @@ from .htmlvis import generate_visualization
 import os, io
 
 script_dir = os.path.dirname(os.path.realpath(__file__)) + os.sep
-name_mapping = io.open(script_dir + "name_mapping.tab", encoding="utf8").read().strip().split("\n")
+name_mapping = open(script_dir + "name_mapping.tab", encoding="utf8").read().strip().split("\n")
 corpus_urn_map = {}
 corpus_title_map = {}
 for line in name_mapping:
@@ -700,7 +700,7 @@ class LocalCorpusScraper:
                 vm = self._get_blob_contents(os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis), "resolver_vis_map.annis")
             else:
                 vm_path = os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis, "resolver_vis_map.annis")
-                with open(vm_path, 'r') as f:
+                with open(vm_path) as f:
                     vm = f.read()
         except (FileNotFoundError, IndexError) as e:
             raise LocalResolverVisMapIssue(corpus_dirname, self.local_repo_path, corpus.github_relannis) from e
@@ -797,7 +797,7 @@ class LocalCorpusScraper:
                 return zip_file.open(path).read().decode('utf-8')
             else:
                 path = os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis, "ExtData", config_file + ".css")
-                with open(path, 'r') as f:
+                with open(path) as f:
                     return f.read()
         except FileNotFoundError:
             return ""
@@ -809,7 +809,7 @@ class LocalCorpusScraper:
                 return zip_file.open(path).read().decode('utf-8')
             else:
                 path = os.path.join(self.local_repo_path, corpus_dirname, corpus.github_relannis, "ExtData", config_file + ".config")
-                with open(path, 'r') as f:
+                with open(path) as f:
                     return f.read()
         except FileNotFoundError as e:
             raise LocalVisConfigIssue(path, self.local_repo_path) from e

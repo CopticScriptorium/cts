@@ -451,9 +451,9 @@ if __name__ == "__main__":
 	p.add_argument("config_text", default="htmlvis_latest_config_text.txt")
 	p.add_argument("text", default="htmlvis_latest_text.txt")
 	args = p.parse_args()
-	with open(args.config_text, 'r') as f:
+	with open(args.config_text) as f:
 		config_text = f.read()
-	with open(args.text, 'r') as f:
+	with open(args.text) as f:
 		text = f.read()
 
 	import cProfile, io, pstats

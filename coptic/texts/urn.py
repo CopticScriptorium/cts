@@ -1,4 +1,3 @@
-
 # TODO: review this logic and make sure it's correct for all documents.
 def cts_work(doc_urn):
 	urn_parts = doc_urn.split(":")

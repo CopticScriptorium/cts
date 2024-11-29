@@ -46,7 +46,7 @@ def corpus_view(request, corpus=None):
     )
 
     # to handle this, for every id, take the one with an "order" if it has one, else fall back to the one without order
-    ids = set([t.id for t in texts])
+    ids = {t.id for t in texts}
     results = []
     for tid in ids:
         no_order_match = [t for t in texts if t.id == tid and t.order is None]
@@ -157,7 +157,7 @@ def get_meta_values(meta):
         meta_values = set()
         for vals in split_meta_values:
             meta_values = meta_values.union(set(vals))
-    meta_values = sorted(list(set(v.strip() for v in meta_values)))
+    meta_values = sorted(list({v.strip() for v in meta_values}))
     meta_values = [re.sub(HTML_TAG_REGEX, '', meta_value) for meta_value in meta_values]
     return meta_values
 
@@ -175,7 +175,7 @@ def index_view(request, special_meta=None):
 
     b64_meta_values = {}
     b64_corpora = {}
-    all_corpora = set([])
+    all_corpora = set()
 
     for meta_value in meta_values:
         b64_meta_values[meta_value] = str(base64.b64encode(('identity="'+meta_value+'"').encode("ascii")).decode("ascii"))
@@ -449,3 +449,10 @@ def add_author_and_urn(texts):
         except models.TextMeta.DoesNotExist:
             pass
 
+def texts_for_urn(urn):
+    # Find texts matching the URN using their metadata
+    matching_tm_ids = models.TextMeta.objects.filter(name='document_cts_urn', value__iregex='^' + urn + r'($|[\.:])'
+    	).values_list('id', flat=True)
+    texts = models.Text.objects.filter(text_meta__name='document_cts_urn',
+        text_meta__id__in=matching_tm_ids).order_by('slug')
+    return texts

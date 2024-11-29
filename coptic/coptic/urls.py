@@ -18,7 +18,7 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 
     cts_urn = all_but_last_part if data_type in ('html', 'xml') else url_except_data_type
 
-    texts = texts_for_urn(cts_urn)
+    texts = views.texts_for_urn(cts_urn)
 
     if len(texts) > 0:
         text = texts[0]
