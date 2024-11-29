@@ -6,34 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('texts', '0002_auto_20190828_0146'),
+        ("texts", "0002_auto_20190828_0146"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='htmlvisualizationformat',
-            options={'managed': False, 'verbose_name': 'HTML Visualization Format', 'verbose_name_plural': 'HTML Visualization Formats'},
+            name="htmlvisualizationformat",
+            options={
+                "managed": False,
+                "verbose_name": "HTML Visualization Format",
+                "verbose_name_plural": "HTML Visualization Formats",
+            },
         ),
         migrations.AlterModelOptions(
-            name='specialmeta',
-            options={'managed': False, 'verbose_name': 'Special Metadata Name'},
+            name="specialmeta",
+            options={"managed": False, "verbose_name": "Special Metadata Name"},
         ),
         migrations.RemoveField(
-            model_name='htmlvisualization',
-            name='visualization_format',
+            model_name="htmlvisualization",
+            name="visualization_format",
         ),
         migrations.AddField(
-            model_name='htmlvisualization',
-            name='visualization_format_slug',
+            model_name="htmlvisualization",
+            name="visualization_format_slug",
             field=models.CharField(max_length=200),
         ),
         migrations.RemoveField(
-            model_name='corpus',
-            name='html_visualization_formats',
+            model_name="corpus",
+            name="html_visualization_formats",
         ),
         migrations.AddField(
-            model_name='corpus',
-            name='visualization_formats',
-            field=models.TextField(default='[]'),
+            model_name="corpus",
+            name="visualization_formats",
+            field=models.TextField(default="[]"),
         ),
     ]
