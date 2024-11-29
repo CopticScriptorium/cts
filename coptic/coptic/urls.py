@@ -1,6 +1,6 @@
 import re
-from django.conf.urls import include, url
-from django.urls import path
+from django.conf.urls import include
+from django.urls import re_path, path
 from django.contrib import admin
 from django.shortcuts import redirect
 import coptic.views as views
@@ -42,8 +42,8 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 
 
 urlpatterns = [
-    url(r"^grappelli/", include("grappelli.urls")),
-    url(r"^admin/", admin.site.urls),
+    path('grappelli/', include("grappelli.urls")),
+    path('admin/', admin.site.urls),
     # Using path() for modern URL patterns
     path("search/", views.search, name="search"),
     path("index/<str:special_meta>/", views.index_view, name="index"),
@@ -55,7 +55,7 @@ urlpatterns = [
         name="text_with_format",
     ),
     # Legacy URL patterns using url()
-    url(r"^(.*)/(annis|relannis|tei/xml|paula/xml|html)$", _redirect_citation_urls),
-    url(r"^(?P<urn>urn:.*)/$", views.urn, name="urn"),
-    url(r"^$", views.home_view, name="home"),
+    re_path(r"^(.*)/(annis|relannis|tei/xml|paula/xml|html)$", _redirect_citation_urls),
+    re_path(r"^(?P<urn>urn:.*)/$", views.urn, name="urn"),
+    path('', views.home_view, name="home"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

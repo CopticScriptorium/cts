@@ -1,7 +1,0 @@
-requests
-django==2.2.13
-django-grappelli==2.13.1
-beautifulsoup4==4.8.0
-mod-wsgi
-github3.py==1.3.0
-tqdm

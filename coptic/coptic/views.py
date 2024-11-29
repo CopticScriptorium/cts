@@ -2,8 +2,8 @@ import re
 from django import forms
 from django.http import Http404
 from django.urls import reverse
-from django.db.models import Q, Case, When, IntegerField, F
-from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Case, F, IntegerField, Q, When
+from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models.functions import Lower
 from texts.search_fields import SearchField
 from django.views.decorators.cache import cache_page
