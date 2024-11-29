@@ -3,7 +3,6 @@ from django.conf.urls import include, url
 from django.urls import path
 from django.contrib import admin
 from django.shortcuts import redirect
-from api.views import texts_for_urn
 import coptic.views as views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -41,8 +40,6 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', admin.site.urls),
-    # Update API URLs to include namespace
-    url(r'^api/', include(('api.urls', 'api'), namespace='api')),
     
     # Using path() for modern URL patterns
     path('search/', views.search, name='search'),

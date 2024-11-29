@@ -27,7 +27,6 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
 	'texts',
 	'gh_ingest',
-	'api',
 	'mod_wsgi.server'
 )
 
