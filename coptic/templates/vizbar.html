@@ -1,27 +1,81 @@
 <b>Show:</b>
-	<table>
-	<tr>
-	<td>
-	<input type="checkbox" checked="true" id="chk_coptic" class="btn" onclick="toggle_display('coptic');"></input>
-	<label for ="chk_coptic">Coptic text</label><br>
-	<input type="checkbox" checked="true" id="chk_pos" class="btn" onclick="toggle_display('pos');"></input>
-	<label for ="chk_pos">Part of speech</label><br>
-	<input type="checkbox" checked="true" id="chk_trans" class="btn" onclick="toggle_display('translation');"></input>
-	<label for ="chk_trans">Translation</label><br>
-	<input type="checkbox" checked="true" id="chk_chapter" class="btn" onclick="toggle_display('chapter');"></input>
-	<label for ="chk_chapter">Chapters</label><br>
-	<input type="checkbox" checked="true" id="chk_verse" class="btn" onclick="toggle_display('verse');"></input>
-	<label for ="chk_verse">Verses</label><br>
-	<input type="checkbox" checked="true" id="chk_page" class="btn" onclick="toggle_display('page');"></input>
-	<label for ="chk_page">Pages</label>
-</td><td>
-	<input type="radio" id="entity_all" name="entities" value="entity_all" onclick="toggle_display('entity_all')" checked="checked">
-	<label for="entity_all">Entities types and Wiki links</label><br>
-	<input type="radio" id="entity_types" name="entities" value="entity_types" onclick="toggle_display('entity_types')">
-	<label for="entity_types">Entity types only</label><br>
-	<input type="radio" id="entity_none" name="entities" value="entity_none" onclick="toggle_display('entity_none')">
-	<label for="entity_none">No entities</label><br>
-	</td></tr></table>
+<table>
+    <tr>
+        <td>
+            <input type="checkbox"
+                   checked="true"
+                   id="chk_coptic"
+                   class="btn"
+                   onclick="toggle_display('coptic');">
+        </input>
+        <label for ="chk_coptic">Coptic text</label>
+        <br>
+        <input type="checkbox"
+               checked="true"
+               id="chk_pos"
+               class="btn"
+               onclick="toggle_display('pos');">
+    </input>
+    <label for ="chk_pos">Part of speech</label>
+    <br>
+    <input type="checkbox"
+           checked="true"
+           id="chk_trans"
+           class="btn"
+           onclick="toggle_display('translation');">
+</input>
+<label for ="chk_trans">Translation</label>
+<br>
+<input type="checkbox"
+       checked="true"
+       id="chk_chapter"
+       class="btn"
+       onclick="toggle_display('chapter');">
+</input>
+<label for ="chk_chapter">Chapters</label>
+<br>
+<input type="checkbox"
+       checked="true"
+       id="chk_verse"
+       class="btn"
+       onclick="toggle_display('verse');">
+</input>
+<label for ="chk_verse">Verses</label>
+<br>
+<input type="checkbox"
+       checked="true"
+       id="chk_page"
+       class="btn"
+       onclick="toggle_display('page');">
+</input>
+<label for ="chk_page">Pages</label>
+</td>
+<td>
+    <input type="radio"
+           id="entity_all"
+           name="entities"
+           value="entity_all"
+           onclick="toggle_display('entity_all')"
+           checked="checked">
+    <label for="entity_all">Entities types and Wiki links</label>
+    <br>
+    <input type="radio"
+           id="entity_types"
+           name="entities"
+           value="entity_types"
+           onclick="toggle_display('entity_types')">
+    <label for="entity_types">Entity types only</label>
+    <br>
+    <input type="radio"
+           id="entity_none"
+           name="entities"
+           value="entity_none"
+           onclick="toggle_display('entity_none')">
+    <label for="entity_none">No entities</label>
+    <br>
+</td>
+</tr>
+</table>
 <style>
 .htmlvis .off_inline {
 	display: inline;
@@ -132,4 +186,5 @@ function toggle_display(target){
 				}
 			}
 		}
-	}</script>
+	}
+</script>

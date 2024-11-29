@@ -1,60 +1,59 @@
 {% extends "base.html" %}
-
-{% block title %} {{ corpus.title }} - Coptic Scriptorium {% endblock %}
+{% block title %}{{ corpus.title }} - Coptic Scriptorium{% endblock %}
 {% block content %}
-<section class="text-list list">
-    <div class="text-author">
-        <div class="text-work">
-            <div class="work-title-wrap">
-                <h2 class="work-title title">{{ corpus.title }}</h2>
-
-                {% if corpus.urn_code %}
-                <h4 class="work-title-urn urn">{{ corpus.urn_code }}</h4>
-                {% endif %}
-
-                <div class="work-meta-wrap page-tabs">
-                    <a href="{{corpus.annis_link}}" class="text-item annis" target="_blank">
-                        <span>Search ANNIS</span>
-                        <span class="fa fa-external-link"></span>
-                    </a>
-                    <a ng-show="corpus.github_tei" href="{{corpus.github}}/{{corpus.github_tei}}"
-                       class="text-item" target="_blank">
-                        <span>TEI</span>
-                        <span class="fa fa-external-link"></span>
-                    </a>
-
-                    <a ng-show="corpus.github_relannis" href="{{corpus.github}}/{{corpus.github_relannis}}"
-                       class="text-item" target="_blank">
-                        <span>ANNIS</span>
-                        <span class="fa fa-external-link"></span>
-                    </a>
-
-                    <a ng-show="corpus.github_paula" href="{{corpus.github}}/{{corpus.github_paula}}"
-                       class="text-item" target="_blank">
-                        <span>PAULA</span>
-                        <span class="fa fa-external-link"></span>
-                    </a>
+    <section class="text-list list">
+        <div class="text-author">
+            <div class="text-work">
+                <div class="work-title-wrap">
+                    <h2 class="work-title title">{{ corpus.title }}</h2>
+                    {% if corpus.urn_code %}<h4 class="work-title-urn urn">{{ corpus.urn_code }}</h4>{% endif %}
+                    <div class="work-meta-wrap page-tabs">
+                        <a href="{{ corpus.annis_link }}"
+                           class="text-item annis"
+                           target="_blank">
+                            <span>Search ANNIS</span>
+                            <span class="fa fa-external-link"></span>
+                        </a>
+                        <a ng-show="corpus.github_tei"
+                           href="{{ corpus.github }}/{{ corpus.github_tei }}"
+                           class="text-item"
+                           target="_blank">
+                            <span>TEI</span>
+                            <span class="fa fa-external-link"></span>
+                        </a>
+                        <a ng-show="corpus.github_relannis"
+                           href="{{ corpus.github }}/{{ corpus.github_relannis }}"
+                           class="text-item"
+                           target="_blank">
+                            <span>ANNIS</span>
+                            <span class="fa fa-external-link"></span>
+                        </a>
+                        <a ng-show="corpus.github_paula"
+                           href="{{ corpus.github }}/{{ corpus.github_paula }}"
+                           class="text-item"
+                           target="_blank">
+                            <span>PAULA</span>
+                            <span class="fa fa-external-link"></span>
+                        </a>
+                    </div>
                 </div>
+                {% for text in texts %}
+                    <div class="text-subwork">
+                        <a href="/texts/{{ corpus.slug }}/{{ text.slug }}"
+                           class="item-title-wrap">
+                            <span class="text-item item-title">{{ text.title }}</span>
+                        </a>
+                        <div class="html-wrap version-wrap page-tabs">
+                            {% for format in corpus.html_visualization_formats %}
+                                <a href="/texts/{{ corpus.slug }}/{{ text.slug }}/{{ format.slug }}"
+                                   class="text-item {{ format.slug }}">
+                                    <span>{{ format.button_title }}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-
-            {% for text in texts %}
-            <div class="text-subwork">
-
-                <a href="/texts/{{corpus.slug}}/{{text.slug}}" class="item-title-wrap">
-                    <span class="text-item item-title">{{text.title}}</span>
-                </a>
-
-                <div class="html-wrap version-wrap page-tabs">
-                    {% for format in corpus.html_visualization_formats %}
-                    <a href="/texts/{{corpus.slug}}/{{text.slug}}/{{format.slug}}" class="text-item {{format.slug}}">
-                        <span>{{format.button_title}}</span>
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
         </div>
-    </div>
-</section>
-
+    </section>
 {% endblock %}
