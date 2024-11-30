@@ -12,9 +12,14 @@ conda activate cts
 1. Install requirements:
 
 ```sh
-pip install -r requirements_django_2.txt
+pip install -r requirements_django_4.txt
 ```
 
+2. Update requirements:
+```sh
+pip install -U -r requirements.txt
+pip freeze > requirements.txt
+```
 ## Configuration
 
 1. Create a copy of the `secrets.py` file and edit it with your information:
@@ -54,4 +59,17 @@ You can also checkout the corpora locally and do a local import which should be 
 
 ```sh
 python manage.py addcorpus --source=local --local-repo-path=../../corpora shenoute-true
+```
+
+To add all current corpora
+
+```sh
+./addcopora.sh
+```
+# Clear Cache
+
+You should clear the cache after deployments.
+
+```sh 
+python manage.py clearcache
 ```
