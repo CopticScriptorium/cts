@@ -193,6 +193,7 @@ class CorpusTransaction:
 
     @transaction.atomic
     def execute(self):
+        # Delete existing objects first
         if len(self._to_delete) > 0:
             print(
                 f"Found an already existing upload of '{self.corpus_name}'. "
@@ -220,15 +221,17 @@ class CorpusTransaction:
 
         self._corpus.save()
 
-        # Rest of the method remains unchanged
         for text, text_metas in self._text_pairs:
             for text_meta in text_metas:
                 text_meta.save()
 
+            # Temporarily remove the corpus association to bypass constraints or trigger signals
+            # FIXME: this should not be needed.
             corpus = text.corpus
             text.corpus = None
             text.save()
 
+            # Restore the corpus association
             text.corpus = corpus
             text.save()
 
@@ -510,6 +513,7 @@ class GithubCorpusScraper:
         # Delete any already-existing corpus object
         github_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
         try:
+            print(f"Trying to find existing corpus '{github_url}'...")
             existing_corpus = Corpus.objects.get(github=github_url)
             # delete text_meta manually because they're not linked with foreign keys--all others will be handled by
             # the cascading sql delete
@@ -666,6 +670,24 @@ class GithubCorpusScraper:
 class LocalCorpusScraper:
 
     def __init__(self):
+        # We use these urls to identify the corpus- which 
+        # we should probably change. But later.
+        # FIXME: Change this to a more general way of identifying a corpus
+        # There might be something specifically wrong 
+        # with 'apophthegmata-patrum-sahidic-117-sisoes-9' in coptic_treebank
+        
+        corpus_repo_owner = get_setting_and_error_if_none(
+            "CORPUS_REPO_OWNER",
+            "A corpus repository owner must be specified, e.g. 'CopticScriptorium' if the "
+            "URL is https://github.com/CopticScriptorium/corpora",
+        )
+        corpus_repo_name = get_setting_and_error_if_none(
+            "CORPUS_REPO_NAME",
+            "A corpus repository name must be specified, e.g. 'corpora' if the "
+            "URL is https://github.com/CopticScriptorium/corpora",
+        )
+        self.corpus_repo_owner = corpus_repo_owner
+        self.corpus_repo_name = corpus_repo_name
 
         self.local_repo_path = get_setting_and_error_if_none(
             "LOCAL_REPO_PATH", "A local repository path must be specified."
@@ -779,7 +801,7 @@ class LocalCorpusScraper:
         try:
             if corpus.github_paula.endswith("zip"):
                 dir_contents = self._get_all_files_in_zip(
-                    os.path.join(corpus_path, corpus.github_paula)
+                    os.path.join(corpus_path, corpus.annis_corpus_name + "_TT.zip")
                 )
                 texts = [(name, contents) for name, contents in dir_contents]
             else:
@@ -871,17 +893,16 @@ class LocalCorpusScraper:
         self._current_corpus = corpus
         self._current_transaction = CorpusTransaction(corpus_dirname, corpus)
 
-        github_url = f"file://{os.path.join(self.local_repo_path, corpus_dirname)}"
-        try:
-            existing_corpus = Corpus.objects.get(github=github_url)
+        github_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
+        print(f"Processing '{github_url}' from '{self.local_repo_path}'...")
+        existing_corpus = Corpus.objects.filter(github=github_url).first()
+        if existing_corpus:
             to_delete = []
             for text in Text.objects.all().filter(corpus=existing_corpus):
                 for text_meta in text.text_meta.all():
                     to_delete.append(text_meta)
             to_delete.append(existing_corpus)
             self._current_transaction.add_objs_to_be_deleted(to_delete)
-        except ObjectDoesNotExist:
-            pass
 
         corpus.slug = corpus_dirname
         corpus.github = github_url
