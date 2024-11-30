@@ -26,6 +26,7 @@ def keyvalue(dict, key):
 def home_view(request):
     "Home"
     context = _base_context()
+    context.update({"page_title":"Home"})
     return render(request, "home.html", context)
 
 
@@ -64,13 +65,14 @@ def corpus_view(request, corpus=None):
     texts = results
 
     context = _base_context()
-    context.update({"corpus": corpus_object, "texts": texts})
+    context.update({"corpus": corpus_object, "texts": texts, "page_title": corpus_object.title})
     return render(request, "corpus.html", context)
 
 
 @cache_page(CACHE_TTL)
 def text_view(request, corpus=None, text=None, format=None):
-    text_object = get_object_or_404(models.Text, slug=text)
+    corpus_object = get_object_or_404(models.Corpus, slug=corpus)
+    text_object = get_object_or_404(models.Text, corpus=corpus_object.id, slug=text)
     if not format:
         visualization = text_object.html_visualizations.all()[0]
         format = visualization.visualization_format.slug
@@ -112,7 +114,7 @@ def text_view(request, corpus=None, text=None, format=None):
 
     context = _base_context()
     context.update(
-        {"text": text_object, "visualization": visualization, "format": format}
+        {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title}
     )
     return render(request, "text.html", context)
 
@@ -280,6 +282,7 @@ def index_view(request, special_meta=None):
             "b64_meta_values": b64_meta_values,
             "b64_corpora": b64_corpora,
             "annis_corpora": annis_corpora,
+            "page_title": f"Index {meta.name}" 
         }
     )
     return render(request, "index.html", context)
