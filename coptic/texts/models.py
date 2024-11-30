@@ -111,7 +111,7 @@ class Corpus(models.Model):
     created = models.DateTimeField(editable=False)
     modified = models.DateTimeField(editable=False)
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=40, db_index=True)
+    slug = models.SlugField(max_length=40, db_index=True, unique=True)
     urn_code = models.CharField(max_length=200, db_index=True)
     annis_corpus_name = models.CharField(max_length=200, db_index=True)
     github = models.CharField(max_length=200)
@@ -198,7 +198,7 @@ class MetaOrder(models.Model):
 
 class Text(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=40, db_index=True)
+    slug = models.SlugField(max_length=40, db_index=True) #Fixme: making the slug unique seems to fail import.
     created = models.DateTimeField(editable=False)
     modified = models.DateTimeField(editable=False)
     corpus = models.ForeignKey(Corpus, blank=True, null=True, on_delete=models.CASCADE)
