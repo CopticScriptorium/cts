@@ -8,6 +8,7 @@ from django.db.models.functions import Lower
 from texts.search_fields import SearchField
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
+from coptic.settings.base import CACHE_TTL
 from coptic.settings.base import DEPRECATED_URNS
 from collections import OrderedDict
 import texts.urn as urnlib

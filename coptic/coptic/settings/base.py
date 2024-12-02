@@ -2,7 +2,7 @@
 Django settings for coptic scriptorium project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
+https://docs.djangoproject.com/en/5.1/topics/settings/
 
 """
 
@@ -105,6 +105,8 @@ CACHES = {
         "LOCATION": "/tmp/django_cache",
     }
 }
+
+CACHE_TTL = 60 * 60 * 24 * 7  # 1 week
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
