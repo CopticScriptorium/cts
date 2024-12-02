@@ -5,20 +5,20 @@ Note: this app requires Python 3.6+.
 0. We recommend you [create a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands):
 
 ```sh
-conda create --name cts python=3.7
+conda create --name cts python=3.12
 conda activate cts 
 ```
 
 1. Install requirements:
 
 ```sh
-pip install -r requirements_django_4.txt
+pip install -r requirements_django_5.txt
 ```
 
 2. Update requirements:
 ```sh
 pip install -U -r requirements.txt
-pip freeze > requirements.txt
+pip freeze > requirements_django_5.txt
 ```
 ## Configuration
 
