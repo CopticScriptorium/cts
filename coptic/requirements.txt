@@ -1,5 +1,5 @@
 django
 django-grappelli
-mod-wsgi
+gunicorn
 tqdm
 requests

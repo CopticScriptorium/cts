@@ -25,6 +25,6 @@ if "test" in sys.argv:
     DATABASES["default"]["name"] = "tessqlite3.db"
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)

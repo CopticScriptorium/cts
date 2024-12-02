@@ -28,7 +28,6 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "texts",
     "gh_ingest",
-    "mod_wsgi.server",
 )
 
 MIDDLEWARE = [
