@@ -1,7 +1,5 @@
 django
 django-grappelli
-beautifulsoup4
 mod-wsgi
-github3.py
 tqdm
 requests
