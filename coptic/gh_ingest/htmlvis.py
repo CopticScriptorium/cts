@@ -107,9 +107,8 @@ class Directive:
             d["attr"] = name[colon_index + 1 :]
 
         # only support the "style" attr for now
-        style = re.findall(r'style="([^"]*?)"', attrs_text)
-
-        if len(style) == 0:
+        style = re.search(r'style="([^"]*?)"', attrs_text).group(1) if re.search(r'style="([^"]*?)"', attrs_text) else None
+        if not style:
             return d
         style = style[0]
 
@@ -145,19 +144,20 @@ class TokDirective(Directive):
         return isinstance(elt, str)
 
     def apply_left(self, elt, text):
-        s = ""
+        parts = []
         if self._generated_name != "NULL":
-            s = f"<{self._generated_name}"
+            parts.append(f"<{self._generated_name}")
             if self._generated_class:
-                s += f' class="{self._generated_class}"'
+                parts.append(f' class="{self._generated_class}"')
             elif self._generated_style:
-                s += f' style="{self._generated_style}"'
-            s += ">"
+                parts.append(f' style="{self._generated_style}"')
+            parts.append(">")
 
         if self._content_type == ContentTypes.STRING:
-            s += self._content_value
+            parts.append(self._content_value)
 
-        return s + text
+        parts.append(text)
+        return "".join(parts)
 
 
 class AnnDirective(Directive):
@@ -170,30 +170,30 @@ class AnnDirective(Directive):
         if self._content_type == ContentTypes.VALUE:
             content = elt.attrs.get(elt.name, "")
         elif self._content_type == ContentTypes.STRING:
-            content = self._content_value
-            content = content.replace("%%name%%", elt.name)
+            content = self._content_value.replace("%%name%%", elt.name)
             content = content.replace("%%value%%", elt.attrs.get(elt.name, ""))
         else:
             content = None
 
-        s = ""
+        parts = []
         if self._generated_name != "NULL":
-            s = f"<{self._generated_name}"
+            parts.append(f"<{self._generated_name}")
             if self._generated_class:
-                s += f' class="{self._generated_class}"'
+                parts.append(f' class="{self._generated_class}"')
             elif self._generated_style:
-                s += f' style="{self._generated_style}"'
+                parts.append(f' style="{self._generated_style}"')
 
             if content and self._generated_attr:
-                s += f' {self._generated_attr}="{content}">'
+                parts.append(f' {self._generated_attr}="{content}">')
             elif content:
-                s += ">" + content
+                parts.append(f">{content}")
             else:
-                s += ">"
+                parts.append(">")
         elif content:
-            s += content
+            parts.append(content)
 
-        return s + text
+        parts.append(text)
+        return "".join(parts)
 
 
 class ValueDirective(Directive):
@@ -213,34 +213,32 @@ class ValueDirective(Directive):
 
     def apply_left(self, elt, text):
         if self._content_type == ContentTypes.VALUE:
-            content = elt.attrs.get(self._triggered_attr_name, "")
+            content = elt.attrs.get(elt.name, "")
         elif self._content_type == ContentTypes.STRING:
-            content = self._content_value
-            content = content.replace("%%name%%", self._triggered_attr_name)
-            content = content.replace(
-                "%%value%%", elt.attrs.get(self._triggered_attr_name, "")
-            )
+            content = self._content_value.replace("%%name%%", elt.name)
+            content = content.replace("%%value%%", elt.attrs.get(elt.name, ""))
         else:
             content = None
 
-        s = ""
+        parts = []
         if self._generated_name != "NULL":
-            s = f"<{self._generated_name}"
+            parts.append(f"<{self._generated_name}")
             if self._generated_class:
-                s += f' class="{self._generated_class}"'
+                parts.append(f' class="{self._generated_class}"')
             elif self._generated_style:
-                s += f' style="{self._generated_style}"'
+                parts.append(f' style="{self._generated_style}"')
 
             if content and self._generated_attr:
-                s += f' {self._generated_attr}="{content}">'
+                parts.append(f' {self._generated_attr}="{content}">')
             elif content:
-                s += ">" + content
+                parts.append(f">{content}")
             else:
-                s += ">"
+                parts.append(">")
         elif content:
-            s += content
+            parts.append(content)
 
-        return s + text
+        parts.append(text)
+        return "".join(parts)
 
 
 class AnnAndValueDirective(Directive):
@@ -256,32 +254,30 @@ class AnnAndValueDirective(Directive):
         if self._content_type == ContentTypes.VALUE:
             content = elt.attrs.get(self._trigger_name, "")
         elif self._content_type == ContentTypes.STRING:
-            content = self._content_value
-            content = content.replace("%%name%%", self._trigger_name)
-            content = content.replace(
-                "%%value%%", elt.attrs.get(self._trigger_name, "")
-            )
+            content = self._content_value.replace("%%name%%", self._trigger_name)
+            content = content.replace("%%value%%", elt.attrs.get(self._trigger_name, ""))
         else:
             content = None
 
-        s = ""
+        parts = []
         if self._generated_name != "NULL":
-            s = f"<{self._generated_name}"
+            parts.append(f"<{self._generated_name}")
             if self._generated_class:
-                s += f' class="{self._generated_class}"'
+                parts.append(f' class="{self._generated_class}"')
             elif self._generated_style:
-                s += f' style="{self._generated_style}"'
+                parts.append(f' style="{self._generated_style}"')
 
             if content and self._generated_attr:
-                s += f' {self._generated_attr}="{content}">'
+                parts.append(f' {self._generated_attr}="{content}">')
             elif content:
-                s += ">" + content
+                parts.append(f">{content}")
             else:
-                s += ">"
+                parts.append(">")
         else:
-            s += content
+            parts.append(content or "")
 
-        return s + text
+        parts.append(text)
+        return "".join(parts)
 
 
 class SgmlElement:
@@ -330,87 +326,107 @@ def parse_config(config_text):
 
     return directives
 
-
-def parse_close_tag(i, line):
-    name = re.findall(r"^</([^\s<>/]*)", line)
-    if len(name) != 1:
-        raise HtmlGenerationException(
-            f"Couldn't recognize an SGML element name on closing line {i}:\n\n\t{line}"
-        )
-    return name[0]
-
-
+CLOSE_TAG_REGEX = re.compile(r"^</([^\s<>/]*)")
 NAME_REGEX = re.compile(r"^<([^\s<>/]*)")
 ATTRS_REGEX = re.compile(r'\s([^\s]*)="([^"]*?)"')
 
+def parse_close_tag(i, line):
+    name_match = CLOSE_TAG_REGEX.search(line)
+    if not name_match:
+        raise HtmlGenerationException(
+            f"Couldn't recognize an SGML element name on closing line {i}:\n\n\t{line}"
+        )
+    return name_match.group(1)
+
 
 def parse_open_tag(i, line, tok_count):
-    name = re.findall(NAME_REGEX, line)
-    if len(name) != 1:
+    name_match = NAME_REGEX.search(line)
+    if not name_match:
         raise HtmlGenerationException(
             f"Couldn't recognize an SGML element name on opening line {i}:\n\n\t{line}"
         )
-    name = name[0]
+    name = name_match.group(1)
 
-    attrs = re.findall(ATTRS_REGEX, line)
+    attrs = ATTRS_REGEX.findall(line)
     return SgmlElement(name, attrs, tok_count)
 
 
+def individuate(elt):
+    """Some TT SGML elements have more than one attr with names that are not their own, e.g.:
+
+            <norm xml:id="u1" func="root" pos="N" lemma="ⲕⲟⲥⲙⲟⲥ" norm="ⲕⲟⲥⲙⲟⲥ">
+
+    This function, conceptually, turns that into this:
+
+            <norm xml:id="u1" norm="ⲕⲟⲥⲙⲟⲥ">
+            <func func="root">
+            <pos pos="N">
+            <lemma lemma="ⲕⲟⲥⲙⲟⲥ">
+    """
+    elts = [elt]
+    to_delete = [attr_name for attr_name in elt.attrs if attr_name != elt.name and ":" not in attr_name and elt.name != "meta"]
+
+    for attr_name in to_delete:
+        attr_val = elt.attrs[attr_name]
+        new_elt = SgmlElement(attr_name, [(attr_name, attr_val)])
+        new_elt.open_line = elt.open_line
+        new_elt.close_line = elt.close_line
+        elts.append(new_elt)
+        del elt.attrs[attr_name]
+
+    return elts
+
 def parse_text(text):
-    def individuate(elt):
-        """Some TT SGML elements have more than one attr with names that are not their own, e.g.:
+    """
+    Parses the given text, extracting elements and tokens.
 
-                <norm xml:id="u1" func="root" pos="N" lemma="ⲕⲟⲥⲙⲟⲥ" norm="ⲕⲟⲥⲙⲟⲥ">
+    Args:
+        text (str): The input text to be parsed.
 
-        This function, conceptually, turns that into this:
-
-                <norm xml:id="u1" norm="ⲕⲟⲥⲙⲟⲥ">
-                <func func="root">
-                <pos pos="N">
-                <lemma lemma="ⲕⲟⲥⲙⲟⲥ">
-        """
-        elts = [elt]
-        to_delete = []
-        for attr_name, attr_val in elt.attrs.items():
-            if attr_name != elt.name and ":" not in attr_name and elt.name != "meta":
-                to_delete.append(attr_name)
-                new_elt = SgmlElement(attr_name, [(attr_name, attr_val)])
-                new_elt.open_line = elt.open_line
-                new_elt.close_line = elt.close_line
-                elts.append(new_elt)
-
-        for attr_name in to_delete:
-            del elt.attrs[attr_name]
-
-        return elts
-
-    complete_elts = []
-    elt_stack = defaultdict(list)
-
-    toks = []
-    tok_count = 0
+    Returns:
+        tuple: A tuple containing:
+            - toks (list of str): A list of token strings extracted from the text.
+            - complete_elts (list): A list of complete elements parsed from the text.
+    """
+    complete_elts = []  # List to store complete elements
+    elt_stack = defaultdict(list)  # Stack to manage nested elements
+    toks = []  # List to store token strings
+    tok_count = 0  # Counter for tokens
 
     for i, line in enumerate(text.strip().split("\n")):
         try:
-            if line[:2] == "</":
-                name = parse_close_tag(i, line)
-                elt = elt_stack[name].pop()
-                elt.close_line = tok_count - 1
-                complete_elts += individuate(elt)
-            elif line[0] == "<":
-                elt = parse_open_tag(i, line, tok_count)
-                elt_stack[elt.name].append(elt)
-            else:
-                toks.append(line)
-                tok_count += 1
-        except IndexError:
-            toks.append(line)
-            tok_count += 1
+            if line.startswith("</"):  # If the line is a closing tag
+                name = parse_close_tag(i, line)  # Parse the closing tag
+                elt = elt_stack[name].pop()  # Pop the element from the stack
+                elt.close_line = tok_count - 1  # Set the closing line for the element
+                complete_elts.extend(individuate(elt))  # Process and add the element to complete elements
+            elif line.startswith("<"):  # If the line is an opening tag
+                elt = parse_open_tag(i, line, tok_count)  # Parse the opening tag
+                elt_stack[elt.name].append(elt)  # Push the element onto the stack
+            else:  # If the line is a token
+                toks.append(line)  # Add the token to the list
+                tok_count += 1  # Increment the token counter
+        except IndexError:  # Handle potential index errors
+            toks.append(line)  # Add the token to the list
+            tok_count += 1  # Increment the token counter
 
-    return toks, complete_elts
+    return toks, complete_elts  # Return the tokens and complete elements
 
 
 def render_html(toks, elts, directives, css_text):
+    """
+    Renders HTML from tokens, elements, directives, and CSS text.
+
+    Args:
+        toks (list of str): A list of token strings.
+        elts (list): A list of elements.
+        directives (list): A list of directives to apply.
+        css_text (str): CSS text to be included in the HTML.
+
+    Returns:
+        str: The rendered HTML string.
+    """
+    # Separate token directives and other directives, reversing their order
     tok_directives = list(
         reversed([d for d in directives if isinstance(d, TokDirective)])
     )
@@ -418,6 +434,7 @@ def render_html(toks, elts, directives, css_text):
         reversed([d for d in directives if not isinstance(d, TokDirective)])
     )
 
+    # Apply token directives to tokens
     for directive in tok_directives:
         for i, tok in enumerate(toks):
             if directive.applies(tok):
@@ -426,8 +443,7 @@ def render_html(toks, elts, directives, css_text):
     if len(tok_directives) == 0:
         toks = [""] * len(toks)
 
-    # split elts into separate lists of equivalent length in order of increasing length to ensure
-    # we get the right tag order
+    # Split elements into separate lists of equivalent length to ensure correct tag order
     if elts:
         elt_lens = [len(elt) for elt in elts]
         elts_by_len = [[] for i in range(max(elt_lens) + 1)]
@@ -446,8 +462,9 @@ def render_html(toks, elts, directives, css_text):
                             elt, toks[elt.close_line]
                         )
 
-    html = "<!--\n-->".join(toks)
-    html = f'<div class="htmlvis">{html}</div>'
+    # Join tokens with HTML comment to form the final HTML
+    inner_html = "<!--\n-->".join(toks)
+    html = f'<div class="htmlvis">{inner_html}</div>'
     html += f"<style>{css_text}</style>"
 
     return html
