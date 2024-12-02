@@ -37,6 +37,8 @@ python manage.py migrate
 
 ## Running tests
 
+Github should automatically run tests on every pull request see `.github/workflows/django.yml`
+
 ```sh
 python manage.py test -t .
 ```
