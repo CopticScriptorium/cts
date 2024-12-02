@@ -42,24 +42,6 @@ with open(script_dir + "name_mapping.tab", encoding="utf8") as file:
             corpus_urn_map[corpus] = corpus_urn
             corpus_title_map[corpus] = corpus_title
 
-def get_git_blob(file_sha):
-    headers = {}
-    if getattr(settings, "GITHUB_TOKEN", "") != "":
-        headers["Authorization"] = f'token {getattr(settings, "GITHUB_TOKEN")}'
-    response = requests.get(
-        f"{settings.GITHUB_API_BASE_URL}"
-        f"/repos"
-        f"/{settings.CORPUS_REPO_OWNER}"
-        f"/{settings.CORPUS_REPO_NAME}"
-        f"/git/blobs"
-        f"/{file_sha}",
-        headers=headers,
-    )
-    content = response.json().get("content")
-    content = base64.b64decode(content)
-    content = content.decode("utf-8")
-    return content
-
 
 KNOWN_SLUGS = {
     "apophthegmata.patrum": "ap",
@@ -316,13 +298,13 @@ class CorpusScraper:
             print("LOCAL_REPO_PATH not found in settings. Using default value ../../corpora.")
             self.local_repo_path = "../../corpora"
 
-    def _get_zipfile_for_blob(self, path):
+    def _get_zip_for_file(self, path):
         with open(path, "rb") as f:
             zip_data = BytesIO(f.read())
         return zipfile.ZipFile(zip_data)
 
-    def _get_blob_contents(self, path, filename):
-        zip_file = self._get_zipfile_for_blob(path)
+    def _get_file_contents(self, path, filename):
+        zip_file = self._get_zip_for_file(path)
         return zip_file.open(filename).read().decode("utf-8")
 
     def _get_all_files_in_zip(self, zip_path):
@@ -443,7 +425,7 @@ class CorpusScraper:
     def _infer_html_visualization_formats_and_add_to_tx(self, corpus, corpus_dirname):
         try:
             if corpus.github_relannis.endswith("zip"):
-                vm = self._get_blob_contents(
+                vm = self._get_file_contents(
                     os.path.join(
                         self.local_repo_path, corpus_dirname, corpus.github_relannis
                     ),
@@ -541,7 +523,7 @@ class CorpusScraper:
         corpus_path = os.path.join(self.local_repo_path, corpus_dirname)
         files = os.listdir(corpus_path)
         if corpus.github_relannis.endswith("zip"):
-            zip_file = self._get_zipfile_for_blob(
+            zip_file = self._get_zip_for_file(
                 os.path.join(corpus_path, corpus.github_relannis)
             )
         else:
