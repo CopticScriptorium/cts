@@ -43,10 +43,10 @@ nav, footer = get_menu()
 
 with io.open(script_dir + "templates" + os.sep + "nav.html", "w", encoding="utf8") as f:
     if len(nav) > 0:
-        f.write(unicode(nav))
+        f.write(nav)
 
 with io.open(
     script_dir + "templates" + os.sep + "footer.html", "w", encoding="utf8"
 ) as f:
     if len(footer) > 0:
-        f.write(unicode(footer))
+        f.write(footer)
