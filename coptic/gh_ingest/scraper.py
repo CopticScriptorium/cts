@@ -6,14 +6,11 @@ import zipfile
 import base64
 import requests
 
-from django.db.models import Model
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
-from django.db.models import ObjectDoesNotExist
 from django.utils.text import slugify
-from github3.exceptions import NotFoundError, ForbiddenError
-from github3 import GitHub
+
 from tqdm import tqdm
 
 from texts.models import (
@@ -26,20 +23,24 @@ from texts.models import (
 import texts.urn as urn
 from .scraper_exceptions import *
 from .htmlvis import generate_visualization
-import os, io
+import os
+import subprocess
+import csv
 
+# Determine the script directory
 script_dir = os.path.dirname(os.path.realpath(__file__)) + os.sep
-name_mapping = (
-    open(script_dir + "name_mapping.tab", encoding="utf8").read().strip().split("\n")
-)
+
+# Initialize mappings
 corpus_urn_map = {}
 corpus_title_map = {}
-for line in name_mapping:
-    if line.count("\t") == 2:
-        corpus, corpus_title, corpus_urn = line.split("\t")
-        corpus_urn_map[corpus] = corpus_urn
-        corpus_title_map[corpus] = corpus_title
 
+# Open the file and use csv.reader to parse it
+with open(script_dir + "name_mapping.tab", encoding="utf8") as file:
+    reader = csv.reader(file, delimiter="\t")
+    for row in reader:
+            corpus, corpus_title, corpus_urn = row
+            corpus_urn_map[corpus] = corpus_urn
+            corpus_title_map[corpus] = corpus_title
 
 def get_git_blob(file_sha):
     headers = {}
@@ -250,424 +251,7 @@ class CorpusTransaction:
             "vises": len(self._vises),
         }
 
-
-class GithubCorpusScraper:
-
-    def __init__(self):
-        corpus_repo_owner = get_setting_and_error_if_none(
-            "CORPUS_REPO_OWNER",
-            "A corpus repository owner must be specified, e.g. 'CopticScriptorium' if the "
-            "URL is https://github.com/CopticScriptorium/corpora",
-        )
-        corpus_repo_name = get_setting_and_error_if_none(
-            "CORPUS_REPO_NAME",
-            "A corpus repository name must be specified, e.g. 'corpora' if the "
-            "URL is https://github.com/CopticScriptorium/corpora",
-        )
-        self.corpus_repo_owner = corpus_repo_owner
-        self.corpus_repo_name = corpus_repo_name
-
-        self._repo = GitHub(
-            token=getattr(settings, "GITHUB_TOKEN", ""),
-        ).repository(corpus_repo_owner, corpus_repo_name)
-        self._corpora = dict(
-            self._repo.directory_contents("")
-        )  # name -> github3.py contents object
-
-        ### stateful member variables that contain information related to the corpus currently being processed
-        # the texts.models.Corpus object corresponding to the corpus being processed
-        self._current_corpus = None
-        # a CorpusTransaction, i.e. a per-corpus list of objects we need to save
-        self._current_transaction = None
-        # the github3.py contents object of the most recently seen text
-        self._current_text_contents = None
-        # the metadata dictionary of the most recently seen text
-        self._latest_meta_dict = None
-
-        # the 5 known visualization formats
-        self._known_visualization_formats = HtmlVisualizationFormat.objects.values_list(
-            "button_title", flat=True
-        )
-
-        # a map from the visualization subtype (identical to a val of HtmlVisualizationFormat's button_title field)
-        # to the file in ExtData that contains information about it
-        self._vis_configs = {}
-
-        # holds the actual values of dipl.config, dipl.css, etc.
-        self._vis_config_contents = {}
-        self._vis_css_contents = {}
-
-        # Text -> meta.prev, meta.next, meta.document_cts_urn
-        self._text_next = defaultdict(lambda: None)
-        self._text_prev = defaultdict(lambda: None)
-        self._text_urn = defaultdict(lambda: None)
-
-    def _get_zipfile_for_blob(self, sha):
-        blob = self._repo.blob(sha)
-        blob = base64.b64decode(blob.content)
-
-        zip_data = BytesIO()
-        zip_data.write(blob)
-        return zipfile.ZipFile(zip_data)
-
-    # misc methods for zipped files
-    def _get_blob_contents(self, sha, filename):
-        zip_file = self._get_zipfile_for_blob(sha)
-        return zip_file.open(filename).read().decode("utf-8")
-
-    def _get_all_zipped_files(self, sha):
-        zip_file = self._get_zipfile_for_blob(sha)
-
-        files_and_contents = []
-        for filename in zip_file.namelist():
-            zfile = zip_file.open(filename)
-            files_and_contents.append((filename, zfile.read().decode("utf-8")))
-        return files_and_contents
-
-    # corpus-level methods ---------------------------------------------------------------------------------------------
-
-    def parse_corpora(self, corpus_dirnames):
-        corpora = []
-        for corpus_dirname in corpus_dirnames:
-            # reset internal state
-            self.__init__()
-            corpora.append(self.parse_corpus(corpus_dirname))
-        return corpora
-
-    def _infer_dir(self, corpus, dirs, *exts):
-        target_dirs = []
-        for ext in exts:
-            if len(target_dirs) == 0:
-                target_dirs = [x for x in dirs if x.lower().endswith(ext.lower())]
-        if len(target_dirs) > 1:
-            raise AmbiguousCorpus(
-                corpus.slug, self.corpus_repo_owner, self.corpus_repo_name
-            )
-        return target_dirs[0] if len(target_dirs) == 1 else ""
-
-    def _infer_github_dirs(self, corpus, corpus_dirname):
-        dirs = [
-            name
-            for name, contents in self._repo.directory_contents(corpus_dirname)
-            if contents.type == "dir" or name.endswith(".zip")
-        ]
-        github_tei = self._infer_dir(corpus, dirs, "_TEI", "_TEI.zip")
-        github_relannis = self._infer_dir(
-            corpus, dirs, "_ANNIS", "_RELANNIS", "_RELANNIS.zip", "_ANNIS.zip"
-        )
-        github_paula = self._infer_dir(corpus, dirs, "_PAULA", "_PAULA.zip")
-        if not any(
-            str(x) and x != "" for x in [github_tei, github_paula, github_relannis]
-        ):
-            raise EmptyCorpus(
-                corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name
-            )
-        return github_tei, github_relannis, github_paula
-
-    def _infer_annis_corpus_name(self, corpus):
-        if corpus.github_tei != "":
-            return corpus.github_tei[: corpus.github_tei.rfind("_")]
-        elif corpus.github_relannis != "":
-            return corpus.github_relannis[: corpus.github_relannis.rfind("_")]
-        elif corpus.github_paula != "":
-            return corpus.github_paula[: corpus.github_paula.rfind("_")]
-        else:
-            raise InferenceError(
-                corpus.slug,
-                self.corpus_repo_owner,
-                self.corpus_repo_name,
-                "annis_corpus_name",
-            )
-
-    def _infer_slug(self, corpus):
-        if corpus.annis_corpus_name in KNOWN_SLUGS:
-            return KNOWN_SLUGS[corpus.annis_corpus_name]
-        else:
-            return slugify(corpus.annis_corpus_name)
-
-    def _get_texts(self, corpus, corpus_dirname):
-        try:
-            if corpus.github_paula.endswith(".zip"):
-                vm = dict(self._repo.directory_contents(corpus_dirname))
-                dir_contents = self._get_all_zipped_files(
-                    vm[corpus.annis_corpus_name + "_TT.zip"].sha
-                )
-                texts = [(name, contents) for name, contents in dir_contents]
-            else:
-                tt_dir = corpus_dirname + "/" + corpus.annis_corpus_name + "_TT"
-                dir_contents = self._repo.directory_contents(tt_dir)
-
-                # texts = [(name, contents.refresh().decoded.decode('utf-8')) for name, contents in dir_contents]
-                # had to rewrite this because github3.py relies on a GitHub API that refuses to serve blobs >1MB in size
-                texts = []
-                for name, contents in dir_contents:
-                    try:
-                        contents = contents.refresh().decoded.decode("utf-8")
-                    except ForbiddenError:
-                        contents = get_git_blob(contents.sha)
-                    texts.append((name, contents))
-        except NotFoundError as e:
-            raise TTDirMissing(
-                corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, tt_dir
-            ) from e
-
-        if len(texts) == 0:
-            raise NoTexts(
-                corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, tt_dir
-            )
-
-        return dict(texts)
-
-    def _infer_urn_code(self, corpus_dirname):
-        meta = self._latest_meta_dict
-        if meta is None or "document_cts_urn" not in meta:
-            # raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
-            return ""
-
-        doc_urn = meta["document_cts_urn"]
-        # TODO: for most corpora right now, it seems like the "corpus urn" actually corresponds to a Text
-        # rather than a Corpus. Use textgroup instead, revisit when the CS team makes a decision on standardizing URNs.
-        corpus_urn = urn.textgroup_urn(doc_urn)
-        # corpus_urn = urn.corpus_urn(doc_urn)
-        # if corpus_urn == "":
-        # 	raise InferenceError(corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name, "urn_code")
-
-        return corpus_urn
-
-    def _parse_resolver_vis_map(self, text, corpus, corpus_dirname):
-        lines = text.strip().split("\n")
-        lines = [line.split("\t") for line in lines]
-        if not all(len(line) == 9 for line in lines):
-            raise ResolverVisMapIssue(
-                corpus_dirname,
-                self.corpus_repo_owner,
-                self.corpus_repo_name,
-                corpus.github_relannis,
-            )
-        return lines
-
-    def _infer_html_visualization_formats_and_add_to_tx(self, corpus, corpus_dirname):
-        try:
-            if corpus.github_relannis.endswith("zip"):
-                vm = dict(self._repo.directory_contents(corpus_dirname))
-                vm = self._get_blob_contents(
-                    vm[corpus.github_relannis].sha, "resolver_vis_map.annis"
-                )
-            else:
-                vm = self._repo.file_contents(
-                    "/".join(
-                        [
-                            corpus_dirname,
-                            corpus.github_relannis,
-                            "resolver_vis_map.annis",
-                        ]
-                    )
-                )
-                vm = vm.decoded.decode("utf-8")
-        except (NotFoundError, IndexError) as e:
-            raise ResolverVisMapIssue(
-                corpus_dirname,
-                self.corpus_repo_owner,
-                self.corpus_repo_name,
-                corpus.github_relannis,
-            ) from e
-
-        vis_lines = self._parse_resolver_vis_map(vm, corpus, corpus_dirname)
-        formats = []
-        already_seen = []
-        for _, _, _, _, type, vis_type, _, _, config_file in vis_lines:
-            if type != "htmldoc":
-                continue
-            vis_type = vis_type.split(" ")[0]
-            if (
-                not vis_type in self._known_visualization_formats
-                or vis_type in already_seen
-            ):
-                raise ResolverVisMapIssue(
-                    corpus_dirname,
-                    self.corpus_repo_owner,
-                    self.corpus_repo_name,
-                    corpus.github_relannis,
-                )
-            self._vis_configs[vis_type] = re.findall(
-                r"config:(?P<fname>.*)", config_file
-            )[0]
-            format = HtmlVisualizationFormat.objects.get(button_title=vis_type)
-            formats.append(format)
-            already_seen.append(vis_type)
-
-        return formats
-
-    @transaction.atomic
-    def parse_corpus(self, corpus_dirname):
-        if corpus_dirname not in self._corpora:
-            raise CorpusNotFound(
-                corpus_dirname, self.corpus_repo_owner, self.corpus_repo_name
-            )
-
-        corpus = Corpus()
-        self._current_corpus = corpus
-        # All objects we make will go into this list
-        self._current_transaction = CorpusTransaction(corpus_dirname, corpus)
-
-        # Delete any already-existing corpus object
-        github_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
-        try:
-            print(f"Trying to find existing corpus '{github_url}'...")
-            existing_corpus = Corpus.objects.get(github=github_url)
-            # delete text_meta manually because they're not linked with foreign keys--all others will be handled by
-            # the cascading sql delete
-            to_delete = []
-            for text in Text.objects.all().filter(corpus=existing_corpus):
-                for text_meta in text.text_meta.all():
-                    to_delete.append(text_meta)
-            to_delete.append(existing_corpus)
-            self._current_transaction.add_objs_to_be_deleted(to_delete)
-        except ObjectDoesNotExist:
-            pass
-
-        corpus.slug = corpus_dirname  # provisionally, until we find the real one, so we can use this in errors
-        corpus.github = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
-        corpus.github_tei, corpus.github_relannis, corpus.github_paula = (
-            self._infer_github_dirs(corpus, corpus_dirname)
-        )
-        corpus.annis_corpus_name = self._infer_annis_corpus_name(corpus)
-        corpus.slug = self._infer_slug(corpus)
-        if corpus.annis_corpus_name in corpus_title_map:
-            corpus.title = corpus_title_map[corpus.annis_corpus_name]
-        else:
-            corpus.title = (
-                corpus.annis_corpus_name
-            )  # User should edit this to something more appropriate
-
-        # assignment to corpus.html_visualization_formats happen during the transaction
-        self._current_transaction.add_vis_formats(
-            self._infer_html_visualization_formats_and_add_to_tx(corpus, corpus_dirname)
-        )
-
-        texts = self._get_texts(corpus, corpus_dirname)
-        self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
-        self._current_transaction.sort_texts(
-            self._text_next, self._text_prev, self._text_urn
-        )
-
-        if corpus.annis_corpus_name in corpus_urn_map:
-            corpus.urn_code = corpus_urn_map[corpus.annis_corpus_name]
-        else:
-            corpus.urn_code = self._infer_urn_code(corpus_dirname)
-
-        return self._current_transaction
-
-    # text-level methods -----------------------------------------------------------------------------------------------
-    def _load_config_files(self, corpus, corpus_dirname):
-        # load config and css for visualizations
-        files = dict(self._repo.directory_contents(corpus_dirname))
-        if corpus.github_relannis.endswith("zip"):
-            zip_file = self._get_zipfile_for_blob(files[corpus.github_relannis].sha)
-        else:
-            zip_file = None
-        for name, config_file in self._vis_configs.items():
-            self._vis_config_contents[name] = self._get_vis_config_file(
-                corpus, corpus_dirname, config_file, zip_file
-            )
-            self._vis_css_contents[name] = self._get_vis_css_file(
-                corpus, corpus_dirname, config_file, zip_file
-            )
-
-    def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
-        print(f"Preparing transaction for '{corpus_dirname}'...")
-        self._load_config_files(corpus, corpus_dirname)
-        for name, contents in tqdm(texts.items(), ncols=80):
-            self._current_text_contents = contents
-            self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
-
-    def _get_meta_dict(self, tt_lines):
-        for line in tt_lines:
-            if line.startswith("<meta"):
-                return dict(re.findall(r'(?P<attr>[\w._-]+)="(?P<value>.*?)"', line))
-        raise MetaNotFound(
-            self.corpus_repo_owner, self.corpus_repo_name, self._current_text_contents
-        )
-
-    def _get_vis_css_file(self, corpus, corpus_dirname, config_file, zip_file):
-        try:
-            if zip_file:
-                path = "ExtData/" + config_file + ".css"
-                return zip_file.open(path).read().decode("utf-8")
-            else:
-                path = (
-                    corpus_dirname
-                    + "/"
-                    + corpus.github_relannis
-                    + "/ExtData/"
-                    + config_file
-                    + ".css"
-                )
-                f = self._repo.file_contents(path)
-                return f.decoded.decode("utf-8")
-        except NotFoundError:
-            return ""
-
-    def _get_vis_config_file(self, corpus, corpus_dirname, config_file, zip_file):
-        try:
-            if zip_file:
-                path = "ExtData/" + config_file + ".config"
-                return zip_file.open(path).read().decode("utf-8")
-            else:
-                path = (
-                    corpus_dirname
-                    + "/"
-                    + corpus.github_relannis
-                    + "/ExtData/"
-                    + config_file
-                    + ".config"
-                )
-                f = self._repo.file_contents(path)
-                return f.decoded.decode("utf-8")
-        except NotFoundError as e:
-            raise VisConfigIssue(
-                path, self.corpus_repo_owner, self.corpus_repo_name
-            ) from e
-
-    def _generate_visualizations_and_add_to_tx(self, text, contents):
-        for name, config_file in self._vis_configs.items():
-            config_text = self._vis_config_contents[name]
-            config_css = self._vis_css_contents[name]
-            rendered_html = generate_visualization(
-                config_text, contents, css_text=config_css
-            )
-            vis = HtmlVisualization()
-            format = HtmlVisualizationFormat.objects.get(button_title=name)
-            vis.visualization_format_slug = format.slug  # Use the new field
-            vis.html = rendered_html
-            self._current_transaction.add_vis((text, vis))
-
-    def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents):
-        tt_lines = contents.split("\n")
-
-        meta = self._get_meta_dict(tt_lines)
-        self._latest_meta_dict = meta
-
-        text = Text()
-        text.title = meta["title"]
-        text.slug = slugify(meta["title"] if "title" in meta else meta["name"])
-        text.corpus = self._current_corpus
-        self._text_next[text.title] = meta["next"] if "next" in meta else None
-        self._text_prev[text.title] = meta["previous"] if "previous" in meta else None
-        self._text_urn[text.title] = (
-            meta["document_cts_urn"] if "document_cts_urn" in meta else None
-        )
-
-        text_metas = [
-            TextMeta(name=name, value=unescape(value)) for name, value in meta.items()
-        ]
-
-        self._generate_visualizations_and_add_to_tx(text, contents)
-
-        self._current_transaction.add_text((text, text_metas))
-
-
-class LocalCorpusScraper:
+class CorpusScraper:
 
     def __init__(self):
         # We use these urls to identify the corpus- which 
@@ -675,37 +259,25 @@ class LocalCorpusScraper:
         # FIXME: Change this to a more general way of identifying a corpus
         # There might be something specifically wrong 
         # with 'apophthegmata-patrum-sahidic-117-sisoes-9' in coptic_treebank
-        
-        corpus_repo_owner = get_setting_and_error_if_none(
-            "CORPUS_REPO_OWNER",
-            "A corpus repository owner must be specified, e.g. 'CopticScriptorium' if the "
-            "URL is https://github.com/CopticScriptorium/corpora",
-        )
-        corpus_repo_name = get_setting_and_error_if_none(
-            "CORPUS_REPO_NAME",
-            "A corpus repository name must be specified, e.g. 'corpora' if the "
-            "URL is https://github.com/CopticScriptorium/corpora",
-        )
-        self.corpus_repo_owner = corpus_repo_owner
-        self.corpus_repo_name = corpus_repo_name
+        self.corpus_repo_name = None
+        self.corpus_repo_owner = None
+        self.local_repo_path = None
 
-        self.local_repo_path = get_setting_and_error_if_none(
-            "LOCAL_REPO_PATH", "A local repository path must be specified."
-        )
+        self._init_config()
+        
         self._corpora = [
             d
             for d in os.listdir(self.local_repo_path)
             if os.path.isdir(os.path.join(self.local_repo_path, d))
         ]
 
+        self._known_visualization_formats = HtmlVisualizationFormat.objects.values_list(
+            "button_title", flat=True
+        )
         self._current_corpus = None
         self._current_transaction = None
         self._current_text_contents = None
         self._latest_meta_dict = None
-
-        self._known_visualization_formats = HtmlVisualizationFormat.objects.values_list(
-            "button_title", flat=True
-        )
         self._vis_configs = {}
         self._vis_config_contents = {}
         self._vis_css_contents = {}
@@ -713,6 +285,36 @@ class LocalCorpusScraper:
         self._text_next = defaultdict(lambda: None)
         self._text_prev = defaultdict(lambda: None)
         self._text_urn = defaultdict(lambda: None)
+        
+    def _init_config(self):
+        try:
+            if not self.corpus_repo_owner:
+                self.corpus_repo_owner = get_setting_and_error_if_none(
+                    "CORPUS_REPO_OWNER",
+                    "A corpus repository owner must be specified, e.g. 'CopticScriptorium' if the "
+                    "URL is https://github.com/CopticScriptorium/corpora",
+                )
+        except:
+            print("CORPUS_REPO_OWNER not found in settings. Using default value CopticScriptorium.")
+            self.corpus_repo_owner = "CopticScriptorium"
+        try: 
+            if not self.corpus_repo_name:
+                self.corpus_repo_name = get_setting_and_error_if_none(
+                    "CORPUS_REPO_NAME",
+                    "A corpus repository name must be specified, e.g. 'corpora' if the "
+                    "URL is https://github.com/CopticScriptorium/corpora",
+                )
+        except:
+            print("CORPUS_REPO_NAME not found in settings. Using default value corpora.")
+            self.corpus_repo_name = "corpora"
+        try:
+            if not self.local_repo_path:
+                self.local_repo_path = get_setting_and_error_if_none(
+                    "LOCAL_REPO_PATH", "A local repository path must be specified."
+                )
+        except:
+            print("LOCAL_REPO_PATH not found in settings. Using default value ../../corpora.")
+            self.local_repo_path = "../../corpora"
 
     def _get_zipfile_for_blob(self, path):
         with open(path, "rb") as f:
@@ -755,7 +357,7 @@ class LocalCorpusScraper:
             if len(target_dirs) == 0:
                 target_dirs = [x for x in dirs if x.lower().endswith(ext.lower())]
         if len(target_dirs) > 1:
-            raise LocalAmbiguousCorpus(corpus.slug, self.local_repo_path)
+            raise AmbiguousCorpus(corpus.slug, self.local_repo_path)
         return target_dirs[0] if len(target_dirs) == 1 else ""
 
     def _infer_local_dirs(self, corpus, corpus_dirname):
@@ -773,7 +375,7 @@ class LocalCorpusScraper:
         if not any(
             str(x) and x != "" for x in [local_tei, local_paula, local_relannis]
         ):
-            raise LocalEmptyCorpus(corpus_dirname, self.local_repo_path)
+            raise EmptyCorpus(corpus_dirname, self.local_repo_path)
         return local_tei, local_relannis, local_paula
 
     def _infer_annis_corpus_name(self, corpus):
@@ -784,7 +386,7 @@ class LocalCorpusScraper:
         elif corpus.github_paula != "":
             return corpus.github_paula[: corpus.github_paula.rfind("_")]
         else:
-            raise LocalInferenceError(
+            raise InferenceError(
                 corpus.slug, self.local_repo_path, "annis_corpus_name"
             )
 
@@ -813,10 +415,10 @@ class LocalCorpusScraper:
                 ]
         except FileNotFoundError as e:
             tt_dir = os.path.join(corpus_path, corpus.annis_corpus_name + "_TT")
-            raise LocalTTDirMissing(corpus_dirname, self.local_repo_path, tt_dir) from e
+            raise TTDirMissing(corpus_dirname, self.local_repo_path, tt_dir) from e
 
         if len(texts) == 0:
-            raise LocalNoTexts(corpus_dirname, self.local_repo_path, tt_dir)
+            raise NoTexts(corpus_dirname, self.local_repo_path, tt_dir)
 
         return dict(texts)
 
@@ -833,7 +435,7 @@ class LocalCorpusScraper:
         lines = text.strip().split("\n")
         lines = [line.split("\t") for line in lines]
         if not all(len(line) == 9 for line in lines):
-            raise LocalResolverVisMapIssue(
+            raise ResolverVisMapIssue(
                 corpus_dirname, self.local_repo_path, corpus.github_relannis
             )
         return lines
@@ -857,7 +459,7 @@ class LocalCorpusScraper:
                 with open(vm_path) as f:
                     vm = f.read()
         except (FileNotFoundError, IndexError) as e:
-            raise LocalResolverVisMapIssue(
+            raise ResolverVisMapIssue(
                 corpus_dirname, self.local_repo_path, corpus.github_relannis
             ) from e
 
@@ -872,7 +474,7 @@ class LocalCorpusScraper:
                 not vis_type in self._known_visualization_formats
                 or vis_type in already_seen
             ):
-                raise LocalResolverVisMapIssue(
+                raise ResolverVisMapIssue(
                     corpus_dirname, self.local_repo_path, corpus.github_relannis
                 )
             self._vis_configs[vis_type] = re.findall(
@@ -887,7 +489,7 @@ class LocalCorpusScraper:
     @transaction.atomic
     def parse_corpus(self, corpus_dirname):
         if corpus_dirname not in self._corpora:
-            raise LocalCorpusNotFound(corpus_dirname, self.local_repo_path)
+            raise CorpusNotFound(corpus_dirname, self.local_repo_path)
 
         corpus = Corpus()
         self._current_corpus = corpus
@@ -913,8 +515,10 @@ class LocalCorpusScraper:
         corpus.slug = self._infer_slug(corpus)
         if corpus.annis_corpus_name in corpus_title_map:
             corpus.title = corpus_title_map[corpus.annis_corpus_name]
+            print(f"Found title for '{corpus.annis_corpus_name}': '{corpus.title}'")
         else:
             corpus.title = corpus.annis_corpus_name
+            print(f"Title not found for '{corpus.annis_corpus_name}'. Using '{corpus.title}'")
 
         self._current_transaction.add_vis_formats(
             self._infer_html_visualization_formats_and_add_to_tx(corpus, corpus_dirname)
@@ -962,7 +566,7 @@ class LocalCorpusScraper:
         for line in tt_lines:
             if line.startswith("<meta"):
                 return dict(re.findall(r'(?P<attr>[\w._-]+)="(?P<value>.*?)"', line))
-        raise LocalMetaNotFound(self.local_repo_path, self._current_text_contents.path)
+        raise MetaNotFound(self.local_repo_path, self._current_text_contents.path)
 
     def _get_vis_css_file(self, corpus, corpus_dirname, config_file, zip_file):
         try:
@@ -998,7 +602,7 @@ class LocalCorpusScraper:
                 with open(path) as f:
                     return f.read()
         except FileNotFoundError as e:
-            raise LocalVisConfigIssue(path, self.local_repo_path) from e
+            raise VisConfigIssue(path, self.local_repo_path) from e
 
     def _generate_visualizations_and_add_to_tx(self, text, contents):
         for name, config_file in self._vis_configs.items():
@@ -1035,3 +639,28 @@ class LocalCorpusScraper:
         self._generate_visualizations_and_add_to_tx(text, contents)
 
         self._current_transaction.add_text((text, text_metas))
+
+class GithubCorpusScraper(CorpusScraper):
+
+    def __init__(self):
+        
+        self._init_config()
+        self.ensure_local_repo()
+
+        # Call the superclass's __init__ method
+        super().__init__()
+
+    def ensure_local_repo(self):
+        if not os.path.exists(self.local_repo_path):
+            self.clone_repo()
+        else:
+            self.pull_repo()
+
+    def clone_repo(self):
+        repo_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}.git"
+        subprocess.run(["git", "clone", repo_url, self.local_repo_path], check=True)
+        print(f"Cloned repository from {repo_url} to {self.local_repo_path}")
+
+    def pull_repo(self):
+        subprocess.run(["git", "-C", self.local_repo_path, "pull"], check=True)
+        print(f"Pulled latest changes in repository at {self.local_repo_path}")

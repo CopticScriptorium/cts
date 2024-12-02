@@ -4,14 +4,12 @@ from unittest.mock import patch, MagicMock
 from django.conf import settings
 from django.test import override_settings, TestCase
 from gh_ingest.scraper import (
-    LocalCorpusScraper,
-    LocalEmptyCorpus,
-    LocalTTDirMissing,
-    LocalNoTexts,
+    CorpusScraper,
 )
+from gh_ingest.scraper_exceptions import EmptyCorpus, TTDirMissing
 
 
-class TestLocalCorpusScraper(unittest.TestCase):
+class TestCorpusScraper(unittest.TestCase):
 
     @patch("os.listdir")
     @patch("os.path.isdir")
@@ -27,7 +25,7 @@ class TestLocalCorpusScraper(unittest.TestCase):
         ]
         mock_isdir.side_effect = lambda path: not path.endswith(".zip")
 
-        scraper = LocalCorpusScraper()
+        scraper = CorpusScraper()
         corpus = MagicMock()
 
         # Call the method
@@ -50,22 +48,22 @@ class TestLocalCorpusScraper(unittest.TestCase):
         mock_listdir.return_value = []
         mock_isdir.side_effect = lambda path: not path.endswith(".zip")
 
-        scraper = LocalCorpusScraper()
+        scraper = CorpusScraper()
         corpus = MagicMock()
 
-        # Call the method and check for LocalEmptyCorpus exception
-        with self.assertRaises(LocalEmptyCorpus):
+        # Call the method and check for EmptyCorpus exception
+        with self.assertRaises(EmptyCorpus):
             scraper._infer_local_dirs(corpus, "empty-corpus")
 
 
 @override_settings(LOCAL_REPO_PATH="../../corpora")
-class TestLocalCorpusScraperWithFiles(TestCase):
+class TestCorpusScraperWithFiles(TestCase):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.local_repo_path = settings.LOCAL_REPO_PATH
-        cls.scraper = LocalCorpusScraper()
+        cls.scraper = CorpusScraper()
 
     def test_infer_local_dirs(self):
         corpus_dirname = "pseudo-timothy"
@@ -89,7 +87,7 @@ class TestLocalCorpusScraperWithFiles(TestCase):
         corpus = MagicMock()
         corpus.github_paula = "empty-corpus_PAULA"
         corpus.annis_corpus_name = "empty-corpus"
-        with self.assertRaises(LocalTTDirMissing):
+        with self.assertRaises(TTDirMissing):
             self.scraper._get_texts(corpus, corpus_dirname)
 
     def test_get_texts_missing_dir(self):
@@ -97,7 +95,7 @@ class TestLocalCorpusScraperWithFiles(TestCase):
         corpus = MagicMock()
         corpus.github_paula = "nonexistent-corpus_PAULA.zip"
         corpus.annis_corpus_name = "nonexistent-corpus"
-        with self.assertRaises(LocalTTDirMissing):
+        with self.assertRaises(TTDirMissing):
             self.scraper._get_texts(corpus, corpus_dirname)
 
     def test_infer_urn_code(self):
