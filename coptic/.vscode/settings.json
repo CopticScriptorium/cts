@@ -1,0 +1,12 @@
+{
+    "python.testing.unittestArgs": [
+        "manage.py",
+        "test",
+        "-t",
+        "."
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "python.testing.autoTestDiscoverOnSaveEnabled": false,
+    "python.envFile": "${workspaceFolder}/.env"
+}
