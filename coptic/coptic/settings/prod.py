@@ -13,7 +13,7 @@ TEMPLATE_DEBUG = False
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db/sqlite3.db",
+        "NAME": "sqlite3.db",
         "USER": "",
         "PASSWORD": "",
         "HOST": "",
@@ -25,6 +25,6 @@ if "test" in sys.argv:
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-STATIC_ROOT=os.path.join(PROJECT_DIR, "static")
+#STATIC_ROOT=os.path.join(PROJECT_DIR, "static")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
