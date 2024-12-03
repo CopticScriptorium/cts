@@ -1,15 +1,21 @@
 import os
 import sys
+from django.core.exceptions import DisallowedHost
+from django.utils.http import is_same_domain
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
+# Fetch the allowed hosts from the environment variable
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '')
+BUILD_CACHE_DIR = os.getenv('PLATFORM_CACHE_DIR', "")
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-TEMPLATE_DEBUG = False
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
+TEMPLATE_DEBUG = DEBUG
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -20,11 +26,13 @@ DATABASES = {
         "PORT": "",
     }
 }
+
+# Use test database if running tests
 if "test" in sys.argv:
-    DATABASES["default"]["name"] = "db/tessqlite3.db"
+    DATABASES["default"]["NAME"] = "db/test_sqlite3.db"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-#STATIC_ROOT=os.path.join(PROJECT_DIR, "static")
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
+LOCAL_REPO_PATH = BUILD_CACHE_DIR + "/corpora"

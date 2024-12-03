@@ -72,18 +72,6 @@ LOGGING = {
         "verbose": {"format": "%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s"},
     },
     "handlers": {
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": BASE_DIR + "/" + os.path.join("django_logger.log"),
-            "formatter": "verbose",
-        },
-        "filedb": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": BASE_DIR + "/" + os.path.join("django_db.log"),
-            "formatter": "verbose",
-        },
         "console": {
             "class": "logging.StreamHandler",
             "stream": sys.stdout,
@@ -92,7 +80,7 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "INFO",
         },
     },

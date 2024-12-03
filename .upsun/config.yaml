@@ -98,7 +98,8 @@ applications:
         pip install -r requirements_django_5.txt
         #./manage.py collectstatic --noinput
         ./manage.py migrate
-        ./addcorpora.sh
+        python manage.py addcorpus abraham
+        #./addcorpora.sh
         
       # The deploy hook is run after the app container has been started, but before it has started accepting requests.
       # More information: https://docs.upsun.com/create-apps/hooks/hooks-comparison.html#deploy-hook
