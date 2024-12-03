@@ -246,7 +246,7 @@ class CorpusScraper:
         self.local_repo_path = None
 
         self._init_config()
-        
+        self.ensure_local_repo()
         self._corpora = [
             d
             for d in os.listdir(self.local_repo_path)
@@ -267,6 +267,21 @@ class CorpusScraper:
         self._text_next = defaultdict(lambda: None)
         self._text_prev = defaultdict(lambda: None)
         self._text_urn = defaultdict(lambda: None)
+
+    def ensure_local_repo(self):
+        if not os.path.exists(self.local_repo_path):
+            self.clone_repo()
+        else:
+            self.pull_repo()
+
+    def clone_repo(self):
+        repo_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}.git"
+        subprocess.run(["git", "clone", repo_url, self.local_repo_path], check=True)
+        print(f"Cloned repository from {repo_url} to {self.local_repo_path}")
+
+    def pull_repo(self):
+        subprocess.run(["git", "-C", self.local_repo_path, "pull"], check=True)
+        print(f"Pulled latest changes in repository at {self.local_repo_path}")
         
     def _init_config(self):
         try:
@@ -625,24 +640,7 @@ class CorpusScraper:
 class GithubCorpusScraper(CorpusScraper):
 
     def __init__(self):
-        
-        self._init_config()
-        self.ensure_local_repo()
-
         # Call the superclass's __init__ method
         super().__init__()
 
-    def ensure_local_repo(self):
-        if not os.path.exists(self.local_repo_path):
-            self.clone_repo()
-        else:
-            self.pull_repo()
-
-    def clone_repo(self):
-        repo_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}.git"
-        subprocess.run(["git", "clone", repo_url, self.local_repo_path], check=True)
-        print(f"Cloned repository from {repo_url} to {self.local_repo_path}")
-
-    def pull_repo(self):
-        subprocess.run(["git", "-C", self.local_repo_path, "pull"], check=True)
-        print(f"Pulled latest changes in repository at {self.local_repo_path}")
+    
