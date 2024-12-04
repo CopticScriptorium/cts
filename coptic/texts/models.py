@@ -204,6 +204,18 @@ class Text(models.Model):
         self.modified = datetime.datetime.today()
         return super().save(*args, **kwargs)
 
+    @classmethod
+    def get_authors_for_corpus(cls, corpus_id):
+        texts = cls.objects.filter(corpus__id=corpus_id).prefetch_related('text_meta')
+        authors = set()
+        for text in texts:
+            try:
+                author = text.text_meta.get(name__iexact="author").value
+                authors.add(author)
+            except TextMeta.DoesNotExist:
+                continue
+        return authors
+
 
 class SpecialMetaManager(models.Manager):
     def get_queryset(self):
