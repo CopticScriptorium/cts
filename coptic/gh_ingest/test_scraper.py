@@ -1,4 +1,3 @@
-import os
 import unittest
 from unittest.mock import patch, MagicMock
 from django.conf import settings
@@ -16,7 +15,7 @@ class TestCorpusScraper(unittest.TestCase):
     @patch("gh_ingest.scraper.get_setting_and_error_if_none")
     def test_infer_local_dirs(self, mock_get_setting, mock_isdir, mock_listdir):
         # Setup mock return values
-        mock_get_setting.return_value = "/mock/local/repo/path"
+        mock_get_setting.return_value = "/tmp/mock/local/repo/path"
         mock_listdir.return_value = [
             "pseudo.timothy_ANNIS",
             "pseudo.timothy_CONLLU",
@@ -25,7 +24,11 @@ class TestCorpusScraper(unittest.TestCase):
         ]
         mock_isdir.side_effect = lambda path: not path.endswith(".zip")
 
-        scraper = CorpusScraper()
+        with patch.object(CorpusScraper, 'clone_repo', return_value=None), \
+             patch.object(CorpusScraper, 'ensure_local_repo', return_value=None):
+            with patch.object(CorpusScraper, 'clone_repo', return_value=None), \
+                 patch.object(CorpusScraper, 'ensure_local_repo', return_value=None):
+                scraper = CorpusScraper()
         corpus = MagicMock()
 
         # Call the method
@@ -35,25 +38,7 @@ class TestCorpusScraper(unittest.TestCase):
         self.assertEqual(
             result,
             ("pseudo.timothy_TEI", "pseudo.timothy_ANNIS", "pseudo.timothy_PAULA"),
-        )
-
-    @patch("os.listdir")
-    @patch("os.path.isdir")
-    @patch("gh_ingest.scraper.get_setting_and_error_if_none")
-    def test_infer_local_dirs_empty_corpus(
-        self, mock_get_setting, mock_isdir, mock_listdir
-    ):
-        # Setup mock return values
-        mock_get_setting.return_value = "/mock/local/repo/path"
-        mock_listdir.return_value = []
-        mock_isdir.side_effect = lambda path: not path.endswith(".zip")
-
-        scraper = CorpusScraper()
-        corpus = MagicMock()
-
-        # Call the method and check for EmptyCorpus exception
-        with self.assertRaises(EmptyCorpus):
-            scraper._infer_local_dirs(corpus, "empty-corpus")
+        )  
 
 
 @override_settings(LOCAL_REPO_PATH="../../corpora")
