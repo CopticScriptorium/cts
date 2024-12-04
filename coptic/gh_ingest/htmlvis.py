@@ -87,37 +87,38 @@ class Directive:
 
     @classmethod
     def parse_generated_element(cls, text):
-        "Parses the second column in a config"
-        semicolon_index = text.find(";")
-        if semicolon_index == -1:
+            "Parses the second column in a config"
+            semicolon_index = text.find(";")
+            if semicolon_index == -1:
+                colon_index = text.find(":")
+                if colon_index == -1:
+                    return {"name": text}
+                else:
+                    return {"name": text[:colon_index], "attr": text[colon_index + 1:]}
+
+            name, attrs_text = text[:semicolon_index], text[semicolon_index + 1:]
+
+            d = {}
             colon_index = text.find(":")
             if colon_index == -1:
-                return {"name": text}
+                d["name"] = name
             else:
-                return {"name": text[:colon_index], "attr": text[colon_index + 1 :]}
+                d["name"] = name[:colon_index]
+                d["attr"] = name[colon_index + 1:]
 
-        name, attrs_text = text[:semicolon_index], text[semicolon_index + 1 :]
+            # only support the "style" attr for now
+            style = re.findall(r'style="([^"]*?)"', attrs_text)
 
-        d = {}
-        colon_index = text.find(":")
-        if colon_index == -1:
-            d["name"] = name
-        else:
-            d["name"] = name[:colon_index]
-            d["attr"] = name[colon_index + 1 :]
+            if len(style) == 0:
+                return d
+            style = style[0]
 
-        # only support the "style" attr for now
-        style = re.search(r'style="([^"]*?)"', attrs_text).group(1) if re.search(r'style="([^"]*?)"', attrs_text) else None
-        if not style:
+            # perhaps regrettably, "style" can actually mean "class" if there's no colon inside.
+            if ":" not in style:
+                d["class"] = style
+            else:
+                d["style"] = style
             return d
-        style = style[0]
-
-        # perhaps regrettably, "style" can actually mean "class" if there's no colon inside.
-        if ":" not in style:
-            d["class"] = style
-        else:
-            d["style"] = style
-        return d
 
     @classmethod
     def parse_content(cls, text):

@@ -124,6 +124,29 @@ class TestHtmlVis(unittest.TestCase):
     def test_directive_parse_content(self):
         result = Directive.parse_content('"word"')
         self.assertEqual(result, {"type": ContentTypes.STRING, "value": "word"})
+ 
+    def test_apply_left_tok_directive(self):
+        directive = TokDirective("tok", "span")
+        result = directive.apply_left("token", "text")
+        self.assertEqual(result, "<span>text")
+
+    def test_apply_left_ann_directive(self):
+        elt = SgmlElement("title", [("title", "Test Title")])
+        directive = AnnDirective("title", "span", "value")
+        result = directive.apply_left(elt, "text")
+        self.assertEqual(result, '<span>Test Titletext')
+
+    def test_apply_left_value_directive(self):
+        elt = SgmlElement("norm", [("norm", "God")])
+        directive = ValueDirective('="God"', "span", "value")
+        result = directive.apply_left(elt, "text")
+        self.assertEqual(result, '<span>Godtext')
+
+    def test_apply_left_ann_and_value_directive(self):
+        elt = SgmlElement("norm", [("norm", "God")])
+        directive = AnnAndValueDirective("norm=God", "span", "value")
+        result = directive.apply_left(elt, "text")
+        self.assertEqual(result, '<span>Godtext')
 
 
 if __name__ == "__main__":
