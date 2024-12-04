@@ -7,6 +7,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 DEBUG = True
 TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = ["localhost", "coptic.dev"]
+SECRET_KEY="ActuallyAnythingWeAreinDev"
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases

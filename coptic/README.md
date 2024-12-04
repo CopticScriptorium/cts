@@ -29,6 +29,9 @@ cp coptic/settings/secrets.py.example coptic/settings/secrets.py
 vim coptic/settings/secrets.py
 ```
 
+Set an environment variable COPTIC_ENVIROMENT to 'prod' to use production settings 
+otherwise it will assume 'dev'
+
 2. Run the migration to update the DB's SQL schema:
 
 ```sh
