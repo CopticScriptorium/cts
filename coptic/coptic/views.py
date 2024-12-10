@@ -183,94 +183,24 @@ def get_meta_values(meta):
 @cache_page(CACHE_TTL)
 def index_view(request, special_meta=None):
     context = _base_context()
-    value_corpus_pairs = OrderedDict()
 
     try:
         meta = models.SpecialMeta.objects.get(name=special_meta)
     except (models.SpecialMeta.DoesNotExist, ValueError):
         raise Http404(f'Special metadata type "{special_meta}" not found')
 
-    meta_values = get_meta_values(meta)
-
-    b64_meta_values = {}
-    b64_corpora = {}
-    all_corpora = set()
-
-    for meta_value in meta_values:
-        b64_meta_values[meta_value] = str(
-            base64.b64encode(('identity="' + meta_value + '"').encode("ascii")).decode(
-                "ascii"
-            )
-        )
-        if meta.splittable:
-            corpora = (
-                models.Text.objects.filter(
-                    text_meta__name__iexact=meta.name,
-                    text_meta__value__icontains=meta_value,
-                )
-                .values(
-                    "corpus__slug",
-                    "corpus__title",
-                    "corpus__id",
-                    "corpus__urn_code",
-                    "corpus__annis_corpus_name",
-                )
-                .distinct()
-            )
-        else:
-            corpora = (
-                models.Text.objects.filter(
-                    text_meta__name__iexact=meta.name,
-                    text_meta__value__iexact=meta_value,
-                )
-                .values(
-                    "corpus__slug",
-                    "corpus__title",
-                    "corpus__id",
-                    "corpus__urn_code",
-                    "corpus__annis_corpus_name",
-                )
-                .distinct()
-            )
-
-        value_corpus_pairs[meta_value] = []
-        for c in sorted(corpora, key=lambda x: x["corpus__title"]):
-            authors = models.Text.get_authors_for_corpus(c["corpus__id"])
-            if len(authors) == 0:
-                author = None
-            elif len(authors) == 1:
-                author = list(authors)[0]
-            elif len(authors) < 3:
-                author = ", ".join(authors)
-            else:
-                author = "multiple"
-
-            value_corpus_pairs[meta_value].append(
-                {
-                    "slug": c["corpus__slug"],
-                    "title": c["corpus__title"],
-                    "urn_code": c["corpus__urn_code"],
-                    "author": author,
-                    "annis_corpus_name": c["corpus__annis_corpus_name"],
-                }
-            )
-
-            b64_corpora[c["corpus__annis_corpus_name"]] = str(
-                base64.b64encode(c["corpus__annis_corpus_name"].encode("ascii")).decode(
-                    "ascii"
-                )
-            )
-            all_corpora.add(c["corpus__annis_corpus_name"])
-        value_corpus_pairs[meta_value].sort(key=lambda x: x["title"])
+    value_corpus_pairs = models.Text.get_value_corpus_pairs(meta)
+    b64_meta_values = models.Text.get_b64_meta_values(value_corpus_pairs)
+    b64_corpora = models.Text.get_b64_corpora(value_corpus_pairs)
+    all_corpora = models.Text.get_all_corpora(value_corpus_pairs)
 
     annis_corpora = ",".join(list(all_corpora))
     annis_corpora = str(base64.b64encode(annis_corpora.encode("ascii")).decode("ascii"))
+
     context.update(
         {
             "special_meta": meta.name,
-            "value_corpus_pairs": sorted(
-                value_corpus_pairs.items(), key=lambda x: x[1][0]["title"]
-            ),
+            "value_corpus_pairs": models.Text.get_sorted_value_corpus_pairs(value_corpus_pairs),
             "is_corpus": meta.name == "corpus",
             "b64_meta_values": b64_meta_values,
             "b64_corpora": b64_corpora,

@@ -3,6 +3,34 @@ import re
 from base64 import b64encode
 from django.db import models
 from django.core.serializers.json import DjangoJSONEncoder
+import base64
+from collections import OrderedDict
+
+HTML_TAG_REGEX = re.compile(r"<[^>]*?>")
+
+def get_meta_values(meta):
+    unsplit_values = map(
+        lambda x: x["value"],
+        TextMeta.objects.filter(name__iexact=meta.name)
+        .values("value")
+        .distinct(),
+    )
+    if not meta.splittable:
+        meta_values = unsplit_values
+    else:
+        sep = "; " if str(meta.name) in ["places", "people"] else ", "
+        split_meta_values = [v.split(sep) for v in unsplit_values]
+        for i, vals in enumerate(split_meta_values):
+            if (
+                any(len(v) > 50 for v in vals) and sep == ", "
+            ):  # e.g. long translation value with comma somewhere
+                split_meta_values[i] = [", ".join(vals)]
+        meta_values = set()
+        for vals in split_meta_values:
+            meta_values = meta_values.union(set(vals))
+    meta_values = sorted(list({v.strip() for v in meta_values}))
+    meta_values = [re.sub(HTML_TAG_REGEX, "", meta_value) for meta_value in meta_values]
+    return meta_values
 
 
 class HtmlVisualizationFormatManager(models.Manager):
@@ -215,6 +243,102 @@ class Text(models.Model):
             except TextMeta.DoesNotExist:
                 continue
         return authors
+
+    @classmethod
+    def get_corpora_for_meta_value(cls, meta_name, meta_value, splittable):
+        if splittable:
+            corpora = (
+                cls.objects.filter(
+                    text_meta__name__iexact=meta_name,
+                    text_meta__value__icontains=meta_value,
+                )
+                .values(
+                    "corpus__slug",
+                    "corpus__title",
+                    "corpus__id",
+                    "corpus__urn_code",
+                    "corpus__annis_corpus_name",
+                )
+                .distinct()
+            )
+        else:
+            corpora = (
+                cls.objects.filter(
+                    text_meta__name__iexact=meta_name,
+                    text_meta__value__iexact=meta_value,
+                )
+                .values(
+                    "corpus__slug",
+                    "corpus__title",
+                    "corpus__id",
+                    "corpus__urn_code",
+                    "corpus__annis_corpus_name",
+                )
+                .distinct()
+            )
+        return corpora
+
+    @classmethod
+    def get_value_corpus_pairs(cls, meta):
+        meta_values = get_meta_values(meta)
+        value_corpus_pairs = OrderedDict()
+
+        for meta_value in meta_values:
+            corpora = cls.get_corpora_for_meta_value(meta.name, meta_value, meta.splittable)
+            value_corpus_pairs[meta_value] = []
+
+            for c in sorted(corpora, key=lambda x: x["corpus__title"]):
+                authors = cls.get_authors_for_corpus(c["corpus__id"])
+                if len(authors) == 0:
+                    author = None
+                elif len(authors) == 1:
+                    author = list(authors)[0]
+                elif len(authors) < 3:
+                    author = ", ".join(authors)
+                else:
+                    author = "multiple"
+
+                value_corpus_pairs[meta_value].append(
+                    {
+                        "slug": c["corpus__slug"],
+                        "title": c["corpus__title"],
+                        "urn_code": c["corpus__urn_code"],
+                        "author": author,
+                        "annis_corpus_name": c["corpus__annis_corpus_name"],
+                    }
+                )
+            value_corpus_pairs[meta_value].sort(key=lambda x: x["title"])
+
+        return value_corpus_pairs
+
+    @classmethod
+    def get_b64_meta_values(cls, value_corpus_pairs):
+        return {
+            meta_value: str(base64.b64encode(('identity="' + meta_value + '"').encode("ascii")).decode("ascii"))
+            for meta_value in value_corpus_pairs.keys()
+        }
+
+    @classmethod
+    def get_b64_corpora(cls, value_corpus_pairs):
+        for meta_value in value_corpus_pairs.values():
+            for c in meta_value:
+                if "annis_corpus_name" not in c:
+                    print(f"Missing key in: {c}")
+                else:
+                    print(f"Key found in: {c}")
+        return {
+            c["annis_corpus_name"]: str(base64.b64encode(c["annis_corpus_name"].encode("ascii")).decode("ascii"))
+            for meta_value in value_corpus_pairs.values()
+            for c in meta_value
+        }
+
+    @classmethod
+    def get_all_corpora(cls, value_corpus_pairs):
+        return {c["annis_corpus_name"] for meta_value in value_corpus_pairs.values() for c in meta_value}
+
+    @classmethod
+    def get_sorted_value_corpus_pairs(cls, value_corpus_pairs):
+        return sorted(value_corpus_pairs.items(), key=lambda x: x[1][0]["title"])
 
 
 class SpecialMetaManager(models.Manager):
