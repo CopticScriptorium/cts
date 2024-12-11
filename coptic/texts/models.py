@@ -3,7 +3,6 @@ import re
 import logging
 from base64 import b64encode
 from django.db import models
-from django.core.serializers.json import DjangoJSONEncoder
 import base64
 from collections import OrderedDict
 
@@ -34,7 +33,7 @@ def get_meta_values(meta):
             meta_values = meta_values.union(set(vals))
     meta_values = sorted(list({v.strip() for v in meta_values}))
     meta_values = [re.sub(HTML_TAG_REGEX, "", meta_value) for meta_value in meta_values]
-    logger.debug("Meta Values: %s", meta_values)  # Debug statement
+    #logger.debug("Meta Values: %s", meta_values)  # Debug statement
     return meta_values
 
 
@@ -239,16 +238,13 @@ class Text(models.Model):
 
     @classmethod
     def get_authors_for_corpus(cls, corpus_id):
-        texts = cls.objects.filter(corpus__id=corpus_id).prefetch_related('text_meta')
-        authors = set()
-        for text in texts:
-            try:
-                author = text.text_meta.get(name__iexact="author").value
-                authors.add(author)
-            except TextMeta.DoesNotExist:
-                continue
-        logger.debug("Authors for Corpus: %s", authors)  # Debug statement
-        return authors
+        authors = TextMeta.objects.filter(
+            text__corpus__id=corpus_id,
+            name__iexact="author"
+        ).values_list('value', flat=True).distinct()
+        authors_set = set(authors)
+        logger.debug("Authors for Corpus: %s", authors_set)  # Debug statement
+        return authors_set
 
     @classmethod
     def get_corpora_for_meta_value(cls, meta_name, meta_value, splittable):
@@ -282,7 +278,7 @@ class Text(models.Model):
                 )
                 .distinct()
             )
-        logger.debug("Corpora for Meta Value: %s", corpora)  # Debug statement
+        #logger.debug("Corpora for Meta Value: %s", corpora)  # Debug statement
         return corpora
 
     @classmethod
