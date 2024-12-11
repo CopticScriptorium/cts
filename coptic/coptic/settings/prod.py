@@ -14,6 +14,26 @@ BUILD_CACHE_DIR = os.getenv('PLATFORM_CACHE_DIR', "")
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
 TEMPLATE_DEBUG = DEBUG
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s"},
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {

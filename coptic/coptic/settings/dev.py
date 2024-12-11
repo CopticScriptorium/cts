@@ -9,6 +9,26 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = ["localhost", "coptic.dev"]
 SECRET_KEY="ActuallyAnythingWeAreinDev"
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {"format": "%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s"},
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "WARNING",
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 

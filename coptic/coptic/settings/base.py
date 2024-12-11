@@ -65,26 +65,6 @@ ROOT_URLCONF = "coptic.urls"
 
 WSGI_APPLICATION = "coptic.wsgi.application"
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {"format": "%(asctime)s\t%(levelname)s\t%(module)s\t%(message)s"},
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "stream": sys.stdout,
-            "formatter": "verbose",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": "INFO",
-        },
-    },
-}
 # Cache configuration
 CACHES = {
     "default": {
