@@ -1,5 +1,5 @@
 from django.test import TestCase
-from texts.models import HtmlVisualizationFormat, HtmlVisualization, Corpus, SpecialMeta
+from texts.models import HtmlVisualizationFormat, HtmlVisualization, Corpus, SpecialMeta, Text, TextMeta
 import json
 
 
@@ -8,13 +8,12 @@ class TestHtmlVisualizationFormat(TestCase):
         formats = HtmlVisualizationFormat.objects.all()
         self.assertEqual(len(formats), 5)  # We have 5 predefined formats
 
-        # Updated to match the actual slugs from HtmlVisualizationFormat.Data.FORMATS
         expected_formats = {
             "norm": "Normalized Text",
             "analytic": "Analytic Visualization",
             "dipl": "Diplomatic Edition",
             "sahidica": "Sahidica Chapter View",
-            "verses": "Versified Text",  # Changed from 'versified' to 'verses'
+            "verses": "Versified Text",
         }
 
         actual_formats = {f.slug: f.title for f in formats}
@@ -111,3 +110,74 @@ class TestSpecialMeta(TestCase):
         meta1 = SpecialMeta.objects.get(name="people")
         meta2 = SpecialMeta.objects.get(name="people")
         self.assertEqual(meta1.id, meta2.id)
+
+
+class TestTextModel(TestCase):
+    def setUp(self):
+        self.corpus = Corpus.objects.create(
+            title="Test Corpus",
+            slug="test-corpus",
+            urn_code="urn:test:corpus",
+            annis_corpus_name="test.corpus",
+        )
+        self.text1 = Text.objects.create(
+            corpus=self.corpus,
+            slug="text1",
+            title="Text 1",
+        )
+        self.text2 = Text.objects.create(
+            corpus=self.corpus,
+            slug="text2",
+            title="Text 2",
+        )
+        self.meta1 = TextMeta.objects.create(
+            text=self.text1,
+            name="author",
+            value="Author 1",
+        )
+        self.meta2 = TextMeta.objects.create(
+            text=self.text2,
+            name="author",
+            value="Author 2",
+        )
+        self.special_meta = SpecialMeta.objects.create(
+            name="author",
+            order=1,
+            splittable=False,
+        )
+
+    def test_get_authors_for_corpus(self):
+        authors = Text.get_authors_for_corpus(self.corpus.id)
+        self.assertSetEqual(authors, {"Author 1", "Author 2"})
+
+    def test_get_corpora_for_meta_value(self):
+        corpora = Text.get_corpora_for_meta_value("author", "Author 1", False)
+        self.assertEqual(len(corpora), 1)
+        self.assertEqual(corpora[0]["corpus__slug"], "test-corpus")
+
+    def test_get_value_corpus_pairs(self):
+        value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
+        self.assertIn("Author 1", value_corpus_pairs)
+        self.assertIn("Author 2", value_corpus_pairs)
+
+    def test_get_b64_meta_values(self):
+        value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
+        b64_meta_values = Text.get_b64_meta_values(value_corpus_pairs)
+        self.assertIn("Author 1", b64_meta_values)
+        self.assertIn("Author 2", b64_meta_values)
+
+    def test_get_b64_corpora(self):
+        value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
+        b64_corpora = Text.get_b64_corpora(value_corpus_pairs)
+        self.assertIn("test.corpus", b64_corpora)
+
+    def test_get_all_corpora(self):
+        value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
+        all_corpora = Text.get_all_corpora(value_corpus_pairs)
+        self.assertIn("test.corpus", all_corpora)
+
+    def test_get_sorted_value_corpus_pairs(self):
+        value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
+        sorted_pairs = Text.get_sorted_value_corpus_pairs(value_corpus_pairs)
+        self.assertEqual(sorted_pairs[0][0], "Author 1")
+        self.assertEqual(sorted_pairs[1][0], "Author 2")

@@ -60,23 +60,13 @@ class HtmlVisualizationFormat(models.Model):
         managed = False  # Tell Django not to create/manage the table
 
     class Data:
-        FORMATS = {
-            "norm": dict(
-                slug="norm", button_title="normalized", title="Normalized Text"
-            ),
-            "analytic": dict(
-                slug="analytic", button_title="analytic", title="Analytic Visualization"
-            ),
-            "dipl": dict(
-                slug="dipl", button_title="diplomatic", title="Diplomatic Edition"
-            ),
-            "sahidica": dict(
-                slug="sahidica", button_title="chapter", title="Sahidica Chapter View"
-            ),
-            "versified": dict(
-                slug="verses", button_title="versified", title="Versified Text"
-            ),
-        }
+        FORMATS = OrderedDict([
+            ("norm", dict(slug="norm", button_title="normalized", title="Normalized Text")),
+            ("analytic", dict(slug="analytic", button_title="analytic", title="Analytic Visualization")),
+            ("dipl", dict(slug="dipl", button_title="diplomatic", title="Diplomatic Edition")),
+            ("sahidica", dict(slug="sahidica", button_title="chapter", title="Sahidica Chapter View")),
+            ("versified", dict(slug="verses", button_title="versified", title="Versified Text")),
+        ])
 
     objects = HtmlVisualizationFormatManager()
 
@@ -118,23 +108,22 @@ class Corpus(models.Model):
     github_tei = models.CharField(max_length=50, blank=True)
     github_relannis = models.CharField(max_length=50, blank=True)
     github_paula = models.CharField(max_length=50, blank=True)
-    visualization_formats = models.TextField(default="[]")
+    # Store visualization formats as a comma-separated string
+    visualization_formats = models.TextField(default="")
 
     def get_visualization_formats(self):
-        import json
-
-        try:
-            return json.loads(self.visualization_formats)
-        except:
+        """Retrieve visualization formats as a list of slugs."""
+        if not self.visualization_formats:
             return []
+        return self.visualization_formats.split(",")
 
     def set_visualization_formats(self, formats):
-        import json
-
-        self.visualization_formats = json.dumps([f.slug for f in formats])
+        """Set visualization formats from a list of HtmlVisualizationFormat objects."""
+        self.visualization_formats = ",".join(f.slug for f in formats)
 
     @property
     def html_visualization_formats(self):
+        """Return HtmlVisualizationFormat objects in the stored order."""
         return [
             HtmlVisualizationFormat.objects.get(slug=slug)
             for slug in self.get_visualization_formats()

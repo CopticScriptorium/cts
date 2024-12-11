@@ -64,9 +64,9 @@ def corpus_view(request, corpus=None):
             results += order_match
     results = sorted(results, key=lambda t: (t.order, t.id))
     texts = results
-
+    formats = models.HtmlVisualizationFormat.objects.all()
     context = _base_context()
-    context.update({"corpus": corpus_object, "texts": texts, "page_title": corpus_object.title})
+    context.update({"corpus": corpus_object, "texts": texts, "page_title": corpus_object.title, "formats": formats})
     return render(request, "corpus.html", context)
 
 
@@ -112,10 +112,10 @@ def text_view(request, corpus=None, text=None, format=None):
         text_object.endnote = text_object.text_meta.get(name="endnote").value
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
         pass
-
+    formats = models.HtmlVisualizationFormat.objects.all()
     context = _base_context()
     context.update(
-        {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title}
+        {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title, "formats": formats}
     )
     return render(request, "text.html", context)
 
