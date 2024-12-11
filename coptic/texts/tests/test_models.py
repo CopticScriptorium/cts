@@ -175,9 +175,3 @@ class TestTextModel(TestCase):
         value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
         all_corpora = Text.get_all_corpora(value_corpus_pairs)
         self.assertIn("test.corpus", all_corpora)
-
-    def test_get_sorted_value_corpus_pairs(self):
-        value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
-        sorted_pairs = Text.get_sorted_value_corpus_pairs(value_corpus_pairs)
-        self.assertEqual(sorted_pairs[0][0], "Author 1")
-        self.assertEqual(sorted_pairs[1][0], "Author 2")

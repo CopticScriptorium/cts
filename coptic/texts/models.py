@@ -336,10 +336,6 @@ class Text(models.Model):
     def get_all_corpora(cls, value_corpus_pairs):
         return {c["annis_corpus_name"] for meta_value in value_corpus_pairs.values() for c in meta_value}
 
-    @classmethod
-    def get_sorted_value_corpus_pairs(cls, value_corpus_pairs):
-        return sorted(value_corpus_pairs.items(), key=lambda x: x[1][0]["title"])
-
 
 class SpecialMetaManager(models.Manager):
     def get_queryset(self):
