@@ -18,7 +18,7 @@
                 <a href="/search?{{ special_meta }}={{ meta_value }}">
                     <h2 class="meta-value">{{ meta_value }}</h2>
                     {% if special_meta == 'people' or special_meta == 'places' %}
-                        <a class="index-link index-annis" target="_blank" title="Search for {{ meta_value }} in all corpora on ANNIS" identity="{{ meta_value }}" href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value }}&_c={{ annis_corpora }}"><span>ANNIS search</span><span class="fa fa-external-link"></span></a> <a class="index-link wiki-link" data-title="{{ meta_value }}" title="{{ meta_value }}" href="https://en.wikipedia.org/wiki/{{ meta_value }}"><span>Wikipedia</span><span class="fa fa-external-link"></span></a>
+                        <a class="index-link index-annis" target="_blank" title="Search for {{ meta_value }} in all corpora on ANNIS" identity="{{ meta_value }}" href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value }}&_c={{ annis_corpora }}"><span>ANNIS search</span> <span class="fa fa-external-link"></span></a> <a class="index-link wiki-link" data-title="{{ meta_value }}" title="{{ meta_value }}" href="https://en.wikipedia.org/wiki/{{ meta_value }}"><span>Wikipedia</span> <span class="fa fa-external-link"></span></a>
                     {% endif %}
                 </a>
             {% endif %}
@@ -47,7 +47,7 @@
                                         <a class="index-link index-annis index-low"
                                            target="_blank"
                                            title="Search for {{ meta_value }} in {{ corpus.title }} on ANNIS"
-                                           href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value }}&_c={{ b64_corpora|keyvalue:corpus.annis_corpus_name }}"><span>ANNIS search</span><span class="fa fa-external-link"></span></a>
+                                           href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value }}&_c={{ b64_corpora|keyvalue:corpus.annis_corpus_name }}"><span>ANNIS search</span> <span class="fa fa-external-link"></span></a>
                                     {% endif %}
                                     {% if corpus.urn_code or corpus.author and special_meta != 'author' %}
                                         <br />
