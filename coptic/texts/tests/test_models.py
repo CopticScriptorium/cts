@@ -47,8 +47,8 @@ class TestCorpusVisualizationFormats(TestCase):
         self.corpus.set_visualization_formats(formats)
 
         # Test raw storage
-        stored_data = json.loads(self.corpus.visualization_formats)
-        self.assertEqual(stored_data, ["norm", "dipl"])
+        stored_data = self.corpus.visualization_formats
+        self.assertEqual(stored_data, 'norm,dipl')
 
         # Test retrieval through property
         retrieved_formats = self.corpus.html_visualization_formats
@@ -140,6 +140,8 @@ class TestTextModel(TestCase):
             name="author",
             value="Author 2",
         )
+        self.text1.text_meta.add(self.meta1)
+        self.text2.text_meta.add(self.meta2)
         self.special_meta = SpecialMeta.objects.create(
             name="author",
             order=1,
@@ -175,3 +177,8 @@ class TestTextModel(TestCase):
         value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
         all_corpora = Text.get_all_corpora(value_corpus_pairs)
         self.assertIn("test.corpus", all_corpora)
+
+    def test_get_sorted_value_corpus_pairs(self):
+        value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
+        self.assertEqual(list(value_corpus_pairs.keys())[0], "Author 1")
+        self.assertEqual(list(value_corpus_pairs.keys())[1], "Author 2")
