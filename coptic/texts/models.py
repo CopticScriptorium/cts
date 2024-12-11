@@ -1,10 +1,14 @@
 import datetime
 import re
+import logging
 from base64 import b64encode
 from django.db import models
 from django.core.serializers.json import DjangoJSONEncoder
 import base64
 from collections import OrderedDict
+
+# Configure logger
+logger = logging.getLogger(__name__)
 
 HTML_TAG_REGEX = re.compile(r"<[^>]*?>")
 
@@ -30,6 +34,7 @@ def get_meta_values(meta):
             meta_values = meta_values.union(set(vals))
     meta_values = sorted(list({v.strip() for v in meta_values}))
     meta_values = [re.sub(HTML_TAG_REGEX, "", meta_value) for meta_value in meta_values]
+    logger.debug("Meta Values: %s", meta_values)  # Debug statement
     return meta_values
 
 
@@ -242,6 +247,7 @@ class Text(models.Model):
                 authors.add(author)
             except TextMeta.DoesNotExist:
                 continue
+        logger.debug("Authors for Corpus: %s", authors)  # Debug statement
         return authors
 
     @classmethod
@@ -276,6 +282,7 @@ class Text(models.Model):
                 )
                 .distinct()
             )
+        logger.debug("Corpora for Meta Value: %s", corpora)  # Debug statement
         return corpora
 
     @classmethod
@@ -309,6 +316,7 @@ class Text(models.Model):
                 )
             value_corpus_pairs[meta_value].sort(key=lambda x: x["title"])
 
+        logger.debug("Value Corpus Pairs: %s", value_corpus_pairs)  # Debug statement
         return value_corpus_pairs
 
     @classmethod
@@ -323,9 +331,9 @@ class Text(models.Model):
         for meta_value in value_corpus_pairs.values():
             for c in meta_value:
                 if "annis_corpus_name" not in c:
-                    print(f"Missing key in: {c}")
+                    logger.debug("Missing key in: %s", c)
                 else:
-                    print(f"Key found in: {c}")
+                    logger.debug("Key found in: %s", c)
         return {
             c["annis_corpus_name"]: str(base64.b64encode(c["annis_corpus_name"].encode("ascii")).decode("ascii"))
             for meta_value in value_corpus_pairs.values()
