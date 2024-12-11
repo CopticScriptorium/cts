@@ -200,7 +200,7 @@ def index_view(request, special_meta=None):
     context.update(
         {
             "special_meta": meta.name,
-            "value_corpus_pairs": models.Text.get_sorted_value_corpus_pairs(value_corpus_pairs),
+            "value_corpus_pairs": value_corpus_pairs.items(),
             "is_corpus": meta.name == "corpus",
             "b64_meta_values": b64_meta_values,
             "b64_corpora": b64_corpora,
