@@ -1,6 +1,13 @@
 {
     "configurations": [
         {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Django: Add Corpus with Profiling",
             "type": "python",
             "request": "launch",
@@ -37,6 +44,20 @@
                 "--source=local",
                 "--local-repo-path=../../corpora",
                 "bohairic.nt"
+            ],
+            "django": true,
+            "justMyCode": true,
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Run Unit Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "test",
+                "-t",
+                "."
             ],
             "django": true,
             "justMyCode": true,
