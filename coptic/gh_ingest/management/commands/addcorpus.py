@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from gh_ingest.scraper import GithubCorpusScraper, CorpusScraper
+from gh_ingest.corpus_scraper import CorpusScraper
 from gh_ingest.scraper_exceptions import ScraperException
 from gh_ingest.htmlvis import HtmlGenerationException
 from django.conf import settings
@@ -30,7 +30,7 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		if options['source'] == 'github':
 			self.stdout.write("Using GitHub as the source of the corpus data.")
-			scraper = GithubCorpusScraper()
+			scraper = CorpusScraper()
 		else:
 			self.stdout.write("Using Local repo as the source of the corpus data.")
 			if not options['local_repo_path']:

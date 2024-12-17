@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from django.conf import settings
 from django.test import override_settings, TestCase
-from gh_ingest.scraper import (
+from gh_ingest.corpus_transaction import (
     CorpusScraper,
 )
 from gh_ingest.scraper_exceptions import EmptyCorpus, TTDirMissing

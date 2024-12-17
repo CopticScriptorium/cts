@@ -1,11 +1,14 @@
 import datetime
+import os
 import re
 import logging
 from base64 import b64encode
 from django.db import models
 import base64
 from collections import OrderedDict
-
+from coptic.settings.base import HTML_CONFIGS
+from gh_ingest.htmlvis import generate_visualization
+from gh_ingest.scraper_exceptions import NoTexts, TTDirMissing
 # Configure logger
 logger = logging.getLogger(__name__)
 
@@ -80,55 +83,6 @@ class HtmlVisualizationFormatManager(models.Manager):
 
         raise HtmlVisualizationFormat.DoesNotExist
 
-
-class HtmlVisualizationFormat(models.Model):
-    title = models.CharField(max_length=200)
-    button_title = models.CharField(max_length=200)
-    slug = models.CharField(max_length=200)
-
-    class Meta:
-        verbose_name = "HTML Visualization Format"
-        verbose_name_plural = "HTML Visualization Formats"
-        managed = False  # Tell Django not to create/manage the table
-
-    class Data:
-        FORMATS = OrderedDict([
-            ("norm", dict(slug="norm", button_title="normalized", title="Normalized Text")),
-            ("analytic", dict(slug="analytic", button_title="analytic", title="Analytic Visualization")),
-            ("dipl", dict(slug="dipl", button_title="diplomatic", title="Diplomatic Edition")),
-            ("sahidica", dict(slug="sahidica", button_title="chapter", title="Sahidica Chapter View")),
-            ("versified", dict(slug="verses", button_title="versified", title="Versified Text")),
-        ])
-
-    objects = HtmlVisualizationFormatManager()
-
-    def __str__(self):
-        return self.title  # Changed from self.visualization_format.title to self.title
-
-
-class HtmlVisualization(models.Model):
-    visualization_format_slug = models.CharField(max_length=200)
-    html = models.TextField()
-
-    class Meta:
-        verbose_name = "HTML Visualization"
-
-    @property
-    def visualization_format(self):
-        return HtmlVisualizationFormat.objects.get(slug=self.visualization_format_slug)
-
-    @visualization_format.setter
-    def visualization_format(self, format_obj):
-        """Set the visualization format using a HtmlVisualizationFormat object"""
-        if format_obj is None:
-            self.visualization_format_slug = None
-        else:
-            self.visualization_format_slug = format_obj.slug
-
-    def __str__(self):
-        return self.visualization_format.title
-
-
 class Corpus(models.Model):
     created = models.DateTimeField(editable=False)
     modified = models.DateTimeField(editable=False)
@@ -183,6 +137,110 @@ class Corpus(models.Model):
             + self._annis_corpus_name_b64encoded()
         )
 
+class HtmlVisualizationFormat(models.Model):
+    title = models.CharField(max_length=200)
+    button_title = models.CharField(max_length=200)
+    slug = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = "HTML Visualization Format"
+        verbose_name_plural = "HTML Visualization Formats"
+        managed = False  # Tell Django not to create/manage the table
+
+    class Data:
+        # FIXME: I'd actually like to refactor this and
+        # get rid of 
+        # norm/norm/normalized -> normalized
+        # dipl/dipl/diplomatic -> diplomatic
+        # sahidica/sahidica/chapter -> sahidica? - maybe sahidica_chapter?
+        # versified/verses/versified -> versified
+        FORMATS = OrderedDict([
+            ("norm", dict(slug="norm", button_title="normalized", title="Normalized Text")),
+            ("analytic", dict(slug="analytic", button_title="analytic", title="Analytic Visualization")),
+            ("dipl", dict(slug="dipl", button_title="diplomatic", title="Diplomatic Edition")),
+            ("sahidica", dict(slug="sahidica", button_title="chapter", title="Sahidica Chapter View")),
+            ("versified", dict(slug="verses", button_title="versified", title="Versified Text")),
+        ])
+
+    objects = HtmlVisualizationFormatManager()
+
+    def __str__(self):
+        return self.title  # Changed from self.visualization_format.title to self.title
+
+
+class HtmlVisualization(models.Model):
+    #FIXME this model is probably not needed at all ..
+    # get_html_visualization should be a method on Text
+    visualization_format_slug = models.CharField(max_length=200)
+    html = models.TextField()
+
+    class Meta:
+        verbose_name = "HTML Visualization"
+
+    # FIXME temporary code duplication 
+    def _get_texts(self, corpus, corpus_dirname):
+        corpus_path = os.path.join("../../corpora", corpus_dirname)
+        texts = []
+
+        try:
+            if corpus.github_paula.endswith("zip"):
+                dir_contents = self._get_all_files_in_zip(
+                    os.path.join(corpus_path, corpus.annis_corpus_name + "_TT.zip")
+                )
+                texts = [(name, contents) for name, contents in dir_contents]
+            else:
+                tt_dir = os.path.join(corpus_path, corpus.annis_corpus_name + "_TT")
+                dir_contents = os.listdir(tt_dir)
+                texts = [
+                    (name, open(os.path.join(tt_dir, name)).read())
+                    for name in dir_contents
+                ]
+        except FileNotFoundError as e:
+            tt_dir = os.path.join(corpus_path, corpus.annis_corpus_name + "_TT")
+            raise TTDirMissing(corpus_dirname,"../../corpora", tt_dir) from e
+
+        if len(texts) == 0:
+            raise NoTexts(corpus_dirname, self.local_repo_path, tt_dir)
+
+        return dict(texts)
+
+    @property
+    def html(self):
+        # FIXME: we can probably refactor
+        # this to something like a dict or
+        # a template? Anyway the weird TSV
+        # is weird.
+    
+        # FIXME: solve circular import issue
+        # The cleanest way us probably to extract
+        # file handling _get_texts, get_all_files_in_zipfile
+        # etc into either its own class or into actually the
+        # Corpus model.
+        # FIXME we are getting there ... now we just need to
+        # be able to get the corpus info ...
+        texts = self.text_set.all()
+        text = texts.get()
+        texts=self._get_texts(text.corpus, text.slug)
+        text = texts['bohairic.Habakkuk_01.tt']
+        return generate_visualization(HTML_CONFIGS[self.visualization_format_slug], text)
+    
+    @property
+    def visualization_format(self):
+        # FIXME: this probably wants to be cached - and possibly
+        # shared - I don't think it is ever different
+        return HtmlVisualizationFormat.objects.get(slug=self.visualization_format_slug)
+
+    @visualization_format.setter
+    def visualization_format(self, format_obj):
+        """Set the visualization format using a HtmlVisualizationFormat object"""
+        if format_obj is None:
+            self.visualization_format_slug = None
+        else:
+            self.visualization_format_slug = format_obj.slug
+
+    def __str__(self):
+        return self.visualization_format.title
+
 
 class TextMeta(models.Model):
     name = models.CharField(max_length=200, db_index=True)
@@ -225,7 +283,8 @@ class Text(models.Model):
     corpus = models.ForeignKey(Corpus, blank=True, null=True, on_delete=models.CASCADE)
     html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
     text_meta = models.ManyToManyField(TextMeta, blank=True, db_index=True)
-
+    title = models.CharField(max_length=200)
+    
     def __str__(self):
         return self.title
 
@@ -292,6 +351,12 @@ class Text(models.Model):
 
             for c in sorted(corpora, key=lambda x: x["corpus__title"]):
                 authors = cls.get_authors_for_corpus(c["corpus__id"])
+                # FIXME: This is really weird logic.
+                # We have 0 authors, 1 author, 2 authors, 3+ authors
+                # Ordering may be important in the case of 2 authors
+                # but we don't have that information here?
+                # Possibly authors may come from two distinct fields?
+                # attributed_author and author ? But we are not using that here.
                 if len(authors) == 0:
                     author = None
                 elif len(authors) == 1:

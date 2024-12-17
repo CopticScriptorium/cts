@@ -1,3 +1,4 @@
+import logging
 import re
 from django import forms
 from django.http import Http404
@@ -10,14 +11,13 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from coptic.settings.base import CACHE_TTL
 from coptic.settings.base import DEPRECATED_URNS
-from collections import OrderedDict
-import texts.urn as urnlib
 import texts.models as models
 import texts.urn
 import base64
 
 from django.template.defaulttags import register
 
+logger = logging.getLogger(__name__)
 
 @register.filter(name="keyvalue")
 def keyvalue(dict, key):
@@ -166,6 +166,11 @@ def get_meta_values(meta):
     if not meta.splittable:
         meta_values = unsplit_values
     else:
+        # FIXME: there is too much undocumented logic here.
+        # The logic is to split the values by a separator, but if the separator is a comma and there are long values, then we should not split them.
+        # I'd imagine this is some heuristics? If so, it should be better documented.
+        # Also if this is structuring data we should either pre-process it and store it in a structured way or document why we don't do that.
+        # And possibly move to the model. 
         sep = "; " if str(meta.name) in ["places", "people"] else ", "
         split_meta_values = [v.split(sep) for v in unsplit_values]
         for i, vals in enumerate(split_meta_values):
@@ -214,6 +219,8 @@ def index_view(request, special_meta=None):
 # search --------------------------------------------------------------------------------
 def _get_meta_names_for_query_text(text):
     names = [sm.name for sm in models.SpecialMeta.objects.all()]
+    #FIXME: this looks like a hack. Why are we adding these fields?
+    # If needed we should probably merge hashes of the text fields with the hashes of the meta fields
     if "title" not in names:
         names.append("title")
     if "author" not in names:
@@ -230,6 +237,7 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Get all SpecialMeta objects and sort them by name
+        # FIXME: Generally sorting should be done in the database, not in Python
         special_metas = sorted(
             models.SpecialMeta.objects.all(), key=lambda x: x.name.lower()
         )
@@ -439,6 +447,7 @@ def add_author_and_urn(texts):
         try:
             text.author = text.text_meta.get(name="author").value
         except models.TextMeta.DoesNotExist:
+            logger.debug("Authors for Corpus not found")  # Debug statement
             pass
         try:
             text.urn_code = text.text_meta.get(name="document_cts_urn").value

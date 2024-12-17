@@ -103,3 +103,54 @@ DEPRECATED_URNS = {
     "urn:cts:copticLit:shenoute.abraham.monbya_547_550": "urn:cts:copticLit:shenoute.abraham.monbya:37-42",
     "urn:cts:copticLit:shenoute.abraham.monbya_551_554": "urn:cts:copticLit:shenoute.abraham.monbya:42-47",
 }
+
+KNOWN_SLUGS = {
+    "apophthegmata.patrum": "ap",
+    "besa.letters": "besa_letters",
+    "doc.papyri": "papyri",
+    "johannes.canons": "johannes",
+    "martyrdom.victor": "victor",
+    "pseudo.theophilus": "pseudotheophilus",
+    "sahidic.ot": "old-testament",
+    "sahidica.1corinthians": "1st_corinthians",
+    "sahidica.mark": "gospel_of_mark",
+    "sahidica.nt": "new-testament",
+    "shenoute.a22": "acephalous_work_22",
+    "shenoute.abraham": "abraham_our_father",
+    "shenoute.dirt": "shenoutedirt",
+    "shenoute.eagerness": "eagernesss",
+    "shenoute.fox": "not_because_a_fox_barks",
+}
+
+HTML_CONFIGS = { 
+"dipl":"""pb_xml_id	table:title; style="pb"	value
+pb_xml_id	tr
+cb_n	td; style="cb"
+lb_n	div:line; style="copt_line"	value
+hi_rend	hi_rend:rend	value
+tok	span	value
+orig_word	a	" "
+""",
+"analytic":"""chapter_n	div:chapter; style="chapter"	value
+translation div:trans; style="translation"	value
+verse_n	div:verse; style="verse"	value
+identity	div; style="named"
+entity	div:entity_type; style="entity"	value
+identity	div; style="identity"	"<a href='https://en.wikipedia.org/wiki/%%value%%' title='%%value%%' class='wikify' target='__new'></a>"
+norm_group	i; style="copt_word"
+norm	ruby; style="norm"
+lemma	NULL	"<a href='https://coptic-dictionary.org/results.cgi?quick_search=%%value%%' target='_new'>"
+norm	NULL	"%%value%%"
+pos	NULL	"</a>"
+pos	rt:pos; style="pos"	value
+pb_xml_id	q:page; style="page"	value""",
+"sahidic":"""
+chapter_n	div:chapter; style="chapter"	value
+orig_group	span; style="word"
+norm	span; style="norm"
+lemma	NULL	"<a href='https://coptic-dictionary.org/results.cgi?quick_search=%%value%%' target='_new'>"
+norm	NULL	"%%value%%"
+pos	NULL	"</a>"
+translation t:title; style="translation"	value
+verse_n	div:verse; style="verse"	value
+pb_xml_id	q:page; style="page"	value""" }

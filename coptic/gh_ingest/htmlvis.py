@@ -158,7 +158,7 @@ class TokDirective(Directive):
             parts.append(self._content_value)
 
         parts.append(text)
-        return "".join(parts)
+        return " ".join(parts)
 
 
 class AnnDirective(Directive):
@@ -414,15 +414,14 @@ def parse_text(text):
     return toks, complete_elts  # Return the tokens and complete elements
 
 
-def render_html(toks, elts, directives, css_text):
+def render_html(toks, elts, directives):
     """
-    Renders HTML from tokens, elements, directives, and CSS text.
+    Renders HTML from tokens, elements, directives
 
     Args:
         toks (list of str): A list of token strings.
         elts (list): A list of elements.
         directives (list): A list of directives to apply.
-        css_text (str): CSS text to be included in the HTML.
 
     Returns:
         str: The rendered HTML string.
@@ -464,9 +463,8 @@ def render_html(toks, elts, directives, css_text):
                         )
 
     # Join tokens with HTML comment to form the final HTML
-    inner_html = "<!--\n-->".join(toks)
+    inner_html = "".join(toks)
     html = f'<div class="htmlvis">{inner_html}</div>'
-    html += f"<style>{css_text}</style>"
 
     return html
 
@@ -474,17 +472,7 @@ def render_html(toks, elts, directives, css_text):
 DEBUG = False
 
 
-def generate_visualization(config_text, text, css_text=""):
-    # ensure the font exists
-    css_text = (
-        """
-@font-face {
-	font-family: Antinoou;
-	src: url('/static/fonts/antinoou-webfont.woff') format('woff');
-}
-"""
-        + css_text
-    )
+def generate_visualization(config_text, text ):
     if DEBUG:
         with open("htmlvis_latest_config_text.txt", "w") as f:
             f.write(config_text)
@@ -493,7 +481,7 @@ def generate_visualization(config_text, text, css_text=""):
     directives = parse_config(config_text)
     toks, elts = parse_text(text)
 
-    return render_html(toks, elts, directives, css_text)
+    return render_html(toks, elts, directives)
 
 
 if __name__ == "__main__":

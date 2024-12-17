@@ -1,6 +1,5 @@
 from texts.models import TextMeta
 
-
 class SearchField:
     def __init__(self, title):
         self.title = title

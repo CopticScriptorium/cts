@@ -108,9 +108,9 @@ class TestHtmlVis(unittest.TestCase):
             TokDirective("tok", "span", "value"),
             AnnDirective("orig_word", "a", '" "'),
         ]
-        css_text = "body { font-family: Arial; }"
-        expected_output = '<div class="htmlvis">ϭⲟⲗ</span><!--\n-->ⲉⲛⲧ</span></div><style>body { font-family: Arial; }</style>'
-        output = render_html(toks, elts, directives, css_text)
+
+        expected_output = '<div class="htmlvis">ϭⲟⲗ</span>ⲉⲛⲧ</span></div>'
+        output = render_html(toks, elts, directives)
         self.assertEqual(output, expected_output)
 
     def test_directive_parse_triggering_condition(self):
