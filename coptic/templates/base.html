@@ -11,6 +11,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/static/css/styles.css">
         <link rel="stylesheet" href="/static/css/styles2.css">
+        <link rel="stylesheet" href="/static/css/vizbar.css">
+        <link rel="stylesheet" href="/static/css/analytic.css">
+        <link rel="stylesheet" href="/static/css/dipl.css">
+        <link rel="stylesheet" href="/static/css/verses.css">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
               rel="stylesheet">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -56,7 +60,8 @@
             </main>
         </div>
         {% include "footer.html" %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="/static/js/vizbar.js"></script>
+        <script src="/static/js/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
         <script>$(".m-corpora").addClass('on');</script>
         {% if 'nalytic' in visualization.visualization_format.title %}<script>add_titles();</script>{% endif %}

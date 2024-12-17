@@ -1,0 +1,17 @@
+.htmlvis .off_inline {
+	display: inline;
+}
+.htmlvis .off_inline:before {
+	content: '';
+}
+.htmlvis .off_4px:before {
+	top: -4px !important;
+}
+.htmlvis .off_seg:after {
+	content: '' !important;
+}
+.chapter:after{display:block}
+#viztoolbar input{width: auto}
+#viztoolbar table{width: 600px}
+#viztoolbar td{vertical-align: top}
+#viztoolbar {margin-bottom:8px}

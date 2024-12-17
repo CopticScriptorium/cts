@@ -2,189 +2,37 @@
 <table>
     <tr>
         <td>
-            <input type="checkbox"
-                   checked="true"
-                   id="chk_coptic"
-                   class="btn"
-                   onclick="toggle_display('coptic');">
+            <input type="checkbox" checked="true" id="chk_coptic" class="btn" onclick="toggle_display('coptic');">
         </input>
         <label for ="chk_coptic">Coptic text</label>
         <br>
-        <input type="checkbox"
-               checked="true"
-               id="chk_pos"
-               class="btn"
-               onclick="toggle_display('pos');">
+        <input type="checkbox" checked="true" id="chk_pos" class="btn" onclick="toggle_display('pos');">
     </input>
     <label for ="chk_pos">Part of speech</label>
     <br>
-    <input type="checkbox"
-           checked="true"
-           id="chk_trans"
-           class="btn"
-           onclick="toggle_display('translation');">
-</input>
+    <input type="checkbox" checked="true" id="chk_trans" class="btn" onclick="toggle_display('translation');"></input>
 <label for ="chk_trans">Translation</label>
 <br>
-<input type="checkbox"
-       checked="true"
-       id="chk_chapter"
-       class="btn"
-       onclick="toggle_display('chapter');">
-</input>
+<input type="checkbox" checked="true" id="chk_chapter" class="btn" onclick="toggle_display('chapter');"></input>
 <label for ="chk_chapter">Chapters</label>
 <br>
-<input type="checkbox"
-       checked="true"
-       id="chk_verse"
-       class="btn"
-       onclick="toggle_display('verse');">
-</input>
+<input type="checkbox" checked="true" id="chk_verse" class="btn" onclick="toggle_display('verse');"></input>
 <label for ="chk_verse">Verses</label>
 <br>
-<input type="checkbox"
-       checked="true"
-       id="chk_page"
-       class="btn"
-       onclick="toggle_display('page');">
+<input type="checkbox" checked="true" id="chk_page" class="btn" onclick="toggle_display('page');">
 </input>
 <label for ="chk_page">Pages</label>
 </td>
-<td>
-    <input type="radio"
-           id="entity_all"
-           name="entities"
-           value="entity_all"
-           onclick="toggle_display('entity_all')"
-           checked="checked">
-    <label for="entity_all">Entities types and Wiki links</label>
-    <br>
-    <input type="radio"
-           id="entity_types"
-           name="entities"
-           value="entity_types"
-           onclick="toggle_display('entity_types')">
-    <label for="entity_types">Entity types only</label>
-    <br>
-    <input type="radio"
-           id="entity_none"
-           name="entities"
-           value="entity_none"
-           onclick="toggle_display('entity_none')">
-    <label for="entity_none">No entities</label>
-    <br>
-</td>
+	<td>
+		<input type="radio" id="entity_all" name="entities" value="entity_all" onclick="toggle_display('entity_all')" checked="checked">
+		<label for="entity_all">Entities types and Wiki links</label>
+		<br>
+		<input type="radio" id="entity_types" name="entities" value="entity_types" onclick="toggle_display('entity_types')">
+		<label for="entity_types">Entity types only</label>
+		<br>
+		<input type="radio" id="entity_none" name="entities" value="entity_none" onclick="toggle_display('entity_none')">
+		<label for="entity_none">No entities</label>
+		<br>
+	</td>
 </tr>
 </table>
-<style>
-.htmlvis .off_inline {
-	display: inline;
-}
-.htmlvis .off_inline:before {
-	content: '';
-}
-.htmlvis .off_4px:before {
-	top: -4px !important;
-}
-.htmlvis .off_seg:after {
-	content: '' !important;
-}
-.chapter:after{display:block}
-#viztoolbar input{width: auto}
-#viztoolbar table{width: 600px}
-#viztoolbar td{vertical-align: top}
-#viztoolbar {margin-bottom:8px}
-</style>
-<script>
-
-function add_titles(){
-	$(".entity").each(function(){
-		ident = $(this).find( "a.wikify" );
-		if (ident.length>0){
-			$(this).prop('title',$(ident[0]).attr('title'));
-		}else{
-			$(this).prop('title',$(this).attr('entity_type'));
-		}
-	});
-}
-
-function toggle_display(target){
-	
-		classes = {"entity":["entity","wikify","named","identity"],
-						"identity":["wikify","named","identity"],
-						"pos":["pos"],
-						"translation":["translation"],
-						"page":["page"],
-						"chapter":["chapter"],
-						"verse":["verse"],
-						"seg": ["norm"]
-						};
-
-		bound_groups = $(".copt_word");
-		
-		if (target=="coptic"){
-			if ($(bound_groups[0]).css("display") == "none"){  // turn on
-				$(bound_groups).css("display","inline");
-				if ($("#entity_none").prop("checked")){
-					toggle_display("entity_none");
-				} else if ($("#entity_all").prop("checked")){
-					toggle_display("entity_all");
-				}
-				else {
-					toggle_display("entity_types");
-				}
-				return true;
-			} else{ // turn off
-				$(bound_groups).css("display","none");
-				$(".entity").css("display","none");
-				return true;
-			}
-		}
-
-		if (target=="entity_all"){ // turn on
-			for (c of classes["entity"]){
-				$(".off_"+c).addClass(c).removeClass("off_" + c).removeClass("off_inline");
-				if (target == "pos"){
-					$(".entity, .wikify").removeClass("off_4px");
-				}
-			}
-			if ($(bound_groups[0]).css("display") != "none"){  // reveal entities unless Coptic text is hidden
-				$(".entity").css("display","inline-block");
-			}
-			return true;
-		} else if (target=="entity_none"){
-			for (c of classes["entity"]){
-				if ($("." + c).length>0){  // turn off
-					$("." + c).addClass("off_" + c).removeClass(c).addClass("off_inline");
-				}			
-			}
-			return true;
-		} else if (target=="entity_types"){
-			toggle_display("entity_all");
-			if ($(bound_groups[0]).css("display") != "none"){  // reveal entities unless Coptic text is hidden
-				$(".entity").css("display","inline-block");
-			}
-			toggle_display("identity");
-			return true;
-		}
-	
-		for (c of classes[target]){
-			if (target=="seg"){
-				$(".norm").addClass("off_seg");
-			}
-			else{
-				if ($("." + c).length>0){  // turn off
-					$("." + c).addClass("off_" + c).removeClass(c).addClass("off_inline");
-					if (target == "pos"){
-						$(".entity, .wikify").addClass("off_4px");
-					}
-				} else{ // turn on
-					$(".off_"+c).addClass(c).removeClass("off_" + c).removeClass("off_inline");
-					if (target == "pos"){
-						$(".entity, .wikify").removeClass("off_4px");
-					}
-				}
-			}
-		}
-	}
-</script>
