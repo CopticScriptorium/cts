@@ -6,6 +6,8 @@ import re
 from enum import Enum
 from collections import defaultdict
 
+from coptic.settings.base import HTML_CONFIGS
+
 
 class HtmlGenerationException(BaseException):
     def __init__(self, message):
@@ -414,7 +416,7 @@ def parse_text(text):
     return toks, complete_elts  # Return the tokens and complete elements
 
 
-def render_html(toks, elts, directives):
+def render_html(toks, elts, directives, config_name):
     """
     Renders HTML from tokens, elements, directives
 
@@ -464,7 +466,7 @@ def render_html(toks, elts, directives):
 
     # Join tokens with HTML comment to form the final HTML
     inner_html = "".join(toks)
-    html = f'<div class="htmlvis">{inner_html}</div>'
+    html = f'<div class="htmlvis {config_name}">{inner_html}</div>'
 
     return html
 
@@ -472,16 +474,16 @@ def render_html(toks, elts, directives):
 DEBUG = False
 
 
-def generate_visualization(config_text, text ):
+def generate_visualization(config_name, text ):
     if DEBUG:
         with open("htmlvis_latest_config_text.txt", "w") as f:
-            f.write(config_text)
+            f.write( HTML_CONFIGS[config_name])
         with open("htmlvis_latest_text.txt", "w") as f:
             f.write(text)
-    directives = parse_config(config_text)
+    directives = parse_config( HTML_CONFIGS[config_name])
     toks, elts = parse_text(text)
 
-    return render_html(toks, elts, directives)
+    return render_html(toks, elts, directives,config_name)
 
 
 if __name__ == "__main__":

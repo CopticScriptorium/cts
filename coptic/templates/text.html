@@ -72,7 +72,7 @@
     <section id="text" class="selected-text-wrap page-content">
         <div class="text-format">
             <h3 class="subtitle">{{ visualization.visualization_format.title }}</h3>
-            {% if 'nalytic' in visualization.visualization_format.title %}
+            {% if 'analytic' in visualization.visualization_format.title %}
                 <div id="viztoolbar">{% include "vizbar.html" %}</div>
             {% endif %}
             <div class="coptic-text html">{{ visualization.html | safe }}</div>

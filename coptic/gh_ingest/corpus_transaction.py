@@ -64,6 +64,7 @@ class CorpusTransaction:
         def get_next_node(node):
             return urn_to_node[text_next[node.title]]
 
+        # FIXME it seems this is not used?
         def get_prev_node(node):
             return urn_to_node[text_prev[node.title]]
 
@@ -125,12 +126,14 @@ class CorpusTransaction:
                 )
                 if vis_format_instance:
                     vis_format_instances.append(vis_format_instance)
+                else:
+                    print(f"Warning: Visualization format '{vis_format}' not found")
             except HtmlVisualizationFormat.DoesNotExist:
                 print(f"Warning: Visualization format '{vis_format.slug}' not found")
                 continue
 
         if vis_format_instances:
-            print(f"Our instances: {vis_format_instances}")
+            print(f"Our instances: {', '.join(map(str, vis_format_instances))}")
             self._corpus.set_visualization_formats(vis_format_instances)
 
         self._corpus.save()

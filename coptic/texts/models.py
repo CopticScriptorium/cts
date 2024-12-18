@@ -177,52 +177,38 @@ class HtmlVisualization(models.Model):
     class Meta:
         verbose_name = "HTML Visualization"
 
-    # FIXME temporary code duplication 
-    def _get_texts(self, corpus, corpus_dirname):
-        corpus_path = os.path.join("../../corpora", corpus_dirname)
-        texts = []
+    def get_text(self, corpus, tt_dir,tt_filename):
+        corpus_path = os.path.join("../../corpora",tt_dir, corpus.annis_corpus_name+"_TT")
+        text = ""
 
         try:
-            if corpus.github_paula.endswith("zip"):
-                dir_contents = self._get_all_files_in_zip(
-                    os.path.join(corpus_path, corpus.annis_corpus_name + "_TT.zip")
-                )
-                texts = [(name, contents) for name, contents in dir_contents]
+            if corpus.github_relannis.endswith("zip"):
+                dir_contents = self._get_all_files_in_zip(corpus_path + ".zip")
+                text = next(contents for name, contents in dir_contents if name == tt_filename)
             else:
-                tt_dir = os.path.join(corpus_path, corpus.annis_corpus_name + "_TT")
-                dir_contents = os.listdir(tt_dir)
-                texts = [
-                    (name, open(os.path.join(tt_dir, name)).read())
-                    for name in dir_contents
-                ]
+                with open(os.path.join(corpus_path, tt_filename)) as file:
+                    text = file.read()
         except FileNotFoundError as e:
-            tt_dir = os.path.join(corpus_path, corpus.annis_corpus_name + "_TT")
-            raise TTDirMissing(corpus_dirname,"../../corpora", tt_dir) from e
+            raise TTDirMissing(os.path.join(corpus_path, tt_filename)) from e
 
-        if len(texts) == 0:
-            raise NoTexts(corpus_dirname, self.local_repo_path, tt_dir)
+        if len(text) == 0:
+            raise NoTexts(corpus.annis_corpus_name, self.local_repo_path)
 
-        return dict(texts)
+        return text
 
     @property
-    def html(self):
+    def html_live(self):
         # FIXME: we can probably refactor
         # this to something like a dict or
         # a template? Anyway the weird TSV
         # is weird.
     
-        # FIXME: solve circular import issue
-        # The cleanest way us probably to extract
-        # file handling _get_texts, get_all_files_in_zipfile
-        # etc into either its own class or into actually the
-        # Corpus model.
-        # FIXME we are getting there ... now we just need to
-        # be able to get the corpus info ...
-        texts = self.text_set.all()
-        text = texts.get()
-        texts=self._get_texts(text.corpus, text.slug)
-        text = texts['bohairic.Habakkuk_01.tt']
-        return generate_visualization(HTML_CONFIGS[self.visualization_format_slug], text)
+        text = self.text_set.all()
+        tt_dir, tt_filename = list(self.text_set.values_list('tt_dir','tt_filename'))[0]
+        corpus = text.values("corpus")[0]["corpus"]
+        tt_text = self.get_text(Corpus.objects.get(id=corpus),tt_dir, tt_filename)
+        return generate_visualization(self.visualization_format_slug, tt_text)
+    
     
     @property
     def visualization_format(self):
@@ -284,6 +270,10 @@ class Text(models.Model):
     html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
     text_meta = models.ManyToManyField(TextMeta, blank=True, db_index=True)
     title = models.CharField(max_length=200)
+    tt_dir = models.CharField(max_length=40)
+    tt_filename = models.CharField(max_length=40)
+    tt_dir_tree_id = models.CharField(max_length=40)
+    document_cts_urn= models.CharField(max_length=80)
     
     def __str__(self):
         return self.title
@@ -294,6 +284,14 @@ class Text(models.Model):
             self.created = datetime.datetime.today()
         self.modified = datetime.datetime.today()
         return super().save(*args, **kwargs)
+
+    def get_visualization_by_slug(self, format_slug):
+        for visualization in self.html_visualizations.all():
+            print(visualization)
+            print(visualization.visualization_format.slug )
+            if visualization.visualization_format.slug == format_slug:
+                return visualization
+        raise ValueError(f"Visualization format '{format_slug}' not found for text '{self.title}'")
 
     @classmethod
     def get_authors_for_corpus(cls, corpus_id):

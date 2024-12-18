@@ -43,6 +43,11 @@
     ga('create', 'UA-55145025-2', 'auto');
     ga('send', 'pageview');
         </script>
+        <script src="/static/js/vizbar.js"></script>
+        <script src="/static/js/jquery-3.4.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+        <script src="/static/js/wikipedia.js"></script>
+        <script src="/static/js/coptic_dictionary.js"></script>
     </head>
     <body class="text-server">
         <!-- coptic scriptorium header with hyperlinks -->
@@ -60,9 +65,6 @@
             </main>
         </div>
         {% include "footer.html" %}
-        <script src="/static/js/vizbar.js"></script>
-        <script src="/static/js/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
         <script>$(".m-corpora").addClass('on');</script>
         {% if 'nalytic' in visualization.visualization_format.title %}<script>add_titles();</script>{% endif %}
     </body>

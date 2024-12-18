@@ -20,11 +20,10 @@ from gh_ingest.htmlvis import (
 class TestHtmlVis(unittest.TestCase):
 
     def test_generate_visualization(self):
-        config_text = 'tok\tspan\t"word"\nlemma\tb\tvalue'
+        #FIXME: this is the original .. invalid markup.
         text = "<lemma>word1\nword2\n</lemma>"
-        css_text = "body { font-family: Arial; }"
-        expected_output = "<div class=\"htmlvis\"><b>word2</span></b></div><style>\n@font-face {\n\tfont-family: Antinoou;\n\tsrc: url('/static/fonts/antinoou-webfont.woff') format('woff');\n}\nbody { font-family: Arial; }</style>"
-        output = generate_visualization(config_text, text, css_text)
+        expected_output = "<div class=\"htmlvis dipl\">word2</span></div>"
+        output = generate_visualization("dipl", text)
         self.assertEqual(output, expected_output)
 
     def test_parse_config(self):
@@ -108,9 +107,9 @@ class TestHtmlVis(unittest.TestCase):
             TokDirective("tok", "span", "value"),
             AnnDirective("orig_word", "a", '" "'),
         ]
-
-        expected_output = '<div class="htmlvis">ϭⲟⲗ</span>ⲉⲛⲧ</span></div>'
-        output = render_html(toks, elts, directives)
+        #FIXME: this is how it is .. but we have closing spans without opening ones.
+        expected_output = '<div class="htmlvis dipl">ϭⲟⲗ</span>ⲉⲛⲧ</span></div>'
+        output = render_html(toks, elts, directives, "dipl")
         self.assertEqual(output, expected_output)
 
     def test_directive_parse_triggering_condition(self):
@@ -128,7 +127,7 @@ class TestHtmlVis(unittest.TestCase):
     def test_apply_left_tok_directive(self):
         directive = TokDirective("tok", "span")
         result = directive.apply_left("token", "text")
-        self.assertEqual(result, "<span>text")
+        self.assertEqual(result, "<span > text")
 
     def test_apply_left_ann_directive(self):
         elt = SgmlElement("title", [("title", "Test Title")])

@@ -14,7 +14,6 @@
             "program": "${workspaceFolder}/manage.py",
             "args": [
                 "addcorpus",
-                "--source=local",
                 "--local-repo-path=../../corpora",
                 "bohairic.nt"
             ],
@@ -41,9 +40,8 @@
             "program": "${workspaceFolder}/manage.py",
             "args": [
                 "addcorpus",
-                "--source=local",
                 "--local-repo-path=../../corpora",
-                "bohairic.nt"
+                "acts-pilate bohairic.nt"
             ],
             "django": true,
             "justMyCode": true,

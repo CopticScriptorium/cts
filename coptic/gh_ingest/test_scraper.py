@@ -2,18 +2,18 @@ import unittest
 from unittest.mock import patch, MagicMock
 from django.conf import settings
 from django.test import override_settings, TestCase
-from gh_ingest.corpus_transaction import (
-    CorpusScraper,
+from gh_ingest.corpus_scraper import (
+    CorpusScraper
 )
-from gh_ingest.scraper_exceptions import EmptyCorpus, TTDirMissing
+from gh_ingest.scraper_exceptions import  TTDirMissing
 
 
 class TestCorpusScraper(unittest.TestCase):
 
     @patch("os.listdir")
     @patch("os.path.isdir")
-    @patch("gh_ingest.scraper.get_setting_and_error_if_none")
-    def test_infer_local_dirs(self, mock_get_setting, mock_isdir, mock_listdir):
+    @patch("gh_ingest.corpus_scraper.get_setting_and_error_if_none")
+    def test_infer_dirs(self, mock_get_setting, mock_isdir, mock_listdir):
         # Setup mock return values
         mock_get_setting.return_value = "/tmp/mock/local/repo/path"
         mock_listdir.return_value = [
@@ -25,14 +25,14 @@ class TestCorpusScraper(unittest.TestCase):
         mock_isdir.side_effect = lambda path: not path.endswith(".zip")
 
         with patch.object(CorpusScraper, 'clone_repo', return_value=None), \
-             patch.object(CorpusScraper, 'ensure_local_repo', return_value=None):
+             patch.object(CorpusScraper, 'ensure_repo', return_value=None):
             with patch.object(CorpusScraper, 'clone_repo', return_value=None), \
-                 patch.object(CorpusScraper, 'ensure_local_repo', return_value=None):
+                 patch.object(CorpusScraper, 'ensure_repo', return_value=None):
                 scraper = CorpusScraper()
         corpus = MagicMock()
 
         # Call the method
-        result = scraper._infer_local_dirs(corpus, "pseudo-timothy")
+        result = scraper._infer_dirs(corpus, "pseudo-timothy")
 
         # Check the results
         self.assertEqual(
@@ -50,10 +50,10 @@ class TestCorpusScraperWithFiles(TestCase):
         cls.local_repo_path = settings.LOCAL_REPO_PATH
         cls.scraper = CorpusScraper()
 
-    def test_infer_local_dirs(self):
+    def test_infer_dirs(self):
         corpus_dirname = "pseudo-timothy"
         corpus = MagicMock()
-        result = self.scraper._infer_local_dirs(corpus, corpus_dirname)
+        result = self.scraper._infer_dirs(corpus, corpus_dirname)
         self.assertEqual(
             result,
             ("pseudo.timothy_TEI", "pseudo.timothy_ANNIS", "pseudo.timothy_PAULA"),
@@ -62,7 +62,7 @@ class TestCorpusScraperWithFiles(TestCase):
     def test_get_texts(self):
         corpus_dirname = "pseudo-timothy"
         corpus = MagicMock()
-        corpus.github_paula = "pseudo.timothy_PAULA"
+        corpus.github_relannis = "pseudo.timothy_ANNIS"
         corpus.annis_corpus_name = "pseudo.timothy"
         texts = self.scraper._get_texts(corpus, corpus_dirname)
         self.assertTrue(len(texts) > 0)
@@ -70,7 +70,7 @@ class TestCorpusScraperWithFiles(TestCase):
     def test_get_texts_no_texts(self):
         corpus_dirname = "empty-corpus"
         corpus = MagicMock()
-        corpus.github_paula = "empty-corpus_PAULA"
+        corpus.github_relannis = "empty-corpus_ANNIS"
         corpus.annis_corpus_name = "empty-corpus"
         with self.assertRaises(TTDirMissing):
             self.scraper._get_texts(corpus, corpus_dirname)
@@ -82,14 +82,6 @@ class TestCorpusScraperWithFiles(TestCase):
         corpus.annis_corpus_name = "nonexistent-corpus"
         with self.assertRaises(TTDirMissing):
             self.scraper._get_texts(corpus, corpus_dirname)
-
-    def test_infer_urn_code(self):
-        corpus_dirname = "pseudo-timothy"
-        self.scraper._latest_meta_dict = {
-            "document_cts_urn": "urn:cts:copticLit:pseudo.timothy"
-        }
-        urn_code = self.scraper._infer_urn_code(corpus_dirname)
-        self.assertEqual(urn_code, "urn:cts:copticLit:pseudo")
 
     def test_parse_corpus(self):
         corpus_dirname = "pseudo-timothy"

@@ -74,16 +74,18 @@ def corpus_view(request, corpus=None):
 def text_view(request, corpus=None, text=None, format=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)
     text_object = get_object_or_404(models.Text, corpus=corpus_object.id, slug=text)
+    
     if not format:
         visualization = text_object.html_visualizations.all()[0]
         format = visualization.visualization_format.slug
         return text_view(request, corpus=corpus, text=text, format=format)
 
+    # FIXME: temporary hack until we align the naming of visualisations
+    # FIXME: It should probably be `norm`
     # Changed to use visualization_format_slug
-    visualization = text_object.html_visualizations.get(
-        visualization_format_slug=format
-    )
-
+    
+    visualization = text_object.get_visualization_by_slug(format)
+    
     doc_urn = text_object.text_meta.get(name="document_cts_urn").value
 
     text_object.edition_urn = doc_urn

@@ -119,7 +119,19 @@ class CorpusScraper:
             print(f"Pulled latest changes in repository at {self.repo_path}")
         except:
             print(f"Could not pull repository from  upstream probably offline")
-        
+
+    def _get_tree_id(self, path):
+        try:
+            result = subprocess.run(
+                ["git", "-C", self.repo_path, "rev-parse", "HEAD:" + path],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        except:
+            raise TTDirMissing("", self.repo_path, path)
+        return result.stdout.strip()
+    
     def _init_config(self):
         try:
             if not self.corpus_repo_owner:
@@ -183,7 +195,6 @@ class CorpusScraper:
     def parse_corpora(self, corpus_dirnames):
         corpora = []
         for corpus_dirname in corpus_dirnames:
-            self.__init__()
             corpora.append(self.parse_corpus(corpus_dirname))
         return corpora
 
@@ -208,10 +219,12 @@ class CorpusScraper:
 
     def _get_texts(self, corpus, corpus_dirname):
         corpus_path = os.path.join(self.repo_path, corpus_dirname)
+        text_tree_id = self._get_tree_id(corpus_dirname)
+        
         texts = []
 
         try:
-            if corpus.github_paula.endswith("zip"):
+            if corpus.github_relannis.endswith("zip"):
                 dir_contents = self._get_all_files_in_zip(
                     os.path.join(corpus_path, corpus.annis_corpus_name + "_TT.zip")
                 )
@@ -230,37 +243,32 @@ class CorpusScraper:
         if len(texts) == 0:
             raise NoTexts(corpus_dirname, self.repo_path, tt_dir)
 
-        return dict(texts)
+        return dict(texts), text_tree_id
 
     def _infer_html_visualization_formats_and_add_to_tx(self, corpus, corpus_dirname):
         vis_map_content = StringIO(self.get_resolver_vis_map_content(corpus, corpus_dirname))
         reader = csv.reader(vis_map_content, delimiter="\t", lineterminator="\n")
-        formats=[] # this is a set because we want them unique
+        formats=[] # this is a list because we want them unique
         for row in reader:
             if row[4]=="htmldoc": # if the fourth column is htmldoc
-                format_type= row[8].split("config:")[1] # extract the format type
-                format = HtmlVisualizationFormat.objects.get(slug=format_type)
-                if format not in formats:
-                    formats.append(format) 
+                vis_type= row[8].split("config:")[1] # extract the format type
+                format = HtmlVisualizationFormat.objects.get(slug=vis_type)
+                if format and format not in formats:
+                    formats.append(format)
         return formats
 
     def get_resolver_vis_map_content(self, corpus, corpus_dirname):
-        try:
-            if corpus.github_relannis.endswith("zip"):
-                vm = self._get_zip_file_contents(
-                    os.path.join(
-                        self.repo_path, corpus_dirname, corpus.github_relannis
-                    ),
-                    "resolver_vis_map.annis",
-                )
-            else:
-                vm_path = os.path.join(
+        file_name = "resolver_vis_map.annis"
+        vm_path = os.path.join(
                     self.repo_path,
                     corpus_dirname,
                     corpus.github_relannis,
-                    "resolver_vis_map.annis",
                 )
-                with open(vm_path) as f:
+        try:
+            if corpus.github_relannis.endswith("zip"):
+                vm = self._get_zip_file_contents(vm_path, file_name)
+            else:
+                with open(os.path.join(vm_path, file_name)) as f:
                     vm = f.read()
         except (FileNotFoundError, IndexError) as e:
             raise ResolverVisMapIssue(
@@ -281,8 +289,11 @@ class CorpusScraper:
         github_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}/tree/master/{corpus_dirname}"
         print(f"Processing '{github_url}' from '{self.repo_path}'...")
         existing_corpus = Corpus.objects.filter(github=github_url).first()
+
         if existing_corpus:
             to_delete = []
+            # FIXME: we should probably give an option not
+            # to reimport existing corpora if the tree_id matches
             for text in Text.objects.all().filter(corpus=existing_corpus):
                 for text_meta in text.text_meta.all():
                     to_delete.append(text_meta)
@@ -311,8 +322,8 @@ class CorpusScraper:
             self._infer_html_visualization_formats_and_add_to_tx(corpus, corpus_dirname)
         )
 
-        texts = self._get_texts(corpus, corpus_dirname)
-        self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts)
+        texts, tree_id = self._get_texts(corpus, corpus_dirname)
+        self._scrape_texts_and_add_to_tx(corpus, corpus_dirname, texts, tree_id)
         self._current_transaction.sort_texts(
             self._text_next, self._text_prev, self._text_urn
         )
@@ -329,12 +340,12 @@ class CorpusScraper:
             corpus.urn_code = urn.textgroup_urn(self._latest_meta_dict["document_cts_urn"])
         return self._current_transaction
 
-    def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts):
+    def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts, tree_id):
         print(f"Preparing transaction for '{corpus_dirname}'...")
-        for name, contents in tqdm(texts.items(), ncols=80):
+        for filename, contents in tqdm(texts.items(), ncols=80):
             if contents:
                 self._current_text_contents = contents
-                self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents)
+                self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents, tree_id, filename)
 
     def _get_meta_dict(self, tt_lines):
         for line in tt_lines:
@@ -343,23 +354,27 @@ class CorpusScraper:
         raise MetaNotFound(self.repo_path, self._current_text_contents.path)
 
     def _generate_visualizations_and_add_to_tx(self, text, contents):
-        for name in HTML_CONFIGS:
+        for config_name in HTML_CONFIGS:
             rendered_html = generate_visualization(
-                HTML_CONFIGS[name], contents
+                config_name, contents
             )
+            
             vis = HtmlVisualization()
-            vis.visualization_format_slug = name
+            vis.visualization_format_slug = config_name
+            
             vis.html = rendered_html
             self._current_transaction.add_vis((text, vis))
 
-    def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents):
+    def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents, tree_id, filename):
         tt_lines = contents.split("\n")
         meta = self._get_meta_dict(tt_lines)
         # FIXME: something called latest sounds dangerous.
         self._latest_meta_dict = meta
-
         text = Text()
         text.title = meta["title"]
+        text.tt_dir=corpus_dirname
+        text.tt_filename=filename
+        text.tt_dir_tree_id=tree_id
         text.slug = slugify(meta["title"] if "title" in meta else meta["name"])
         text.corpus = self._current_corpus
         self._text_next[text.title] = meta["next"] if "next" in meta else None
@@ -367,7 +382,8 @@ class CorpusScraper:
         self._text_urn[text.title] = (
             meta["document_cts_urn"] if "document_cts_urn" in meta else None
         )
-
+        self.document_cts_urn=meta["document_cts_urn"]
+        
         text_metas = [
             TextMeta(name=name, value=unescape(value)) for name, value in meta.items()
         ]

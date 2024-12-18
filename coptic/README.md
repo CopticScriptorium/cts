@@ -1,6 +1,6 @@
 # Installation
 
-Note: this app requires Python 3.6+. 
+Note: this app requires Python 3.8+. 
 
 0. We recommend you [create a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands):
 
@@ -19,6 +19,12 @@ pip install -r requirements_django_5.txt
 ```sh
 pip install -U -r requirements.txt
 pip freeze > requirements_django_5.txt
+```
+
+For search:
+````
+curl -L https://install.meilisearch.com | sh
+./meilisearch --master-key=$MEILLI_MASTER_KEY
 ```
 ## Configuration
 

@@ -7,9 +7,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import django
 import os
-import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
@@ -131,7 +129,7 @@ hi_rend	hi_rend:rend	value
 tok	span	value
 orig_word	a	" "
 """,
-"analytic":"""chapter_n	div:chapter; style="chapter"	value
+"analytic" : """chapter_n	div:chapter; style="chapter"	value
 translation div:trans; style="translation"	value
 verse_n	div:verse; style="verse"	value
 identity	div; style="named"
@@ -139,18 +137,27 @@ entity	div:entity_type; style="entity"	value
 identity	div; style="identity"	"<a href='https://en.wikipedia.org/wiki/%%value%%' title='%%value%%' class='wikify' target='__new'></a>"
 norm_group	i; style="copt_word"
 norm	ruby; style="norm"
-lemma	NULL	"<a href='https://coptic-dictionary.org/results.cgi?quick_search=%%value%%' target='_new'>"
+lemma	NULL	"<a href='%%value%%' target='_new'>"
 norm	NULL	"%%value%%"
 pos	NULL	"</a>"
 pos	rt:pos; style="pos"	value
-pb_xml_id	q:page; style="page"	value""",
-"sahidic":"""
-chapter_n	div:chapter; style="chapter"	value
+pb_xml_id	q:page; style="page"	value
+""",
+"verses" : """chapter_n	div:chapter; style="chapter"	value
 orig_group	span; style="word"
 norm	span; style="norm"
-lemma	NULL	"<a href='https://coptic-dictionary.org/results.cgi?quick_search=%%value%%' target='_new'>"
+lemma	NULL	"<a href='%%value%%' target='_new'>"
 norm	NULL	"%%value%%"
 pos	NULL	"</a>"
 translation t:title; style="translation"	value
 verse_n	div:verse; style="verse"	value
-pb_xml_id	q:page; style="page"	value""" }
+pb_xml_id	q:page; style="page"	value""",
+"sahidica" : """orig_group	span; style="word"
+norm	span; style="norm"
+lemma	NULL	"<a href='%%value%%' target='_new'>"
+norm	NULL	"%%value%%"
+pos	NULL	"</a>"
+translation t:title; style="translation"	value
+verse_n	div:verse; style="verse"	value
+"""
+}
