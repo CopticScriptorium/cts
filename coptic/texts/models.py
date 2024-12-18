@@ -284,6 +284,29 @@ class Text(models.Model):
             self.created = datetime.datetime.today()
         self.modified = datetime.datetime.today()
         return super().save(*args, **kwargs)
+    
+    def to_json(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "slug": self.slug,
+            "created": self.created.isoformat(),
+            "modified": self.modified.isoformat(),
+            "corpus": self.corpus.title if self.corpus else None,
+            "text_meta": {meta.name: meta.value for meta in self.text_meta.all()},
+            "html_visualizations": [
+                {
+                    "visualization_format_slug": vis.visualization_format_slug,
+                    "html": vis.html
+                }
+                for vis in self.html_visualizations.all()
+            ],
+            "tt_dir": self.tt_dir,
+            "tt_filename": self.tt_filename,
+            "tt_dir_tree_id": self.tt_dir_tree_id,
+            "document_cts_urn": self.document_cts_urn,
+        }
+
 
     def get_visualization_by_slug(self, format_slug):
         for visualization in self.html_visualizations.all():

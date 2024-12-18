@@ -41,7 +41,7 @@
             "args": [
                 "addcorpus",
                 "--local-repo-path=../../corpora",
-                "acts-pilate bohairic.nt"
+                "acts-pilate"
             ],
             "django": true,
             "justMyCode": true,

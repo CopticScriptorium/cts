@@ -1,10 +1,8 @@
 from collections import defaultdict
 from django.db import transaction
-
-from texts.models import (
-    HtmlVisualizationFormat,
-)
+from texts.models import HtmlVisualizationFormat, Text
 from .scraper_exceptions import *
+from texts.ft_search import Search
 
 class CorpusTransaction:
     """Keeps track of every object that needs to be added to the SQL database for a given corpus,
@@ -160,6 +158,11 @@ class CorpusTransaction:
             vis.save()
             text.html_visualizations.add(vis)
             text.save()
+
+        # Index texts in Meilisearch
+        search = Search()
+        texts_to_index = [text.to_json() for text, _ in self._text_pairs]
+        search.index_text(texts_to_index)
 
         return {
             "texts": len(self._text_pairs),
