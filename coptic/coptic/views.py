@@ -419,7 +419,7 @@ def search(request):
 
     # preliminary results--might need to filter more if freetext query is present
     texts = _fetch_and_filter_texts_for_special_metadata_query(queries)
-
+    
     # build base explanation, a string that will be displayed to the user summarizing their search parameters
     explanation = _build_explanation(params)
 
@@ -427,6 +427,25 @@ def search(request):
         results, all_empty_explanation = _build_result_for_query_text(
             params, texts, explanation
         )
+        ft_hits=models.Text.search(params["text"])
+        fulltext_results=[]
+        if ft_hits["hits"]:
+            for result in ft_hits["hits"]:
+                print(result["_matchesPosition"])
+                attr=list(result["_matchesPosition"].keys())[0]
+                print(f'Attribute: {attr}')
+                keys = attr.split('.')
+                value = result["_formatted"]
+                for key in keys:
+                    if isinstance(value, list):
+                        # we are doing this for visualisations
+                        # the content is the same for all of them
+                        # so we simply choose the first one.
+                        value = value[0]
+                    value = value[key]
+                if value:
+                    fulltext_results.append({"title":result["_formatted"]["title"] ,"field":attr,"value":value})
+            
     else:
         results = [{"texts": texts, "explanation": explanation}]
         all_empty_explanation = explanation
@@ -434,6 +453,7 @@ def search(request):
     context.update(
         {
             "results": results,
+            "fulltext_results": fulltext_results,
             "form": SearchForm(request.GET),
             "no_query": not any(len(v) for v in request.GET.dict().values()),
             "all_empty": not any(len(r["texts"]) for r in results),

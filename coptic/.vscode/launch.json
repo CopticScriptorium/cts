@@ -30,7 +30,6 @@
                 "runserver"
             ],
             "django": true,
-            "python": "/Users/oripekelman/.pyenv/versions/3.9.2/bin/python",
             "console": "integratedTerminal"
         },
         {

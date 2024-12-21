@@ -7,6 +7,7 @@ from django.db import models
 import base64
 from collections import OrderedDict
 from coptic.settings.base import HTML_CONFIGS
+from texts.ft_search import Search
 from gh_ingest.htmlvis import generate_visualization
 from gh_ingest.scraper_exceptions import NoTexts, TTDirMissing
 # Configure logger
@@ -284,7 +285,7 @@ class Text(models.Model):
             self.created = datetime.datetime.today()
         self.modified = datetime.datetime.today()
         return super().save(*args, **kwargs)
-    
+        
     def to_json(self):
         return {
             "id": self.id,
@@ -315,6 +316,12 @@ class Text(models.Model):
             if visualization.visualization_format.slug == format_slug:
                 return visualization
         raise ValueError(f"Visualization format '{format_slug}' not found for text '{self.title}'")
+
+    #add Full Text Search
+    @classmethod
+    def search(cls, keyword):
+        search = Search()
+        return search.search(keyword)
 
     @classmethod
     def get_authors_for_corpus(cls, corpus_id):
