@@ -38,11 +38,13 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <div>
+        <div class="fulltext_results">
             {% if fulltext_results %}
             <h1>Fulltext results</h1>
                 {% for result in fulltext_results %}
-                <h4>{{ result.title }}</h4>
+                <h4>
+                    <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}" class="text-link"><span class="text-title">{{ result.title }}</span></a>
+                </h4>
                 {{ result.value | safe }}
                 {% endfor %}
             {% endif %}
