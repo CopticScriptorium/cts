@@ -5,17 +5,16 @@ from django.test import override_settings, TestCase
 from gh_ingest.corpus_scraper import (
     CorpusScraper
 )
-from gh_ingest.scraper_exceptions import  TTDirMissing
+from gh_ingest.repository import Repository
+from gh_ingest.scraper_exceptions import TTDirMissing, EmptyCorpus
 
 
 class TestCorpusScraper(unittest.TestCase):
 
     @patch("os.listdir")
     @patch("os.path.isdir")
-    @patch("gh_ingest.corpus_scraper.get_setting_and_error_if_none")
-    def test_infer_dirs(self, mock_get_setting, mock_isdir, mock_listdir):
+    def test_infer_dirs(self, mock_isdir, mock_listdir):
         # Setup mock return values
-        mock_get_setting.return_value = "/tmp/mock/local/repo/path"
         mock_listdir.return_value = [
             "pseudo.timothy_ANNIS",
             "pseudo.timothy_CONLLU",
@@ -24,21 +23,19 @@ class TestCorpusScraper(unittest.TestCase):
         ]
         mock_isdir.side_effect = lambda path: not path.endswith(".zip")
 
-        with patch.object(CorpusScraper, 'clone_repo', return_value=None), \
-             patch.object(CorpusScraper, 'ensure_repo', return_value=None):
-            with patch.object(CorpusScraper, 'clone_repo', return_value=None), \
-                 patch.object(CorpusScraper, 'ensure_repo', return_value=None):
-                scraper = CorpusScraper()
+        repository = MagicMock(spec=Repository)
+        repository._get_dirs.return_value = mock_listdir.return_value
+
+        scraper = CorpusScraper()
+        scraper.repository = repository
         corpus = MagicMock()
+        corpus.repository = repository
 
         # Call the method
         result = scraper._infer_dirs(corpus, "pseudo-timothy")
 
         # Check the results
-        self.assertEqual(
-            result,
-            ("pseudo.timothy_TEI", "pseudo.timothy_ANNIS", "pseudo.timothy_PAULA"),
-        )  
+        self.assertEqual(result, ('pseudo.timothy_TEI', 'pseudo.timothy_ANNIS', 'pseudo.timothy_PAULA'))
 
 
 @override_settings(LOCAL_REPO_PATH="../../corpora")
@@ -48,23 +45,31 @@ class TestCorpusScraperWithFiles(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.local_repo_path = settings.LOCAL_REPO_PATH
+        cls.repo = Repository()
         cls.scraper = CorpusScraper()
+        cls.scraper.repository = cls.repo
 
-    def test_infer_dirs(self):
+    @patch.object(Repository, '_get_dirs')
+    def test_infer_dirs(self, mock_get_dirs):
+        mock_get_dirs.return_value = [
+            "pseudo.timothy_ANNIS",
+            "pseudo.timothy_CONLLU",
+            "pseudo.timothy_PAULA",
+            "pseudo.timothy_TEI",
+        ]
         corpus_dirname = "pseudo-timothy"
         corpus = MagicMock()
+        corpus.repository = self.repo
+
         result = self.scraper._infer_dirs(corpus, corpus_dirname)
-        self.assertEqual(
-            result,
-            ("pseudo.timothy_TEI", "pseudo.timothy_ANNIS", "pseudo.timothy_PAULA"),
-        )
+        self.assertEqual(result, ('pseudo.timothy_TEI', 'pseudo.timothy_ANNIS', 'pseudo.timothy_PAULA'))
 
     def test_get_texts(self):
         corpus_dirname = "pseudo-timothy"
         corpus = MagicMock()
         corpus.github_relannis = "pseudo.timothy_ANNIS"
         corpus.annis_corpus_name = "pseudo.timothy"
-        texts = self.scraper._get_texts(corpus, corpus_dirname)
+        texts = self.repo._get_texts(corpus, corpus_dirname)
         self.assertTrue(len(texts) > 0)
 
     def test_get_texts_no_texts(self):
@@ -73,7 +78,7 @@ class TestCorpusScraperWithFiles(TestCase):
         corpus.github_relannis = "empty-corpus_ANNIS"
         corpus.annis_corpus_name = "empty-corpus"
         with self.assertRaises(TTDirMissing):
-            self.scraper._get_texts(corpus, corpus_dirname)
+            self.repo._get_texts(corpus, corpus_dirname)
 
     def test_get_texts_missing_dir(self):
         corpus_dirname = "nonexistent-corpus"
@@ -81,7 +86,7 @@ class TestCorpusScraperWithFiles(TestCase):
         corpus.github_paula = "nonexistent-corpus_PAULA.zip"
         corpus.annis_corpus_name = "nonexistent-corpus"
         with self.assertRaises(TTDirMissing):
-            self.scraper._get_texts(corpus, corpus_dirname)
+            self.repo._get_texts(corpus, corpus_dirname)
 
     def test_parse_corpus(self):
         corpus_dirname = "pseudo-timothy"
