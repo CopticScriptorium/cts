@@ -2,14 +2,16 @@ import datetime
 import os
 import re
 import logging
+from collections import OrderedDict
 from base64 import b64encode
 from django.db import models
-import base64
-from collections import OrderedDict
-from coptic.settings.base import HTML_CONFIGS
+from django.conf import settings
+
 from texts.ft_search import Search
 from gh_ingest.htmlvis import generate_visualization
 from gh_ingest.scraper_exceptions import NoTexts, TTDirMissing
+from gh_ingest.repository import Repository
+
 # Configure logger
 logger = logging.getLogger(__name__)
 
@@ -98,6 +100,11 @@ class Corpus(models.Model):
     # Store visualization formats as a comma-separated string
     visualization_formats = models.TextField(default="")
 
+    def __init__(self, *args, **kwargs):
+        # the repository is a signleton, so we can just create it here
+        self.repository=Repository()
+        super().__init__(*args, **kwargs)
+        
     def get_visualization_formats(self):
         """Retrieve visualization formats as a list of slugs."""
         if not self.visualization_formats:
@@ -178,36 +185,9 @@ class HtmlVisualization(models.Model):
     class Meta:
         verbose_name = "HTML Visualization"
 
-    def get_text(self, corpus, tt_dir,tt_filename):
-        corpus_path = os.path.join("../../corpora",tt_dir, corpus.annis_corpus_name+"_TT")
-        text = ""
-
-        try:
-            if corpus.github_relannis.endswith("zip"):
-                dir_contents = self._get_all_files_in_zip(corpus_path + ".zip")
-                text = next(contents for name, contents in dir_contents if name == tt_filename)
-            else:
-                with open(os.path.join(corpus_path, tt_filename)) as file:
-                    text = file.read()
-        except FileNotFoundError as e:
-            raise TTDirMissing(os.path.join(corpus_path, tt_filename)) from e
-
-        if len(text) == 0:
-            raise NoTexts(corpus.annis_corpus_name, self.local_repo_path)
-
-        return text
-
     @property
     def html_live(self):
-        # FIXME: we can probably refactor
-        # this to something like a dict or
-        # a template? Anyway the weird TSV
-        # is weird.
-    
-        text = self.text_set.all()
-        tt_dir, tt_filename = list(self.text_set.values_list('tt_dir','tt_filename'))[0]
-        corpus = text.values("corpus")[0]["corpus"]
-        tt_text = self.get_text(Corpus.objects.get(id=corpus),tt_dir, tt_filename)
+        tt_text = self.text_set.get().get_text()
         return generate_visualization(self.visualization_format_slug, tt_text)
     
     
@@ -276,6 +256,31 @@ class Text(models.Model):
     tt_dir_tree_id = models.CharField(max_length=40)
     document_cts_urn= models.CharField(max_length=80)
     
+    # FIXME this repeats code in _get_texts
+
+    def get_text(self):
+       dir_contents, tree_id = self.corpus.repository._get_texts(self.corpus, self.tt_dir)
+       text=dict(dir_contents).get(self.tt_filename)
+       if len(text) == 0:
+           raise NoTexts(self.corpus.annis_corpus_name, self.corpus.repo_path)
+       return text
+    
+    def get_text_lemmatized(self):
+        text= self.get_text()
+        # Text is an SGML document that has been tokenized and lemmatized
+        # we want to extract all "lemma" attributes from <norm> tags
+        # and contcatenate them into a single string (with spaces)
+        # and return that string
+        return " ".join(re.findall(r'lemma="([^"]*)"', text))
+
+    def get_text_normalized(self):
+        text= self.get_text()
+        # Text is an SGML document that has been tokenized and lemmatized
+        # we want to extract all "lemma" attributes from <norm> tags
+        # and contcatenate them into a single string (with spaces)
+        # and return that string
+        return " ".join(re.findall(r'norm="([^"]*)"', text))
+    
     def __str__(self):
         return self.title
 
@@ -294,11 +299,12 @@ class Text(models.Model):
             "created": self.created.isoformat(),
             "modified": self.modified.isoformat(),
             "corpus": self.corpus.title if self.corpus else None,
+            "corpus_slug": self.corpus.slug if self.corpus else None,
             "text_meta": {meta.name: meta.value for meta in self.text_meta.all()},
-            "html_visualizations": [
+            "text": [
                 {
-                    "visualization_format_slug": vis.visualization_format_slug,
-                    "html": vis.html
+                    "lemmatized": self.get_text_lemmatized(),
+                    "normalized": self.get_text_normalized(),
                 }
                 for vis in self.html_visualizations.all()
             ],
@@ -411,7 +417,7 @@ class Text(models.Model):
     @classmethod
     def get_b64_meta_values(cls, value_corpus_pairs):
         return {
-            meta_value: str(base64.b64encode(('identity="' + meta_value + '"').encode("ascii")).decode("ascii"))
+            meta_value: str(b64encode(('identity="' + meta_value + '"').encode("ascii")).decode("ascii"))
             for meta_value in value_corpus_pairs.keys()
         }
 
@@ -424,7 +430,7 @@ class Text(models.Model):
                 else:
                     logger.debug("Key found in: %s", c)
         return {
-            c["annis_corpus_name"]: str(base64.b64encode(c["annis_corpus_name"].encode("ascii")).decode("ascii"))
+            c["annis_corpus_name"]: str(b64encode(c["annis_corpus_name"].encode("ascii")).decode("ascii"))
             for meta_value in value_corpus_pairs.values()
             for c in meta_value
         }
