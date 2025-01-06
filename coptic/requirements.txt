@@ -1,4 +1,5 @@
- django
+django
+django-cache-memoize
 django-grappelli
 gunicorn
 tqdm

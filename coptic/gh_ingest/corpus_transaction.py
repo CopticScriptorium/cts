@@ -1,6 +1,6 @@
 from collections import defaultdict
 from django.db import transaction
-from texts.models import HtmlVisualizationFormat, Text
+from texts.models import HtmlVisualizationFormat
 from .scraper_exceptions import *
 from texts.ft_search import Search
 

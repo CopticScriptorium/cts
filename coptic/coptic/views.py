@@ -9,8 +9,7 @@ from django.db.models.functions import Lower
 from texts.search_fields import SearchField
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
-from coptic.settings.base import CACHE_TTL
-from coptic.settings.base import DEPRECATED_URNS
+from django.conf import settings
 import texts.models as models
 import texts.urn
 import base64
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 def keyvalue(dict, key):
     return dict.get(key)
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def home_view(request):
     "Home"
     context = _base_context()
@@ -31,7 +30,7 @@ def home_view(request):
     return render(request, "home.html", context)
 
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def corpus_view(request, corpus=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)
 
@@ -70,7 +69,7 @@ def corpus_view(request, corpus=None):
     return render(request, "corpus.html", context)
 
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def text_view(request, corpus=None, text=None, format=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)
     text_object = get_object_or_404(models.Text, corpus=corpus_object.id, slug=text)
@@ -148,7 +147,7 @@ def urn(request, urn=None):
         )
 
     # check to see if the URN is deprecated and redirect if so
-    urn = DEPRECATED_URNS.get(urn, urn)
+    urn = settings.DEPRECATED_URNS.get(urn, urn)
     obj = _resolve_urn(urn)
 
     if obj.__class__.__name__ == "Text":
@@ -187,7 +186,7 @@ def get_meta_values(meta):
     meta_values = [re.sub(HTML_TAG_REGEX, "", meta_value) for meta_value in meta_values]
     return meta_values
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def index_view(request, special_meta=None):
     context = _base_context()
 
@@ -404,7 +403,7 @@ def search(request):
                 return redirect(
                     "https://github.com/CopticScriptorium/corpora/releases/tag/v2.5.0"
                 )
-            urn = DEPRECATED_URNS.get(urn, urn)
+            urn = settings.DEPRECATED_URNS.get(urn, urn)
             obj = _resolve_urn(urn)
             if obj.__class__.__name__ == "Text":
                 return redirect("text", corpus=obj.corpus.slug, text=obj.slug)
@@ -444,7 +443,11 @@ def search(request):
                         value = value[0]
                     value = value[key]
                 if value:
-                    fulltext_results.append({"title":result["_formatted"]["title"] ,"field":attr,"value":value})
+                    fulltext_results.append({
+                        "title":result["_formatted"]["title"] ,
+                        "slug":result["slug"],
+                        "corpus_slug":result["corpus_slug"],
+                        "field":attr,"value":value})
             
     else:
         results = [{"texts": texts, "explanation": explanation}]

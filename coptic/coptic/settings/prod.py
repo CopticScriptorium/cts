@@ -47,6 +47,11 @@ DATABASES = {
     }
 }
 
+SEARCH_CONFIG = {
+    "MEILISEARCH_URL": 'http://127.0.0.1:7700',
+    "MEILISEARCH_MASTER_KEY": 'masterKey',
+    "MEILISEARCH_INDEX": "texts",
+}
 # Use test database if running tests
 if "test" in sys.argv:
     DATABASES["default"]["NAME"] = "db/test_sqlite3.db"
@@ -55,4 +60,6 @@ if "test" in sys.argv:
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
-LOCAL_REPO_PATH = BUILD_CACHE_DIR + "/corpora"
+LOCAL_REPO_PATH = BUILD_CACHE_DIR + "/corpora" # this is for upsun
+
+CACHE_TTL = 60 * 60 * 24 * 7  # 1 week

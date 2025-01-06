@@ -42,6 +42,13 @@ DATABASES = {
         "PORT": "",
     }
 }
+
+SEARCH_CONFIG = {
+    "MEILISEARCH_URL": 'http://127.0.0.1:7700',
+    "MEILISEARCH_MASTER_KEY": 'masterKey',
+    "MEILISEARCH_INDEX": "texts",
+}
+
 if "test" in sys.argv:
     DATABASES["default"]["name"] = "tessqlite3.db"
 
@@ -49,3 +56,5 @@ if "test" in sys.argv:
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
+CACHE_TTL = 1  # 1 second
+LOCAL_REPO_PATH =  "../../corpora" # this is for upsun
