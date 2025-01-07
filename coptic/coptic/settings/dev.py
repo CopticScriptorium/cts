@@ -56,5 +56,11 @@ if "test" in sys.argv:
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
-CACHE_TTL = 1  # 1 second
+# For the time being we are using the same value for cache ttl
+# both for http cache and the cached used in the scraper.
+CACHE_TTL = 60  # 60 seconds 
 LOCAL_REPO_PATH =  "../../corpora" # this is for upsun
+# Control whether we are lazy loading the HTML generation
+# This has effects both on scraping (much faster)  and in
+# production.
+LAZY_HTML_GENERATION = True

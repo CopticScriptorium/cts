@@ -63,3 +63,5 @@ STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
 LOCAL_REPO_PATH = BUILD_CACHE_DIR + "/corpora" # this is for upsun
 
 CACHE_TTL = 60 * 60 * 24 * 7  # 1 week
+# Control whether we are lazy loading the HTML generation
+LAZY_HTML_GENERATION = False

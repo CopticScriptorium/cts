@@ -75,7 +75,11 @@
             {% if 'analytic' in visualization.visualization_format.title %}
                 <div id="viztoolbar">{% include "vizbar.html" %}</div>
             {% endif %}
+            {% if lazy %}
+            <div class="coptic-text html">{{ visualization.html_live | safe }}</div>
+            {% else %}
             <div class="coptic-text html">{{ visualization.html | safe }}</div>
+            {% endif %}
         </div>
         <div class="end-note">{{ text.endnote }}</div>
         <div id="information" class="meta-information">

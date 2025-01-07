@@ -22,7 +22,6 @@ class Search():
         index_exists = any(idx.uid == self.index for idx in existing_indexes)
         if not index_exists:
             self.client.create_index(self.index, {'primaryKey': 'id'})
-        self.client.create_index(self.index, {'primaryKey': 'id'})
         pass
     
     def index_text(self, texts):

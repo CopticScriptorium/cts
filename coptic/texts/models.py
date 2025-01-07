@@ -259,27 +259,28 @@ class Text(models.Model):
     # FIXME this repeats code in _get_texts
 
     def get_text(self):
-       dir_contents, tree_id = self.corpus.repository._get_texts(self.corpus, self.tt_dir)
-       text=dict(dir_contents).get(self.tt_filename)
-       if len(text) == 0:
-           raise NoTexts(self.corpus.annis_corpus_name, self.corpus.repo_path)
-       return text
+       if  hasattr(self, 'text'):
+           return self.text
+       else:
+            dir_contents, tree_id = self.corpus.repository._get_texts(self.corpus, self.tt_dir)
+            self.text=dict(dir_contents).get(self.tt_filename)
+            if len(self.text) == 0:
+                raise NoTexts(self.corpus.annis_corpus_name, self.corpus.repo_path)
+            return self.text
     
     def get_text_lemmatized(self):
-        text= self.get_text()
         # Text is an SGML document that has been tokenized and lemmatized
         # we want to extract all "lemma" attributes from <norm> tags
         # and contcatenate them into a single string (with spaces)
         # and return that string
-        return " ".join(re.findall(r'lemma="([^"]*)"', text))
+        return " ".join(re.findall(r'lemma="([^"]*)"', self.get_text()))
 
     def get_text_normalized(self):
-        text= self.get_text()
         # Text is an SGML document that has been tokenized and lemmatized
         # we want to extract all "lemma" attributes from <norm> tags
         # and contcatenate them into a single string (with spaces)
         # and return that string
-        return " ".join(re.findall(r'norm="([^"]*)"', text))
+        return " ".join(re.findall(r'norm="([^"]*)"', self.get_text()))
     
     def __str__(self):
         return self.title

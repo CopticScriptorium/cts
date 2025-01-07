@@ -6,7 +6,7 @@
             {% if no_query %}
                 <h4>Please enter some criteria to search.</h4>
             {% elif all_empty %}
-                <h4 class="explanation">No results found for {{ all_empty_explanation|safe }}. Please try a different query.</h4>
+                <h4 class="explanation">No results found for {{ all_empty_explanation|safe }}.</h4>
             {% else %}
                 {% for result in results %}
                     {% if result.texts %}
@@ -37,18 +37,19 @@
                         {% if result.texts %}</div>{% endif %}
                 {% endfor %}
             {% endif %}
-        </div>
-        <div class="fulltext_results">
-            {% if fulltext_results %}
-            <h1>Fulltext results</h1>
-                {% for result in fulltext_results %}
-                <h4>
-                    <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}" class="text-link"><span class="text-title">{{ result.title }}</span></a>
-                </h4>
-                {{ result.value | safe }}
-                {% endfor %}
-            {% endif %}
-
+            <div class="fulltext_results">
+                {% if fulltext_results %}
+                     <h4>Full-text search results</h4>
+                    {% for result in fulltext_results %}
+                    <h4>
+                        <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}" class="text-link"><span class="text-title">{{ result.title }}</span></a>
+                    </h4>
+                    <div class="result">
+                    {{ result.value | safe }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
         <div class="search-column search-params">
             <form action="/search">

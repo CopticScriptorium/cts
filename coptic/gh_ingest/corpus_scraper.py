@@ -8,7 +8,7 @@ from django.db import transaction
 from django.utils.text import slugify
 from tqdm import tqdm
 from gh_ingest.corpus_transaction import CorpusTransaction
-from gh_ingest.repository import Repository
+
 from texts.models import (
     Corpus,
     Text,
@@ -173,9 +173,12 @@ class CorpusScraper:
 
     def _generate_visualizations_and_add_to_tx(self, text, contents):
         for config_name in settings.HTML_CONFIGS:
-            rendered_html = generate_visualization(
-                config_name, contents
-            )
+            if settings.LAZY_HTML_GENERATION:
+                rendered_html = ""
+            else:
+                rendered_html = generate_visualization(
+                    config_name, contents
+                )
             
             vis = HtmlVisualization()
             vis.visualization_format_slug = config_name

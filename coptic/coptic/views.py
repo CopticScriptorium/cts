@@ -114,9 +114,11 @@ def text_view(request, corpus=None, text=None, format=None):
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
         pass
     formats = models.HtmlVisualizationFormat.objects.all()
+    # Control whether we are lazy loading the HTML generation
+    lazy = settings.LAZY_HTML_GENERATION
     context = _base_context()
     context.update(
-        {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title, "formats": formats}
+        {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title, "formats": formats, "lazy": lazy}
     )
     return render(request, "text.html", context)
 

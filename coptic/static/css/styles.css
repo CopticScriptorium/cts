@@ -731,6 +731,32 @@ h2.meta-value:hover {
   color: #444;
 }
 
+#KMW_Controller_Img, #kmwico, .desktop, kmw-osk-frame{filter: grayscale(100%) !important;}
+
+/* Container styles */
+.fulltext_results {
+  width: 100%;
+  margin: 0 auto;
+  font-size: x-small;
+  display: block;
+}
+
+
+/* Title styles */
+.text-title {
+  color: #333;
+  text-decoration: none;
+}
+
+/* Text content styles */
+.fulltext_results > div.result {
+  padding: 8px;
+  margin-bottom: 1em;
+  background: var(--secondary-color);
+}
+
 .fulltext_results .highlight {
-  background-color: #FF0;
+  font-family: antinoouRegular, sans-serif;
+  background-color: var(--highlight-color);
+  font-size: large;
 }

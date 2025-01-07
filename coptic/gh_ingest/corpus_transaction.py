@@ -3,6 +3,7 @@ from django.db import transaction
 from texts.models import HtmlVisualizationFormat
 from .scraper_exceptions import *
 from texts.ft_search import Search
+from tqdm import tqdm
 
 class CorpusTransaction:
     """Keeps track of every object that needs to be added to the SQL database for a given corpus,
@@ -117,7 +118,7 @@ class CorpusTransaction:
 
         # Set visualization formats before initial save
         vis_format_instances = []
-        for vis_format in self._vis_formats:
+        for vis_format in tqdm(self._vis_formats, desc="Processing visualization formats", unit="format"):
             try:
                 vis_format_instance = HtmlVisualizationFormat.objects.get(
                     slug=vis_format.slug
@@ -135,8 +136,7 @@ class CorpusTransaction:
             self._corpus.set_visualization_formats(vis_format_instances)
 
         self._corpus.save()
-
-        for text, text_metas in self._text_pairs:
+        for text, text_metas in tqdm(self._text_pairs, desc="Processing text pairs", unit="metas"):
             for text_meta in text_metas:
                 text_meta.save()
 
@@ -154,7 +154,7 @@ class CorpusTransaction:
                 text.text_meta.add(text_meta)
             text.save()
 
-        for text, vis in self._vises:
+        for text, vis in tqdm(self._vises, desc="Saving visualisations", unit="visualisations"):
             vis.save()
             text.html_visualizations.add(vis)
             text.save()

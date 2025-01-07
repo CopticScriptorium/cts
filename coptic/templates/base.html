@@ -10,7 +10,6 @@
         <meta name="description" content="Coptic Scriptorium">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/static/css/styles.css">
-        <link rel="stylesheet" href="/static/css/styles2.css">
         <link rel="stylesheet" href="/static/css/vizbar.css">
         <link rel="stylesheet" href="/static/css/analytic.css">
         <link rel="stylesheet" href="/static/css/dipl.css">
@@ -48,6 +47,16 @@
         <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
         <script src="/static/js/wikipedia.js"></script>
         <script src="/static/js/coptic_dictionary.js"></script>
+        <script src='https://s.keyman.com/kmw/engine/17.0.332/keymanweb.js'></script>
+        <script src='https://s.keyman.com/kmw/engine/17.0.332/kmwuitoggle.js'></script>
+        <script>
+        (function() {
+            keyman.init({attachType:'auto'});
+            keyman.addKeyboards('@cop-copt'); // Loads default en keyboard from Keyman Cloud (CDN) https://github.com/keymanapp/keyboards/tree/master/release/c/coptic_qwerty
+            keyman.addKeyboards('@cop'); // Loads default copt keyboard from Keyman Cloud (CDN) https://github.com/keymanapp/keyboards/tree/master/release/c/coptic_greek
+            keyman.addKeyboards('@en'); // Loads default en keyboard from Keyman Cloud (CDN) https://github.com/keymanapp/keyboards/tree/master/release/c/coptic_qwerty
+        })();
+        </script>
     </head>
     <body class="text-server">
         <!-- coptic scriptorium header with hyperlinks -->
