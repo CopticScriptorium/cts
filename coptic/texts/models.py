@@ -328,7 +328,11 @@ class Text(models.Model):
     @classmethod
     def search(cls, keyword):
         search = Search()
-        return search.search(keyword)
+        if search.search_available:
+            return search.search(keyword)
+        else:
+            logger.error("MeiliSearch is not available")
+            return {"hits": []}
 
     @classmethod
     def get_authors_for_corpus(cls, corpus_id):

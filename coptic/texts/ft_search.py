@@ -18,10 +18,14 @@ class Search():
         self.client = meilisearch.Client(settings.SEARCH_CONFIG['MEILISEARCH_URL'],settings.SEARCH_CONFIG['MEILISEARCH_MASTER_KEY'])
         self.index = settings.SEARCH_CONFIG['MEILISEARCH_INDEX']
         # Create the index if it doesn't exist
-        existing_indexes = self.client.get_indexes()['results']
-        index_exists = any(idx.uid == self.index for idx in existing_indexes)
-        if not index_exists:
-            self.client.create_index(self.index, {'primaryKey': 'id'})
+        try:
+            existing_indexes = self.client.get_indexes()['results']
+            index_exists = any(idx.uid == self.index for idx in existing_indexes)
+            if not index_exists:
+                self.client.create_index(self.index, {'primaryKey': 'id'})
+            self.search_available=True
+        except:
+            self.search_available=False
         pass
     
     def index_text(self, texts):

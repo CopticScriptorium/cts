@@ -26,6 +26,7 @@ For search:
 curl -L https://install.meilisearch.com | sh
 ./meilisearch --master-key=$MEILLI_MASTER_KEY
 ```
+
 ## Configuration
 
 1. Create a copy of the `secrets.py` file and edit it with your information:
@@ -84,3 +85,9 @@ You should clear the cache after deployments.
 ```sh 
 python manage.py clearcache
 ```
+
+## How search works
+
+We have a to_json method added on the Text model, it included the main fields as well as the "text_meta" fields extracted from the SGML and the lemmatized as well as normalized versions of the text (that we "flatten").
+
+We index each text with all of its metadata and withing the retrievel implemented in texts/ft_search we retrieve the matched positions as well as the highlighting of the search terms.
