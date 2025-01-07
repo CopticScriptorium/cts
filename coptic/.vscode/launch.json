@@ -15,7 +15,10 @@
             "args": [
                 "addcorpus",
                 "--local-repo-path=../../corpora",
-                "bohairic.nt"
+                "bohairic.nt",
+                "--",
+                "-m", "cProfile",
+                "-o", "addcorpus.prof"
             ],
             "django": true,
             "justMyCode": true,
@@ -40,7 +43,8 @@
             "args": [
                 "addcorpus",
                 "--local-repo-path=../../corpora",
-                "acts-pilate"
+                "acts-pilate",
+                "bohairic.nt"
             ],
             "django": true,
             "justMyCode": true,
