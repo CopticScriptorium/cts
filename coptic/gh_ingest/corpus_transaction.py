@@ -161,8 +161,11 @@ class CorpusTransaction:
 
         # Index texts in Meilisearch
         search = Search()
-        texts_to_index = [text.to_json() for text, _ in self._text_pairs]
-        search.index_text(texts_to_index)
+        if search.search_available:
+            texts_to_index = [text.to_json() for text, _ in self._text_pairs]
+            search.index_text(texts_to_index)
+        else:
+            print("Search is not available. Skipping indexing.")
 
         return {
             "texts": len(self._text_pairs),
