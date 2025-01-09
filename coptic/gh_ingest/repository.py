@@ -54,7 +54,7 @@ class Repository(metaclass=SingletonMeta):
         ]
         
     def ensure_repo(self):
-        if not os.path.exists(self.repo_path):
+        if not os.path.exists(os.path.join(self.repo_path, ".git")):
             self.clone_repo()
         else:
             self.pull_repo()

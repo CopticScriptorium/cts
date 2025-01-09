@@ -48,7 +48,7 @@ class CorpusScraper:
         def find_dir(suffix):
             matched_dirs = [d for d in dirs if suffix in d]
             if len(matched_dirs) > 1:
-                raise AmbiguousCorpus(corpus.slug, self.repo_path)
+                raise AmbiguousCorpus(corpus.slug, settings.LOCAL_REPO_PATH)
             return matched_dirs[0] if matched_dirs else ""
 
         tei = find_dir("_TEI")
@@ -87,7 +87,7 @@ class CorpusScraper:
                     vm = f.read()
         except (FileNotFoundError, IndexError) as e:
             raise ResolverVisMapIssue(
-                corpus_dirname, self.repo_path, corpus.github_relannis
+                corpus_dirname, settings.LOCAL_REPO_PATH, corpus.github_relannis
             ) from e
             
         return vm
@@ -97,7 +97,7 @@ class CorpusScraper:
     
         corpus = Corpus()
         if corpus_dirname not in corpus.repository._corpora:
-            raise CorpusNotFound(corpus_dirname, self.repo_path)
+            raise CorpusNotFound(corpus_dirname, settings.LOCAL_REPO_PATH)
 
         self._current_corpus = corpus
         self._current_transaction = CorpusTransaction(corpus_dirname, corpus)
@@ -169,7 +169,7 @@ class CorpusScraper:
         for line in tt_lines:
             if line.startswith("<meta"):
                 return dict(re.findall(r'(?P<attr>[\w._-]+)="(?P<value>.*?)"', line))
-        raise MetaNotFound(self.repo_path, self._current_text_contents.path)
+        raise MetaNotFound(settings.LOCAL_REPO_PATH, self._current_text_contents.path)
 
     def _generate_visualizations_and_add_to_tx(self, text, contents):
         for config_name in settings.HTML_CONFIGS:
