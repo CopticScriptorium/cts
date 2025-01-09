@@ -2,7 +2,6 @@
 applications:
   search:
     type: "python:3.12"
-    container_profile: HIGHER_MEMORY
     web:
       # Commands are run once after deployment to start the application process.
       # More information: https://docs.upsun.com/create-apps/app-reference.html#web-commands
@@ -35,7 +34,7 @@ applications:
     # Application source code directory
     source:
       root: "/coptic"
-
+    container_profile: HIGHER_MEMORY
     # The runtime the application uses.
     # Complete list of available runtimes: https://docs.upsun.com/create-apps/app-reference.html#types
     type: "python:3.12"
