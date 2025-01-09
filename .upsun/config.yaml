@@ -2,6 +2,7 @@
 applications:
   search:
     type: "python:3.12"
+    container_profile: HIGHER_MEMORY
     web:
       # Commands are run once after deployment to start the application process.
       # More information: https://docs.upsun.com/create-apps/app-reference.html#web-commands
