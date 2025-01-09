@@ -39,7 +39,7 @@ LOGGING = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "sqlite3.db",
+        "NAME": "db/sqlite3.db",
         "USER": "",
         "PASSWORD": "",
         "HOST": "",
@@ -60,7 +60,7 @@ if "test" in sys.argv:
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
-LOCAL_REPO_PATH = BUILD_CACHE_DIR + "/corpora" # this is for upsun
+LOCAL_REPO_PATH =  "/app/corpora" # this is for upsun
 
 CACHE_TTL = 60 * 60 * 24 * 7  # 1 week
 # Control whether we are lazy loading the HTML generation

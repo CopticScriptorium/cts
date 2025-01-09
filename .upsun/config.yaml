@@ -59,7 +59,9 @@ applications:
        "/db": # Represents the path in the app.
          source: "storage" # "storage" sources are unique to the app, but shared among instances of the app. "service" sources can be shared among apps.
          source_path: "db" # The subdirectory within the mounted disk (the source) where the mount should point.
-
+       "/corpora": # Represents the path in the app.
+         source: "storage" # "storage" sources are unique to the app, but shared among instances of the app. "service" sources can be shared among apps.
+         source_path: "corpora" # The subdirectory within the mounted disk (the source) where the mount should point.
     # The web key configures the web server running in front of your app.
     # More information: https://docs.upsun.com/create-apps/app-reference.html#web
     web:
@@ -130,16 +132,14 @@ applications:
         set -eux
         pip install -r requirements_django_5.txt
         #./manage.py collectstatic --noinput
-        ./manage.py migrate
-        mkdir -p $PLATFORM_CACHE_DIR/corpora
-        ./addcorpora.sh $PLATFORM_CACHE_DIR/corpora
         
       # The deploy hook is run after the app container has been started, but before it has started accepting requests.
       # More information: https://docs.upsun.com/create-apps/hooks/hooks-comparison.html#deploy-hook
       deploy: |
         set -eux
         # echo 'Put your deploy command here'
-        
+        #         ./manage.py migrate
+        #        ./addcorpora.sh $PLATFORM_CACHE_DIR/corpora
 
       # The post_deploy hook is run after the app container has been started and after it has started accepting requests.
       # More information: https://docs.upsun.com/create-apps/hooks/hooks-comparison.html#deploy-hook
