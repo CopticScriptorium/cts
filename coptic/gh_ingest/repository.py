@@ -62,7 +62,7 @@ class Repository(metaclass=SingletonMeta):
     def clone_repo(self):
         try:
             repo_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}.git"
-            subprocess.run(["git", "clone", repo_url, self.repo_path], check=True)
+            subprocess.run(["git", "clone", "--depth", "1", repo_url, self.repo_path], check=True) # we should do a shallow clone.
             print(f"Cloned repository from {repo_url} to {self.repo_path}")
         except:
             print(f"Could not clone repository from probably offline, but do please check the error")
