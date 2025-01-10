@@ -49,8 +49,8 @@ applications:
     # side is in the form `<service name>:<endpoint name>`.
     # More information: https://docs.upsun.com/create-apps/app-reference.html#relationships
     
-    # relationships:
-    #   database: "db:postgresql"
+    relationships:
+       search: "search:http"
     
 
     # Mounts define directories that are writable after the build is complete.
