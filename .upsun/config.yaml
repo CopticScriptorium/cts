@@ -138,14 +138,21 @@ applications:
       deploy: |
         set -eux
         # echo 'Put your deploy command here'
-        #         ./manage.py migrate
-        #        ./addcorpora.sh $PLATFORM_CACHE_DIR/corpora
+        ./manage.py migrate
 
       # The post_deploy hook is run after the app container has been started and after it has started accepting requests.
       # More information: https://docs.upsun.com/create-apps/hooks/hooks-comparison.html#deploy-hook
       post_deploy: |
         ./manage.py clearcache
-
+    operations:
+      import:
+        role: admin
+        commands:
+          start: ./addcorpora.sh corpora
+      clearcache:
+        role: admin
+        commands:
+          start: ./manage.py clearcache
     # Scheduled tasks for the app.
     # More information: https://docs.upsun.com/create-apps/app-reference.html#crons
     # crons:
