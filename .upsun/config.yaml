@@ -25,6 +25,9 @@ applications:
       "/data.ms":
         source: "storage"
         source_path: "data.ms"
+      "/dumps":
+        source: "storage"
+        source_path: "dumps"
     hooks:
       build: |
         set -eux
