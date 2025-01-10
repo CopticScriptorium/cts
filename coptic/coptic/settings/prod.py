@@ -48,7 +48,7 @@ DATABASES = {
 }
 
 SEARCH_CONFIG = {
-    "MEILISEARCH_URL": 'search.internal',
+    "MEILISEARCH_URL": 'http://search.internal:80/',
     "MEILISEARCH_MASTER_KEY": os.getenv('PLATFORM_PROJECT_ENTROPY', 'secretkey'),
     "MEILISEARCH_INDEX": "texts",
 }
