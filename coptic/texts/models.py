@@ -6,6 +6,7 @@ from collections import OrderedDict
 from base64 import b64encode
 from django.db import models
 from django.conf import settings
+from cache_memoize import cache_memoize
 
 from texts.ft_search import Search
 from gh_ingest.htmlvis import generate_visualization
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 HTML_TAG_REGEX = re.compile(r"<[^>]*?>")
 
+@cache_memoize(settings.CACHE_TTL)
 def get_meta_values(meta):
     unsplit_values = map(
         lambda x: x["value"],
@@ -241,7 +243,6 @@ class MetaOrder(models.Model):
     def __str__(self):
         return self.name
 
-
 class Text(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=40, db_index=True) #Fixme: making the slug unique seems to fail import.
@@ -277,7 +278,7 @@ class Text(models.Model):
 
     def get_text_normalized(self):
         # Text is an SGML document that has been tokenized and lemmatized
-        # we want to extract all "lemma" attributes from <norm> tags
+        # we want to extract all "norm" attributes from <norm> tags
         # and contcatenate them into a single string (with spaces)
         # and return that string
         return " ".join(re.findall(r'norm="([^"]*)"', self.get_text()))
@@ -345,81 +346,6 @@ class Text(models.Model):
         return authors_set
 
     @classmethod
-    def get_corpora_for_meta_value(cls, meta_name, meta_value, splittable):
-        if splittable:
-            corpora = (
-                cls.objects.filter(
-                    text_meta__name__iexact=meta_name,
-                    text_meta__value__icontains=meta_value,
-                )
-                .values(
-                    "corpus__slug",
-                    "corpus__title",
-                    "corpus__id",
-                    "corpus__urn_code",
-                    "corpus__annis_corpus_name",
-                )
-                .distinct()
-            )
-        else:
-            corpora = (
-                cls.objects.filter(
-                    text_meta__name__iexact=meta_name,
-                    text_meta__value__iexact=meta_value,
-                )
-                .values(
-                    "corpus__slug",
-                    "corpus__title",
-                    "corpus__id",
-                    "corpus__urn_code",
-                    "corpus__annis_corpus_name",
-                )
-                .distinct()
-            )
-        #logger.debug("Corpora for Meta Value: %s", corpora)  # Debug statement
-        return corpora
-
-    @classmethod
-    def get_value_corpus_pairs(cls, meta):
-        meta_values = get_meta_values(meta)
-        value_corpus_pairs = OrderedDict()
-
-        for meta_value in meta_values:
-            corpora = cls.get_corpora_for_meta_value(meta.name, meta_value, meta.splittable)
-            value_corpus_pairs[meta_value] = []
-
-            for c in sorted(corpora, key=lambda x: x["corpus__title"]):
-                authors = cls.get_authors_for_corpus(c["corpus__id"])
-                # FIXME: This is really weird logic.
-                # We have 0 authors, 1 author, 2 authors, 3+ authors
-                # Ordering may be important in the case of 2 authors
-                # but we don't have that information here?
-                # Possibly authors may come from two distinct fields?
-                # attributed_author and author ? But we are not using that here.
-                if len(authors) == 0:
-                    author = None
-                elif len(authors) == 1:
-                    author = list(authors)[0]
-                elif len(authors) < 3:
-                    author = ", ".join(authors)
-                else:
-                    author = "multiple"
-
-                value_corpus_pairs[meta_value].append(
-                    {
-                        "slug": c["corpus__slug"],
-                        "title": c["corpus__title"],
-                        "urn_code": c["corpus__urn_code"],
-                        "author": author,
-                        "annis_corpus_name": c["corpus__annis_corpus_name"],
-                    }
-                )
-            value_corpus_pairs[meta_value].sort(key=lambda x: x["title"])
-
-        logger.debug("Value Corpus Pairs: %s", value_corpus_pairs)  # Debug statement
-        return value_corpus_pairs
-
-    @classmethod
     def get_b64_meta_values(cls, value_corpus_pairs):
         return {
             meta_value: str(b64encode(('identity="' + meta_value + '"').encode("ascii")).decode("ascii"))
@@ -443,6 +369,27 @@ class Text(models.Model):
     @classmethod
     def get_all_corpora(cls, value_corpus_pairs):
         return {c["annis_corpus_name"] for meta_value in value_corpus_pairs.values() for c in meta_value}
+
+    @classmethod
+    @cache_memoize(settings.CACHE_TTL)
+    def get_value_corpus_pairs(cls, meta):
+        value_corpus_pairs = OrderedDict()
+        meta_values = get_meta_values(meta)
+
+        corpora = (
+            cls.objects.filter(text_meta__name__iexact=meta.name, text_meta__value__in=meta_values)
+            .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name", "text_meta__value")
+            .order_by("corpus__title")
+            .distinct()
+        )
+
+        for c in corpora:
+            meta_value = c.pop("text_meta__value")
+            if meta_value not in value_corpus_pairs:
+                value_corpus_pairs[meta_value] = []
+            value_corpus_pairs[meta_value].append({key.replace('corpus__', ''): value for key, value in c.items()})
+
+        return value_corpus_pairs
 
 
 class SpecialMetaManager(models.Manager):
