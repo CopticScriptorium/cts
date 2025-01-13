@@ -431,7 +431,7 @@ def search(request):
     # build base explanation, a string that will be displayed to the user summarizing their search parameters
     explanation = _build_explanation(params)
     fulltext_results=[]
-    if "text" in params:
+    if "text" in params and params["text"]:
         results, all_empty_explanation = _build_result_for_query_text(
             params, texts, explanation
         )
