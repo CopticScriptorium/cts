@@ -107,6 +107,7 @@ class Corpus(models.Model):
         self.repository=Repository()
         super().__init__(*args, **kwargs)
         
+        
     def get_visualization_formats(self):
         """Retrieve visualization formats as a list of slugs."""
         if not self.visualization_formats:
@@ -245,18 +246,39 @@ class MetaOrder(models.Model):
 
 class Text(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=40, db_index=True) #Fixme: making the slug unique seems to fail import.
+    slug = models.SlugField(max_length=40, db_index=True)
     created = models.DateTimeField(editable=False)
     modified = models.DateTimeField(editable=False)
     corpus = models.ForeignKey(Corpus, blank=True, null=True, on_delete=models.CASCADE)
     html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
     text_meta = models.ManyToManyField(TextMeta, blank=True, db_index=True)
-    title = models.CharField(max_length=200)
     tt_dir = models.CharField(max_length=40)
     tt_filename = models.CharField(max_length=40)
     tt_dir_tree_id = models.CharField(max_length=40)
-    document_cts_urn= models.CharField(max_length=80)
-    
+    document_cts_urn = models.CharField(max_length=80)
+
+    @classmethod
+    @cache_memoize(settings.CACHE_TTL)
+    def get_value_corpus_pairs(cls, meta):
+        value_corpus_pairs = OrderedDict()
+        meta_values = get_meta_values(meta)
+
+        corpora = (
+            cls.objects.filter(text_meta__name__iexact=meta.name, text_meta__value__in=meta_values)
+            .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name", "text_meta__value")
+            .order_by("corpus__title")
+            .distinct()
+        )
+
+        for c in corpora:
+            meta_value = c.pop("text_meta__value")
+            c["corpus__author"]=', '.join(list(cls.objects.filter(corpus_id = c["corpus__id"],text_meta__name__iexact="author").values_list("text_meta__value", flat=True).distinct()))
+            if meta_value not in value_corpus_pairs:
+                value_corpus_pairs[meta_value] = []
+            value_corpus_pairs[meta_value].append({key.replace('corpus__', ''): value for key, value in c.items()})
+
+        return OrderedDict(sorted(value_corpus_pairs.items()))
+
     # FIXME this repeats code in _get_texts
 
     def get_text(self):
@@ -334,62 +356,6 @@ class Text(models.Model):
         else:
             logger.error("MeiliSearch is not available")
             return {"hits": []}
-
-    @classmethod
-    def get_authors_for_corpus(cls, corpus_id):
-        authors = TextMeta.objects.filter(
-            text__corpus__id=corpus_id,
-            name__iexact="author"
-        ).values_list('value', flat=True).distinct()
-        authors_set = set(authors)
-        logger.debug("Authors for Corpus: %s", authors_set)  # Debug statement
-        return authors_set
-
-    @classmethod
-    def get_b64_meta_values(cls, value_corpus_pairs):
-        return {
-            meta_value: str(b64encode(('identity="' + meta_value + '"').encode("ascii")).decode("ascii"))
-            for meta_value in value_corpus_pairs.keys()
-        }
-
-    @classmethod
-    def get_b64_corpora(cls, value_corpus_pairs):
-        for meta_value in value_corpus_pairs.values():
-            for c in meta_value:
-                if "annis_corpus_name" not in c:
-                    logger.debug("Missing key in: %s", c)
-                else:
-                    logger.debug("Key found in: %s", c)
-        return {
-            c["annis_corpus_name"]: str(b64encode(c["annis_corpus_name"].encode("ascii")).decode("ascii"))
-            for meta_value in value_corpus_pairs.values()
-            for c in meta_value
-        }
-
-    @classmethod
-    def get_all_corpora(cls, value_corpus_pairs):
-        return {c["annis_corpus_name"] for meta_value in value_corpus_pairs.values() for c in meta_value}
-
-    @classmethod
-    @cache_memoize(settings.CACHE_TTL)
-    def get_value_corpus_pairs(cls, meta):
-        value_corpus_pairs = OrderedDict()
-        meta_values = get_meta_values(meta)
-
-        corpora = (
-            cls.objects.filter(text_meta__name__iexact=meta.name, text_meta__value__in=meta_values)
-            .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name", "text_meta__value")
-            .order_by("corpus__title")
-            .distinct()
-        )
-
-        for c in corpora:
-            meta_value = c.pop("text_meta__value")
-            if meta_value not in value_corpus_pairs:
-                value_corpus_pairs[meta_value] = []
-            value_corpus_pairs[meta_value].append({key.replace('corpus__', ''): value for key, value in c.items()})
-
-        return value_corpus_pairs
 
 
 class SpecialMetaManager(models.Manager):

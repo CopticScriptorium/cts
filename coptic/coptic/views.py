@@ -196,27 +196,34 @@ def index_view(request, special_meta=None):
         meta = models.SpecialMeta.objects.get(name=special_meta)
     except (models.SpecialMeta.DoesNotExist, ValueError):
         raise Http404(f'Special metadata type "{special_meta}" not found')
-
+    
     value_corpus_pairs = models.Text.get_value_corpus_pairs(meta)
-    b64_meta_values = models.Text.get_b64_meta_values(value_corpus_pairs)
-    b64_corpora = models.Text.get_b64_corpora(value_corpus_pairs)
-    all_corpora = models.Text.get_all_corpora(value_corpus_pairs)
+
+    b64_meta_values = {
+        meta_value: str(base64.b64encode(('identity="'+meta_value+'"').encode("ascii")).decode("ascii"))
+        for meta_value in value_corpus_pairs.keys()
+    }
+
+    b64_corpora = {
+        c["annis_corpus_name"]: str(base64.b64encode(c["annis_corpus_name"].encode("ascii")).decode("ascii"))
+        for meta_value_list in value_corpus_pairs.values()
+        for c in meta_value_list
+    }
+
+    all_corpora = {c["annis_corpus_name"] for meta_value_list in value_corpus_pairs.values() for c in meta_value_list}
 
     annis_corpora = ",".join(list(all_corpora))
     annis_corpora = str(base64.b64encode(annis_corpora.encode("ascii")).decode("ascii"))
 
-    context.update(
-        {
-            "special_meta": meta.name,
-            "value_corpus_pairs": value_corpus_pairs.items(),
-            "is_corpus": meta.name == "corpus",
-            "b64_meta_values": b64_meta_values,
-            "b64_corpora": b64_corpora,
-            "annis_corpora": annis_corpora,
-            "page_title": f"Index {meta.name}" 
-        }
-    )
-    return render(request, "index.html", context)
+    context.update({
+        'special_meta': meta.name,
+        'value_corpus_pairs': value_corpus_pairs.items,
+        'is_corpus': meta.name == "corpus",
+        'b64_meta_values': b64_meta_values,
+        'b64_corpora': b64_corpora,
+        'annis_corpora': annis_corpora  
+    })
+    return render(request, 'index.html', context)
 
 
 # search --------------------------------------------------------------------------------
@@ -423,13 +430,12 @@ def search(request):
     
     # build base explanation, a string that will be displayed to the user summarizing their search parameters
     explanation = _build_explanation(params)
-
+    fulltext_results=[]
     if "text" in params:
         results, all_empty_explanation = _build_result_for_query_text(
             params, texts, explanation
         )
         ft_hits=models.Text.search(params["text"])
-        fulltext_results=[]
         if ft_hits["hits"]:
             for result in ft_hits["hits"]:
                 print(result["_matchesPosition"])
