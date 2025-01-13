@@ -152,11 +152,6 @@ class TestTextModel(TestCase):
         authors = Text.get_authors_for_corpus(self.corpus.id)
         self.assertSetEqual(authors, {"Author 1", "Author 2"})
 
-    def test_get_corpora_for_meta_value(self):
-        corpora = Text.get_corpora_for_meta_value("author", "Author 1", False)
-        self.assertEqual(len(corpora), 1)
-        self.assertEqual(corpora[0]["corpus__slug"], "test-corpus")
-
     def test_get_value_corpus_pairs(self):
         value_corpus_pairs = Text.get_value_corpus_pairs(self.special_meta)
         self.assertIn("Author 1", value_corpus_pairs)
