@@ -41,11 +41,18 @@
                 {% if fulltext_results %}
                      <h4>Full-text search results</h4>
                     {% for result in fulltext_results %}
-                    <h4>
-                        <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}" class="text-link"><span class="text-title">{{ result.title }}</span></a>
-                    </h4>
-                    <div class="result">
-                    {{ result.value | safe }}
+                    <div class="search-results-row">
+                    <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}/analytic#text={{query_text|urlencode}}" class="text-link">
+                        {# FIXME we should be using the standard #:~:text= but that doesnt seem to work well yet. So resorting to #text and a js hack with window.find #}
+                        <h4>
+                            <span class="text-title">{{ result.title }}</span>
+                        </h4>
+                        <div class="result">
+                        {# FIXME Implement results for fields other than the text itself #}
+                        {{ result.value | safe }}
+                        </div>
+                        <div>(from: {{ result.field | safe }})</div>
+                    </a>
                     </div>
                     {% endfor %}
                 {% endif %}

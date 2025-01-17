@@ -57,6 +57,15 @@
             keyman.addKeyboards('@en'); // Loads default en keyboard from Keyman Cloud (CDN) https://github.com/keymanapp/keyboards/tree/master/release/c/coptic_qwerty
         })();
         </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              text_hash = document.location.hash.split("#text=") || [];
+              if (text_hash.length > 1) {
+               console.log("Find:" + decodeURIComponent(text_hash[1]));
+               window.find(decodeURIComponent(text_hash[1]));
+              }
+            });
+        </script>
     </head>
     <body class="text-server">
         <!-- coptic scriptorium header with hyperlinks -->
