@@ -21,7 +21,7 @@ URLS = [
 ]
 
 PROD_URL = "https://data.copticscriptorium.org"
-STAGE_URL = "http://localhost:8000"
+STAGE_URL = "hhttps://ft-search-3h5wsji-5k5ajmc7ljyhw.eu-5.platformsh.site"
 
 
 async def fetch_content(session, url):
