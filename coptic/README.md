@@ -88,6 +88,91 @@ python manage.py clearcache
 
 ## How search works
 
-We have a to_json method added on the Text model, it included the main fields as well as the "text_meta" fields extracted from the SGML and the lemmatized as well as normalized versions of the text (that we "flatten").
+We have a to_json method added on the Text model, it included the main fields as well as the "text_meta" fields extracted from the SGML and the lemmatized as well as normalized versions of the text (that we "flatten" by chapter).
 
 We index each text with all of its metadata and withing the retrievel implemented in texts/ft_search we retrieve the matched positions as well as the highlighting of the search terms.
+
+The documents we are indexing have the following format:
+```python
+[
+    {
+        "id": 33031,
+        "title": "Acts of Pilate-Gospel of Nicodemus CM.1643 part 1",
+        "slug": "acts-of-pilate-gospel-of-nicodemus-cm1643-part-1",
+        "created": "2025-01-15T09:18:25.020424",
+        "modified": "2025-01-15T09:18:25.056685",
+        "corpus": "Acts of Pilate - Gospel of Nicodemus",
+        "corpus_slug": "actspilate",
+        "text_meta": {
+            "Coptic_edition": "<a href='https://babel.hathitrust.org/cgi/pt?id=coo.31924028715617&seq=10'>Lacau 1904</a>",
+            "OrigDate_notBefore": "901",
+            "Trismegistos": "none",
+            "annotation": "Lydia Bremer-McCollum, Nicholas Wagner",
+            "author": "Anonymous",
+            "collection": "Manuscrits coptes",
+            "corpus": "acts.pilate",
+            "country": "Egypt",
+            "document_cts_urn": "urn:cts:copticLit:misc.acts_pilate.lacau_ed:9",
+            "idno": "129/17 f. 50",
+            "language": "Sahidic Coptic",
+            "license": "<a href='https://creativecommons.org/licenses/by/4.0/'>CC-BY 4.0</a>",
+            "msName": "CM.1643",
+            "next": "urn:cts:copticLit:misc.acts_pilate.lacau_ed:10-11",
+            "note": "Coptic follows Lacau's transcription. Chapter divisions follow paragraph breaks in Lacau's translation. No CMCL manuscript siglum exists for this codex, so the MsName is the CLM number in PATHS.",
+            "objectType": "codex",
+            "ocr": "automatic",
+            "order": "1",
+            "origDate": "between 901 and 1100",
+            "origDate_notAfter": "1100",
+            "origDate_precision": "medium",
+            "origPlace": "White Monastery",
+            "pages_from": "27",
+            "pages_to": "28",
+            "parsing": "automatic",
+            "paths_authors": "none",
+            "paths_manuscripts": "<a href='http://paths.uniroma1.it/atlas/manuscripts/1643'>1643</a>",
+            "paths_works": "<a href='http://paths.uniroma1.it/atlas/works/35'>35</a>",
+            "placeName": "Atripe",
+            "project": "Coptic SCRIPTORIUM",
+            "redundant": "no",
+            "repository": "Paris Bibliothéque Nationale",
+            "segmentation": "automatic",
+            "source": "<a href='https://babel.hathitrust.org/cgi/pt?id=coo.31924028715617&seq=10'>Lacau 1904</a>",
+            "source_info": "OCR of Lacau pdf on Hathitrust using OCR4all",
+            "tagging": "automatic",
+            "title": "Acts of Pilate-Gospel of Nicodemus CM.1643 part 1",
+            "translation": "none",
+            "version_date": "2024-10-31",
+            "version_n": "6.0.0",
+            "witness": "2 other manuscripts contain this work but are not published by Coptic Scriptorium",
+        },
+        "text": [
+            {
+                "lemmatized": "ϫⲉ ⲁ ⲟⲩ ⲥⲧⲁⲥⲓⲥ ϣⲱⲡⲉ ... ⲛⲧⲟⲟⲩ ⲱϣ ⲉⲃⲟⲗ",
+                "normalized": "ϫⲉ ⲁ ⲟⲩ ⲥⲧⲁⲥⲓⲥ ϣⲱⲡⲉ ... ⲁ ⲩ ⲱϣ ⲉⲃⲟⲗ",
+                "normalized_group": "ϫⲉⲁⲟⲩⲥⲧⲁⲥⲓⲥ ϣⲱⲡⲉ ... · ⲁⲩⲱϣ ⲉⲃⲟⲗ",
+            }
+        ],
+        "tt_dir": "acts-pilate",
+        "tt_filename": "pilate.1643.27-28.tt",
+        "tt_dir_tree_id": "c5513bbe70dfa745bb49c55ef88862af6dfc0981",
+        "document_cts_urn": "",
+    },
+    { "id": ...
+    },
+]
+```
+
+
+The built-in ranking rules are
+
+[
+  "words", 
+  "typo",  
+  "proximity",
+  "attribute",
+  "sort",
+  "exactness",
+  "release_date:desc"
+]
+
