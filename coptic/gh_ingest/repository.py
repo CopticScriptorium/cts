@@ -1,4 +1,5 @@
 from io import BytesIO
+import logging
 import os
 import subprocess
 import zipfile
@@ -63,16 +64,16 @@ class Repository(metaclass=SingletonMeta):
         try:
             repo_url = f"https://github.com/{self.corpus_repo_owner}/{self.corpus_repo_name}.git"
             subprocess.run(["git", "clone", "--depth", "1", repo_url, self.repo_path], check=True) # we should do a shallow clone.
-            print(f"Cloned repository from {repo_url} to {self.repo_path}")
+            logging.info(f"Cloned repository from {repo_url} to {self.repo_path}")
         except:
-            print(f"Could not clone repository from probably offline, but do please check the error")
+            logging.info(f"Could not clone repository from probably offline, but do please check the error")
 
     def pull_repo(self):
         try:
             subprocess.run(["git", "-C", self.repo_path, "pull"], check=True)
-            print(f"Pulled latest changes in repository at {self.repo_path}")
+            logging.info(f"Pulled latest changes in repository at {self.repo_path}")
         except:
-            print(f"Could not pull repository from  upstream probably offline")
+            logging.info(f"Could not pull repository from  upstream probably offline")
 
     def _get_tree_id(self, path):
         try:
@@ -91,19 +92,19 @@ class Repository(metaclass=SingletonMeta):
             if not self.corpus_repo_owner:
                 self.corpus_repo_owner = settings.CORPUS_REPO_OWNER
         except:
-            print("CORPUS_REPO_OWNER not found in settings. Using default value CopticScriptorium.")
+            logging.warning("CORPUS_REPO_OWNER not found in settings. Using default value CopticScriptorium.")
             self.corpus_repo_owner = "CopticScriptorium"
         try: 
             if not self.corpus_repo_name:
                 self.corpus_repo_name = settings.CORPUS_REPO_NAME
         except:
-            print("CORPUS_REPO_NAME not found in settings. Using default value corpora.")
+            logging.warning("CORPUS_REPO_NAME not found in settings. Using default value corpora.")
             self.corpus_repo_name = "corpora"
         try:
             if not self.repo_path:
                 self.repo_path = settings.LOCAL_REPO_PATH
         except:
-            print("LOCAL_REPO_PATH not found in settings. Using default value ../../corpora.")
+            logging.warning("LOCAL_REPO_PATH not found in settings. Using default value ../../corpora.")
             self.repo_path = "../../corpora"
     
     def _get_zip_for_file(self, path):

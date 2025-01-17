@@ -4,7 +4,8 @@
 :root {
   --primary-color: #361b01;
   --secondary-color: #e3d9d8;
-  --highlight-color: #8e463d;
+  --highlight-color: #8e473d11;
+  --highlight-search-color: #8e473d00;
   --font-color: #222222;
   --font-family: 'Asul', Helvetica, Arial, sans-serif;
   --font-size-base: 16px;
@@ -734,13 +735,16 @@ h2.meta-value:hover {
 #KMW_Controller_Img, #kmwico, .desktop, kmw-osk-frame{filter: grayscale(100%) !important;}
 
 /* Container styles */
+
 .fulltext_results {
   width: 100%;
   margin: 0 auto;
-  font-size: x-small;
   display: block;
 }
 
+.fulltext_results h4 {
+  margin-top: 10px;
+}
 
 /* Title styles */
 .text-title {
@@ -758,5 +762,21 @@ h2.meta-value:hover {
 .fulltext_results .highlight {
   font-family: antinoouRegular, sans-serif;
   background-color: var(--highlight-color);
-  font-size: large;
+  font-weight: bolder;
+  font-size: 120%;
+  font-style: italic;
+}
+
+.fulltext_results a {
+  color: #333;
+  text-decoration: none;
+}
+.fulltext_results a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.fulltext_results a:hover h4 {
+  color: #333;
+  text-decoration: underline;
 }

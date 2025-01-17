@@ -16,6 +16,8 @@ import base64
 
 from django.template.defaulttags import register
 
+HTML_TAG_REGEX = re.compile(r"<[^>]*?>")
+
 logger = logging.getLogger(__name__)
 
 @register.filter(name="keyvalue")
@@ -63,7 +65,7 @@ def corpus_view(request, corpus=None):
             results += order_match
     results = sorted(results, key=lambda t: (t.order, t.id))
     texts = results
-    formats = models.HtmlVisualizationFormat.objects.all()
+    formats = settings.HTML_VISUALISATION_FORMATS
     context = _base_context()
     context.update({"corpus": corpus_object, "texts": texts, "page_title": corpus_object.title, "formats": formats})
     return render(request, "corpus.html", context)
@@ -76,11 +78,10 @@ def text_view(request, corpus=None, text=None, format=None):
     
     if not format:
         visualization = text_object.html_visualizations.all()[0]
-        format = visualization.visualization_format.slug
+        format = visualization.visualization_format["slug"] # Verify this is the correct attribute
         return text_view(request, corpus=corpus, text=text, format=format)
-
-    # FIXME: temporary hack until we align the naming of visualisations
-    # FIXME: It should probably be `norm`
+    
+    # FIXME: It should probably be `norm` everywhere - will be fixed in data.
     # Changed to use visualization_format_slug
     
     visualization = text_object.get_visualization_by_slug(format)
@@ -100,6 +101,7 @@ def text_view(request, corpus=None, text=None, format=None):
         ).slug
         text_object.next = slug
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
+        logger.error("Next text not found")  # Debug statement
         pass
     try:
         previous_text_urn = text_object.text_meta.get(name="previous").value.strip()
@@ -108,14 +110,17 @@ def text_view(request, corpus=None, text=None, format=None):
         ).slug
         text_object.previous = slug
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
+        logger.error("Previous text not found") # Debug statement
         pass
     try:
         text_object.endnote = text_object.text_meta.get(name="endnote").value
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
+        logger.warning("Endnote not found")  # Debug statement
         pass
-    formats = models.HtmlVisualizationFormat.objects.all()
+    formats = settings.HTML_VISUALISATION_FORMATS
     # Control whether we are lazy loading the HTML generation
     lazy = settings.LAZY_HTML_GENERATION
+    logger.info(f"Lazy loading is set to {lazy}")
     context = _base_context()
     context.update(
         {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title, "formats": formats, "lazy": lazy}
@@ -125,7 +130,6 @@ def text_view(request, corpus=None, text=None, format=None):
 
 def not_found(request):
     return render(request, "404.html", {})
-
 
 def _resolve_urn(urn):
     try:
@@ -158,43 +162,15 @@ def urn(request, urn=None):
         return redirect("corpus", corpus=obj.slug)
     return redirect(reverse("search") + f"?text={urn}")
 
-
-def get_meta_values(meta):
-    unsplit_values = map(
-        lambda x: x["value"],
-        models.TextMeta.objects.filter(name__iexact=meta.name)
-        .values("value")
-        .distinct(),
-    )
-    if not meta.splittable:
-        meta_values = unsplit_values
-    else:
-        # FIXME: there is too much undocumented logic here.
-        # The logic is to split the values by a separator, but if the separator is a comma and there are long values, then we should not split them.
-        # I'd imagine this is some heuristics? If so, it should be better documented.
-        # Also if this is structuring data we should either pre-process it and store it in a structured way or document why we don't do that.
-        # And possibly move to the model. 
-        sep = "; " if str(meta.name) in ["places", "people"] else ", "
-        split_meta_values = [v.split(sep) for v in unsplit_values]
-        for i, vals in enumerate(split_meta_values):
-            if (
-                any(len(v) > 50 for v in vals) and sep == ", "
-            ):  # e.g. long translation value with comma somewhere
-                split_meta_values[i] = [", ".join(vals)]
-        meta_values = set()
-        for vals in split_meta_values:
-            meta_values = meta_values.union(set(vals))
-    meta_values = sorted(list({v.strip() for v in meta_values}))
-    meta_values = [re.sub(HTML_TAG_REGEX, "", meta_value) for meta_value in meta_values]
-    return meta_values
-
 @cache_page(settings.CACHE_TTL)
 def index_view(request, special_meta=None):
     context = _base_context()
-
     try:
-        meta = models.SpecialMeta.objects.get(name=special_meta)
-    except (models.SpecialMeta.DoesNotExist, ValueError):
+        # FIXME hack are the inconsistency in meta names.
+        if special_meta=="msName":
+            special_meta="ms_name"
+        meta = settings.METAS.get(special_meta)
+    except KeyError:
         raise Http404(f'Special metadata type "{special_meta}" not found')
     
     value_corpus_pairs = models.Text.get_value_corpus_pairs(meta)
@@ -216,9 +192,9 @@ def index_view(request, special_meta=None):
     annis_corpora = str(base64.b64encode(annis_corpora.encode("ascii")).decode("ascii"))
 
     context.update({
-        'special_meta': meta.name,
+        'special_meta': meta["name"] ,
         'value_corpus_pairs': value_corpus_pairs.items,
-        'is_corpus': meta.name == "corpus",
+        'is_corpus': meta["name"] == "corpus",
         'b64_meta_values': b64_meta_values,
         'b64_corpora': b64_corpora,
         'annis_corpora': annis_corpora  
@@ -228,9 +204,9 @@ def index_view(request, special_meta=None):
 
 # search --------------------------------------------------------------------------------
 def _get_meta_names_for_query_text(text):
-    names = [sm.name for sm in models.SpecialMeta.objects.all()]
-    #FIXME: this looks like a hack. Why are we adding these fields?
-    # If needed we should probably merge hashes of the text fields with the hashes of the meta fields
+    names = [settings.METAS[meta]["name"] for meta in settings.METAS]
+    # FIXME: in the original code we are only doing "full text search" 
+    # on title, author and urn which explains this code.
     if "title" not in names:
         names.append("title")
     if "author" not in names:
@@ -239,24 +215,20 @@ def _get_meta_names_for_query_text(text):
         names.append("document_cts_urn")
     return names
 
-
-HTML_TAG_REGEX = re.compile(r"<[^>]*?>")
-
-
 class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Get all SpecialMeta objects and sort them by name
-        # FIXME: Generally sorting should be done in the database, not in Python
-        special_metas = sorted(
-            models.SpecialMeta.objects.all(), key=lambda x: x.name.lower()
-        )
+        # Get all Meta objects and sort them by name
+        # FIXME: Why are we sorting by name? also they are already lowercase.
 
+        special_metas = dict(
+            sorted(settings.METAS.items(), key=lambda x: x[1]["name"].lower())
+        )
         for sm in special_metas:
-            meta_values = get_meta_values(sm)
+            meta_values = models.Text.get_meta_values(special_metas[sm]) # So this is how we actually do "faceting"
             choices = []
             for v in meta_values:
-                if sm.name == "corpus":
+                if special_metas[sm]["name"] == "corpus":
                     try:
                         human_name = models.Corpus.objects.get(
                             annis_corpus_name=v
@@ -268,8 +240,8 @@ class SearchForm(forms.Form):
                 human_name = re.sub(HTML_TAG_REGEX, "", human_name)
                 choices.append((v, human_name))
 
-            self.fields[sm.name] = forms.MultipleChoiceField(
-                label=sm.name,
+            self.fields[special_metas[sm]["name"]] = forms.MultipleChoiceField(
+                label=special_metas[sm]["name"],
                 required=False,
                 choices=choices,
                 widget=forms.SelectMultiple(attrs={"class": "search-choice-field"}),
@@ -283,11 +255,14 @@ class SearchForm(forms.Form):
 
 
 def _build_queries_for_special_metadata(params):
+    # OK This one wants love now.
+    # Let's figure out splittability.
     queries = []
     for meta_name, meta_values in params.items():
         if meta_name == "text":
             continue
-
+        # The following is probably uneeded because we are already
+        # stripping in the import and we can get the values alredy sorted?
         meta_values = sorted([s.strip() for s in meta_values])
         meta_name_query = Q()
         for meta_value in meta_values:
@@ -296,11 +271,6 @@ def _build_queries_for_special_metadata(params):
                     regex = "^" + meta_value.replace(".", r"\.").replace("*", ".*")
                     meta_name_query = meta_name_query | Q(
                         text_meta__name__iexact=meta_name, text_meta__value__regex=regex
-                    )
-                elif models.SpecialMeta.objects.get(name=meta_name).splittable:
-                    meta_name_query = meta_name_query | Q(
-                        text_meta__name__iexact=meta_name,
-                        text_meta__value__icontains=meta_value,
                     )
                 else:
                     meta_name_query = meta_name_query | Q(
@@ -347,8 +317,7 @@ def _build_explanation(params):
     return " AND ".join(meta_explanations)
 
 
-def _build_result_for_query_text(params, texts, explanation):
-    query_text = params["text"]
+def _build_result_for_query_text(query_text, texts, explanation):
     results = []
     meta_names = _get_meta_names_for_query_text(query_text)
     for meta_name in meta_names:
@@ -398,15 +367,15 @@ def search(request):
     # and slugs corresponding to SpecialMetas (e.g. "author", "translation", ...)
     # which the user can select in the sidebar on right-hand side of the screen
     params = dict(request.GET.lists())
+    text_query = params["text"][0] if "text" in params and params["text"] > [''] else None
 
     # (1) unwrap the list of length 1 in params['text'] if it exists
     # (2) if params['text'] starts with "urn:", treat it as a special case, first checking for redirects, then
     #     copying it to params['document_cts_urn'] (it is in a list to remain symmetric with all other non-'text' fields)
-    if "text" in params:
-        assert len(params["text"]) == 1
-        params["text"] = params["text"][0].strip()
-        if params["text"].startswith("urn:"):
-            urn = params["text"]
+    if text_query:
+        text_query = text_query.strip()
+        if text_query.startswith("urn:"):
+            urn = text_query
             # check for redirects
             if re.match(r"urn:cts:copticLit:ot.*.crosswire", urn):
                 return redirect(
@@ -430,33 +399,41 @@ def search(request):
     
     # build base explanation, a string that will be displayed to the user summarizing their search parameters
     explanation = _build_explanation(params)
+        
     fulltext_results=[]
-    if "text" in params and params["text"]:
+    if "text" in params and text_query:
         results, all_empty_explanation = _build_result_for_query_text(
-            params, texts, explanation
+            text_query, texts, explanation
         )
-        ft_hits=models.Text.search(params["text"])
+        ft_hits=models.Text.search(text_query)
         if ft_hits["hits"]:
             for result in ft_hits["hits"]:
-                print(result["_matchesPosition"])
-                attr=list(result["_matchesPosition"].keys())[0]
-                print(f'Attribute: {attr}')
-                keys = attr.split('.')
-                value = result["_formatted"]
-                for key in keys:
-                    if isinstance(value, list):
-                        # we are doing this for visualisations
-                        # the content is the same for all of them
-                        # so we simply choose the first one.
-                        value = value[0]
-                    value = value[key]
+                logging.info(result["_matchesPosition"])
+                # These are the attributes on which we have hits.
+                attrs=list(result["_matchesPosition"].keys())
+                if "text.normalized" in attrs:
+                    attr="text.normalized"
+                    value = result["_formatted"]["text"][0]["normalized"]
+                elif "text.normalized_group" in attrs:
+                    value = result["_formatted"]["text"][0]["normalized_group"]
+                    attr="text.normalized_group"
+                elif "text.lemmatized" in attrs:
+                    attr="text.lemmatized"
+                    value = result["_formatted"]["text"][0]["lemmatized"]
+                else:
+                    attr=", ".join(attrs)
+                    value=result["_formatted"] # FIXME lets actually handle this case.
+                logging.info(f'Attribute: {attrs} Value: {value}')
+
                 if value:
                     fulltext_results.append({
-                        "title":result["_formatted"]["title"] ,
-                        "slug":result["slug"],
-                        "corpus_slug":result["corpus_slug"],
-                        "field":attr,"value":value})
-            
+                        "title": result["_formatted"]["title"],
+                        "slug": result["slug"],
+                        "corpus_slug": result["corpus_slug"],
+                        "field": attr,
+                        "value": value})
+
+                
     else:
         results = [{"texts": texts, "explanation": explanation}]
         all_empty_explanation = explanation
@@ -469,11 +446,30 @@ def search(request):
             "no_query": not any(len(v) for v in request.GET.dict().values()),
             "all_empty": not any(len(r["texts"]) for r in results),
             "all_empty_explanation": all_empty_explanation,
+            "query_text": text_query,
         }
     )
 
     return render(request, "search.html", context)
 
+def faceted_search(request):
+    context = _base_context()
+    fulltext_results=[]
+    params = dict(request.GET.lists())
+    ft_hits=models.Text.faceted_search(params["text"][0])
+    # {'text_meta.annotation': {'Amir Zeldes': 16, 'Lydia Bremer-McCollum, Caroline T. Schroeder': 2, 'Lydia Bremer-McCollum, Nicholas Wagner': 2}, 'text_meta.author': {'Anonymous': 2, 'Paul the apostle': 1, 'Shenoute': 2}, 'text_meta.corpus': {'acts.pilate': 2, 'bohairic.mark': 16, 'shenoute.house': 2}, 'text_meta.msName': {'CM.1643': 2, 'MONB.XG': 1, 'MONB.XU': 1}, 'text_meta.people': {'none': 17, 'Phinehas': 1}, 'text_meta.places': {'none': 18}, 'text_meta.translation': {'none': 2, 'World English Bible (WEB)': 16}}
+    context.update(
+        {
+            "results": [],
+            "fulltext_results": fulltext_results,
+            "form": SearchForm(request.GET),
+            "no_query": not any(len(v) for v in request.GET.dict().values()),
+            "all_empty": True,
+            "all_empty_explanation": "Not runnig SQL search",
+            "query_text": params["text"],
+        }
+    )
+    return render(request, "search.html", context)
 
 def add_author_and_urn(texts):
     for text in texts:

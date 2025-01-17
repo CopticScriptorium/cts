@@ -7,6 +7,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from collections import OrderedDict
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -85,6 +86,8 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, "templates")]
 CORPUS_REPO_OWNER = "CopticScriptorium"
 CORPUS_REPO_NAME = "corpora"
 GITHUB_API_BASE_URL = "https://api.github.com"
+
+
 
 
 DEPRECATED_URNS = {
@@ -170,6 +173,25 @@ CORPUS_MAP = {
 "shenoute.witness":{"title":"Who but God is the Witness","urn":"urn:cts:copticLit:shenoute.witness.amelineau"},
 "theodosius.alexandria":{"title":"Encomium on Michael the Archangel","urn":"urn:cts:copticLit:theodosiusalex.michael"}
 }
+
+METAS = {
+    "corpus": {"name":"corpus", "order":1, "splitter":""}, 
+    "author": {"name":"author", "order":2, "splitter":""},
+    "people": {"name":"people", "order":3, "splitter":";"}, 
+    "places": {"name":"places", "order":4, "splitter":";"},
+    "ms_name": {"name":"msName", "order":5, "splitter":""},
+    "annotation": {"name":"annotation", "order":6, "splitter":","},
+    "translation": {"name":"translation", "order":7, "splitter":","},
+    "arabic_translation": {"name":"arabic_translation", "order":8, "splitter":","},
+}
+
+HTML_VISUALISATION_FORMATS = OrderedDict([
+            ("norm", dict(slug="norm", button_title="normalized", title="Normalized Text")),
+            ("analytic", dict(slug="analytic", button_title="analytic", title="Analytic Visualization")),
+            ("dipl", dict(slug="dipl", button_title="diplomatic", title="Diplomatic Edition")),
+            ("sahidica", dict(slug="sahidica", button_title="chapter", title="Sahidica Chapter View")),
+            ("versified", dict(slug="verses", button_title="versified", title="Versified Text")),
+])
 
 HTML_CONFIGS = { 
 "dipl":"""pb_xml_id	table:title; style="pb"	value

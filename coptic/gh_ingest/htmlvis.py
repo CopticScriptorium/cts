@@ -480,6 +480,7 @@ def generate_visualization(config_name, text ):
             f.write( HTML_CONFIGS[config_name])
         with open("htmlvis_latest_text.txt", "w") as f:
             f.write(text)
+    #TODO: we need to get the actual config from the database
     directives = parse_config( HTML_CONFIGS[config_name])
     toks, elts = parse_text(text)
 

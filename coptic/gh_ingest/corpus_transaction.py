@@ -1,6 +1,9 @@
 from collections import defaultdict
+import logging
 from django.db import transaction
-from texts.models import HtmlVisualizationFormat
+from django.conf import settings
+
+from texts.models import HtmlVisualization
 from .scraper_exceptions import *
 from texts.ft_search import Search
 from tqdm import tqdm
@@ -8,7 +11,9 @@ from tqdm import tqdm
 class CorpusTransaction:
     """Keeps track of every object that needs to be added to the SQL database for a given corpus,
     and atomically saves all of them."""
-
+    # FIXME the whole transaction thing should go away; We should do blue green deployments
+    # We want to build a fully new clean database, and then switch to it.
+    
     def __init__(self, corpus_name, corpus):
         self.corpus_name = corpus_name
         self._corpus = corpus
@@ -87,7 +92,7 @@ class CorpusTransaction:
 
         # refuse to cooperate if we don't have a full chain
         if n_links != len(nodes) - 1:
-            print(
+            logging.warning(
                 "Insufficient data to properly order corpus based on next/prev attrs."
             )
             return
@@ -101,7 +106,7 @@ class CorpusTransaction:
             node = node.next
 
         self._text_pairs = new_text_pairs
-        print(
+        logging.info(
             "Successfully inferred proper ordering of corpus based on next/prev attrs."
         )
 
@@ -109,7 +114,7 @@ class CorpusTransaction:
     def execute(self):
         # Delete existing objects first
         if len(self._to_delete) > 0:
-            print(
+            logging.info(
                 f"Found an already existing upload of '{self.corpus_name}'. "
                 f"It will be automatically deleted if this transaction succeeds."
             )
@@ -120,22 +125,22 @@ class CorpusTransaction:
         vis_format_instances = []
         for vis_format in tqdm(self._vis_formats, desc="Processing visualization formats", unit="format"):
             try:
-                vis_format_instance = HtmlVisualizationFormat.objects.get(
-                    slug=vis_format.slug
-                )
+                
+                vis_format_instance = HtmlVisualization.get_format_by_attribute("slug",vis_format["slug"])
                 if vis_format_instance:
                     vis_format_instances.append(vis_format_instance)
                 else:
-                    print(f"Warning: Visualization format '{vis_format}' not found")
-            except HtmlVisualizationFormat.DoesNotExist:
-                print(f"Warning: Visualization format '{vis_format.slug}' not found")
+                    logging.warning(f"Warning: Visualization format '{vis_format}' not found")
+            except:
+                logging.error(f"Warning: Visualization format '{vis_format["slug"]}' not found")
                 continue
 
         if vis_format_instances:
-            print(f"Our instances: {', '.join(map(str, vis_format_instances))}")
+            logging.info(f"Our instances: {', '.join(map(str, vis_format_instances))}")
             self._corpus.set_visualization_formats(vis_format_instances)
 
         self._corpus.save()
+        logging.info(f"Saved corpus '{self.corpus_name}'")
         for text, text_metas in tqdm(self._text_pairs, desc="Processing text pairs", unit="metas"):
             for text_meta in text_metas:
                 text_meta.save()
@@ -145,27 +150,34 @@ class CorpusTransaction:
             corpus = text.corpus
             text.corpus = None
             text.save()
+            logging.info(f"Saved text '{text.title}'")
 
             # Restore the corpus association
             text.corpus = corpus
             text.save()
+            logging.info(f"Re-saved text '{text.title}'")
 
             for text_meta in text_metas:
                 text.text_meta.add(text_meta)
             text.save()
-
+            logging.info(f"Re-Re-saved text '{text.title}'")
+            
         for text, vis in tqdm(self._vises, desc="Saving visualisations", unit="visualisations"):
             vis.save()
+            logging.info(f"Saved visualization '{vis.visualization_format_slug}'")
             text.html_visualizations.add(vis)
             text.save()
 
         # Index texts in Meilisearch
+        # FIXME this shouldbe done in a seprate command -
+        # once we have the text in the database, we can index them.
         search = Search()
         if search.search_available:
             texts_to_index = [text.to_json() for text, _ in self._text_pairs]
-            search.index_text(texts_to_index)
+            result = search.index_text(texts_to_index)
+            logging.info(f"Indexed {len(texts_to_index)} texts. {result}")
         else:
-            print("Search is not available. Skipping indexing.")
+            logging.error("Search is not available. Skipping indexing.")
 
         return {
             "texts": len(self._text_pairs),

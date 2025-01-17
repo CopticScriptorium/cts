@@ -1,5 +1,6 @@
 from html import unescape
 from collections import defaultdict
+import logging
 import re
 import csv
 from io import StringIO
@@ -14,8 +15,8 @@ from texts.models import (
     Text,
     TextMeta,
     HtmlVisualization,
-    HtmlVisualizationFormat,
 )
+
 import texts.urn as urn
 from .scraper_exceptions import *
 from .htmlvis import generate_visualization
@@ -61,18 +62,45 @@ class CorpusScraper:
         return tei, relannis, paula
 
     def _infer_html_visualization_formats_and_add_to_tx(self, corpus, corpus_dirname):
+        """
+        Tnis file looks like the followingù ...
+        pseudo.basil	NULL	scriptorium	node	grid	[... redacted from brevity ...]
+        pseudo.basil	NULL	dep	edge	arch_dependency	syntax (dependencies)	hidden	2	node_key:norm
+        pseudo.basil	NULL	NULL	NULL	htmldoc	normalized text (document)	hidden	102	config:verses
+        pseudo.basil	NULL	NULL	NULL	htmldoc	analytic view (document)	hidden	101	config:analytic
+
+        Args:
+            corpus (_type_): _description_
+            corpus_dirname (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         vis_map_content = StringIO(self.get_resolver_vis_map_content(corpus, corpus_dirname))
         reader = csv.reader(vis_map_content, delimiter="\t", lineterminator="\n")
         formats=[] # this is a list because we want them unique
         for row in reader:
             if row[4]=="htmldoc": # if the fourth column is htmldoc
                 vis_type= row[8].split("config:")[1] # extract the format type
-                format = HtmlVisualizationFormat.objects.get(slug=vis_type)
+                format =HtmlVisualization.get_format_by_attribute( "slug",vis_type)
                 if format and format not in formats:
                     formats.append(format)
         return formats
 
     def get_resolver_vis_map_content(self, corpus, corpus_dirname):
+        """ This loads files like ./pseudo-basil/pseudo.basil_ANNIS/resolver_vis_map.annis from
+        the corpus repository. It will raise a ResolverVisMapIssue if the file is not found.
+    
+        Args:
+            corpus (_type_): _description_
+            corpus_dirname (_type_): _description_
+
+        Raises:
+            ResolverVisMapIssue: _description_
+
+        Returns:
+            _type_: _description_
+        """
         file_name = "resolver_vis_map.annis"
         vm_path = os.path.join(
                     corpus.repository.repo_path,
@@ -103,9 +131,13 @@ class CorpusScraper:
         self._current_transaction = CorpusTransaction(corpus_dirname, corpus)
 
         github_url = f"https://github.com/{corpus.repository.corpus_repo_owner}/{corpus.repository.corpus_repo_name}/tree/master/{corpus_dirname}"
-        print(f"Processing '{github_url}' from '{corpus.repository.repo_path}'...")
+        logging.info(f"Processing '{github_url}' from '{corpus.repository.repo_path}'...")
         existing_corpus = Corpus.objects.filter(github=github_url).first()
 
+        # FIXME actually everything is fast enough now
+        # to reimport everything, every time. We would get 
+        # rid of all of the transacation stuff - which 
+        # will make it even faster. Blue green.
         if existing_corpus:
             to_delete = []
             # FIXME: we should probably give an option not
@@ -125,16 +157,16 @@ class CorpusScraper:
         # If this corpus has a slug in the settings, use it
         if settings.CORPUS_MAP[corpus.annis_corpus_name].get("slug", None):
             corpus.slug = settings.CORPUS_MAP[corpus.annis_corpus_name]["slug"]
-            print(f"Found slug for '{corpus.annis_corpus_name}': '{corpus.title}'")
+            logging.info(f"Found slug for '{corpus.annis_corpus_name}': '{corpus.title}'")
         else:
             corpus.slug = slugify(corpus.annis_corpus_name)
         # If this corpus has a title in the settings, use it
         if settings.CORPUS_MAP[corpus.annis_corpus_name].get("title", None):
             corpus.title = settings.CORPUS_MAP[corpus.annis_corpus_name]["title"]
-            print(f"Found title for '{corpus.annis_corpus_name}': '{corpus.title}'")
+            logging.info(f"Found title for '{corpus.annis_corpus_name}': '{corpus.title}'")
         else:
             corpus.title = corpus.annis_corpus_name
-            print(f"Title not found for '{corpus.annis_corpus_name}'. Using '{corpus.title}'")
+            logging.info(f"Title not found for '{corpus.annis_corpus_name}'. Using '{corpus.title}'")
 
         self._current_transaction.add_vis_formats(
             self._infer_html_visualization_formats_and_add_to_tx(corpus, corpus_dirname)
@@ -149,17 +181,20 @@ class CorpusScraper:
         # first prefer the explicit map
         if settings.CORPUS_MAP[corpus.annis_corpus_name].get("urn", None):
             corpus.urn_code = settings.CORPUS_MAP[corpus.annis_corpus_name]["urn"]
+            logging.info(f"Found URN for '{corpus.annis_corpus_name}': '{corpus.urn_code}'")
         # then if we have no meta or we don't have document_cts_urn set the urn code to empty
         elif self._latest_meta_dict is None or "document_cts_urn" not in self._latest_meta_dict:
+            logging.warning(f"No URN found for '{corpus.annis_corpus_name}'. Setting to empty.")
             corpus.urn_code = ""
         # Finally set the urn code to whatever is in _latest_meta_dict
         # FIXME: figure out _latest_meta_dict
         else:
+            logging.info(f"Setting URN for '{corpus.annis_corpus_name}' to '{self._latest_meta_dict['document_cts_urn']}'")
             corpus.urn_code = urn.textgroup_urn(self._latest_meta_dict["document_cts_urn"])
         return self._current_transaction
 
     def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts, tree_id):
-        print(f"Preparing transaction for '{corpus_dirname}'...")
+        logging.info(f"Preparing transaction for '{corpus_dirname}'...")
         for filename, contents in tqdm(texts.items(), ncols=80):
             if contents:
                 self._current_text_contents = contents
@@ -172,10 +207,14 @@ class CorpusScraper:
         raise MetaNotFound(settings.LOCAL_REPO_PATH, self._current_text_contents.path)
 
     def _generate_visualizations_and_add_to_tx(self, text, contents):
+        #FIXME we want to get back to using the specific visualisation
+        # at least as a default.
         for config_name in settings.HTML_CONFIGS:
             if settings.LAZY_HTML_GENERATION:
                 rendered_html = ""
+                logging.info(f"Lazy HTML generation enabled. Skipping '{config_name}'")
             else:
+                logging.info(f"Generating HTML '{config_name}' for '{text.title}'...")
                 rendered_html = generate_visualization(
                     config_name, contents
                 )
@@ -188,14 +227,21 @@ class CorpusScraper:
 
     def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents, tree_id, filename):
         tt_lines = contents.split("\n")
+        # So here we can do the "splitting"
         meta = self._get_meta_dict(tt_lines)
-        # FIXME: something called latest sounds dangerous.
-        self._latest_meta_dict = meta
+        meta_split_and_cleaned= {}
+        for key in meta:
+            # these are the "special meta that might be splittable"
+            if key in settings.METAS.keys():
+                meta_split_and_cleaned[key]=  Text.split_and_clean_meta_values([meta[key]], settings.METAS[key])
+            else:
+                meta_split_and_cleaned[key]= meta[key]
+        self._latest_meta_dict = meta_split_and_cleaned
         text = Text()
         text.title = meta["title"]
         text.tt_dir=corpus_dirname
         text.tt_filename=filename
-        text.tt_dir_tree_id=tree_id
+        text.tt_dir_tree_id=tree_id # not yet used - but useful for doing partial imports, and general reproducibility
         text.slug = slugify(meta["title"] if "title" in meta else meta["name"])
         text.corpus = self._current_corpus
         self._text_next[text.title] = meta["next"] if "next" in meta else None
@@ -205,9 +251,24 @@ class CorpusScraper:
         )
         self.document_cts_urn=meta["document_cts_urn"]
         
-        text_metas = [
-            TextMeta(name=name, value=unescape(value)) for name, value in meta.items()
-        ]
+        if not self.document_cts_urn:
+            raise "Missing URN"
+
+        text_metas=[]
+        for name in meta_split_and_cleaned:
+            # If this is a string .. add once.
+            if isinstance(meta_split_and_cleaned[name], str):
+                    # FIXME: I wonder what the unsescape is about.
+                text_metas.append(TextMeta(name=name, value=unescape(meta_split_and_cleaned[name])) )
+            elif isinstance(meta_split_and_cleaned[name], list):
+                for v in meta_split_and_cleaned[name]:
+                    text_metas.append(
+                        TextMeta(name=name, value=unescape(v)) 
+                    )
+                
+            else:
+                raise ("Unexpected type for meta value")
+            
         # FIXME: here to finish the refactoring
         # we want to actually import the "tt" text rather than the visualisation
         # which we will do lazily (but it will make it easier to do FTS)
