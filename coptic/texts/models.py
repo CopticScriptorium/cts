@@ -118,7 +118,7 @@ class HtmlVisualization(models.Model):
             self.visualization_format_slug = format_obj["slug"]
 
     def __str__(self):
-        return self.visualization_format.title
+        return self.visualization_format["title"]
 
 
 class TextMeta(models.Model):
@@ -141,17 +141,6 @@ class TextMeta(models.Model):
 
         return v
 
-
-class MetaOrder(models.Model):
-    "Metadata names that are ordered ahead of the others when displayed on a text"
-    name = models.CharField(max_length=200, unique=True)
-    order = models.IntegerField()
-
-    class Meta:
-        verbose_name = "Metadata Order"
-
-    def __str__(self):
-        return self.name
 
 class Text(models.Model):
     title = models.CharField(max_length=200)
