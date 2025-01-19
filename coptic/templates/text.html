@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ text.title }} - Coptic Scriptorium{% endblock %}
+{% block custom_css %}<style>{{visualization.css}}</style>{% endblock %}
+
 {% block content %}
     <section class="text-list list">
         <div class="text-work">
@@ -13,13 +15,11 @@
                 </a>
                 <div class="html-wrap version-wrap page-tabs">
                     <!-- text.html -->
-                    {% for format in formats %}
-                        {% if format in text.corpus.html_visualization_formats %}
-                            <a href="/texts/{{ text.corpus.slug }}/{{ text.slug }}/{{ format.slug }}"
-                            class="text-item {{ format.slug }}">
-                                <span>{{ format.button_title }}</span>
+                    {% for visualization in visualizations %}
+                            <a href="/texts/{{ text.corpus.slug }}/{{ text.slug }}/{{ visualization.visualization_format.slug }}"
+                            class="text-item {{ visualization.visualization_format.slug }}">
+                                <span>{{ visualization.visualization_format.button_title }}</span>
                             </a>
-                        {% endif %}
                     {% endfor %}
                     {% if text.corpus.github_tei %}
                         <a href="{{ text.corpus.github }}/{{ text.corpus.github_tei }}"

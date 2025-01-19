@@ -10,7 +10,8 @@ from django.conf.urls.static import static
 
 def _redirect_citation_urls(request, url_except_data_type, data_type):
     'Redirect all the "permanent" citation URLs (annis, relannis, visualizations, etc.) to internal URLs'
-
+    #FIXME: too much undocumented logic.
+    
     new_loc = "/"  # In case we fail
     parts_split_by_slash = url_except_data_type.split("/")
     all_but_last_part = "/".join(parts_split_by_slash[0:-1])

@@ -117,13 +117,13 @@ def text_view(request, corpus=None, text=None, format=None):
     except (models.TextMeta.DoesNotExist, models.Text.DoesNotExist):
         logger.warning("Endnote not found")  # Debug statement
         pass
-    formats = settings.HTML_VISUALISATION_FORMATS
+    visualizations = text_object.html_visualizations.all()
     # Control whether we are lazy loading the HTML generation
     lazy = settings.LAZY_HTML_GENERATION
     logger.info(f"Lazy loading is set to {lazy}")
     context = _base_context()
     context.update(
-        {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title, "formats": formats, "lazy": lazy}
+        {"text": text_object, "visualization": visualization, "format": format, "page_title": text_object.title, "visualizations": visualizations, "lazy": lazy}
     )
     return render(request, "text.html", context)
 

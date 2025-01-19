@@ -6,9 +6,6 @@ import re
 from enum import Enum
 from collections import defaultdict
 
-from coptic.settings.base import HTML_CONFIGS
-
-
 class HtmlGenerationException(BaseException):
     def __init__(self, message):
         self.message = message
@@ -474,17 +471,11 @@ def render_html(toks, elts, directives, config_name):
 DEBUG = False
 
 
-def generate_visualization(config_name, text ):
-    if DEBUG:
-        with open("htmlvis_latest_config_text.txt", "w") as f:
-            f.write( HTML_CONFIGS[config_name])
-        with open("htmlvis_latest_text.txt", "w") as f:
-            f.write(text)
-    #TODO: we need to get the actual config from the database
-    directives = parse_config( HTML_CONFIGS[config_name])
-    toks, elts = parse_text(text)
+def generate_visualization(text, config, config_name):
+    directives = parse_config(config)
+    toks, elts = parse_text(text.content)
 
-    return render_html(toks, elts, directives,config_name)
+    return render_html(toks, elts, directives, config_name)
 
 
 if __name__ == "__main__":

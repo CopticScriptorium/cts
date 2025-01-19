@@ -30,14 +30,15 @@ class Corpus(models.Model):
     github_relannis = models.CharField(max_length=50, blank=True)
     github_paula = models.CharField(max_length=50, blank=True)
     # Store visualization formats as a comma-separated string
-    visualization_formats = models.TextField(default="")
+    visualization_formats = models.TextField(default="", db_index=True)
+    author = models.TextField(default="",db_index=True)
+    
     #TODO: here we want to add a fielf for the actual text.
 
     def __init__(self, *args, **kwargs):
         # the repository is a signleton, so we can just create it here
         self.repository=Repository()
         super().__init__(*args, **kwargs)
-        
         
     def get_visualization_formats(self):
         """Retrieve visualization formats as a list of slugs."""
@@ -85,7 +86,9 @@ class HtmlVisualization(models.Model):
     # At any rate we want to actually store the CSS and configuration used in the database
     # So at runtime we can still generate the visualizations dynamically.
     visualization_format_slug = models.CharField(max_length=200)
-    html = models.TextField()
+    config = models.TextField(blank=True)
+    css = models.TextField(blank=True)
+    html = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "HTML Visualization"
@@ -98,11 +101,10 @@ class HtmlVisualization(models.Model):
             raise ValueError(f"Visualization format with '{attribute}' = '{value}' not found.")
         return format
 
-        
     @property
     def html_live(self):
-        tt_text = self.text_set.get().get_text()
-        return generate_visualization(self.visualization_format_slug, tt_text)
+        texts = self.text_set.all()
+        return generate_visualization(texts.get(), self.config, self.visualization_format_slug)
     
     
     @property
@@ -141,7 +143,6 @@ class TextMeta(models.Model):
 
         return v
 
-
 class Text(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=40, db_index=True)
@@ -149,11 +150,14 @@ class Text(models.Model):
     modified = models.DateTimeField(editable=False)
     corpus = models.ForeignKey(Corpus, blank=True, null=True, on_delete=models.CASCADE)
     html_visualizations = models.ManyToManyField(HtmlVisualization, blank=True)
+    # FIXME: This is not actually a many to many relationship but a one to
+    # many relationship in the entity-attribute-value model.
     text_meta = models.ManyToManyField(TextMeta, blank=True, db_index=True)
     tt_dir = models.CharField(max_length=40)
     tt_filename = models.CharField(max_length=40)
     tt_dir_tree_id = models.CharField(max_length=40)
     document_cts_urn = models.CharField(max_length=80)
+    content=models.TextField(default="")
 
     @classmethod
     @cache_memoize(settings.CACHE_TTL)
@@ -186,20 +190,17 @@ class Text(models.Model):
     @cache_memoize(settings.CACHE_TTL)
     def get_value_corpus_pairs(cls, meta):
         value_corpus_pairs = OrderedDict()
-        # FIXME: so it seems we are first getting *all of the values* and then filtering them out.
-        # Again, this should all be done in import
-        meta_values = Text.get_meta_values(meta) # FIXME: finish refacotring this.
 
+        # Directly query the corpora that match the given metadata attribute and its values
         corpora = (
-            cls.objects.filter(text_meta__name__iexact=meta["name"], text_meta__value__in=meta_values)
-            .values("corpus__slug", "corpus__title", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name", "text_meta__value")
+            cls.objects.filter(text_meta__name__iexact=meta["name"])
+            .values("corpus__slug", "corpus__title", "corpus__author", "corpus__id", "corpus__urn_code", "corpus__annis_corpus_name", "text_meta__value")
             .order_by("corpus__title")
             .distinct()
         )
 
         for c in corpora:
             meta_value = c.pop("text_meta__value")
-            c["corpus__author"]=', '.join(list(cls.objects.filter(corpus_id = c["corpus__id"],text_meta__name__iexact="author").values_list("text_meta__value", flat=True).distinct()))
             if meta_value not in value_corpus_pairs:
                 value_corpus_pairs[meta_value] = []
             value_corpus_pairs[meta_value].append({key.replace('corpus__', ''): value for key, value in c.items()})
@@ -207,7 +208,6 @@ class Text(models.Model):
         return OrderedDict(sorted(value_corpus_pairs.items()))
 
     # FIXME this repeats code in _get_texts
-
     def get_text(self):
         if  hasattr(self, 'text'):
             return self.text

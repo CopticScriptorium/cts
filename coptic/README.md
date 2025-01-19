@@ -92,6 +92,10 @@ We have a to_json method added on the Text model, it included the main fields as
 
 We index each text with all of its metadata and withing the retrievel implemented in texts/ft_search we retrieve the matched positions as well as the highlighting of the search terms.
 
+Results are sorted by decreasing number of matched query terms. Returns documents that contain all query terms first.
+
+Results are sorted by increasing number of typos. Returns documents that match query terms with fewer typos first.
+
 The documents we are indexing have the following format:
 ```python
 [

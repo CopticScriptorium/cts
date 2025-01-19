@@ -4,6 +4,7 @@ import logging
 import re
 import csv
 from io import StringIO
+from xml.dom import NotFoundErr
 from django.conf import settings
 from django.db import transaction
 from django.utils.text import slugify
@@ -30,8 +31,6 @@ class CorpusScraper:
         self._current_transaction = None
         self._current_text_contents = None
         self._latest_meta_dict = None
-        self._vis_configs = {}
-        self._vis_config_contents = {}
 
         self._text_next = defaultdict(lambda: None)
         self._text_prev = defaultdict(lambda: None)
@@ -76,7 +75,8 @@ class CorpusScraper:
         Returns:
             _type_: _description_
         """
-        vis_map_content = StringIO(self.get_resolver_vis_map_content(corpus, corpus_dirname))
+        
+        vis_map_content = StringIO(self.get_file_content(corpus, corpus_dirname, "resolver_vis_map.annis"))
         reader = csv.reader(vis_map_content, delimiter="\t", lineterminator="\n")
         formats=[] # this is a list because we want them unique
         for row in reader:
@@ -87,7 +87,7 @@ class CorpusScraper:
                     formats.append(format)
         return formats
 
-    def get_resolver_vis_map_content(self, corpus, corpus_dirname):
+    def get_file_content(self, corpus, corpus_dirname, file_name):
         """ This loads files like ./pseudo-basil/pseudo.basil_ANNIS/resolver_vis_map.annis from
         the corpus repository. It will raise a ResolverVisMapIssue if the file is not found.
     
@@ -101,7 +101,7 @@ class CorpusScraper:
         Returns:
             _type_: _description_
         """
-        file_name = "resolver_vis_map.annis"
+        
         vm_path = os.path.join(
                     corpus.repository.repo_path,
                     corpus_dirname,
@@ -120,6 +120,22 @@ class CorpusScraper:
             
         return vm
 
+
+
+
+    def get_vis_config_file(self, corpus, corpus_dirname, config_file, zip_file):
+        try:
+            if zip_file:
+                path = "ExtData/" + config_file + ".config"
+                return zip_file.open(path).read().decode('utf-8')
+            else:
+                # FIXME we should use os.path.join here
+                path = os.path.join(corpus_dirname, corpus.github_relannis , "ExtData/" + config_file + ".config")
+                f = self._repo.file_contents(path)
+                return f.decoded.decode('utf-8')
+        except NotFoundErr as e:
+            raise VisConfigIssue(path, self.corpus_repo_owner, self.corpus_repo_name) from e
+        
     @transaction.atomic
     def parse_corpus(self, corpus_dirname):
     
@@ -147,7 +163,7 @@ class CorpusScraper:
                     to_delete.append(text_meta)
             to_delete.append(existing_corpus)
             self._current_transaction.add_objs_to_be_deleted(to_delete)
-
+        
         corpus.slug = corpus_dirname
         corpus.github = github_url
         corpus.github_tei, corpus.github_relannis, corpus.github_paula = (
@@ -177,7 +193,7 @@ class CorpusScraper:
         self._current_transaction.sort_texts(
             self._text_next, self._text_prev, self._text_urn
         )
-
+        
         # first prefer the explicit map
         if settings.CORPUS_MAP[corpus.annis_corpus_name].get("urn", None):
             corpus.urn_code = settings.CORPUS_MAP[corpus.annis_corpus_name]["urn"]
@@ -191,14 +207,17 @@ class CorpusScraper:
         else:
             logging.info(f"Setting URN for '{corpus.annis_corpus_name}' to '{self._latest_meta_dict['document_cts_urn']}'")
             corpus.urn_code = urn.textgroup_urn(self._latest_meta_dict["document_cts_urn"])
+        # lastly let's add the corpus author
+        corpus.author = ', '.join(list(self._latest_meta_dict.get("author", [])))
         return self._current_transaction
 
     def _scrape_texts_and_add_to_tx(self, corpus, corpus_dirname, texts, tree_id):
         logging.info(f"Preparing transaction for '{corpus_dirname}'...")
+        print(f"Preparing transaction for '{corpus_dirname}'...")
         for filename, contents in tqdm(texts.items(), ncols=80):
             if contents:
                 self._current_text_contents = contents
-                self._scrape_text_and_add_to_tx(corpus, corpus_dirname, contents, tree_id, filename)
+                self._scrape_text_and_add_to_tx(corpus_dirname, contents, tree_id, filename, self._current_transaction._vis_formats)
 
     def _get_meta_dict(self, tt_lines):
         for line in tt_lines:
@@ -206,29 +225,31 @@ class CorpusScraper:
                 return dict(re.findall(r'(?P<attr>[\w._-]+)="(?P<value>.*?)"', line))
         raise MetaNotFound(settings.LOCAL_REPO_PATH, self._current_text_contents.path)
 
-    def _generate_visualizations_and_add_to_tx(self, text, contents):
+    def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname, text, vis_formats):
         #FIXME we want to get back to using the specific visualisation
         # at least as a default.
-        for config_name in settings.HTML_CONFIGS:
+        for config in vis_formats:
             if settings.LAZY_HTML_GENERATION:
                 rendered_html = ""
-                logging.info(f"Lazy HTML generation enabled. Skipping '{config_name}'")
+                logging.info(f"Lazy HTML generation enabled. Skipping '{config["slug"]}'")
             else:
-                logging.info(f"Generating HTML '{config_name}' for '{text.title}'...")
+                logging.info(f"Generating HTML '{config["slug"]}' for '{text.title}'...")
                 rendered_html = generate_visualization(
-                    config_name, contents
+                    config["slug"], text
                 )
             
             vis = HtmlVisualization()
-            vis.visualization_format_slug = config_name
+            vis.visualization_format_slug = config["slug"]
             
+            vis.config = self.get_file_content(corpus, corpus_dirname, "ExtData/" + config["slug"]+ ".config")
+            vis.css = self.get_file_content(corpus, corpus_dirname, "ExtData/" + config["slug"]+ ".css")
             vis.html = rendered_html
             self._current_transaction.add_vis((text, vis))
 
-    def _scrape_text_and_add_to_tx(self, corpus, corpus_dirname, contents, tree_id, filename):
-        tt_lines = contents.split("\n")
+    def _scrape_text_and_add_to_tx(self, corpus_dirname, contents, tree_id, filename, vis_formats):
+        tt_lines = contents.split("\n"),
         # So here we can do the "splitting"
-        meta = self._get_meta_dict(tt_lines)
+        meta = self._get_meta_dict(tt_lines[0])
         meta_split_and_cleaned= {}
         for key in meta:
             # these are the "special meta that might be splittable"
@@ -238,6 +259,7 @@ class CorpusScraper:
                 meta_split_and_cleaned[key]= meta[key]
         self._latest_meta_dict = meta_split_and_cleaned
         text = Text()
+        text.content = contents
         text.title = meta["title"]
         text.tt_dir=corpus_dirname
         text.tt_filename=filename
@@ -272,5 +294,5 @@ class CorpusScraper:
         # FIXME: here to finish the refactoring
         # we want to actually import the "tt" text rather than the visualisation
         # which we will do lazily (but it will make it easier to do FTS)
-        self._generate_visualizations_and_add_to_tx(text, contents)
+        self._generate_visualizations_and_add_to_tx( self._current_corpus, corpus_dirname, text, vis_formats)
         self._current_transaction.add_text((text, text_metas))
