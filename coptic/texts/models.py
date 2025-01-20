@@ -53,10 +53,12 @@ class Corpus(models.Model):
     def index(self):
         # Index texts in Meilisearch
         search = Search()
+        json_array=[]
         if search.search_available:
             texts = self.text_set.all()
             for text in texts:
-                result = search.index_text([text.to_json()])
+                json_array.append(text.to_json())
+            result = search.index_text(json_array)
             logging.info(f"Indexed {self.slug}: {len(texts)} texts.")
         else:
             logging.error("Search is not available. Skipping indexing.")
