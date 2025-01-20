@@ -221,6 +221,7 @@ class Text(models.Model):
         return OrderedDict(sorted(value_corpus_pairs.items()))
 
     # FIXME this repeats code in _get_texts
+    @cache_memoize(settings.CACHE_TTL)
     def get_text(self):
         if  hasattr(self, 'text'):
             return self.text
