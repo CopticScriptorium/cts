@@ -239,7 +239,7 @@ python manage.py delete_index
 Simplest is to delete the file and run migrations.
 ```
 rm db/sqlite3.db 
-./manage migrate
+./manage.py migrate
 ```
 
 # How search works
@@ -248,7 +248,7 @@ Full text search is enabled by default both in development an production. You ca
 
 We are using https://www.meilisearch.com an open source search engine written in Rust that offers a good mix of capabilities, performance and ease of operations.
 
-The Coptic keyboard is implemented using https://keyman.com and is included in [](templates/base.html) we load three configurations cop-copt, cop and en and attach by default to all text boxes.
+The Coptic keyboard is implementefd using https://keyman.com and is included in [](templates/base.html) we load three configurations cop-copt, cop and en and attach by default to all text boxes.
 
 We have a to_json method added on the [Text](texts/models.py) model, it includes the main fields as well as the "text_meta" fields extracted from the SGML and the lemmatized as well as normalized and normalized_group versions of the text (that we "flatten" by chapter).
 
@@ -351,7 +351,7 @@ The built-in ranking rules are:
 In the `__init__` method of the  `Search` class you have a all of the possible options, commented-out - including stop words and the likes.
 
 ## Project Structure
-
+```
 ├── README.md -- This file
 ├── addcorpora.sh - a script to import all corpora
 ├── compare_prod_to_stage.py - a script to compare staging to production
@@ -394,3 +394,4 @@ In the `__init__` method of the  `Search` class you have a all of the possible o
     ├── test_urn.py - tests for full stable urns
     ├── tests - test_models.py tests for full stable urns
     └── urn.py - implementation for stable urns
+```
