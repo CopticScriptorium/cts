@@ -155,7 +155,7 @@ applications:
       index:
         role: admin
         commands:
-          start: ./addcorpora.sh index_corpora
+          start: ./manage.py index_corpora
       clearcache:
         role: admin
         commands:
