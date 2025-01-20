@@ -8,12 +8,12 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 # Fetch the allowed hosts from the environment variable
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '')
-BUILD_CACHE_DIR = os.getenv('PLATFORM_CACHE_DIR', "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
 TEMPLATE_DEBUG = DEBUG
 
+#SETUP Logging.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -47,11 +47,21 @@ DATABASES = {
     }
 }
 
-SEARCH_CONFIG = {
-    "MEILISEARCH_URL": 'http://search.internal:80/',
-    "MEILISEARCH_MASTER_KEY": os.getenv('PLATFORM_PROJECT_ENTROPY', 'secretkey'),
-    "MEILISEARCH_INDEX": "texts",
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "/tmp/django_cache",
+    }
 }
+
+
+SEARCH_CONFIG = {
+    "MEILI_HTTP_ADDR":  os.getenv('MEILI_HTTP_ADDR','http://localhost:7700/'),
+    "MEILI_MASTER_KEY": os.getenv('MEILLI_MASTER_KEY', 'masterKey'),
+    "MEILI_COPTIC_INDEX": "texts",
+    "DISABLE": False,
+}
+
 # Use test database if running tests
 if "test" in sys.argv:
     DATABASES["default"]["NAME"] = "db/test_sqlite3.db"

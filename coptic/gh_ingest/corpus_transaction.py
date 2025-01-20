@@ -168,17 +168,6 @@ class CorpusTransaction:
             text.html_visualizations.add(vis)
             text.save()
 
-        # Index texts in Meilisearch
-        # FIXME this shouldbe done in a seprate command -
-        # once we have the text in the database, we can index them.
-        search = Search()
-        if search.search_available:
-            texts_to_index = [text.to_json() for text, _ in self._text_pairs]
-            result = search.index_text(texts_to_index)
-            logging.info(f"Indexed {len(texts_to_index)} texts. {result}")
-        else:
-            logging.error("Search is not available. Skipping indexing.")
-
         return {
             "texts": len(self._text_pairs),
             "text_metas": sum(map(lambda x: len(x[1]), self._text_pairs)),

@@ -152,6 +152,10 @@ applications:
         role: admin
         commands:
           start: ./addcorpora.sh corpora
+      index:
+        role: admin
+        commands:
+          start: ./addcorpora.sh index_corpora
       clearcache:
         role: admin
         commands:

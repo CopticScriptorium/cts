@@ -49,6 +49,17 @@ class Corpus(models.Model):
     def set_visualization_formats(self, formats):
         """Set visualization formats from a list of HtmlVisualizationFormat objects."""
         self.visualization_formats = ",".join(f["slug"] for f in formats)
+        
+    def index(self):
+        # Index texts in Meilisearch
+        search = Search()
+        if search.search_available:
+            texts = self.text_set.all()
+            for text in texts:
+                result = search.index_text([text.to_json()])
+            logging.info(f"Indexed {self.slug}: {len(texts)} texts.")
+        else:
+            logging.error("Search is not available. Skipping indexing.")
 
     @property
     def html_visualization_formats(self):
@@ -298,6 +309,19 @@ class Text(models.Model):
         raise ValueError(f"Visualization format '{format_slug}' not found for text '{self.title}'")
 
     # add Full Text Search
+    def index(self):
+        # Index texts in Meilisearch
+        # FIXME this shouldbe done in a seprate command -
+        # once we have the text in the database, we can index them.
+        search = Search()
+        if search.search_available:
+            result = search.index_text([self.to_json()])
+            logging.info(f"Indexed {self.slug} {result} in full text search.")
+        else:
+            logging.error("Search is not available.")
+            raise "Search not available but trying to index"
+
+    
     @classmethod
     def search(cls, keyword):
         search = Search()

@@ -87,9 +87,6 @@ CORPUS_REPO_OWNER = "CopticScriptorium"
 CORPUS_REPO_NAME = "corpora"
 GITHUB_API_BASE_URL = "https://api.github.com"
 
-
-
-
 DEPRECATED_URNS = {
     "urn:cts:copticLit:shenoute.a22.monbyb_307_320": "urn:cts:copticLit:shenoute.a22.monbyb:801-825",
     "urn:cts:copticLit:shenoute.a22.monbzc_301_308": "urn:cts:copticLit:shenoute.a22.monbzc:1001-1006",
@@ -103,7 +100,6 @@ DEPRECATED_URNS = {
     "urn:cts:copticLit:shenoute.abraham.monbya_547_550": "urn:cts:copticLit:shenoute.abraham.monbya:37-42",
     "urn:cts:copticLit:shenoute.abraham.monbya_551_554": "urn:cts:copticLit:shenoute.abraham.monbya:42-47",
 }
-
 
 CORPUS_MAP = {
 "acts.pilate":{"title":"Acts of Pilate - Gospel of Nicodemus","urn":"urn:cts:copticLit:misc.acts_pilate.lacau_ed"},

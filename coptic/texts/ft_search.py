@@ -34,9 +34,9 @@ class Search():
         
     """
     def __init__(self):
-        self.client = meilisearch.Client(settings.SEARCH_CONFIG['MEILISEARCH_URL'],
-                                         settings.SEARCH_CONFIG['MEILISEARCH_MASTER_KEY'])
-        self.index = settings.SEARCH_CONFIG['MEILISEARCH_INDEX']
+        self.client = meilisearch.Client(settings.SEARCH_CONFIG['MEILI_HTTP_ADDR'],
+                                         settings.SEARCH_CONFIG['MEILI_MASTER_KEY'])
+        self.index = settings.SEARCH_CONFIG['MEILI_COPTIC_INDEX']
         # Create the index if it doesn't exist
         try:
             existing_indexes = self.client.get_indexes()['results']

@@ -43,10 +43,18 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "/tmp/django_cache",
+    }
+}
+
 SEARCH_CONFIG = {
-    "MEILISEARCH_URL": 'http://127.0.0.1:7700',
-    "MEILISEARCH_MASTER_KEY": 'masterKey',
-    "MEILISEARCH_INDEX": "texts",
+    "MEILI_HTTP_ADDR":  os.getenv('MEILI_HTTP_ADDR','http://localhost:7700/'),
+    "MEILI_MASTER_KEY": os.getenv('MEILLI_MASTER_KEY', 'masterKey'),
+    "MEILI_COPTIC_INDEX": "texts",
+    "DISABLE": False,
 }
 
 if "test" in sys.argv:
