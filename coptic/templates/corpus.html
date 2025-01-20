@@ -44,13 +44,11 @@
                             <span class="text-item item-title">{{ text.title }}</span>
                         </a>
                         <div class="html-wrap version-wrap page-tabs">
-                            {% for format in formats %}
-                                {% if format in corpus.html_visualization_formats %}
+                            {% for format in corpus.html_visualization_formats %}
                                     <a href="/texts/{{ corpus.slug }}/{{ text.slug }}/{{ format.slug }}"
                                     class="text-item {{ format.slug }}">
                                         <span>{{ format.button_title }}</span>
                                     </a>
-                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
