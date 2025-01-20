@@ -412,26 +412,25 @@ def search(request):
                 # These are the attributes on which we have hits.
                 attrs=list(result["_matchesPosition"].keys())
                 if "text.normalized" in attrs:
-                    attr="text.normalized"
-                    value = result["_formatted"]["text"][0]["normalized"]
+                    hits = {"Normalized text": result["_formatted"]["text"][0]["normalized"]}
                 elif "text.normalized_group" in attrs:
-                    value = result["_formatted"]["text"][0]["normalized_group"]
-                    attr="text.normalized_group"
+                    hits = {"Normalized text group": result["_formatted"]["text"][0]["normalized_group"]}
                 elif "text.lemmatized" in attrs:
-                    attr="text.lemmatized"
-                    value = result["_formatted"]["text"][0]["lemmatized"]
+                    hits = {"Lemmatized": result["_formatted"]["text"][0]["lemmatized"]}
                 else:
-                    attr=", ".join(attrs)
-                    value=result["_formatted"] # FIXME lets actually handle this case.
-                logging.info(f'Attribute: {attrs} Value: {value}')
+                    # Create a simple key value dict for the results
+                    hits = {}
+                    for attr in attrs:
+                        name = attr.split('.')[-1]
+                        hits[name] = result["_formatted"]["text_meta"].get(name, '')
+                logging.info(f'Attribute: {attrs} Hits: {hits}')
 
-                if value:
+                if hits:
                     fulltext_results.append({
                         "title": result["_formatted"]["title"],
                         "slug": result["slug"],
                         "corpus_slug": result["corpus_slug"],
-                        "field": attr,
-                        "value": value})
+                        "hits": hits})
 
                 
     else:

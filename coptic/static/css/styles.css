@@ -780,3 +780,8 @@ h2.meta-value:hover {
   color: #333;
   text-decoration: underline;
 }
+.fulltext_results .fullt_text_field_hit {
+  font-weight: bold;
+  text-transform: capitalize;
+  margin-right: 4px;
+}

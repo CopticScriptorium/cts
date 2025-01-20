@@ -48,10 +48,11 @@
                             <span class="text-title">{{ result.title }}</span>
                         </h4>
                         <div class="result">
-                        {# FIXME Implement results for fields other than the text itself #}
-                        {{ result.value | safe }}
+                        {% for field, hits in result.hits.items %}
+                            {# FIXME Implement results for fields other than the text itself #}
+                            <div><span class="fullt_text_field_hit"> Found in {{ field | safe }}:</span>{{ hits | safe }}</div>
+                        {% endfor %}
                         </div>
-                        <div>(from: {{ result.field | safe }})</div>
                     </a>
                     </div>
                     {% endfor %}
