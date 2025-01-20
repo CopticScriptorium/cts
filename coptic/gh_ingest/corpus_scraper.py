@@ -223,6 +223,8 @@ class CorpusScraper:
         raise MetaNotFound(settings.LOCAL_REPO_PATH, self._current_text_contents.path)
 
     def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname, text, vis_formats):
+        #FIXME we want to get back to using the specific visualisation
+        # at least as a default.
         for config in vis_formats:
             if settings.LAZY_HTML_GENERATION:
                 rendered_html = ""
@@ -230,7 +232,7 @@ class CorpusScraper:
             else:
                 logging.info(f"Generating HTML '{config["slug"]}' for '{text.title}'...")
                 rendered_html = generate_visualization(
-                    config["slug"], text
+                    text, config, config["slug"]
                 )
             
             vis = HtmlVisualization()
