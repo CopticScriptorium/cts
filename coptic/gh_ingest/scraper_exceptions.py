@@ -62,6 +62,13 @@ class InferenceError(ScraperException):
         super().__init__(message)
 
 
+class GetFileContentIssue(ScraperException):
+    """Raised when we can't grab a corpus file config or css file"""
+
+    def __init__(self, corpus_dirname, local_repo_path, annis_dir):
+        message = f"Getting file content failed in '{annis_dir}' for corpus '{corpus_dirname}' is either missing or malformed in local repository at '{local_repo_path}'."
+        super().__init__(message)
+
 class ResolverVisMapIssue(ScraperException):
     """Raised when the corpus's resolver_vis_map.annis is missing or malformed"""
 

@@ -81,10 +81,22 @@ class CorpusScraper:
         formats=[] # this is a list because we want them unique
         for row in reader:
             if row[4]=="htmldoc": # if the fourth column is htmldoc
-                vis_type= row[8].split("config:")[1] # extract the format type
-                format =HtmlVisualization.get_format_by_attribute( "slug",vis_type)
+                #FIXME: we actually want the button_title 
+                # This is very hacky so we are doing it step by step for clarity
+                # We take the fifth column, of the format "diplomatic text (document)"
+                # and we split it by spaces and take the first element
+                title = row[5]
+                title = title.split(" ")[0]
+                # vis_type= row[8].split("config:")[1] # extract the format type 
+                # FIXME: Now the problem is that the actual config files for norm/normalized
+                # are going to have different names (verses). So need to figure out how to
+                # pass that. Probably the simplest is to add to HTML_VISUALISATION_FORMATS
+                # something like config_file_name=verses if we can be sure it  is systematic.
+                format = HtmlVisualization.get_format_by_attribute( "button_title", title)
                 if format and format not in formats:
                     formats.append(format)
+                else:
+                    logging.error(f"Seeing format for the second time '{format.slug}'")
         return formats
 
     def get_file_content(self, corpus, corpus_dirname, file_name):
@@ -114,7 +126,7 @@ class CorpusScraper:
                 with open(os.path.join(vm_path, file_name)) as f:
                     vm = f.read()
         except (FileNotFoundError, IndexError) as e:
-            raise ResolverVisMapIssue(
+            raise GetFileContentIssue(
                 corpus_dirname, settings.LOCAL_REPO_PATH, corpus.github_relannis
             ) from e
             
@@ -223,8 +235,6 @@ class CorpusScraper:
         raise MetaNotFound(settings.LOCAL_REPO_PATH, self._current_text_contents.path)
 
     def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname, text, vis_formats):
-        #FIXME we want to get back to using the specific visualisation
-        # at least as a default.
         for config in vis_formats:
             if settings.LAZY_HTML_GENERATION:
                 rendered_html = ""
@@ -237,9 +247,12 @@ class CorpusScraper:
             
             vis = HtmlVisualization()
             vis.visualization_format_slug = config["slug"]
-            
-            vis.config = self.get_file_content(corpus, corpus_dirname, "ExtData/" + config["slug"]+ ".config")
-            vis.css = self.get_file_content(corpus, corpus_dirname, "ExtData/" + config["slug"]+ ".css")
+            filename = config["slug"]
+            #FIXME: for the time being if we meet norm we know its actually verses
+            if filename=="norm":
+                filename="verses"
+            vis.config = self.get_file_content(corpus, corpus_dirname, "ExtData/" + filename + ".config")
+            vis.css = self.get_file_content(corpus, corpus_dirname, "ExtData/" + filename + ".css")
             vis.html = rendered_html
             self._current_transaction.add_vis((text, vis))
 
@@ -288,8 +301,5 @@ class CorpusScraper:
             else:
                 raise ("Unexpected type for meta value")
             
-        # FIXME: here to finish the refactoring
-        # we want to actually import the "tt" text rather than the visualisation
-        # which we will do lazily (but it will make it easier to do FTS)
         self._generate_visualizations_and_add_to_tx( self._current_corpus, corpus_dirname, text, vis_formats)
         self._current_transaction.add_text((text, text_metas))

@@ -24,11 +24,11 @@ The configuration of the import is done in code within the [](coptic/settings/ba
 ## CAVEAT
 
 * Corpora have multiple ways to be addressed that are slightly different and can lead to some confusion through the implementation: the top-level directory  may be `acts-pilate`. the "ANNIS" directories `acts.pilate` the slug in the database `actspilate` and the urn `acts_pilate`.
-* The same goes for visualisations that may have different technical names in different contexts. (`verses`, `versified` ).
+* The same goes for visualisations that may have different technical names in different contexts. (`verses`, `versified` ). Critically the implementation actually uses the button_title to select the visualisation format. See [button_title](https://github.com/CopticScriptorium/cts/blame/a1b616cd527002353cd7185807921208667dda2f/coptic/gh_ingest/scraper.py#L251C91-L251C103) which comes from actually matching it on the text `diplomatic text (document)` that is split by spaces. (so "diplomatic") here. For the time being we are resorting to a hack. When we meet a visualisation that has `norm` as slug we actually look for the filename `verses`.
 
 # Installation
 
-Note: this app requires Python 3.8+. 
+Note: this app requires Python 3.10+. 
 
 0. We recommend you [create a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands):
 
