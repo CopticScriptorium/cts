@@ -463,7 +463,13 @@ def render_html(toks, elts, directives, config_name):
 
     # Join tokens with HTML comment to form the final HTML
     inner_html = "".join(toks)
-    html = f'<div class="htmlvis {config_name}">{inner_html}</div>'
+    # FIXME : again because of inconsistency in visualisation format handling
+    # We add a hack to set the correct css class.
+    if config_name == "norm":
+        css_class = "verses"
+    else:
+        css_class = config_name
+    html = f'<div class="htmlvis {css_class}">{inner_html}</div>'
 
     return html
 
