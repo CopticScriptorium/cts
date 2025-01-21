@@ -282,11 +282,14 @@ def _build_queries_for_special_metadata(params):
 
 
 def _fetch_and_filter_texts_for_special_metadata_query(queries):
-    texts = models.Text.objects.all().order_by(Lower("title"))
-    for query in queries:
-        texts = texts.filter(query)
-    add_author_and_urn(texts)
-    return texts
+    if queries:
+        texts = models.Text.objects.all().order_by(Lower("title"))
+        for query in queries:
+            texts = texts.filter(query)
+        add_author_and_urn(texts)
+        return texts
+    else:
+        return models.Text.objects.none()
 
 
 def _build_explanation(params):
