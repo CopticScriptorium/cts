@@ -62,7 +62,6 @@ class TestHtmlVisualization(TestCase):
         self.norm_format = HtmlVisualization.get_format_by_attribute("slug","norm")
         self.visualization = HtmlVisualization.objects.create(
             visualization_format_slug=self.norm_format["slug"],
-            html="<div>Test content</div>",
         )
 
     def test_visualization_format_property(self):
