@@ -158,12 +158,15 @@ class Search():
     """
     Reduces the given HTML text to a more manageable size by keeping the highlighted text
     and a specified number of surrounding words, and replacing the rest with ellipses. 
-    When n=0 the function will only keep the highlighted text and remove the rest.
-    It always keeps the first and last words of the text (based on n)
+    When context_size=0 the function will only keep the highlighted text and remove the rest.
+    It always keeps the first and last words of the text (based on context_size)
+    All
+    FIXME: currently this is actually horribly inefficient. Specifically the part at the end
+    where we add the first and last words.
 
     Parameters:
     html_text (str): The HTML text containing highlighted spans.
-    n (int): The number of words to keep around each highlighted span. Default is 10.
+    context_size (int): The number of words to keep around each highlighted span. Default is 5.
 
     Returns:
     str: The reduced text with ellipses indicating omitted content.

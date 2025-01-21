@@ -465,7 +465,7 @@ def render_html(toks, elts, directives, config_name):
     inner_html = "".join(toks)
     # FIXME : again because of inconsistency in visualisation format handling
     # We add a hack to set the correct css class.
-    if config_name == "norm":
+    if config_name == "norm" or config_name == "sahidica":
         css_class = "verses"
     else:
         css_class = config_name
