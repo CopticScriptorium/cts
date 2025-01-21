@@ -458,7 +458,7 @@ def faceted_search(request):
     context = _base_context()
     fulltext_results=[]
     params = dict(request.GET.lists())
-    ft_hits=models.Text.faceted_search(params["text"][0])
+    fulltext_results=models.Text.faceted_search(params["text"][0])
     # {'text_meta.annotation': {'Amir Zeldes': 16, 'Lydia Bremer-McCollum, Caroline T. Schroeder': 2, 'Lydia Bremer-McCollum, Nicholas Wagner': 2}, 'text_meta.author': {'Anonymous': 2, 'Paul the apostle': 1, 'Shenoute': 2}, 'text_meta.corpus': {'acts.pilate': 2, 'bohairic.mark': 16, 'shenoute.house': 2}, 'text_meta.msName': {'CM.1643': 2, 'MONB.XG': 1, 'MONB.XU': 1}, 'text_meta.people': {'none': 17, 'Phinehas': 1}, 'text_meta.places': {'none': 18}, 'text_meta.translation': {'none': 2, 'World English Bible (WEB)': 16}}
     context.update(
         {
@@ -467,7 +467,7 @@ def faceted_search(request):
             "form": SearchForm(request.GET),
             "no_query": not any(len(v) for v in request.GET.dict().values()),
             "all_empty": True,
-            "all_empty_explanation": "Not runnig SQL search",
+            "all_empty_explanation": "Not running SQL search",
             "query_text": params["text"],
         }
     )
