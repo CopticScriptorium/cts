@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %}{{ text.title }} - Coptic Scriptorium{% endblock %}
 {% block custom_css %}<style>{{visualization.css | safe}}</style>{% endblock %}
 
@@ -80,12 +81,16 @@
         <div class="end-note">{{ text.endnote }}</div>
         <div id="information" class="meta-information">
             <h3 class="subtitle">ANNIS Metadata</h3>
-            {% for meta_item in text.text_meta.all %}
-                <div class="meta-item">
-                    <span class="meta-label">{{ meta_item.name }}:</span>
-                    <span class="meta-value">{{ meta_item.value | safe }}</span>
-                </div>
-            {% endfor %}
+            {% for meta_name, meta_values in text.text_meta.all|groupby:"name" %}
+            <div class="meta-item">
+                <span class="meta-label">{{ meta_name }}:</span>
+                <span class="meta-value">
+                    {% for value in meta_values %}
+                        {{ value.value | safe }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        {% endfor %}
         </div>
         <div class="citation-help">
             <h3 class="subtitle">Cite this Document</h3>

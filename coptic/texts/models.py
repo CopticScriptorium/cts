@@ -282,12 +282,16 @@ class Text(models.Model):
         # Process text_meta to handle duplicate keys
         text_meta = self.text_meta.values_list("name", "value")
         meta_dict = {}
+        #FIXME : it seems the structure can still be
+        # [['Amir Zeldes', 'Caroline T. Schroeder'], 'Lance Martin']
+        # which is not what we want but doesn't break anything.
         for name, value in text_meta:
             if name in meta_dict.keys():
-                # If we encounter a second value for the same key, convert the value to a list
-                # We should probably always have an array for splittables.
-                meta_dict[name] = [meta_dict[name]]
-                meta_dict[name].append(value)
+                # If we encounter a second value for the same key, append to the list
+                if isinstance(meta_dict[name], list):
+                    meta_dict[name].append(value)
+                else:
+                    meta_dict[name] = [meta_dict[name], value]
             else:
                 meta_dict[name] = value
         json["text_meta"] = meta_dict
