@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ text.title }} - Coptic Scriptorium{% endblock %}
-{% block custom_css %}<style>{{visualization.css}}</style>{% endblock %}
+{% block custom_css %}<style>{{visualization.css | safe}}</style>{% endblock %}
 
 {% block content %}
     <section class="text-list list">

@@ -71,4 +71,3 @@ LOCAL_REPO_PATH =  "../../corpora" # this is for upsun
 # Control whether we are lazy loading the HTML generation
 # This has effects both on scraping (much faster)  and in
 # production.
-LAZY_HTML_GENERATION = True

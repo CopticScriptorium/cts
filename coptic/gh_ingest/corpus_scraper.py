@@ -236,24 +236,19 @@ class CorpusScraper:
 
     def _generate_visualizations_and_add_to_tx(self, corpus, corpus_dirname, text, vis_formats):
         for config in vis_formats:
-            if settings.LAZY_HTML_GENERATION:
-                rendered_html = ""
-                logging.info(f"Lazy HTML generation enabled. Skipping '{config["slug"]}'")
-            else:
-                logging.info(f"Generating HTML '{config["slug"]}' for '{text.title}'...")
-                rendered_html = generate_visualization(
-                    text, config, config["slug"]
-                )
-            
+
             vis = HtmlVisualization()
             vis.visualization_format_slug = config["slug"]
             filename = config["slug"]
+            
             #FIXME: for the time being if we meet norm we know its actually verses
+            #TODO: Clearly we are not figuring out the correct css file .. or
+            # we are not outputting the correct css.
+            
             if filename=="norm":
                 filename="verses"
             vis.config = self.get_file_content(corpus, corpus_dirname, "ExtData/" + filename + ".config")
             vis.css = self.get_file_content(corpus, corpus_dirname, "ExtData/" + filename + ".css")
-            vis.html = rendered_html
             self._current_transaction.add_vis((text, vis))
 
     def _scrape_text_and_add_to_tx(self, corpus_dirname, contents, tree_id, filename, vis_formats):

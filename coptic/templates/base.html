@@ -9,16 +9,13 @@
         </title>
         {% block custom_css %}
         <style>
-            {{visualization.css}} 
+            {{visualization.css | safe}} 
         </style>
         {% endblock %}
         <meta name="description" content="Coptic Scriptorium">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/static/css/styles.css">
         <link rel="stylesheet" href="/static/css/vizbar.css">
-        <link rel="stylesheet" href="/static/css/analytic.css">
-        <link rel="stylesheet" href="/static/css/dipl.css">
-        <link rel="stylesheet" href="/static/css/verses.css">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
               rel="stylesheet">
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">

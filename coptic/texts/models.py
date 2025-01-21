@@ -102,7 +102,6 @@ class HtmlVisualization(models.Model):
     visualization_format_slug = models.CharField(max_length=200)
     config = models.TextField(blank=True)
     css = models.TextField(blank=True)
-    html = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "HTML Visualization"

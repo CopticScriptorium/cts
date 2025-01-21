@@ -85,6 +85,7 @@ def text_view(request, corpus=None, text=None, format=None):
     # FIXME: It should probably be `norm` everywhere - will be fixed in data.
     # Changed to use visualization_format_slug
     
+    # this is probably wrong?
     visualization = text_object.get_visualization_by_slug(format)
     
     doc_urn = text_object.text_meta.get(name="document_cts_urn").value
