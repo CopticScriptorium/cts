@@ -33,11 +33,12 @@ class Corpus(models.Model):
     visualization_formats = models.TextField(default="", db_index=True)
     author = models.TextField(default="",db_index=True)
     
-    #TODO: here we want to add a fielf for the actual text.
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, read_repository=False, **kwargs):
         # the repository is a signleton, so we can just create it here
-        self.repository=Repository()
+        if read_repository:
+            self.repository=Repository()
+        else:
+            self.repository=None
         super().__init__(*args, **kwargs)
         
     def get_visualization_formats(self):
@@ -220,27 +221,15 @@ class Text(models.Model):
 
         return OrderedDict(sorted(value_corpus_pairs.items()))
 
-    # FIXME this repeats code in _get_texts
-    @cache_memoize(settings.CACHE_TTL)
-    def get_text(self):
-        if  hasattr(self, 'text'):
-            return self.text
-        else:
-            dir_contents, tree_id = self.corpus.repository._get_texts(self.corpus, self.tt_dir)
-            self.text=dict(dir_contents).get(self.tt_filename)
-            if len(self.text) == 0:
-                raise NoTexts(self.corpus.annis_corpus_name, self.corpus.repo_path)
-            return self.text
 
     def get_text_chapters(self):
         # We will have better search results if we return the text as a list of chapters
         # Chapters in the SGML are marked by <chapter_n chapter_n="0">
         # </chapter_n> >
         chapter_pattern = re.compile(r'<chapter_n chapter_n="\d+">(.*?)<\/chapter_n>', re.DOTALL)
-        text = self.get_text()
-        chapters = {match.group(1) for match in chapter_pattern.finditer(text)}
+        chapters = {match.group(1) for match in chapter_pattern.finditer(self.content)}
         if not chapters:
-            return [text]
+            return [self.content]
         return chapters
 
     def get_text_lemmatized(self, text):

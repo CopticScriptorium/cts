@@ -148,7 +148,7 @@ class CorpusScraper:
     @transaction.atomic
     def parse_corpus(self, corpus_dirname):
     
-        corpus = Corpus()
+        corpus = Corpus(read_repository=True)
         if corpus_dirname not in corpus.repository._corpora:
             raise CorpusNotFound(corpus_dirname, settings.LOCAL_REPO_PATH)
 

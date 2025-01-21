@@ -173,8 +173,9 @@ class Search():
     >>> reduce_text_with_ellipsis(html_text, 2)
     'This is [...] very good <span class="highlight">test</span> case with [...] a highlight.'
     """
-    def reduce_text_with_ellipsis(self, html_text, n=10):
+    def reduce_text_with_ellipsis(self, html_text, context_size=5):
         # Parse the HTML content
+        CLEANR = re.compile('<.*?>') # Regex to remove HTML tags
         soup = BeautifulSoup(html_text, 'html.parser')
         
         # Extract all highlighted spans
@@ -188,29 +189,51 @@ class Search():
         words = text.split()
         
         # Always keep the first n and last n words
-        first_n_words = " ".join(words[:n]) if n > 0 else ""
-        last_n_words = " ".join(words[-n:]) if n > 0 else ""
+        first_3_words = " ".join(words[:3]) if context_size > 0 else ""
+        last_3_words = " ".join(words[-3:]) if context_size > 0 else ""
         
+        last_match_end = 0
+
         for span in highlighted:
             highlighted_text = span.get_text()
-            match = re.search(re.escape(highlighted_text), text)
+            match = re.search(re.escape(highlighted_text), text[last_match_end:])
             if not match:
                 continue
-            
+
+            # Adjust match positions relative to the full text
+            match_start = last_match_end + match.start()
+            match_end = last_match_end + match.end()
+            last_match_end = match_end
+
             # Calculate word boundaries for context
-            start_idx = len(text[:match.start()].split())  # Start word index
+            start_idx = len(text[:match_start].split())  # Start word index
             end_idx = start_idx + len(highlighted_text.split())  # End word index
-            
-            # Slice surrounding context
-            start_context = max(n, start_idx - n)
-            end_context = min(len(words) - n, end_idx + n)
-            
-            # Append to output
-            context_segment = " ".join(words[start_context:start_idx]) + " " + str(span) + " " + " ".join(words[end_idx:end_context])
-            output_segments.append(context_segment)
+
+            # Extract context
+            context_start = max(start_idx - context_size, 0)
+            context_end = min(end_idx + context_size, len(words))
+            context = " ".join(words[context_start:context_end])
+
+            # Highlight the matched text in the context
+            highlighted_context = context.replace(highlighted_text, f'<span class="highlight">{highlighted_text}</span>')
+
+            # Append unique context to output_segments
+            if highlighted_context not in output_segments:
+                output_segments.append(highlighted_context)
+
+        # Combine segments with ellipsis
+        result = ' [...] '.join(output_segments)
+
+        # Let's add the first two and last words of each text
+        # If they are not within our context
+        # FIXME this breaks if the result is in the first 
+        # two words becaue of highlighting - we will be repeating
+        # it. 
         
-        # Combine all segments into the result
-        result = " [...] ".join(output_segments)
-        if n > 0:
-            result = first_n_words + " [...] " + result + " [...] " + last_n_words
+        cleanresult = re.sub(CLEANR, '', result)
+        if first_3_words and first_3_words !=cleanresult[:len(first_3_words)]:
+            result = ' [...] '.join([first_3_words, result])
+        if last_3_words and last_3_words !=cleanresult[-len(last_3_words):]:
+            result = ' [...] '.join([result, last_3_words])        
         return result
+
