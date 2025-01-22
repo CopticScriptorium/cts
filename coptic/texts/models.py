@@ -246,6 +246,11 @@ class Text(models.Model):
     def get_text_normalized(self, text):
         # we want to extract all "norm" attributes from <norm> tags
         return " ".join(re.findall(r'norm="([^"]*)"', text))
+    
+    def get_text_translation(self, text):
+        # we want to extract all "norm" attributes from <norm> tags
+        translations = [t for t in re.findall(r'<translation translation="([^"]*)">', text) if t != "..."]
+        return " ".join(translations)
 
     def __str__(self):
         return self.title
@@ -271,6 +276,7 @@ class Text(models.Model):
                 "lemmatized": self.get_text_lemmatized(text),
                 "normalized": self.get_text_normalized(text),
                 "normalized_group": self.get_text_normalized_group(text),
+                "english_translation": self.get_text_translation(text),
             }
             for text in self.get_text_chapters()
             ],

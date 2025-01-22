@@ -64,6 +64,13 @@ class Search():
                            'text_meta.translation', 
                            'text_meta.arabic_translation',
                            ],
+            "typoTolerance": {
+                'minWordSizeForTypos': {
+                    'oneTypo': 8,
+                    'twoTypos': 10,
+                    },
+                'disableOnAttributes': ['text.english_translation']
+                },
             #'searchableAttributes': [
             #    'title',
             #    'overview',
@@ -118,15 +125,15 @@ class Search():
         return self.client.index(self.index).delete()
     
     def search(self, keyword):
-        results = self.client.index(self.index).search(keyword, {'showMatchesPosition': True, 'attributesToHighlight': ['text.lemmatized','text.normalized' ,'text.normalized_group'], 'highlightPreTag': '<span class="highlight">','highlightPostTag': '</span>'})
+        results = self.client.index(self.index).search(keyword, {'showMatchesPosition': True, 'attributesToHighlight': ['text.lemmatized','text.normalized' ,'text.normalized_group', 'text.english_translation'], 'highlightPreTag': '<span class="highlight">','highlightPostTag': '</span>'})
         reduced_results = self.reduce_search_result_with_ellipsis(results)
-        return results
+        return reduced_results
     
     def faceted_search(self, keyword):
         results = self.client.index(self.index).search(keyword, {
             'showMatchesPosition': True, 
             'attributesToHighlight': 
-                ['text.lemmatized','text.normalized' ,'text.normalized_group'],
+                ['text.lemmatized','text.normalized' ,'text.normalized_group','text.english_translation'],
                 'highlightPreTag': '<span class="highlight">',
                 'highlightPostTag': '</span>',
                 'facets': ['text_meta.corpus', 
@@ -152,6 +159,8 @@ class Search():
                         text_entry['normalized'] = self.reduce_text_with_ellipsis(text_entry['normalized'])
                     if 'normalized_group' in text_entry:
                         text_entry['normalized_group'] = self.reduce_text_with_ellipsis(text_entry['normalized_group'])
+                    if 'english_translation' in text_entry:
+                        text_entry['english_translation'] = self.reduce_text_with_ellipsis(text_entry['english_translation'])
         
         return search_results
     

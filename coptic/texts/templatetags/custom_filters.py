@@ -21,3 +21,7 @@ def groupby(queryset, attr):
     # Group items
     grouped = itertools_groupby(sorted_items, key_func)
     return [(key, list(group)) for key, group in grouped]
+
+@register.filter(name="isinstance")
+def isinstance_filter(val, instance_type):
+    return isinstance(val, eval(instance_type))

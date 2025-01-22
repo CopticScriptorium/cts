@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %}Search - Coptic Scriptorium{% endblock %}
 {% block content %}
     <div class="search-container">
@@ -50,7 +51,13 @@
                         <div class="result">
                         {% for field, hits in result.hits.items %}
                             {# FIXME Implement results for fields other than the text itself #}
-                            <div><span class="fullt_text_field_hit"> Found in {{ field | safe }}:</span>{{ hits | safe }}</div>
+                            <div><span class="fullt_text_field_hit"> Found in {{ field | safe }}:</span>
+                                {% if hits|isinstance:"str" %}
+                                    {{ hits|safe }}
+                                {% else %}
+                                    {{ hits|join:", " |safe }}
+                                {% endif %}
+                            </div>
                         {% endfor %}
                         </div>
                     </a>

@@ -420,6 +420,8 @@ def search(request):
                     hits = {"Normalized text group": result["_formatted"]["text"][0]["normalized_group"]}
                 elif "text.lemmatized" in attrs:
                     hits = {"Lemmatized": result["_formatted"]["text"][0]["lemmatized"]}
+                elif "text.english_translation" in attrs:
+                    hits = {"English Translation": result["_formatted"]["text"][0]["english_translation"]}
                 else:
                     # Create a simple key value dict for the results
                     hits = {}
