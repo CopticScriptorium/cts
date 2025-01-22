@@ -67,10 +67,11 @@ class Corpus(models.Model):
     @property
     def html_visualization_formats(self):
         """Return HtmlVisualizationFormat objects in the stored order."""
-        return [
-            HtmlVisualization.get_format_by_attribute("slug",slug)
-            for slug in self.get_visualization_formats()
-        ]
+        ordered_visualizations = []
+        for vis in settings.HTML_VISUALISATION_FORMATS:
+            if vis in self.get_visualization_formats():
+                ordered_visualizations.append(settings.HTML_VISUALISATION_FORMATS[vis])
+        return ordered_visualizations
 
     class Meta:
         verbose_name_plural = "Corpora"
