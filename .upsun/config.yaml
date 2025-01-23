@@ -190,7 +190,7 @@ routes:
   "https://{default}/":
     type: upstream
     upstream: "cts:http"
-  "https:/search.{default}/":
+  "https://search.{default}/":
     type: upstream
     upstream: "upstream:http"
   # A basic redirect definition
