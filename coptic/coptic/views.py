@@ -16,6 +16,7 @@ import base64
 
 from django.template.defaulttags import register
 
+
 HTML_TAG_REGEX = re.compile(r"<[^>]*?>")
 
 logger = logging.getLogger(__name__)
@@ -374,23 +375,9 @@ def search(request):
     # (2) if params['text'] starts with "urn:", treat it as a special case, first checking for redirects, then
     #     copying it to params['document_cts_urn'] (it is in a list to remain symmetric with all other non-'text' fields)
     if text_query:
-        text_query = text_query.strip()
-        if text_query.startswith("urn:"):
-            urn = text_query
-            # check for redirects
-            if re.match(r"urn:cts:copticLit:ot.*.crosswire", urn):
-                return redirect(
-                    "https://github.com/CopticScriptorium/corpora/releases/tag/v2.5.0"
-                )
-            urn = settings.DEPRECATED_URNS.get(urn, urn)
-            obj = _resolve_urn(urn)
-            if obj.__class__.__name__ == "Text":
-                return redirect("text", corpus=obj.corpus.slug, text=obj.slug)
-            elif obj.__class__.__name__ == "Corpus":
-                return redirect("corpus", corpus=obj.slug)
-
-            # no redirect, proceed with search
-            params["document_cts_urn"] = [urn]
+        urn_redirect = handle_urn(text_query)
+        if urn_redirect:
+            return urn_redirect
 
     # returns a list of queries built with Django's Q operator using non-freetext parameters
     queries = _build_queries_for_special_metadata(params)
@@ -454,10 +441,17 @@ def search(request):
 
     return render(request, "search.html", context)
 
+@cache_page(settings.CACHE_TTL)
 def faceted_search(request):
     context = _base_context()
     params = dict(request.GET.lists())
     query_text = params["text"][0] if "text" in params and params["text"] > [''] else None
+
+    # Handle URN
+    if query_text:
+        urn_redirect = handle_urn(query_text)
+        if urn_redirect:
+            return urn_redirect
 
     # Build the filter query
     filters = []
@@ -469,11 +463,11 @@ def faceted_search(request):
         for value in values:
             filters.append(f'{key} = "{value}"')
     filter_query = " AND ".join(filters) if filters else None
-    fulltext_results=[]
-    ft_hits = models.Text.faceted_search(query_text, filter_query)
+
+    fulltext_results = models.Text.faceted_search(query_text, filter_query)
     
     # Extract facet distribution from the search results
-    facet_distribution = ft_hits.get("facetDistribution", {})
+    facet_distribution = fulltext_results.get("facetDistribution", {})
 
     # Process facet distribution and active facets for display
     processed_facets = []
@@ -497,36 +491,9 @@ def faceted_search(request):
                 "values": facet_values
             })
 
-    if ft_hits["hits"]:
-        for result in ft_hits["hits"]:
-            logging.info(result["_matchesPosition"])
-            # These are the attributes on which we have hits.
-            attrs=list(result["_matchesPosition"].keys())
-            if "text.normalized" in attrs:
-                hits = {"Normalized text": result["_formatted"]["text"][0]["normalized"]}
-            elif "text.normalized_group" in attrs:
-                hits = {"Normalized text group": result["_formatted"]["text"][0]["normalized_group"]}
-            elif "text.lemmatized" in attrs:
-                hits = {"Lemmatized": result["_formatted"]["text"][0]["lemmatized"]}
-            elif "text.english_translation" in attrs:
-                hits = {"English Translation": result["_formatted"]["text"][0]["english_translation"]}
-            else:
-                # Create a simple key value dict for the results
-                hits = {}
-                for attr in attrs:
-                    name = attr.split('.')[-1]
-                    hits[name] = result["_formatted"]["text_meta"].get(name, '')
-            
-            fulltext_results.append({
-                "title": result["_formatted"]["title"],
-                "author": result["text_meta"]["author"],
-                "urn": result["text_meta"]["document_cts_urn"],
-                "slug": result["slug"],
-                "corpus_slug": result["corpus_slug"],
-                "hits": hits})
-                
     context.update({
-        "fulltext_results": fulltext_results,
+        "results": [],
+        "fulltext_results": fulltext_results["hits"],
         "facet_distribution": processed_facets,
         "query_text": query_text,
         "active_facets": active_facets,
@@ -556,3 +523,20 @@ def texts_for_urn(urn):
         text_meta__name="document_cts_urn", text_meta__id__in=matching_tm_ids
     ).order_by("slug")
     return texts
+
+def handle_urn(text_query):
+    text_query = text_query.strip()
+    if text_query.startswith("urn:"):
+        urn = text_query
+        # check for redirects
+        if re.match(r"urn:cts:copticLit:ot.*.crosswire", urn):
+            return redirect(
+                "https://github.com/CopticScriptorium/corpora/releases/tag/v2.5.0"
+            )
+        urn = settings.DEPRECATED_URNS.get(urn, urn)
+        obj = _resolve_urn(urn)
+        if obj.__class__.__name__ == "Text":
+            return redirect("text", corpus=obj.corpus.slug, text=obj.slug)
+        elif obj.__class__.__name__ == "Corpus":
+            return redirect("corpus", corpus=obj.slug)
+    return None
