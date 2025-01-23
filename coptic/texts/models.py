@@ -280,8 +280,6 @@ class Text(models.Model):
             }
             for text in self.get_text_chapters()
             ],
-            "tt_dir": self.tt_dir,
-            "tt_filename": self.tt_filename,
             "tt_dir_tree_id": self.tt_dir_tree_id,
             "document_cts_urn": self.document_cts_urn,
         }
@@ -335,10 +333,10 @@ class Text(models.Model):
 
     # add Full Text Search
     @classmethod
-    def faceted_search(cls, keyword):
+    def faceted_search(cls, keyword, filters):
         search = Search()
         if search.search_available:
-            return search.faceted_search(keyword)
+            return search.faceted_search(keyword, filters)
         else:
             logger.error("MeiliSearch is not available")
             return {"hits": []}

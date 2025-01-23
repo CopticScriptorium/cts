@@ -255,8 +255,6 @@ class SearchForm(forms.Form):
 
 
 def _build_queries_for_special_metadata(params):
-    # OK This one wants love now.
-    # Let's figure out splittability.
     queries = []
     for meta_name, meta_values in params.items():
         if meta_name == "text":
@@ -458,22 +456,83 @@ def search(request):
 
 def faceted_search(request):
     context = _base_context()
-    fulltext_results=[]
     params = dict(request.GET.lists())
-    fulltext_results=models.Text.faceted_search(params["text"][0])
-    # {'text_meta.annotation': {'Amir Zeldes': 16, 'Lydia Bremer-McCollum, Caroline T. Schroeder': 2, 'Lydia Bremer-McCollum, Nicholas Wagner': 2}, 'text_meta.author': {'Anonymous': 2, 'Paul the apostle': 1, 'Shenoute': 2}, 'text_meta.corpus': {'acts.pilate': 2, 'bohairic.mark': 16, 'shenoute.house': 2}, 'text_meta.msName': {'CM.1643': 2, 'MONB.XG': 1, 'MONB.XU': 1}, 'text_meta.people': {'none': 17, 'Phinehas': 1}, 'text_meta.places': {'none': 18}, 'text_meta.translation': {'none': 2, 'World English Bible (WEB)': 16}}
-    context.update(
-        {
-            "results": [],
-            "fulltext_results": fulltext_results,
-            "form": SearchForm(request.GET),
-            "no_query": not any(len(v) for v in request.GET.dict().values()),
-            "all_empty": True,
-            "all_empty_explanation": "Not running SQL search",
-            "query_text": params["text"],
-        }
-    )
-    return render(request, "search.html", context)
+    query_text = params["text"][0] if "text" in params and params["text"] > [''] else None
+
+    # Build the filter query
+    filters = []
+    active_facets = {}
+    for key, values in params.items():
+        if key == "text":
+            continue
+        active_facets[key] = values
+        for value in values:
+            filters.append(f'{key} = "{value}"')
+    filter_query = " AND ".join(filters) if filters else None
+    fulltext_results=[]
+    ft_hits = models.Text.faceted_search(query_text, filter_query)
+    
+    # Extract facet distribution from the search results
+    facet_distribution = ft_hits.get("facetDistribution", {})
+
+    # Process facet distribution and active facets for display
+    processed_facets = []
+    for facet, values in facet_distribution.items():
+        if not values:
+            continue
+        display_facet = facet.replace("text_meta.", "").replace("_", " ").capitalize()
+        facet_values = []
+        for value, count in values.items():
+            is_active = facet in active_facets and value in active_facets[facet]
+            facet_values.append({
+                "value": value,
+                "count": count,
+                "is_active": is_active,
+                "remove_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items() if k != facet or v != value])}",
+                "add_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items()])}&{facet}={value}"
+            })
+        if facet_values:
+            processed_facets.append({
+                "facet": display_facet,
+                "values": facet_values
+            })
+
+    if ft_hits["hits"]:
+        for result in ft_hits["hits"]:
+            logging.info(result["_matchesPosition"])
+            # These are the attributes on which we have hits.
+            attrs=list(result["_matchesPosition"].keys())
+            if "text.normalized" in attrs:
+                hits = {"Normalized text": result["_formatted"]["text"][0]["normalized"]}
+            elif "text.normalized_group" in attrs:
+                hits = {"Normalized text group": result["_formatted"]["text"][0]["normalized_group"]}
+            elif "text.lemmatized" in attrs:
+                hits = {"Lemmatized": result["_formatted"]["text"][0]["lemmatized"]}
+            elif "text.english_translation" in attrs:
+                hits = {"English Translation": result["_formatted"]["text"][0]["english_translation"]}
+            else:
+                # Create a simple key value dict for the results
+                hits = {}
+                for attr in attrs:
+                    name = attr.split('.')[-1]
+                    hits[name] = result["_formatted"]["text_meta"].get(name, '')
+            
+            fulltext_results.append({
+                "title": result["_formatted"]["title"],
+                "author": result["text_meta"]["author"],
+                "urn": result["text_meta"]["document_cts_urn"],
+                "slug": result["slug"],
+                "corpus_slug": result["corpus_slug"],
+                "hits": hits})
+                
+    context.update({
+        "fulltext_results": fulltext_results,
+        "facet_distribution": processed_facets,
+        "query_text": query_text,
+        "active_facets": active_facets,
+    })
+
+    return render(request, "faceted_search.html", context)
 
 def add_author_and_urn(texts):
     for text in texts:

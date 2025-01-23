@@ -106,9 +106,9 @@ class Search():
                 'maxTotalHits': 5000
             },
             'faceting': {
-                'maxValuesPerFacet': 200
+                'maxValuesPerFacet': 400
             },
-            'searchCutoffMs': 150
+            'searchCutoffMs': 400
             })
             self.search_available=True
         except:
@@ -129,8 +129,8 @@ class Search():
         reduced_results = self.reduce_search_result_with_ellipsis(results)
         return reduced_results
     
-    def faceted_search(self, keyword):
-        results = self.client.index(self.index).search(keyword, {
+    def faceted_search(self, keyword, filters = None):
+        search_params = {
             'showMatchesPosition': True, 
             'attributesToHighlight': 
                 ['text.lemmatized','text.normalized' ,'text.normalized_group','text.english_translation'],
@@ -144,7 +144,11 @@ class Search():
                            'text_meta.annotation', 
                            'text_meta.translation', 
                            'text_meta.arabic_translation'],          
-                })
+                }
+        if filters:
+            search_params['filter'] = filters
+     
+        results = self.client.index(self.index).search(keyword, search_params )
         reduced_results = self.reduce_search_result_with_ellipsis(results)
         return reduced_results
 

@@ -785,3 +785,45 @@ h2.meta-value:hover {
   text-transform: capitalize;
   margin-right: 4px;
 }
+
+.ft_explanation{
+  font-weight: 100;
+  font-size: small;
+  line-height: 1.5;
+  margin-bottom: auto;
+}
+
+
+.search-column .expandable-list {
+  margin-top: 0px;
+  padding: 0px;
+  max-height: 150px;
+  overflow: scroll;
+  transition: max-height 0.3s ease-out;
+  font-size:small;
+}
+
+.search-column .expandable-list.expanded {
+  max-height: 2000px;
+}
+
+.search-column .toggle {
+  cursor: pointer;
+  font-size: small;
+  color: rgb(205, 87, 18);
+}
+
+.search-column > div.facet > ul > li {
+  list-style-type: none;
+  background-color: whitesmoke;
+}
+
+.search-column .search-item {
+  padding-bottom: 5px;
+}
+.remove_facet{
+  color: rgb(205, 87, 18);
+  cursor: pointer;
+  padding-left: 4px;
+  padding-right: 4px;
+}

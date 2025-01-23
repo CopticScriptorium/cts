@@ -4,8 +4,8 @@ from operator import attrgetter
 
 register = template.Library()
 
-@register.filter
-def groupby(queryset, attr):
+@register.filter(name="groupby")
+def groupby_filter(queryset, attr):
     """
     Groups a queryset by the given attribute.
     Usage: queryset|group_by_attr:"attribute_name"
@@ -25,3 +25,10 @@ def groupby(queryset, attr):
 @register.filter(name="isinstance")
 def isinstance_filter(val, instance_type):
     return isinstance(val, eval(instance_type))
+
+@register.filter(name="remove_dot_prefix")
+def remove_dot_prefix_filter(value):
+    """
+    Remove do prefix from a string if it exists.
+    """
+    return value.split(".")[-1]

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block title %}Search - Coptic Scriptorium{% endblock %}
+{% block content %}
+    <div class="search-container">
+        <div class="search-column search-results">
+            <div class="fulltext_results">
+                {% if fulltext_results %}
+                     {% if query_text %}
+                     <p class="ft_explanation">Searching for "{{query_text}}"</p>
+                        {% else %}
+                        <p class="ft_explanation">No search term entered. You can use the filters to the right to explore the texts or enter a search term in the box above. </p>
+                        <p class="ft_explanation">You may  enter text both in English and Coptic (there is a small icon to the right of the search box to choose the active keyboard).</p>
+                        <p class="ft_explanation">You can also use the search box to search for URNs such as "urn:cts:copticLit:misc.acts_pilate.lacau_ed:9"</p>
+                        {% endif %}
+                        {% if facet_distribution %}
+                        <p class="ft_explanation">Active filters: 
+                            {% for facet in facet_distribution %}
+                                        {% for value in facet.values %}
+                                            {% if value.is_active %}
+                                                <span>{{ value.value }} ({{ value.count }})<a class="remove_facet" href="{{ value.remove_url }}">✖</a>
+                                                </span>
+                                            {% endif %}
+                                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                {% for result in fulltext_results %}
+                    <div class="search-results-row">
+                    <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}/analytic#text={{query_text|urlencode}}" class="text-link">
+                        {# FIXME we should be using the standard #:~:text= but that doesnt seem to work well yet. So resorting to #text and a js hack with window.find #}
+                        <h4>
+                            <span class="text-title">{{ result.title }}</span>
+                        </h4>
+                        <div class="result">
+                        <div>
+                        <span class="text-author">{{ result.author }} </span>
+                        <span class="text-urn">{{ result.urn }}</span>
+                        </div>
+                        {% for field, hits in result.hits.items %}
+                            {# FIXME Implement results for fields other than the text itself #}
+                            <div><span class="fullt_text_field_hit"> Found in {{ field | safe }}:</span>
+                                {% if hits|isinstance:"str" %}
+                                    {{ hits|safe }}
+                                {% else %}
+                                    {{ hits|join:", " |safe }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </a>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="search-column search-params">
+            {# Display facet counts #}
+            {% if facet_distribution %}
+                <h4>Refine your search</h4>
+                {% for facet in facet_distribution %}
+                    <div class="facet">
+                        <div class="search-item">{{ facet.facet }}</div>
+                        <ul class="expandable-list">
+                            {% for value in facet.values %}
+                                <li>
+                                    {% if value.is_active %}
+                                        {{ value.value }} ({{ value.count }})
+                                        <a class= "remove_facet" href="{{ value.remove_url }}">✖</a>
+                                    {% else %}
+                                        <a href="{{ value.add_url }}">{{ value.value }} ({{ value.count }})</a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
