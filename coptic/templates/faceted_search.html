@@ -55,6 +55,21 @@
             </div>
         </div>
         <div class="search-column search-params">
+            <form name="search_box" action="/faceted_search">
+                <input type="text"
+                       name="text"
+                       value="{{ query_text }}"
+                       placeholder="URN or query (&quot;besa&quot;, ...)">
+                <svg width="28"
+                     height="28"
+                     viewBox="0 0 490 490"
+                     class="search-icon"
+                     onclick="document.querySelector('.search-bar').submit()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="490" height="490">
+                        <path fill="none" stroke="#555" stroke-width="36" stroke-linecap="round" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110" />
+                    </svg>
+                </svg>
+            </form>
             {# Display facet counts #}
             {% if facet_distribution %}
                 <h4>Refine your search</h4>

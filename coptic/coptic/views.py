@@ -16,7 +16,6 @@ import base64
 
 from django.template.defaulttags import register
 
-
 HTML_TAG_REGEX = re.compile(r"<[^>]*?>")
 
 logger = logging.getLogger(__name__)
@@ -441,18 +440,14 @@ def search(request):
 
     return render(request, "search.html", context)
 
-@cache_page(settings.CACHE_TTL)
 def faceted_search(request):
     context = _base_context()
     params = dict(request.GET.lists())
-    query_text = params["text"][0] if "text" in params and params["text"] > [''] else None
-
-    # Handle URN
-    if query_text:
-        urn_redirect = handle_urn(query_text)
+    text_query = params["text"][0] if "text" in params and params["text"] > [''] else None
+    if text_query:
+        urn_redirect = handle_urn(text_query)
         if urn_redirect:
             return urn_redirect
-
     # Build the filter query
     filters = []
     active_facets = {}
@@ -463,11 +458,11 @@ def faceted_search(request):
         for value in values:
             filters.append(f'{key} = "{value}"')
     filter_query = " AND ".join(filters) if filters else None
-
-    fulltext_results = models.Text.faceted_search(query_text, filter_query)
+    fulltext_results=[]
+    ft_hits = models.Text.faceted_search(text_query, filter_query)
     
     # Extract facet distribution from the search results
-    facet_distribution = fulltext_results.get("facetDistribution", {})
+    facet_distribution = ft_hits.get("facetDistribution", {})
 
     # Process facet distribution and active facets for display
     processed_facets = []
@@ -491,11 +486,42 @@ def faceted_search(request):
                 "values": facet_values
             })
 
+    if ft_hits["hits"]:
+        for result in ft_hits["hits"]:
+            logging.info(result["_matchesPosition"])
+            # These are the attributes on which we have hits.
+            attrs=list(result["_matchesPosition"].keys())
+            if "text.normalized" in attrs:
+                hits = {"Normalized text": result["_formatted"]["text"][0]["normalized"]}
+            elif "text.normalized_group" in attrs:
+                hits = {"Normalized text group": result["_formatted"]["text"][0]["normalized_group"]}
+            elif "text.lemmatized" in attrs:
+                hits = {"Lemmatized": result["_formatted"]["text"][0]["lemmatized"]}
+            elif "text.english_translation" in attrs:
+                hits = {"English Translation": result["_formatted"]["text"][0]["english_translation"]}
+            else:
+                # Create a simple key value dict for the results
+                hits = {}
+                for attr in attrs:
+                    name = attr.split('.')[-1]
+                    hits[name] = result["_formatted"]["text_meta"].get(name, '')
+            
+            if "author" in result["text_meta"].keys():
+                author = result["text_meta"]["author"]
+            else:    
+                author = ""
+            fulltext_results.append({
+                "title": result["_formatted"]["title"],
+                "author": author,
+                "urn": result["text_meta"]["document_cts_urn"],
+                "slug": result["slug"],
+                "corpus_slug": result["corpus_slug"],
+                "hits": hits})
+                
     context.update({
-        "results": [],
-        "fulltext_results": fulltext_results["hits"],
+        "fulltext_results": fulltext_results,
         "facet_distribution": processed_facets,
-        "query_text": query_text,
+        "query_text": text_query,
         "active_facets": active_facets,
     })
 
