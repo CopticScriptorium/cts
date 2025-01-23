@@ -1,7 +1,7 @@
 # Complete list of all available properties: https://docs.upsun.com/create-apps/app-reference.html
 applications:
   search:
-    container_profile: BALANCED
+    container_profile: HIGH_MEMORY
     type: "python:3.12"
     web:
       # Commands are run once after deployment to start the application process.
@@ -32,13 +32,14 @@ applications:
     hooks:
       build: |
         set -eux
+        # Install MeiliSearch
         curl -L https://install.meilisearch.com | sh
     
   cts:
     # Application source code directory
     source:
       root: "/coptic"
-    container_profile: BALANCED
+    container_profile: HIGHER_MEMORY
     # The runtime the application uses.
     # Complete list of available runtimes: https://docs.upsun.com/create-apps/app-reference.html#types
     type: "python:3.12"
