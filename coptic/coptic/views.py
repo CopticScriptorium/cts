@@ -368,13 +368,13 @@ def search(request):
     # and slugs corresponding to SpecialMetas (e.g. "author", "translation", ...)
     # which the user can select in the sidebar on right-hand side of the screen
     params = dict(request.GET.lists())
-    text_query = params["text"][0] if "text" in params and params["text"] > [''] else None
+    query_text = params["text"][0] if "text" in params and params["text"] > [''] else None
 
     # (1) unwrap the list of length 1 in params['text'] if it exists
     # (2) if params['text'] starts with "urn:", treat it as a special case, first checking for redirects, then
     #     copying it to params['document_cts_urn'] (it is in a list to remain symmetric with all other non-'text' fields)
-    if text_query:
-        urn_redirect = handle_urn(text_query)
+    if query_text:
+        urn_redirect = handle_urn(query_text)
         if urn_redirect:
             return urn_redirect
 
@@ -388,11 +388,11 @@ def search(request):
     explanation = _build_explanation(params)
         
     fulltext_results=[]
-    if "text" in params and text_query:
+    if "text" in params and query_text:
         results, all_empty_explanation = _build_result_for_query_text(
-            text_query, texts, explanation
+            query_text, texts, explanation
         )
-        ft_hits=models.Text.search(text_query)
+        ft_hits=models.Text.search(query_text)
         if ft_hits["hits"]:
             for result in ft_hits["hits"]:
                 logging.info(result["_matchesPosition"])
@@ -434,7 +434,7 @@ def search(request):
             "no_query": not any(len(v) for v in request.GET.dict().values()),
             "all_empty": not any(len(r["texts"]) for r in results),
             "all_empty_explanation": all_empty_explanation,
-            "query_text": text_query,
+            "query_text": query_text,
         }
     )
 
@@ -443,9 +443,9 @@ def search(request):
 def faceted_search(request):
     context = _base_context()
     params = dict(request.GET.lists())
-    text_query = params["text"][0] if "text" in params and params["text"] > [''] else None
-    if text_query:
-        urn_redirect = handle_urn(text_query)
+    query_text = params["text"][0] if "text" in params and params["text"] > [''] else ""
+    if query_text:
+        urn_redirect = handle_urn(query_text)
         if urn_redirect:
             return urn_redirect
     # Build the filter query
@@ -459,7 +459,7 @@ def faceted_search(request):
             filters.append(f'{key} = "{value}"')
     filter_query = " AND ".join(filters) if filters else None
     fulltext_results=[]
-    ft_hits = models.Text.faceted_search(text_query, filter_query)
+    ft_hits = models.Text.faceted_search(query_text, filter_query)
     
     # Extract facet distribution from the search results
     facet_distribution = ft_hits.get("facetDistribution", {})
@@ -521,7 +521,7 @@ def faceted_search(request):
     context.update({
         "fulltext_results": fulltext_results,
         "facet_distribution": processed_facets,
-        "query_text": text_query,
+        "query_text": query_text,
         "active_facets": active_facets,
     })
 
@@ -550,10 +550,10 @@ def texts_for_urn(urn):
     ).order_by("slug")
     return texts
 
-def handle_urn(text_query):
-    text_query = text_query.strip()
-    if text_query.startswith("urn:"):
-        urn = text_query
+def handle_urn(query_text):
+    query_text = query_text.strip()
+    if query_text.startswith("urn:"):
+        urn = query_text
         # check for redirects
         if re.match(r"urn:cts:copticLit:ot.*.crosswire", urn):
             return redirect(
