@@ -5,6 +5,7 @@ export DJANGO_ALLOWED_HOSTS=$(echo $PLATFORM_ROUTES | base64 --decode | jq -r 't
 export COPTIC_ENVIROMENT="production"``
 export MEILI_HTTP_ADDR='http://search.internal:80/'
 export MEILLI_MASTER_KEY="$DJANGO_SECRET_KEY"
+export MEILI_MAX_INDEXING_MEMORY=200MB
 export XDG_CACHE_HOME=/tmp/.cache
 . $HOME/.local/bin/env
 alias uvm="uv run python manage.py"
