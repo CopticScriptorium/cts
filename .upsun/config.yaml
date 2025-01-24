@@ -134,7 +134,8 @@ applications:
       # More information: https://docs.upsun.com/create-apps/hooks/hooks-comparison.html#build-hook
       build: |
         set -eux
-        pip install -r requirements_django_5.txt
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        uv sync
         #./manage.py collectstatic --noinput
         
       # The deploy hook is run after the app container has been started, but before it has started accepting requests.
@@ -142,25 +143,25 @@ applications:
       deploy: |
         set -eux
         # echo 'Put your deploy command here'
-        ./manage.py migrate
+        uvm migrate
 
       # The post_deploy hook is run after the app container has been started and after it has started accepting requests.
       # More information: https://docs.upsun.com/create-apps/hooks/hooks-comparison.html#deploy-hook
       post_deploy: |
-        ./manage.py clearcache
+        uvm clearcache
     operations:
       import:
         role: admin
         commands:
-          start: ./addcorpora.sh corpora
+          start: uv run ./addcorpora.sh corpora
       index:
         role: admin
         commands:
-          start: ./manage.py index_corpora
+          start: uvm index_corpora
       clearcache:
         role: admin
         commands:
-          start: ./manage.py clearcache
+          start: uvm clearcache
     # Scheduled tasks for the app.
     # More information: https://docs.upsun.com/create-apps/app-reference.html#crons
     # crons:

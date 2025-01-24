@@ -1,0 +1,16 @@
+[project]
+name = "coptic"
+version = "0.1.0"
+description = "Front end application for the Coptic Scriptorium Annis data"
+readme = "README.md"
+requires-python = ">=3.12.5"
+dependencies = [
+    "beautifulsoup4>=4.12.3",
+    "django>=5.1.5",
+    "django-cache-memoize>=0.2.1",
+    "django-grappelli>=4.0.1",
+    "gunicorn>=23.0.0",
+    "meilisearch>=0.33.1",
+    "requests>=2.32.3",
+    "tqdm>=4.67.1",
+]
