@@ -106,7 +106,6 @@ dependencies = [
     { name = "beautifulsoup4" },
     { name = "django" },
     { name = "django-cache-memoize" },
-    { name = "django-grappelli" },
     { name = "gunicorn" },
     { name = "meilisearch" },
     { name = "requests" },
@@ -118,7 +117,6 @@ requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.12.3" },
     { name = "django", specifier = ">=5.1.5" },
     { name = "django-cache-memoize", specifier = ">=0.2.1" },
-    { name = "django-grappelli", specifier = ">=4.0.1" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "meilisearch", specifier = ">=0.33.1" },
     { name = "requests", specifier = ">=2.32.3" },
@@ -146,15 +144,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/8a/81/8e07e815118a5afbb9a10e766d9338751cc11ca462dea7f8a509a8fa22c5/django_cache_memoize-0.2.1.tar.gz", hash = "sha256:025ff5d941420247b83452bb183bde172dde7def95501fca829adf8ea01b2b7b", size = 21865 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e8/b4/81550fd4e8ae9e2dd017b761d73fa4aa22dccab13076622ea5a3ec76e7d4/django_cache_memoize-0.2.1-py3-none-any.whl", hash = "sha256:07929d063a03557013875d453a13edc8e3359d3ba8a568b64ac3288578ed8be3", size = 14797 },
-]
-
-[[package]]
-name = "django-grappelli"
-version = "4.0.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b1/b5/f3f48797ac4829d0cbf648f33dcffeb2801742b3464225e685d4f9537261/django-grappelli-4.0.1.tar.gz", hash = "sha256:5095c8b6cef3f471a7876e30e8ac5b8cfbee30f999a4fba9e5ee26bf6addc5e4", size = 11062540 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/63/30/ca6b76f0583a0d1c957ad049d5669d0fc43d7c62d727ab1e23bad2b9b8f5/django_grappelli-4.0.1-py2.py3-none-any.whl", hash = "sha256:35cdf82d509ac4c3a19ca7252a78be8b3b60686d4f2976c488c6d5f1dd3bdc85", size = 1823475 },
 ]
 
 [[package]]
