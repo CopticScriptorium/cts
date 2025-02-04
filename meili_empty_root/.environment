@@ -1,4 +1,4 @@
-# this is configuration for upsun.com
+# This is configuration for upsun.com
 export MEILI_HTTP_ADDR='http://search.internal:80/'
 export MEILLI_MASTER_KEY="$DJANGO_SECRET_KEY"
 export MEILI_MAX_INDEXING_MEMORY=200MB
