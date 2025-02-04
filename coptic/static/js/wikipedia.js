@@ -1,5 +1,5 @@
-var WIKIPEDIA = function() {
-  var my = {};
+const WIKIPEDIA = (function() {
+  const my = {};
 
   // DBPedia SPARQL endpoint
   my.endpoint = 'http://dbpedia.org/sparql/';
@@ -28,9 +28,9 @@ var WIKIPEDIA = function() {
   // Function is asynchronous as we have to call out to DBPedia to get the
   // info.
   my.getData = function(wikipediaUrlOrPageName, callback, error) {
-    var url = my._getDbpediaUrl(wikipediaUrlOrPageName);
+    const url = my._getDbpediaUrl(wikipediaUrlOrPageName);
     function onSuccess(data) {
-      var out = {
+      const out = {
         raw: data,
         dbpediaUrl: url,
         summary: null
@@ -50,8 +50,8 @@ var WIKIPEDIA = function() {
   // Convert the incoming URL or page name to a DBPedia url
   my._getDbpediaUrl = function(url) {
     if (url.indexOf('wikipedia')!=-1) {
-      var parts = url.split('/');
-      var title = parts[parts.length-1];
+      const parts = url.split('/');
+      const title = parts[parts.length-1];
       url = 'http://dbpedia.org/resource/' + title;
       return url;
     } else if (url.indexOf('dbpedia.org')!=-1) {
@@ -66,18 +66,14 @@ var WIKIPEDIA = function() {
   //
   // get raw RDF JSON for DBPedia resource from DBPedia SPARQL endpoint
   my.getRawJson = function(url, callback, error) {
-    var sparqlQuery = 'DESCRIBE <{{url}}>'.replace('{{url}}', url);
-    var jqxhr = $.ajax({
-      url: my.endpoint,
-      data: {
-        query: sparqlQuery,
-        // format: 'application/x-json+ld'
-        format: 'application/rdf+json'
-      },
-      dataType: 'json',
-      success: callback,
-      error: error
-    });
+    const sparqlQuery = 'DESCRIBE <{{url}}>'.replace('{{url}}', url);
+    fetch(my.endpoint + '?' + new URLSearchParams({
+      query: sparqlQuery,
+      format: 'application/rdf+json'
+    }))
+    .then(response => response.json())
+    .then(callback)
+    .catch(error);
   };
 
   // Standard RDF namespace prefixes for use in lookupProperty function
@@ -96,7 +92,7 @@ var WIKIPEDIA = function() {
   };
 
   my._expandNamespacePrefix = function(uriWithPrefix) {
-    for(var key in WIKIPEDIA.PREFIX) {
+    for(const key in WIKIPEDIA.PREFIX) {
       if (uriWithPrefix.indexOf(key + ':') === 0) {
         uriWithPrefix = WIKIPEDIA.PREFIX[key] + uriWithPrefix.slice(key.length + 1);
       }
@@ -119,8 +115,8 @@ var WIKIPEDIA = function() {
   //       ...
   my._lookupProperty = function(dict, property) {
     property = my._expandNamespacePrefix(property);
-    var values = dict[property];
-    for (var idx in values) {
+    const values = dict[property];
+    for (const idx in values) {
       // only take english values if lang is present
       if (!values[idx]['lang'] || values[idx].lang == 'en') {
         return values[idx].value;
@@ -133,12 +129,12 @@ var WIKIPEDIA = function() {
   // 
   //      extractSummary('http://dbpedia.org/resource/Rufus_Pollock', rdfJson object from dbpedia)
   my.extractSummary = function(subjectUri, rdfJson) {
-    var properties = rdfJson[subjectUri];
+    const properties = rdfJson[subjectUri];
     function lkup(attribs) {
       if (attribs instanceof Array) {
-        var out = [];
-        for (var idx in attribs) {
-          var _tmp = my._lookupProperty(properties, attribs[idx]);
+        const out = [];
+        for (const idx in attribs) {
+          const _tmp = my._lookupProperty(properties, attribs[idx]);
           if (_tmp) {
             out.push(_tmp);
           }
@@ -149,7 +145,7 @@ var WIKIPEDIA = function() {
       }
     }
 
-    var summaryInfo = {
+    const summaryInfo = {
       title: lkup('rdfs:label'),
       description: lkup('dbo:abstract'),
       summary: lkup('rdfs:comment'),
@@ -174,15 +170,15 @@ var WIKIPEDIA = function() {
 
     // getLastPartOfUrl
     function gl(url) {
-      var parts = url.split('/');
+      const parts = url.split('/');
       return parts[parts.length-1];
     }
 
-    var typeUri = my._expandNamespacePrefix('rdf:type');
-    var types = [];
-    var typeObjs = properties[typeUri];
-    for(var idx in typeObjs) {
-      var value = typeObjs[idx].value;
+    const typeUri = my._expandNamespacePrefix('rdf:type');
+    const types = [];
+    const typeObjs = properties[typeUri];
+    for(const idx in typeObjs) {
+      const value = typeObjs[idx].value;
       // let's be selective
       // ignore yago and owl stuff
       if (value.indexOf('dbpedia.org/ontology') != -1 || value.indexOf('schema.org') != -1 || value.indexOf('foaf/0.1') != -1) {
@@ -216,53 +212,91 @@ var WIKIPEDIA = function() {
 
   // Function to display Wikipedia information
   my.wikipop = function(e, article_title) {
-    var position = $(e.target).offset();
-    position.top -= 3;
+    const target = e.target;
+    const position = {
+      top: target.getBoundingClientRect().top + window.scrollY - 3,
+      left: target.getBoundingClientRect().left + window.scrollX
+    };
 
+    const infobox = document.getElementById("infobox");
+    
+    // Set fixed dimensions before displaying content
+    infobox.style.width = "60%"; // Set a fixed width
+    infobox.style.minWidth = "200px"; // Set a fixed width
+    infobox.style.minHeight = "300px"; // Set a max height
+    infobox.style.height = "fit-content"; // Set a max height
+    infobox.style.overflowY = "auto"; // Allow vertical scrolling if needed
+    
     // clear box
-    $('.thumbnail').css('display', "none");
-    $('.summary').text("");
-    $('.title').html('<h4>' + article_title + '</h4><span> (<a href="https://en.wikipedia.org/wiki/' + article_title.replace(/ /g, "_") + '" target="_blank">open in Wikipedia</a>)</span>');
+    document.querySelector('.thumbnail').style.display = "none";
+    document.querySelector('.summary').textContent = "";
+    document.querySelector('.title').innerHTML = `<h4>${article_title}</h4><span> (<a href="https://en.wikipedia.org/wiki/${article_title.replace(/ /g, "_")}" target="_blank">open in Wikipedia</a>)</span>`;
 
-    $("#infobox").css("display", "block").css(position);
-    $("#infobox").on(".mouseout", my.hide_wiki);
-    $(".index-list, .meta-value, .index-annis, h1").on("mouseover", my.hide_wiki);
+    infobox.style.display = "block";
+    infobox.style.top = position.top + 'px';
+    infobox.style.left = position.left + 'px';
+
+    // Remove previous event listeners to prevent duplicates
+    const newInfobox = infobox.cloneNode(true);
+    infobox.parentNode.replaceChild(newInfobox, infobox);
+    
+    // Add event listeners
+    let hideTimeout;
+    newInfobox.addEventListener("mouseout", function(e) {
+      // Check if the mouse is really leaving the infobox (not moving to a child element)
+      if (!newInfobox.contains(e.relatedTarget)) {
+        hideTimeout = setTimeout(my.hide_wiki, 300); // Add small delay before hiding
+      }
+    });
+    
+    newInfobox.addEventListener("mouseover", function() {
+      if (hideTimeout) {
+        clearTimeout(hideTimeout); // Cancel hiding if mouse returns
+      }
+    });
+
+    document.querySelectorAll(".index-list, .meta-value, .index-annis, h1").forEach(el => {
+      el.addEventListener("mouseover", my.hide_wiki);
+    });
 
     article_title = "https://en.wikipedia.org/wiki/" + article_title.replace(/ /g, "_");
-    $('.summary').text(""); // pre-emptively prepare missing entry response
+    document.querySelector('.summary').textContent = ""; // pre-emptively prepare missing entry response
 
-    var display = function(info) {
+    const display = function(info) {
       if (!info) {
-        $('.summary').text("[No Wikidata entry found for this entity]");
+        document.querySelector('.summary').textContent = "[No Wikidata entry found for this entity]";
         return true;
       }
-      var rawData = info.raw;
-      var summaryInfo = info.summary;
-      var properties = rawData[info.dbpediaUrl];
+      const rawData = info.raw;
+      const summaryInfo = info.summary;
+      const properties = rawData[info.dbpediaUrl];
 
-      $('.title').html('<h4>' + summaryInfo.title + '</h4><span> (<a href="' + article_title + '" target="_blank">open in Wikipedia</a>)</span>');
+      document.querySelector('.title').innerHTML = `<h4>${summaryInfo.title}</h4><span> (<a href="${article_title}" target="_blank">open in Wikipedia</a>)</span>`;
 
       if (summaryInfo.summary) {
-        $('.summary').text(summaryInfo["summary"]);
+        document.querySelector('.summary').textContent = summaryInfo["summary"];
       } else {
-        $('.summary').text("[No Wikidata entry found for this entity]");
+        document.querySelector('.summary').textContent = "[No Wikidata entry found for this entity]";
         return true;
       }
 
       if (summaryInfo.image) {
-        $('.thumbnail').attr('src', summaryInfo.image);
-        $('.thumbnail').css('display', "inline-block");
+        const thumbnail = document.querySelector('.thumbnail');
+        thumbnail.src = summaryInfo.image;
+        thumbnail.style.display = "inline-block";
       }
 
-      $("#map").css("display", "none");
-      var special_meta = "people";
+      const map = document.getElementById("map");
+      map.style.display = "none";
+      const special_meta = "people";
       if ('location' in summaryInfo) {
         if ('lat' in summaryInfo["location"] && 'lon' in summaryInfo["location"]) {
-          var lon = summaryInfo["location"].lon;
-          var lat = summaryInfo["location"].lat;
+          const lon = summaryInfo["location"].lon;
+          const lat = summaryInfo["location"].lat;
           if (lon && lat && special_meta == 'places') {
-            var map_url = "https://maps.google.com/maps?q=" + lat + "," + lon;
-            $("#map").html('<a href="' + map_url + '"><i class="fa fa-map-marker"></i> Map</a>').css("display", "inline-block");
+            const map_url = `https://maps.google.com/maps?q=${lat},${lon}`;
+            map.innerHTML = `<a href="${map_url}"><i class="fa fa-map-marker"></i> Map</a>`;
+            map.style.display = "inline-block";
           }
         }
       }
@@ -274,17 +308,19 @@ var WIKIPEDIA = function() {
   };
 
   my.hide_wiki = function() {
-    $("#infobox").css("display", "none");
+    document.getElementById("infobox").style.display = "none";
   };
 
   // Ensure the functions are called after the page content is loaded
-  $(document).ready(function() {
+  document.addEventListener('DOMContentLoaded', function() {
     // Example usage: Attach wikipop to elements with class 'wiki-link'
-    $('.wiki-link').on('mouseover', function(e) {
-      var article_title = $(this).data('title');
-      my.wikipop(e, article_title);
+    document.querySelectorAll('.wiki-link').forEach(el => {
+      el.addEventListener('mouseover', function(e) {
+        const article_title = this.dataset.title;
+        my.wikipop(e, article_title);
+      });
     });
   });
 
   return my;
-}();
+})();
