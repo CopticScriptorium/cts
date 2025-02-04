@@ -4,7 +4,7 @@ applications:
     source:
       root: "/meili_empty_root"
     container_profile: HIGH_MEMORY
-    stack: [ "meilisearch" ]
+    stack: [ "meilisearch@1.11.3" ]
     web:
       # Commands are run once after deployment to start the application process.
       # More information: https://docs.upsun.com/create-apps/app-reference.html#web-commands
