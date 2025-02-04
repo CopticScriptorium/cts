@@ -2,7 +2,7 @@ const WIKIPEDIA = (function() {
   const my = {};
 
   // DBPedia SPARQL endpoint
-  my.endpoint = 'http://dbpedia.org/sparql/';
+  my.endpoint = 'https://dbpedia.org/sparql/';
 
   // ### getData
   //
@@ -22,7 +22,7 @@ const WIKIPEDIA = (function() {
   //    {
   //      raw: the-raw-json-from-dbpedia,
   //      summary: a-cleaned-up-set-of-the-properties (see extractSummary),
-  //      dbpediaUrl: dbpedia-resource-url e.g. http://dbpedia.org/resource/World_War_II
+  //      dbpediaUrl: dbpedia-resource-url e.g. https://dbpedia.org/resource/World_War_II
   //    }
   //
   // Function is asynchronous as we have to call out to DBPedia to get the
@@ -52,12 +52,12 @@ const WIKIPEDIA = (function() {
     if (url.indexOf('wikipedia')!=-1) {
       const parts = url.split('/');
       const title = parts[parts.length-1];
-      url = 'http://dbpedia.org/resource/' + title;
+      url = 'https://dbpedia.org/resource/' + title;
       return url;
     } else if (url.indexOf('dbpedia.org')!=-1) {
       return url;
     } else {
-      url = 'http://dbpedia.org/resource/' + url.replace(/ /g, '_');
+      url = 'https://dbpedia.org/resource/' + url.replace(/ /g, '_');
       return url;
     }
   };
