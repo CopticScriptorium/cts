@@ -7,7 +7,7 @@ applications:
     stack: [ "meilisearch" ]
     hooks:
       build: |
-        wget https://github.com/yarnpkg/yarn/releases/download/v1.12.8/meilisearch-linux-amd64
+        wget https://github.com/meilisearch/meilisearch/releases/download/v1.12.8/meilisearch-linux-amd64
         mv meilisearch-linux-amd64 meilisearch
         chmod +x meilisearch 
     web:
