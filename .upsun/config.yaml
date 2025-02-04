@@ -5,13 +5,18 @@ applications:
       root: "/meili_empty_root"
     container_profile: HIGH_MEMORY
     stack: [ "meilisearch" ]
+    hooks:
+      build: |
+	wget https://github.com/yarnpkg/yarn/releases/download/v1.12.8/meilisearch-linux-amd64
+        mv meilisearch-linux-amd64 meilisearch
+        chmod +x meilisearch 
     web:
       # Commands are run once after deployment to start the application process.
       # More information: https://docs.upsun.com/create-apps/app-reference.html#web-commands
       commands:
         # The command to launch your app. If it terminates, it’s restarted immediately.
         # You can use the $PORT or the $SOCKET environment variable depending on the socket family of your upstream
-        start: "meilisearch --master-key=$PLATFORM_PROJECT_ENTROPY --http-addr=localhost:$PORT"
+        start: "./meilisearch --master-key=$PLATFORM_PROJECT_ENTROPY --http-addr=localhost:$PORT"
       # You can listen to a UNIX socket (unix) or a TCP port (tcp, default).
       # Whether your app should speak to the webserver via TCP or Unix socket. Defaults to tcp
       # More information: https://docs.upsun.com/create-apps/app-reference.html#where-to-listen
