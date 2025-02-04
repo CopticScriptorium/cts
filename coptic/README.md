@@ -29,7 +29,19 @@ The configuration of the import is done in code within the [](coptic/settings/ba
 # Installation
 
 Note: this app requires Python 3.10+. 
+## UV Installation (preferred)
 
+```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv python install 3.12
+uv sync
+```
+And then you can run the app with:
+```sh
+uv run python ./manage.py runserver
+```
+
+## Conda Installation
 0. We recommend you [create a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands):
 
 ```sh
@@ -50,6 +62,7 @@ pip freeze > requirements_django_5.txt
 ```
 
 To install the search-engine:
+(This has been tested with 1.11.3 and 1.12.8 )
 ```
 curl -L https://install.meilisearch.com | sh
 mv /usr/local/bin/meilisearch
@@ -89,6 +102,8 @@ The file-based cache is currently set both in development and production to the 
 
 
 ### 2.  Install requirements in production:
+
+** See the procedure above for using uv. This is the preferred method. ** 
 
 ```sh
  pip install -r requirements_django_5.txt
