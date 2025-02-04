@@ -467,12 +467,14 @@ def faceted_search(request):
         for value in values:
             filters.append(f'{key} = "{value}"')
     filter_query = " AND ".join(filters) if filters else None
-    fulltext_results=[]
+    fulltext_results = []
     processed_facets = []
-    totalHits=0
+    totalHits = 0
+    
+
     ft_hits = models.Text.faceted_search(query_text, filter_query)
     if ft_hits["hits"]:
-        totalHits=ft_hits["estimatedTotalHits"]
+        totalHits = ft_hits["estimatedTotalHits"]
         # Extract facet distribution from the search results
         facet_distribution = ft_hits.get("facetDistribution", {})
 
@@ -499,7 +501,7 @@ def faceted_search(request):
         for result in ft_hits["hits"]:
             logging.info(result["_matchesPosition"])
             # These are the attributes on which we have hits.
-            attrs=list(result["_matchesPosition"].keys())
+            attrs = list(result["_matchesPosition"].keys())
             if "text.normalized" in attrs:
                 hits = {"Normalized text": result["_formatted"]["text"][0]["normalized"]}
             elif "text.normalized_group" in attrs:

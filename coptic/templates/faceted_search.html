@@ -54,12 +54,23 @@
                     </a>
                     </div>
                     {% endfor %}
+                {% else %}
+                    {% if query_text %}
+                    <p class="ft_explanation">Searching for "{{query_text}}"</p>
+                    <div class="search-results-count">
+                        <p>No results found. Please try different search terms or adjust your filters.</p>
+                    </div>
+                    {% else %}
+                    <p class="ft_explanation">No search term entered. You can use the filters to the right to explore the texts or enter a search term in the box above.</p>
+                    <p class="ft_explanation">You may enter text both in English and Coptic (there is a small icon to the right of the search box to choose the active keyboard).</p>
+                    <p class="ft_explanation">You can also use the search box to search for URNs such as "urn:cts:copticLit:misc.acts_pilate.lacau_ed:9"</p>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
+        {% if facet_distribution %}
         <div class="search-column search-params">
             {# Display facet counts #}
-            {% if facet_distribution %}
                 <h4>Refine your search</h4>
                 {% for facet in facet_distribution %}
                     <div class="facet">
@@ -78,7 +89,7 @@
                         </ul>
                     </div>
                 {% endfor %}
-            {% endif %}
         </div>
+        {% endif %}
     </div>
 {% endblock %}
