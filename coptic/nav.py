@@ -27,6 +27,9 @@ def get_menu():
     header = header.replace('href="/', 'href="https://copticscriptorium.org/')
     header = header.replace('src="./', 'src="https://copticscriptorium.org/')
     header = header.replace('src="/', 'src="https://copticscriptorium.org/')
+    # make the corpora link active
+    header = header.replace('class="m-corpora"', 'class="m-corpora on"')
+    
     footer = footer.replace('src="./', 'src="https://copticscriptorium.org/')
     footer = footer.replace('src="/', 'src="https://copticscriptorium.org/')
     footer = re.sub(

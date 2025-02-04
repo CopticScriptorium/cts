@@ -7,6 +7,7 @@ from django.db.models import Case, F, IntegerField, Q, When
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models.functions import Lower
 from texts.search_fields import SearchField
+from texts.ft_search import Search
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.conf import settings
@@ -337,7 +338,7 @@ def _build_result_for_query_text(query_text, texts, explanation):
             )
         add_author_and_urn(text_results)
         results.append({"texts": text_results, "explanation": complete_explanation})
-    all_empty_explanation = f'<span class="meta_pair">{query_text}</span> in any field'
+    all_empty_explanation = f'<span class="meta_pair">{query_text}</span> in metadata'
     all_empty_explanation += " with " if explanation else ""
     all_empty_explanation += explanation
     return results, all_empty_explanation
@@ -388,12 +389,15 @@ def search(request):
     explanation = _build_explanation(params)
         
     fulltext_results=[]
+    totalHits=0
+    search_instance = Search()
     if "text" in params and query_text:
         results, all_empty_explanation = _build_result_for_query_text(
             query_text, texts, explanation
         )
         ft_hits=models.Text.search(query_text)
         if ft_hits["hits"]:
+            totalHits=ft_hits["estimatedTotalHits"] #FIXME: either estimatedTotalHits or totalHits (then we need to change the query)
             for result in ft_hits["hits"]:
                 logging.info(result["_matchesPosition"])
                 # These are the attributes on which we have hits.
@@ -408,20 +412,24 @@ def search(request):
                     hits = {"English Translation": result["_formatted"]["text"][0]["english_translation"]}
                 else:
                     # Create a simple key value dict for the results
-                    hits = {}
+                    hits = {}                    
                     for attr in attrs:
-                        name = attr.split('.')[-1]
-                        hits[name] = result["_formatted"]["text_meta"].get(name, '')
+                        if attr.count("slug") == 0:
+                        # We are not displaying the slug in the search results
+                        # Other than that we respect the settings in the ft_search.py
+                        # We need the slug for the url
+                            if attr.count(".") > 0:
+                                name = attr.split('.')[-1]
+                                hits[name] = result["_formatted"]["text_meta"].get(name, '')
+                            else:
+                                name = attr
+                                hits[name] = result["_formatted"].get(name, '')
                 logging.info(f'Attribute: {attrs} Hits: {hits}')
-
-                if hits:
-                    fulltext_results.append({
-                        "title": result["_formatted"]["title"],
-                        "slug": result["slug"],
-                        "corpus_slug": result["corpus_slug"],
-                        "hits": hits})
-
-                
+                fulltext_results.append({
+                    "title": result["_formatted"]["title"],
+                    "slug": result["slug"],
+                    "corpus_slug": result["corpus_slug"],
+                    "hits": hits})
     else:
         results = [{"texts": texts, "explanation": explanation}]
         all_empty_explanation = explanation
@@ -429,6 +437,7 @@ def search(request):
     context.update(
         {
             "results": results,
+            "totalHits": totalHits,
             "fulltext_results": fulltext_results,
             "form": SearchForm(request.GET),
             "no_query": not any(len(v) for v in request.GET.dict().values()),
@@ -459,34 +468,34 @@ def faceted_search(request):
             filters.append(f'{key} = "{value}"')
     filter_query = " AND ".join(filters) if filters else None
     fulltext_results=[]
-    ft_hits = models.Text.faceted_search(query_text, filter_query)
-    
-    # Extract facet distribution from the search results
-    facet_distribution = ft_hits.get("facetDistribution", {})
-
-    # Process facet distribution and active facets for display
     processed_facets = []
-    for facet, values in facet_distribution.items():
-        if not values:
-            continue
-        display_facet = facet.replace("text_meta.", "").replace("_", " ").capitalize()
-        facet_values = []
-        for value, count in values.items():
-            is_active = facet in active_facets and value in active_facets[facet]
-            facet_values.append({
-                "value": value,
-                "count": count,
-                "is_active": is_active,
-                "remove_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items() if k != facet or v != value])}",
-                "add_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items()])}&{facet}={value}"
-            })
-        if facet_values:
-            processed_facets.append({
-                "facet": display_facet,
-                "values": facet_values
-            })
-
+    totalHits=0
+    ft_hits = models.Text.faceted_search(query_text, filter_query)
     if ft_hits["hits"]:
+        totalHits=ft_hits["estimatedTotalHits"]
+        # Extract facet distribution from the search results
+        facet_distribution = ft_hits.get("facetDistribution", {})
+
+        # Process facet distribution and active facets for display
+        for facet, values in facet_distribution.items():
+            if not values:
+                continue
+            display_facet = facet.replace("text_meta.", "").replace("_", " ").capitalize()
+            facet_values = []
+            for value, count in values.items():
+                is_active = facet in active_facets and value in active_facets[facet]
+                facet_values.append({
+                    "value": value,
+                    "count": count,
+                    "is_active": is_active,
+                    "remove_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items() if k != facet or v != value])}",
+                    "add_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items()])}&{facet}={value}"
+                })
+            if facet_values:
+                processed_facets.append({
+                    "facet": display_facet,
+                    "values": facet_values
+                })
         for result in ft_hits["hits"]:
             logging.info(result["_matchesPosition"])
             # These are the attributes on which we have hits.
@@ -501,10 +510,18 @@ def faceted_search(request):
                 hits = {"English Translation": result["_formatted"]["text"][0]["english_translation"]}
             else:
                 # Create a simple key value dict for the results
-                hits = {}
+                hits = {}                    
                 for attr in attrs:
-                    name = attr.split('.')[-1]
-                    hits[name] = result["_formatted"]["text_meta"].get(name, '')
+                    if attr.count("slug") == 0:
+                    # We are not displaying the slug in the search results
+                    # Other than that we respect the settings in the ft_search.py
+                    # We need the slug for the url
+                        if attr.count(".") > 0:
+                            name = attr.split('.')[-1]
+                            hits[name] = result["_formatted"]["text_meta"].get(name, '')
+                        else:
+                            name = attr
+                            hits[name] = result["_formatted"].get(name, '')
             
             if "author" in result["text_meta"].keys():
                 author = result["text_meta"]["author"]
@@ -523,6 +540,7 @@ def faceted_search(request):
         "facet_distribution": processed_facets,
         "query_text": query_text,
         "active_facets": active_facets,
+        "totalHits": totalHits,
     })
 
     return render(request, "faceted_search.html", context)

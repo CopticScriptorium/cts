@@ -1,91 +1,65 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head prefix="og: http://ogp.me/ns#, cts: http://chs.harvard.edu/xmlns/cts">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>
-            {% block title %}Coptic Scriptorium{% endblock %}
-        </title>
-        {% block custom_css %}
-        <style>
-            {{visualization.css | safe}} 
-        </style>
-        {% endblock %}
-        <meta name="description" content="Coptic Scriptorium">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/static/css/styles.css">
-        <link rel="stylesheet" href="/static/css/vizbar.css">
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-              rel="stylesheet">
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="/favicon.ico" type="image/x-icon">
-        <link rel="icon" type="image/jpg" href="/static/img/logo.png">
-        <style>@import url('https://fonts.googleapis.com/css?family=Merriweather:400,300|Montserrat:400,700|Open+Sans:400,300,600|');</style>
-        <link href="https://fonts.googleapis.com/css?family=Asul:400,700"
-              rel="stylesheet">
-        <link rel="stylesheet" href="https://copticscriptorium.org/css/global.css">
-        <!-- Opengraph Meta -->
-        <meta property="og:title"
-              content="Coptic Scriptorium Text Server - {{ page_title }} ">
-        <meta property="og:locale" content="en_US">
-        <meta property="og:site_name" content="Coptic Scriptorium Text Server">
-        <meta property="og:image" content="/static/img/logo.jpg">
-        <!-- CTS Meta -->
-        <meta name="corpus_urn" property="cts:corpus_urn" content="" />
-        <meta name="mss_urn" property="cts:mss_urn" content="" />
-        <meta name="edition_urn" property="cts:edition_urn" content="" />
-        <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-55145025-2', 'auto');
-    ga('send', 'pageview');
-        </script>
-        <script src="/static/js/vizbar.js"></script>
-        <script src="/static/js/facet_toggle.js"></script>
-        <script src="/static/js/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
-        <script src="/static/js/wikipedia.js"></script>
-        <!-- script src="/static/js/coptic_dictionary.js"></script -->
-        <script src='https://s.keyman.com/kmw/engine/17.0.332/keymanweb.js'></script>
-        <script src='https://s.keyman.com/kmw/engine/17.0.332/kmwuitoggle.js'></script>
-        <script>
-        (function() {
-            keyman.init({attachType:'auto'});
-            keyman.addKeyboards('@cop','@cop-copt','@en');
-        })();
-        </script>
-        <script>
-            // Scroll down to the first exact match for the query term
-            document.addEventListener("DOMContentLoaded", () => {
-              text_hash = document.location.hash.split("#text=") || [];
-              if (text_hash.length > 1) {
-               console.log("Find:" + decodeURIComponent(text_hash[1]));
-               window.find(decodeURIComponent(text_hash[1]));
-              }
-            });
-        </script>
-    </head>
-    <body class="text-server">
-        <!-- coptic scriptorium header with hyperlinks -->
-        {% include "nav.html" %}
-        <!-- cts-specific header with index links and search bar -->
-        {% include "header.html" %}
-        <!-- Primary grid-->
-        <div class="grid primary">
-            <main class="main" role="main">
-                <div class="content primary">
-                    <div class="grid inner">
-                        {% block content %}{% endblock %}
-                    </div>
-                </div>
-            </main>
+  <head prefix="og: http://ogp.me/ns#, cts: http://chs.harvard.edu/xmlns/cts">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>
+      {% block title %}
+        Coptic Scriptorium
+      {% endblock %}
+    </title>
+    <meta name="description" content="Coptic Scriptorium" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Opengraph Meta -->
+    <meta property="og:title" content="Coptic Scriptorium Text Server - {{ page_title }} " />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Coptic Scriptorium Text Server" />
+    <meta property="og:image" content="/static/img/logo.jpg" />
+    <!-- CTS Meta -->
+    <!-- FIXME: we probably need these in the view.py -->
+    <meta name="corpus_urn" property="cts:corpus_urn" content="{{ corpus_urn }}" />
+    <meta name="mss_urn" property="cts:mss_urn" content="{{ mss_urn }}" />
+    <meta name="edition_urn" property="cts:edition_urn" content="{{ edition_urn }}" />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    {% block custom_css %}
+      <style></style>
+    {% endblock %}
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/jpg" href="/static/img/logo.png" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Asul:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+    </style>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://copticscriptorium.org/css/global.css" />
+    <!-- FIXME: Are we using jQuery at all? Oh maybe wikipedia.js? or vizbar.js? -->
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/ga.js"></script>
+    <script src="/static/js/vizbar.js"></script>
+    <script src="/static/js/search_interface.js"></script>
+    <script src="/static/js/wikipedia.js"></script>
+    <script src="https://s.keyman.com/kmw/engine/17.0.332/keymanweb.js"></script>
+    <!-- script src='https://s.keyman.com/kmw/engine/17.0.332/kmwuitoggle.js'></script -->
+    <script src="/static/js/keyboard.js"></script>
+    <!-- script src="/static/js/coptic_dictionary.js"></script -->
+  </head>
+  <body class="text-server">
+    {% include 'nav.html' %}
+    <!-- cts-specific header with index links and search bar -->
+    {% include 'header.html' %}
+    <!-- Primary grid -->
+    <div class="grid primary">
+      <main class="main" role="main">
+        <div class="content primary">
+          <div class="grid inner">
+            {% block content %}
+            {% endblock %}
+          </div>
         </div>
-        {% include "footer.html" %}
-        <script>$(".m-corpora").addClass('on');</script>
-        {% if 'nalytic' in visualization.visualization_format.title %}<script>add_titles();</script>{% endif %}
-    </body>
+      </main>
+    </div>
+    {% include 'footer.html' %}
+    {% include 'preferences.html' %}
+  </body>
 </html>

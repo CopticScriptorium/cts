@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 import coptic.views as views
 from django.conf import settings
 from django.conf.urls.static import static
+from texts.ft_search import Search
 
 
 def _redirect_citation_urls(request, url_except_data_type, data_type):
@@ -41,13 +42,15 @@ def _redirect_citation_urls(request, url_except_data_type, data_type):
 
     return redirect(new_loc)
 
-
+search = Search()
+if search.search_available:
+    search_path = path("search/", views.faceted_search, name="search")
+else:
+    search_path = path("search/", views.search, name="search")
+    
 urlpatterns = [
-    path('grappelli/', include("grappelli.urls")),
-    path('admin/', admin.site.urls),
-    # Using path() for modern URL patterns
-    path("search/", views.search, name="search"),
-    path("faceted_search/", views.faceted_search, name="faceted_search"),
+    # Using path() for modern URL patterns    
+    search_path,
     path("index/<str:special_meta>/", views.index_view, name="index"),
     path("texts/<slug:corpus>/", views.corpus_view, name="corpus"),
     path("texts/<slug:corpus>/<slug:text>/", views.text_view, name="text"),
