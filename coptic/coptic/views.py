@@ -464,6 +464,8 @@ def faceted_search(request):
         if key == "text":
             continue
         active_facets[key] = values
+        if not key.startswith("text_meta."):
+            key=f"text_meta.{key}"
         for value in values:
             filters.append(f'{key} = "{value}"')
     filter_query = " AND ".join(filters) if filters else None

@@ -874,6 +874,24 @@ kmw-osk-frame {
   margin-bottom: auto;
 }
 
+.ft_filters {
+  font-weight: 200;
+  font-size: medium;
+  line-height: 2.5;
+  margin-top: 4px;
+  margin-bottom: auto;
+}
+
+.facet_label {
+  font-weight: 900;
+  padding: 0px 4px;
+}
+
+.facet_value {
+  font-weight: 100;
+  padding: 0px 4px;
+  margin-right: 4px;
+}
 
 .search-column .expandable-list {
   margin-top: 0px;

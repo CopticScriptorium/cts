@@ -6,24 +6,28 @@
         <div class="search-column search-results">
             <div class="fulltext_results">
                 {% if fulltext_results %}
-                     {% if query_text %}
-                     <p class="ft_explanation">Searching for "{{query_text}}"</p>
-                     <div class="search-results-count">
-                         Found <strong>{{ totalHits }}</strong> result{% if fulltext_results|length != 1 %}s{% endif %}
-                     </div>
+                     {% if query_text or facet_distribution %}
+                        {% if query_text %}
+                            <p class="ft_explanation">Searching for "{{query_text}}"</p>
                         {% else %}
-                        <p class="ft_explanation">No search term entered. You can use the filters to the right to explore the texts or enter a search term in the box above. </p>
-                        <p class="ft_explanation">You may  enter text both in English and Coptic (there is a small icon to the right of the search box to choose the active keyboard).</p>
-                        <p class="ft_explanation">You can also use the search box to search for URNs such as "urn:cts:copticLit:misc.acts_pilate.lacau_ed:9"</p>
+                            <p class="ft_explanation">No search term entered. You can use the filters to the right to explore the texts or enter a search term in the box above. </p>
+                            <p class="ft_explanation">You may  enter text both in English and Coptic (You can activate the Coptic keyboard by clicking on "Preferences".).</p>
+                            <p class="ft_explanation">You can also use the search box to search for URNs such as "urn:cts:copticLit:misc.acts_pilate.lacau_ed:9"</p>
+                        {% endif %}
+                     <div class="search-results-count">
+                        <strong>{{ totalHits }}</strong> text{% if fulltext_results|length != 1 %}s{% endif %}
+                     </div>
                         {% endif %}
                         {% if facet_distribution %}
-                        <p class="ft_explanation">Active filters: 
+                        <p class="ft_filters">
                             {% for facet in facet_distribution %}
                                         {% for value in facet.values %}
-                                            {% if value.is_active %}
-                                                <span>{{ value.value }} ({{ value.count }})<a class="remove_facet" href="{{ value.remove_url }}">✖</a>
-                                                </span>
+                                            {% if value.is_active %}<div>
+                                                <span class="facet_label">{{ facet.facet }}: </span>
+                                                <span class="facet_value">{{ value.value }} ({{ value.count }})<a class="remove_facet" href="{{ value.remove_url }}">✖</a>
+                                                </span></div>
                                             {% endif %}
+                                        
                                         {% endfor %}
                             {% endfor %}
                         {% endif %}
