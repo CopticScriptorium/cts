@@ -41,4 +41,4 @@ def get_nested_filter(dict, key):
     try:
         return dict.get(key)
     except:
-        return None
+        return ""

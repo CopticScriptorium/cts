@@ -285,6 +285,9 @@ class Text(models.Model):
         }
 
         # Process text_meta to handle duplicate keys
+        # FIXME Actually it could be simpler to just use a flat dictionary
+        # here and instead of putting values under text_meta have text.author
+        # etc directly. There are possibly some collisions with the corpus?
         text_meta = self.text_meta.values_list("name", "value")
         meta_dict = {}
         #FIXME : it seems the structure can still be
