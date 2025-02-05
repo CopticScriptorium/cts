@@ -449,105 +449,155 @@ def search(request):
 
     return render(request, "search.html", context)
 
+def _build_remove_query_url(request):
+    """Build URL for removing the query text while preserving other parameters."""
+    params = request.GET.copy()
+    if 'text' in params:
+        del params['text']
+    return f"?{params.urlencode()}"
+
 def faceted_search(request):
     context = _base_context()
     params = dict(request.GET.lists())
-    query_text = params["text"][0] if "text" in params and params["text"] > [''] else ""
-    if query_text:
-        urn_redirect = handle_urn(query_text)
-        if urn_redirect:
-            return urn_redirect
-    # Build the filter query
+    query_text = params.get("text", [""])[0].strip()
+
+    if query_text and (urn_redirect := handle_urn(query_text)):
+        return urn_redirect
+
+    # Build filter query and track active facets
     filters = []
     active_facets = {}
+    facet_counts = {}
+    remove_facet_urls = {}
+
     for key, values in params.items():
         if key == "text":
             continue
         active_facets[key] = values
         if not key.startswith("text_meta."):
-            key=f"text_meta.{key}"
+            search_key = f"text_meta.{key}"
+        else:
+            search_key = key
+            
         for value in values:
-            filters.append(f'{key} = "{value}"')
+            filters.append(f'{search_key} = "{value}"')
+            
+            # Prepare removal URLs for each facet value
+            if key not in remove_facet_urls:
+                remove_facet_urls[key] = {}
+            remove_facet_urls[key][value] = _build_remove_facet_url(request, key, value)
+
     filter_query = " AND ".join(filters) if filters else None
-    fulltext_results = []
-    processed_facets = []
-    totalHits = 0
-    
 
+    # Perform search
+    search_instance = Search()
     ft_hits = models.Text.faceted_search(query_text, filter_query)
-    if ft_hits["hits"]:
-        totalHits = ft_hits["estimatedTotalHits"]
-        # Extract facet distribution from the search results
-        facet_distribution = ft_hits.get("facetDistribution", {})
+    
+    # Process search results
+    fulltext_results = []
+    facets = []
+    has_results = bool(ft_hits.get("hits"))
+    total_hits = ft_hits.get("estimatedTotalHits", 0) if has_results else 0
 
-        # Process facet distribution and active facets for display
-        for facet, values in facet_distribution.items():
+    if has_results:
+        # Process facet distribution
+        facet_distribution = ft_hits.get("facetDistribution", {})
+        
+        for facet_name, values in facet_distribution.items():
             if not values:
                 continue
-            display_facet = facet.replace("text_meta.", "").replace("_", " ").capitalize()
+                
+            display_name = facet_name.replace("text_meta.", "").replace("_", " ").capitalize()
             facet_values = []
+            
+            # Store counts for active facets display
+            if facet_name not in facet_counts:
+                facet_counts[facet_name] = {}
+                
             for value, count in values.items():
-                is_active = facet in active_facets and value in active_facets[facet]
+                facet_counts[facet_name][value] = count
+                is_active = facet_name in active_facets and value in active_facets[facet_name]
+                
                 facet_values.append({
                     "value": value,
                     "count": count,
                     "is_active": is_active,
-                    "remove_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items() if k != facet or v != value])}",
-                    "add_url": f"?{'&'.join([f'{k}={v}' for k, v in request.GET.items()])}&{facet}={value}"
+                    "remove_url": _build_remove_facet_url(request, facet_name, value),
+                    "add_url": _build_add_facet_url(request, facet_name, value)
                 })
+
             if facet_values:
-                processed_facets.append({
-                    "facet": display_facet,
-                    "values": facet_values
+                facets.append({
+                    "name": display_name,
+                    "values": sorted(facet_values, key=lambda x: (-x["count"], x["value"]))
                 })
-        for result in ft_hits["hits"]:
-            logging.info(result["_matchesPosition"])
-            # These are the attributes on which we have hits.
-            attrs = list(result["_matchesPosition"].keys())
-            if "text.normalized" in attrs:
-                hits = {"Normalized text": result["_formatted"]["text"][0]["normalized"]}
-            elif "text.normalized_group" in attrs:
-                hits = {"Normalized text group": result["_formatted"]["text"][0]["normalized_group"]}
-            elif "text.lemmatized" in attrs:
-                hits = {"Lemmatized": result["_formatted"]["text"][0]["lemmatized"]}
-            elif "text.english_translation" in attrs:
-                hits = {"English Translation": result["_formatted"]["text"][0]["english_translation"]}
-            else:
-                # Create a simple key value dict for the results
-                hits = {}                    
-                for attr in attrs:
-                    if attr.count("slug") == 0:
-                    # We are not displaying the slug in the search results
-                    # Other than that we respect the settings in the ft_search.py
-                    # We need the slug for the url
-                        if attr.count(".") > 0:
-                            name = attr.split('.')[-1]
-                            hits[name] = result["_formatted"]["text_meta"].get(name, '')
-                        else:
-                            name = attr
-                            hits[name] = result["_formatted"].get(name, '')
-            
-            if "author" in result["text_meta"].keys():
-                author = result["text_meta"]["author"]
-            else:    
-                author = ""
-            fulltext_results.append({
-                "title": result["_formatted"]["title"],
-                "author": author,
-                "urn": result["text_meta"]["document_cts_urn"],
-                "slug": result["slug"],
-                "corpus_slug": result["corpus_slug"],
-                "hits": hits})
-                
+
+        # Process search hits
+        fulltext_results = _process_search_hits(ft_hits["hits"])
+
     context.update({
         "fulltext_results": fulltext_results,
-        "facet_distribution": processed_facets,
+        "facets": facets,
         "query_text": query_text,
         "active_facets": active_facets,
-        "totalHits": totalHits,
+        "facet_counts": facet_counts,
+        "remove_facet_urls": remove_facet_urls,
+        "remove_query_url": _build_remove_query_url(request),
+        "totalHits": total_hits,
+        "has_results": has_results,
     })
 
     return render(request, "faceted_search.html", context)
+
+def _build_remove_facet_url(request, facet, value):
+    """Build URL for removing a facet value from the current search."""
+    params = request.GET.copy()
+    facet_values = params.getlist(facet)
+    # Only attempt to remove if the value exists
+    if value in facet_values:
+        facet_values.remove(value)
+    params.setlist(facet, facet_values)
+    return f"?{params.urlencode()}"
+
+def _build_add_facet_url(request, facet, value):
+    """Build URL for adding a facet value to the current search."""
+    params = request.GET.copy()
+    params.appendlist(facet, value)
+    return f"?{params.urlencode()}"
+
+def _process_search_hits(hits):
+    """Process search hits into a consistent format."""
+    results = []
+    for hit in hits:
+        # Get hit positions and determine which fields have matches
+        attrs = list(hit["_matchesPosition"].keys())
+        
+        # Process hits based on matched fields
+        hits_dict = {}
+        if "text.normalized" in attrs:
+            hits_dict["Normalized text"] = hit["_formatted"]["text"][0]["normalized"]
+        elif "text.normalized_group" in attrs:
+            hits_dict["Normalized text group"] = hit["_formatted"]["text"][0]["normalized_group"]
+        elif "text.lemmatized" in attrs:
+            hits_dict["Lemmatized"] = hit["_formatted"]["text"][0]["lemmatized"]
+        elif "text.english_translation" in attrs:
+            hits_dict["English Translation"] = hit["_formatted"]["text"][0]["english_translation"]
+        else:
+            for attr in attrs:
+                if "slug" not in attr:
+                    name = attr.split('.')[-1] if '.' in attr else attr
+                    hits_dict[name] = hit["_formatted"]["text_meta"].get(name, '') if '.' in attr else hit["_formatted"].get(name, '')
+
+        results.append({
+            "title": hit["_formatted"]["title"],
+            "author": hit["text_meta"].get("author", ""),
+            "urn": hit["text_meta"]["document_cts_urn"],
+            "slug": hit["slug"],
+            "corpus_slug": hit["corpus_slug"],
+            "hits": hits_dict
+        })
+    
+    return results
 
 def add_author_and_urn(texts):
     for text in texts:

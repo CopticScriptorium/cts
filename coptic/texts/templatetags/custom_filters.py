@@ -29,6 +29,13 @@ def isinstance_filter(val, instance_type):
 @register.filter(name="remove_dot_prefix")
 def remove_dot_prefix_filter(value):
     """
-    Remove do prefix from a string if it exists.
+    Remove dot prefix from a string if it exists.
     """
     return value.split(".")[-1]
+
+@register.filter(name="get_nested")
+def get_nested_filter(dict, key):
+    """
+    Get a nested value from a dictionary.
+    """
+    return dict.get(key)

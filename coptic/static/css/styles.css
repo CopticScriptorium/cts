@@ -893,6 +893,14 @@ kmw-osk-frame {
   margin-right: 4px;
 }
 
+.start-over {
+  color: rgb(104, 1, 1);
+  background-color: var(--secondary-color);
+  padding: 0 6px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
 .search-column .expandable-list {
   margin-top: 0px;
   padding: 0px;

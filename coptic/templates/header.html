@@ -32,6 +32,13 @@
                    name="text"
                    value="{{query_text}}"
                    placeholder="Query (&quot;ⲃⲏⲥⲁ&quot; 'besa' or URN...)">
+            {% if active_facets %}
+                {% for facet, values in active_facets.items %}
+                    {% for value in values %}
+                        <input type="hidden" name="{{ facet }}" value="{{ value }}">
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
             <img src="/static/img/magnifying_glass_icon.svg"
                  width="28"
                  height="28"
