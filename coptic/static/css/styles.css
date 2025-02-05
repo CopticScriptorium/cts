@@ -604,7 +604,9 @@ p.description-text {
   background-color: var(--secondary-color);
   padding: 0 6px;
   border-radius: 12px;
+  display: inline-block;
   white-space: nowrap;
+  margin-top: 4px;
 }
 
 .search-results-section {
@@ -870,7 +872,7 @@ kmw-osk-frame {
 .ft_explanation {
   font-weight: 100;
   font-size: small;
-  line-height: 1.5;
+  line-height: 2.5;
   margin-bottom: auto;
 }
 
@@ -935,7 +937,10 @@ kmw-osk-frame {
   padding-left: 4px;
   padding-right: 4px;
 }
-
+a.remove_facet:hover {
+  color: rgb(205, 87, 18);
+  text-decoration: none;
+}
 /* Preferences Modal Styles */
 .modal {
   display: none;
@@ -1088,4 +1093,35 @@ kmw-osk-frame {
 
 .kmw-keyboard-visible {
   display: block;
+}
+.pagination {
+  margin: 20px 0;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.pagination-button {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 0 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+}
+
+.pagination-button:hover {
+  background-color: #f5f5f5;
+}
+
+.pagination-info {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 0 4px;
+  /* Ensure it stays centered even when prev/next buttons are missing */
+  flex: 1;
+  text-align: center;
 }

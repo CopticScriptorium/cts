@@ -202,7 +202,7 @@ class Search:
             },
         )
 
-    def faceted_search(self, keyword, filters=None):
+    def faceted_search(self, keyword, filters=None, page=1, hits_per_page=4):
         search_params = {
             "showMatchesPosition": True,
             "attributesToCrop": [
@@ -231,6 +231,8 @@ class Search:
                 "text_meta.translation",
                 "text_meta.arabic_translation",
             ],
+            "page": page,
+            "hitsPerPage": hits_per_page,
         }
         if filters:
             search_params["filter"] = filters

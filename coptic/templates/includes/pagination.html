@@ -1,0 +1,15 @@
+{% if total_pages > 1 %}
+  <div class="pagination">
+    {% if has_previous %}
+      <a href="?{% for key, values in request.GET.lists %}{% if key != 'page' %}{% for value in values %}{{ key }}={{ value|urlencode }}&{% endfor %}{% endif %}{% endfor %}page={{ previous_page }}" class="pagination-button">&laquo; Previous</a>
+    {% endif %}
+
+    <span class="pagination-info">
+      Page {{ current_page }} of {{ total_pages }}
+    </span>
+
+    {% if has_next %}
+      <a href="?{% for key, values in request.GET.lists %}{% if key != 'page' %}{% for value in values %}{{ key }}={{ value|urlencode }}&{% endfor %}{% endif %}{% endfor %}page={{ next_page }}" class="pagination-button">Next &raquo;</a>
+    {% endif %}
+  </div>
+{% endif %} 

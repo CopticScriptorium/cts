@@ -454,13 +454,20 @@ def _build_remove_query_url(request):
     params = request.GET.copy()
     if 'text' in params:
         del params['text']
+    # Remove page parameter to reset pagination
+    if 'page' in params:
+        del params['page']
     return f"?{params.urlencode()}"
 
 def faceted_search(request):
     context = _base_context()
     params = dict(request.GET.lists())
     query_text = params.get("text", [""])[0].strip()
-
+    
+    # Get pagination parameters
+    page = int(request.GET.get('page', '1'))
+    hits_per_page = 20  # You can adjust this number
+    
     if query_text and (urn_redirect := handle_urn(query_text)):
         return urn_redirect
 
@@ -471,7 +478,7 @@ def faceted_search(request):
     remove_facet_urls = {}
 
     for key, values in params.items():
-        if key == "text":
+        if key in ["text", "page"]:  # Skip pagination parameter
             continue
         active_facets[key] = values
         if not key.startswith("text_meta."):
@@ -489,15 +496,21 @@ def faceted_search(request):
 
     filter_query = " AND ".join(filters) if filters else None
 
-    # Perform search
+    # Create search instance and perform search with pagination
     search_instance = Search()
-    ft_hits = models.Text.faceted_search(query_text, filter_query)
+    ft_hits = search_instance.faceted_search(
+        query_text, 
+        filters=filter_query,
+        page=page,
+        hits_per_page=hits_per_page
+    )
     
     # Process search results
     fulltext_results = []
     facets = []
     has_results = bool(ft_hits.get("hits"))
-    total_hits = ft_hits.get("estimatedTotalHits", 0) if has_results else 0
+    total_hits = ft_hits.get("totalHits", 0) if has_results else 0
+    total_pages = ft_hits.get("totalPages", 1) if has_results else 1
 
     if has_results:
         # Process facet distribution
@@ -545,6 +558,13 @@ def faceted_search(request):
         "remove_query_url": _build_remove_query_url(request),
         "totalHits": total_hits,
         "has_results": has_results,
+        # Add pagination context
+        "current_page": page,
+        "total_pages": total_pages,
+        "has_previous": page > 1,
+        "has_next": page < total_pages,
+        "previous_page": page - 1,
+        "next_page": page + 1,
     })
 
     return render(request, "faceted_search.html", context)
@@ -557,12 +577,18 @@ def _build_remove_facet_url(request, facet, value):
     if value in facet_values:
         facet_values.remove(value)
     params.setlist(facet, facet_values)
+    # Remove page parameter to reset pagination
+    if 'page' in params:
+        del params['page']
     return f"?{params.urlencode()}"
 
 def _build_add_facet_url(request, facet, value):
     """Build URL for adding a facet value to the current search."""
     params = request.GET.copy()
     params.appendlist(facet, value)
+    # Remove page parameter to reset pagination
+    if 'page' in params:
+        del params['page']
     return f"?{params.urlencode()}"
 
 def _process_search_hits(hits):

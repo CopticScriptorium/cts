@@ -15,7 +15,6 @@
         {% endif %}
 
         {# Search results #}
-
         <h4 class="explanation">
           {{ totalHits }} result{% if totalHits != 1 %}s{% endif %}
           {# plural s #}
@@ -28,17 +27,20 @@
           {% if has_results and active_facets %}
             {% for facet, values in active_facets.items %}
               {% for value in values %}
-                &nbsp;
+                 &nbsp; 
                 <span class="meta_pair">{{ facet|remove_dot_prefix|title }}</span> =
                 <span class="meta_pair">
                   {{ value|striptags }} ({{ facet_counts|get_nested:facet|get_nested:value }})
-                  <a class="remove_facet" href="{{ remove_facet_urls|get_nested:facet|get_nested:value }}">✖</a>&nbsp;
+                  <a class="remove_facet" href="{{ remove_facet_urls|get_nested:facet|get_nested:value }}">✖</a> &nbsp; 
                 </span>
               {% endfor %}
             {% endfor %}
           {% endif %}
         </h4>
         {% if has_results %}
+          {# Top pagination #}
+          {% include "includes/pagination.html" %}
+
           {% for result in fulltext_results %}
             <div class="search-results-row">
               <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}/analytic#text={{ query_text|urlencode }}" class="text-link">
@@ -62,6 +64,9 @@
               </a>
             </div>
           {% endfor %}
+
+          {# Bottom pagination #}
+          {% include "includes/pagination.html" %}
         {% endif %}
       </div>
     </div>
