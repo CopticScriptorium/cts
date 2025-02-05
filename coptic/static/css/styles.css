@@ -1134,3 +1134,56 @@ a.remove_facet:hover {
   flex: 1;
   text-align: center;
 }
+
+/* Scoped to fulltext results explanation */
+.fulltext_results .explanation summary {
+  list-style: none;
+  cursor: help;
+}
+
+.fulltext_results .explanation summary::-webkit-details-marker {
+  display: none;
+}
+
+.fulltext_results .explanation details {
+  position: relative;
+  display: inline-block;
+}
+
+.fulltext_results .explanation details > p {
+  font-size: medium;
+  font-weight: 100;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  padding: 1em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  min-width: 500%;
+  max-width: 1200px;
+  z-index: 1000;
+}
+
+.fulltext_results .explanation details[open] > p {
+  animation: show-on-load 0.1s ease-out;
+}
+
+@keyframes show-on-load {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fulltext_results .explanation details:not(:hover) > *:not(summary) {
+  display: none;
+}
+
+.fulltext_results .explanation details:hover > *:not(summary) {
+  display: block;
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

@@ -7,22 +7,33 @@
   <div class="search-container">
     <div class="search-column search-results">
       <div class="fulltext_results">
-        {# No search term entered #}
-        {% if not query_text and not active_facets %}
-          <p class="ft_explanation">No search term entered. You can use the filters to the right to explore the texts or enter a search term in the box above.</p>
-          <p class="ft_explanation">You may enter text both in English and Coptic (activate the Coptic keyboard by clicking on "Preferences").</p>
-          <p class="ft_explanation">You can also use the search box to access URNs such as "urn:cts:copticLit:misc.acts_pilate.lacau_ed:9"</p>
-        {% endif %}
-
-        {# Search results #}
         <h4 class="explanation">
-          {{ totalHits }} result{% if totalHits != 1 %}s{% endif %}
+        <details open>
+            <summary>
+          {{ totalHits }} result{% if totalHits != 1 %}s{% endif %} <i class="fa fa-info-circle" aria-hidden="true"></i>
           {# plural s #}
-          {% if not has_results %}
-          <a class="start-over" href="/search">click here</a> to start over. Use "✖" to remove the search term or filter. You can also enable fuzzy matches in the Preferences. 
-          {% endif %}
+            </summary>
+        {% if not query_text and not active_facets %}
+        {# No search term entered #}
+        <p>
+        No search term entered. You can use the filters to the right to explore the texts or enter a search term in the box above. 
+        You may enter text both in English and Coptic (activate the Coptic keyboard by clicking on "<a href="#" id="save-preferences-button">Preferences</a>"). <br> 
+        You can use negative search terms such as <i>"ⲓⲱⲁⲛⲛⲏⲥ" -"ⲡⲉⲧⲣⲟⲥ"</i> to exclude texts containing the second term. <br>
+        The search works on all metadata so you can search for <i> ⲉⲕⲕⲗⲏⲥⲓⲁ -Alexandria </i>to exclude texts about Alexandria.<br>
+        You can also use the search box to access URNs such as <i>urn:cts:copticLit:misc.acts_pilate.lacau_ed:9</i>
+        </p>
+        {% else %}
+        <p>
+        Use "✖" to remove the search term or filter. You can also enable fuzzy matches in the Preferences. 
+        </p>
+        {% endif %}
+        </details>
+      {# Search results #}
           {% if query_text %}
-            for <span class="meta_pair">Query</span> = <span class="meta_pair">{{ query_text }} <a class="remove_facet" href="{{ remove_query_url }}">✖</a></span>
+            for <span class="meta_pair">Query</span> = <span class="meta_pair">{{ query_text }} <a class="remove_facet" href="{{ remove_query_url }}">✖</a></span> &nbsp; 
+          {% endif %}
+          {% if not has_results %}
+          <a class="start-over" href="/search">Click here</a> to start-over. Use "✖" to remove the search term or filter. You can also enable fuzzy matches in the Preferences. 
           {% endif %}
           {% if has_results and active_facets %}
             {% for facet, values in active_facets.items %}
