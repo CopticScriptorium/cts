@@ -38,4 +38,7 @@ def get_nested_filter(dict, key):
     """
     Get a nested value from a dictionary.
     """
-    return dict.get(key)
+    try:
+        return dict.get(key)
+    except:
+        return None
