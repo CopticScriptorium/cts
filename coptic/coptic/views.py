@@ -596,18 +596,26 @@ def _process_search_hits(hits):
     results = []
     for hit in hits:
         # Get hit positions and determine which fields have matches
-        attrs = list(hit["_matchesPosition"].keys())
+        mathches_positions= hit["_matchesPosition"]
+        attrs = list(mathches_positions.keys())
+        # The display logic should stay the same we can possibly output the indice an additional property (it should represent the paragraph number)
+        # we can also output the indice as a property (it should represent the paragraph number)
+        
         
         # Process hits based on matched fields
         hits_dict = {}
         if "text.normalized" in attrs:
-            hits_dict["Normalized text"] = hit["_formatted"]["text"][0]["normalized"]
+            indice = mathches_positions.get("text.normalized")[0]["indices"][0]
+            hits_dict["Normalized text"] = hit["_formatted"]["text"][indice]["normalized"]
         elif "text.normalized_group" in attrs:
-            hits_dict["Normalized text group"] = hit["_formatted"]["text"][0]["normalized_group"]
+            indice = mathches_positions.get("text.normalized_group")[0]["indices"][0]
+            hits_dict["Normalized text group"] = hit["_formatted"]["text"][indice]["normalized_group"]
         elif "text.lemmatized" in attrs:
-            hits_dict["Lemmatized"] = hit["_formatted"]["text"][0]["lemmatized"]
+            indice = mathches_positions.get("text.lemmatized")[0]["indices"][0]
+            hits_dict["Lemmatized"] = hit["_formatted"]["text"][indice]["lemmatized"]
         elif "text.english_translation" in attrs:
-            hits_dict["English Translation"] = hit["_formatted"]["text"][0]["english_translation"]
+            indice = mathches_positions.get("text.english_translation")[0]["indices"][0]
+            hits_dict["English Translation"] = hit["_formatted"]["text"][indice]["english_translation"]
         else:
             for attr in attrs:
                 if "slug" not in attr:

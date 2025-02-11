@@ -55,22 +55,26 @@
           {% for result in fulltext_results %}
             <div class="search-results-row">
               <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}/analytic#text={{ query_text|urlencode }}" class="text-link">
+                {% autoescape off %}
                 <h4><span class="text-title">{{ result.title }}</span></h4>
                 <div class="result">
                   <div>
                     <span class="text-author">{{ result.author }}</span>
                     <span class="text-urn">{{ result.urn }}</span>
                   </div>
+                  
                   {% for field, hits in result.hits.items %}
                     <div>
                       <span class="fullt_text_field_hit">Found in {{ field|safe }}:</span>
                       {% if hits|isinstance:'str' %}
                         {{ hits|safe }}
                       {% else %}
-                        {{ hits|join:', '|safe }}
+                      
+                        {{ hits | join:', '|safe }}
                       {% endif %}
                     </div>
                   {% endfor %}
+                  {% endautoescape %}
                 </div>
               </a>
             </div>
