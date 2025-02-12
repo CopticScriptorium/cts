@@ -172,6 +172,7 @@ class Text(models.Model):
     tt_dir_tree_id = models.CharField(max_length=40)
     document_cts_urn = models.CharField(max_length=80)
     content=models.TextField(default="")
+    order = models.IntegerField(default=999999)
 
     @classmethod
     @cache_memoize(settings.CACHE_TTL)

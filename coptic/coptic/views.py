@@ -37,35 +37,12 @@ def home_view(request):
 def corpus_view(request, corpus=None):
     corpus_object = get_object_or_404(models.Corpus, slug=corpus)
 
-    # This is almost what we need, but because of some ORM quirks (LEFT OUTER JOINs where we needed INNER JOINs)
-    # every text with a valid `order` metadatum will appear twice in these results: once with an "order" annotation,
-    # and once without.
     texts = (
         models.Text.objects.filter(corpus=corpus_object)
-        .annotate(
-            order=Case(
-                When(text_meta__name="order", then="text_meta__value"),
-                output_field=IntegerField(),
-            )
-        )
+        .order_by('order', 'title')
         .distinct()
-        .order_by("order", "id")
     )
 
-    # to handle this, for every id, take the one with an "order" if it has one, else fall back to the one without order
-    ids = {t.id for t in texts}
-    results = []
-    for tid in ids:
-        no_order_match = [t for t in texts if t.id == tid and t.order is None]
-        order_match = [t for t in texts if t.id == tid and t.order is not None]
-        if len(order_match) == 0:
-            # Some corpora, like urn:cts:copticLit:shenoute.those, have only partial orderings--in this case, put the unordered ones last
-            no_order_match[0].order = 999999
-            results += no_order_match
-        else:
-            results += order_match
-    results = sorted(results, key=lambda t: (t.order, t.id))
-    texts = results
     formats = settings.HTML_VISUALISATION_FORMATS
     context = _base_context()
     context.update({"corpus": corpus_object, "texts": texts, "page_title": corpus_object.title, "formats": formats})

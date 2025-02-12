@@ -206,7 +206,7 @@ class CorpusScraper:
         # first prefer the explicit map
         if settings.CORPUS_MAP[corpus.annis_corpus_name].get("urn", None):
             corpus.urn_code = settings.CORPUS_MAP[corpus.annis_corpus_name]["urn"]
-            logging.info(f"Found URN for '{corpus.annis_corpus_name}': '{corpus.urn_code}'")
+            logging.info(f"Found URN for '{corpus.annis_corpus_name}': '{corpus.urn_code}' in settings")
         # then if we have no meta or we don't have document_cts_urn set the urn code to empty
         elif self._latest_meta_dict is None or "document_cts_urn" not in self._latest_meta_dict:
             logging.warning(f"No URN found for '{corpus.annis_corpus_name}'. Setting to empty.")
@@ -214,7 +214,7 @@ class CorpusScraper:
         # Finally set the urn code to whatever is in _latest_meta_dict
         # FIXME: figure out _latest_meta_dict
         else:
-            logging.info(f"Setting URN for '{corpus.annis_corpus_name}' to '{self._latest_meta_dict['document_cts_urn']}'")
+            logging.info(f"Setting URN for '{corpus.annis_corpus_name}' to '{self._latest_meta_dict['document_cts_urn']}' from meta")
             corpus.urn_code = urn.textgroup_urn(self._latest_meta_dict["document_cts_urn"])
         # lastly let's add the corpus author
         corpus.author = ', '.join(list(self._latest_meta_dict.get("author", [])))
@@ -269,14 +269,14 @@ class CorpusScraper:
         text.tt_dir=corpus_dirname
         text.tt_filename=filename
         text.tt_dir_tree_id=tree_id # not yet used - but useful for doing partial imports, and general reproducibility
-        text.slug = slugify(meta["title"] if "title" in meta else meta["name"])
+        text.slug = slugify(meta_split_and_cleaned["title"] if "title" in meta_split_and_cleaned else meta_split_and_cleaned["name"])
         text.corpus = self._current_corpus
-        self._text_next[text.title] = meta["next"] if "next" in meta else None
-        self._text_prev[text.title] = meta["previous"] if "previous" in meta else None
+        self._text_next[text.title] = meta_split_and_cleaned["next"] if "next" in meta_split_and_cleaned else None
+        self._text_prev[text.title] = meta_split_and_cleaned["previous"] if "previous" in meta_split_and_cleaned else None
         self._text_urn[text.title] = (
-            meta["document_cts_urn"] if "document_cts_urn" in meta else None
+            meta_split_and_cleaned["document_cts_urn"] if "document_cts_urn" in meta_split_and_cleaned else None
         )
-        self.document_cts_urn=meta["document_cts_urn"]
+        self.document_cts_urn=meta_split_and_cleaned["document_cts_urn"]
         
         if not self.document_cts_urn:
             raise "Missing URN"
@@ -285,16 +285,26 @@ class CorpusScraper:
         for name in meta_split_and_cleaned:
             # If this is a string .. add once.
             if isinstance(meta_split_and_cleaned[name], str):
-                    # FIXME: I wonder what the unsescape is about.
+                # FIXME: I wonder what the unsescape is about.
+                if name == "order":
+                # put the order in the text model if it exists
+                # Otherwise in the model it defaults to 99999 so
+                # texts without an order will be at the bottom of the list
+                    try:
+                        text.order = int(meta_split_and_cleaned["order"])
+                    except ValueError:
+                        logging.warning(f"Found order '{meta_split_and_cleaned["order"]}'. But could not convert to int.")
+                        # If order value can't be converted to int, keep default
+                        pass
+                    break
                 text_metas.append(TextMeta(name=name, value=unescape(meta_split_and_cleaned[name])) )
             elif isinstance(meta_split_and_cleaned[name], list):
                 for v in meta_split_and_cleaned[name]:
                     text_metas.append(
                         TextMeta(name=name, value=unescape(v)) 
                     )
-                
             else:
                 raise ("Unexpected type for meta value")
-            
+        
         self._generate_visualizations_and_add_to_tx( self._current_corpus, corpus_dirname, text, vis_formats)
         self._current_transaction.add_text((text, text_metas))
