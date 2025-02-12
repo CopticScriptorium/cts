@@ -17,7 +17,8 @@
         {# No search term entered #}
         <p>
         No search term entered. You can use the filters to the right to explore the texts or enter a search term in the box above. 
-        You may enter text both in English and Coptic (activate the Coptic keyboard by clicking on "<a href="#" id="save-preferences-button">Preferences</a>"). <br> 
+        You may enter text both in English and Coptic (activate the Coptic keyboard by clicking on the "Keyboard" checkbox next to the search box). <br> 
+        You can find more information here on the <a href="https://help.keyman.com/keyboard/coptic_qwerty/2.2/coptic_qwerty" title="Coptic Qwerty Keyboard Help" target="_blank">  Coptic Qwerty <i class="fa fa-info-circle" aria-hidden="true"></i> layout</a> and the <a href="https://help.keyman.com/keyboard/coptic_greek/2.3/coptic_greek" title="Coptic Greek Keyboard Help" target="_blank">Coptic Greek<i class="fa fa-info-circle" aria-hidden="true"></i></a> layout. <br>
         You can use negative search terms such as <i>"ⲓⲱⲁⲛⲛⲏⲥ" -"ⲡⲉⲧⲣⲟⲥ"</i> to exclude texts containing the second term. <br>
         The search works on all metadata so you can search for <i> ⲉⲕⲕⲗⲏⲥⲓⲁ -Alexandria </i>to exclude texts about Alexandria.<br>
         You can also use the search box to access URNs such as <i>urn:cts:copticLit:misc.acts_pilate.lacau_ed:9</i>
@@ -33,7 +34,7 @@
             for <span class="meta_pair">Query</span> = <span class="meta_pair">{{ query_text }} <a class="remove_facet" href="{{ remove_query_url }}">✖</a></span> &nbsp; 
           {% endif %}
           {% if not has_results %}
-          <a class="start-over" href="/search">Click here</a> to start-over. Use "✖" to remove the search term or filter. You can also enable fuzzy matches in the Preferences. 
+          <a class="start-over" href="/search">Click here</a> to start-over. Use "✖" to remove the search term or filter. You can also enable fuzzy matches in the Preferences by unchecking "Exact Search". 
           {% endif %}
           {% if has_results and active_facets %}
             {% for facet, values in active_facets.items %}

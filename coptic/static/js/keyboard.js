@@ -6,6 +6,7 @@
         { id: 'cop-copt', name: 'Keyboard_coptic_qwerty', label: 'Coptic Qwerty' },
         // Add more keyboards here in the same format
     ];
+
     var virtualKeyboardEnabled = localStorage.getItem('virtualKeyboardEnabled') === 'true';
     console.log('virtualKeyboardEnabled', virtualKeyboardEnabled);
     var storedKeyboard = localStorage.getItem('preferredKeyboard') || KEYBOARDS[0].id;
@@ -63,12 +64,11 @@
 
     // Update save preferences function
     function savePreferences() {
-        virtualKeyboardEnabled = document.getElementById('virtual-keyboard-toggle').checked;
-        const fuzzySearchEnabled = document.getElementById('fuzzy-search-toggle').checked;
+        const virtualKeyboardEnabled = document.getElementById('virtual-keyboard-toggle').checked;
+        const exactSearch = document.getElementById('exact-search-toggle').checked;
         localStorage.setItem('virtualKeyboardEnabled', virtualKeyboardEnabled);
-        localStorage.setItem('fuzzySearchEnabled', fuzzySearchEnabled);
+        localStorage.setItem('exactSearch', exactSearch);
         applyPreferences();
-        document.getElementById('preferences-modal').style.display = 'none';
     }
 
     async function initKeyman(virtualKeyboardEnabled) {
@@ -104,12 +104,36 @@
     async function applyPreferences() {
 
         const virtualKeyboardEnabled = localStorage.getItem('virtualKeyboardEnabled') === 'true';
+        const exactSearch = localStorage.getItem('exactSearch') === 'true';
+        const searchInputs = document.querySelectorAll('input[type="text"][name="text"]');
 
+        if (exactSearch) {
+            searchInputs.forEach(input => {
+                    // Remove any existing quotes first
+                    const withoutQuotes = input.value.replace(/"/g, '');
+                    // Split by whitespace, add quotes around each word, and rejoin
+                    const withQuotes = withoutQuotes
+                        .split(/\s+/)
+                        .filter(word => word.length > 0)  // Remove empty strings
+                        .map(word => `"${word}"`)
+                        .join(' ');
+                    if (input.value !== withQuotes) {
+                        input.value = withQuotes;
+                    }
+
+            });
+    
+        } else {
+            searchInputs.forEach(input => {
+                    const withoutQuotes = input.value.replace(/"/g, '');
+                    if (input.value !== withoutQuotes) {
+                        input.value = withoutQuotes;
+                    }
+            });
+        }
         await initKeyman(virtualKeyboardEnabled);
 
-        const searchInputs = document.querySelectorAll('input[type="text"][name="text"]');
         const languageSelector = document.getElementById('language-selector');
-        const lastKeyboard = localStorage.getItem('preferredKeyboard') || KEYBOARDS[0].id;
 
         // Apply preferences
         if (virtualKeyboardEnabled) {
@@ -134,25 +158,20 @@
         }
     }
 
-    function showPreferences() {
-        const preferencesModal = document.getElementById('preferences-modal');
-        preferencesModal.style.display = 'block';
-        // Load saved preferences
-        const virtualKeyboardEnabled = localStorage.getItem('virtualKeyboardEnabled') === 'true';
-        const fuzzySearchEnabled = localStorage.getItem('fuzzySearchEnabled') === 'true';
-        document.getElementById('virtual-keyboard-toggle').checked = virtualKeyboardEnabled;
-        document.getElementById('fuzzy-search-toggle').checked = fuzzySearchEnabled;
-    }
-
 
     // Initialize after document is loaded
     document.addEventListener('DOMContentLoaded', function () {
-
+        // Set default value for exactSearch if not present
+        if (localStorage.getItem('exactSearch') === null) {
+            localStorage.setItem('exactSearch', 'true');
+            const exactSearchToggle = document.getElementById('exact-search-toggle');
+                exactSearchToggle.checked = true;
+        }
         storedKeyboard = localStorage.getItem('preferredKeyboard') || KEYBOARDS[0].id;
         console.log('storedKeyboard', storedKeyboard);
         document.getElementById('language-toggle').addEventListener('click', toggleLanguage);
-        document.getElementById('preferences-button').addEventListener('click', showPreferences);
-        document.getElementById('save-preferences-button').addEventListener('click', savePreferences);
+        document.getElementById('virtual-keyboard-toggle').addEventListener('change', savePreferences);
+        document.getElementById('exact-search-toggle').addEventListener('change', savePreferences);
         console.log('Event listeners attached');
         applyPreferences();
     });
