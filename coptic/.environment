@@ -6,5 +6,4 @@ export COPTIC_ENVIROMENT="production"``
 export MEILI_HTTP_ADDR='http://search.internal:80/'
 export MEILLI_MASTER_KEY="$DJANGO_SECRET_KEY"
 export XDG_CACHE_HOME=/tmp/.cache
-. $HOME/.local/bin/env
 alias uvm="uv run python manage.py"
