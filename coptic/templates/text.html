@@ -7,8 +7,7 @@
     <section class="text-list list">
         <div class="text-work">
             <div class="text-subwork single-header">
-                <a href="/texts/{{ text.corpus.slug }}/{{ text.slug }}"
-                   class="item-title-wrap">
+                <a href="/texts/{{ text.corpus.slug }}/{{ text.slug }}" class="item-title-wrap">
                     <span class="text-item item-title">{{ text.title }}</span>
                 </a>
                 <a href="/" class="close-selected-text">
@@ -86,7 +85,7 @@
                 <span class="meta-label">{{ meta_name }}:</span>
                 <span class="meta-value">
                     {% for value in meta_values %}
-                        {{ value.value | safe }}{% if not forloop.last %}, {% endif %}
+                        {{ value.value | fix_html | safe }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </span>
             </div>

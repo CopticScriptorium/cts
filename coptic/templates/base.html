@@ -2,37 +2,37 @@
 <!DOCTYPE html>
 <html>
   <head prefix="og: http://ogp.me/ns#, cts: http://chs.harvard.edu/xmlns/cts">
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>
       {% block title %}
         Coptic Scriptorium
       {% endblock %}
     </title>
-    <meta name="description" content="Coptic Scriptorium" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Coptic Scriptorium">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Opengraph Meta -->
-    <meta property="og:title" content="Coptic Scriptorium Text Server - {{ page_title }} " />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Coptic Scriptorium Text Server" />
-    <meta property="og:image" content="/static/img/logo.jpg" />
+    <meta property="og:title" content="Coptic Scriptorium Text Server - {{ page_title }} ">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Coptic Scriptorium Text Server">
+    <meta property="og:image" content="/static/img/logo.jpg">
     <!-- CTS Meta -->
     <!-- FIXME: we probably need these in the view.py -->
-    <meta name="corpus_urn" property="cts:corpus_urn" content="{{ corpus_urn }}" />
-    <meta name="mss_urn" property="cts:mss_urn" content="{{ mss_urn }}" />
-    <meta name="edition_urn" property="cts:edition_urn" content="{{ edition_urn }}" />
-    <link rel="stylesheet" href="/static/css/styles.css" />
+    <meta name="corpus_urn" property="cts:corpus_urn" content="{{ corpus_urn }}">
+    <meta name="mss_urn" property="cts:mss_urn" content="{{ mss_urn }}">
+    <meta name="edition_urn" property="cts:edition_urn" content="{{ edition_urn }}">
+    <link rel="stylesheet" href="/static/css/styles.css">
     {% block custom_css %}
       <style></style>
     {% endblock %}
-    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon" />
-    <link rel="icon" type="image/jpg" href="/static/img/logo.png" />
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/jpg" href="/static/img/logo.png">
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Asul:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
     </style>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://copticscriptorium.org/css/global.css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://copticscriptorium.org/css/global.css">
     <!-- FIXME: Are we using jQuery at all? Oh maybe wikipedia.js? or vizbar.js? -->
     <script src="/static/js/jquery-3.4.1.min.js"></script>
     <script src="/static/js/ga.js"></script>
@@ -50,7 +50,7 @@
     {% include 'header.html' %}
     <!-- Primary grid -->
     <div class="grid primary">
-      <main class="main" role="main">
+      <main class="main">
         <div class="content primary">
           <div class="grid inner">
             {% block content %}

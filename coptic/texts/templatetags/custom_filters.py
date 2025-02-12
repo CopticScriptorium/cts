@@ -1,6 +1,8 @@
 from django import template
 from itertools import groupby as itertools_groupby
 from operator import attrgetter
+import re
+from bs4 import BeautifulSoup
 
 register = template.Library()
 
@@ -42,3 +44,26 @@ def get_nested_filter(dict, key):
         return dict.get(key)
     except:
         return ""
+
+
+@register.filter
+def fix_html(value):
+    try:
+        # Try to parse and fix HTML
+        soup = BeautifulSoup(value, 'html.parser')
+        fixed_html = str(soup)
+        
+        # Check if it's the specific case of unclosed <a> tag
+        if re.search(r"<a\s+[^>]*>[^<]*<a>", value):
+            fixed_html = re.sub(r"(<a\s+[^>]*>[^<]*)<a>", r"\1</a>", value)
+            return fixed_html
+            
+        # If the HTML is valid after BeautifulSoup parsing, return it
+        if soup.find():  # Check if there's any HTML
+            return fixed_html
+        
+        # If no HTML elements found, return original
+        return value
+    except:
+        # If parsing fails, strip all HTML tags
+        return re.sub(r'<[^>]+>', '', value) 

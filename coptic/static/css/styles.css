@@ -65,6 +65,7 @@
 .text-subwork.single-header {
   background: #fff;
   border-top: 1px solid var(--primary-color);
+  border-bottom: none !important;
   width: 96%;
   padding: 15px 2% 10px;
   position: relative;
@@ -109,7 +110,9 @@
 /* Selected text wrap styles */
 .selected-text-wrap {
   background: #fff;
-  border: 1px solid var(--primary-color);
+  border-bottom: 1px solid var(--primary-color);
+  border-left: 1px solid var(--primary-color);
+  border-right: 1px solid var(--primary-color);
   width: 94%;
   margin: 0 auto;
   padding: 15px 3% 20px;
@@ -273,7 +276,7 @@
   clear: both;
   display: block;
   text-align: left;
-  margin: 0 auto;
+  margin: 0px auto;
   padding: 10px 0 0;
 }
 

@@ -3,7 +3,7 @@
 {% block content %}
     <section>
         <div id="infobox">
-            <img src="" class="thumbnail" />
+            <img src="" class="thumbnail">
             <p class="title"></p>
             <p class="map" id="map"></p>
             <p class="summary"></p>
@@ -28,7 +28,7 @@
                         <li>
                             <a href="/texts/{{ corpus.slug }}/">
                                 {{ corpus.title }}
-                                <br />
+                                <br>
                                 <span class="index-corpus-info">
                                     {% if corpus.author %}<span class="index-author">{{ corpus.author }}</span>{% endif %}
                                     {% if corpus.author and corpus.urn_code %}-{% endif %}
@@ -50,7 +50,7 @@
                                            href="https://annis.copticscriptorium.org/annis/scriptorium#_q={{ b64_meta_values|keyvalue:meta_value }}&_c={{ b64_corpora|keyvalue:corpus.annis_corpus_name }}"><span>ANNIS search</span> <span class="fa fa-external-link"></span></a>
                                     {% endif %}
                                     {% if corpus.urn_code or corpus.author and special_meta != 'author' %}
-                                        <br />
+                                        <br>
                                         <span class="index-corpus-info">
                                             {% if corpus.author and special_meta != 'author' %}<span class="index-author">{{ corpus.author }}</span>{% endif %}
                                             {% if corpus.author and special_meta != 'author' and corpus.urn_code %}({% endif %}{% if corpus.urn_code %}<span class="index-urn">{{ corpus.urn_code }}</span>{% endif %}{% if corpus.author and special_meta != 'author' and corpus.urn_code %}){% endif %}

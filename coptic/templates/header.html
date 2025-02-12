@@ -31,7 +31,7 @@
             <input type="text"
                    name="text"
                    value="{{query_text}}"
-                   placeholder='besa, ϣⲗⲏⲗ, "ⲡⲉⲧⲣⲟⲥ", ⲉⲕⲕⲗⲏⲥⲓⲁ -Alexandria or URN...''>
+                   placeholder='besa, ϣⲗⲏⲗ, "ⲡⲉⲧⲣⲟⲥ", ⲉⲕⲕⲗⲏⲥⲓⲁ -Alexandria or URN...'>
             {% if active_facets %}
                 {% for facet, values in active_facets.items %}
                     {% for value in values %}
@@ -39,12 +39,7 @@
                     {% endfor %}
                 {% endfor %}
             {% endif %}
-            <img src="/static/img/magnifying_glass_icon.svg"
-                 width="28"
-                 height="28"
-                 class="search-icon"
-                 onclick="document.querySelector('.search-bar').submit()">
-            </svg>
+            <img alt="Search icon" src="/static/img/magnifying_glass_icon.svg" width="28" height="28" class="search-icon" onclick="document.querySelector('.search-bar').submit()">
         </form>
         {% include 'preferences.html' %}
     </div>
