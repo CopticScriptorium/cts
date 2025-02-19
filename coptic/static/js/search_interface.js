@@ -21,32 +21,6 @@ document.addEventListener("DOMContentLoaded", function() {
             facet.appendChild(toggle);
         }
     });
-
-    // Add search form handling
-    const searchForm = document.querySelector('.search-bar');
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const searchInput = this.querySelector('input[name="text"]');
-            let searchTerm = searchInput.value.trim();
-            
-            // Check fuzzy search preference
-            const fuzzySearchEnabled = localStorage.getItem('fuzzySearchEnabled') === 'true';
-            
-            // If fuzzy search is disabled and the term isn't already quoted
-            if (!fuzzySearchEnabled && searchTerm && 
-                !(searchTerm.startsWith('"') && searchTerm.endsWith('"'))) {
-                // Add quotes, but only if it's not a URN
-                if (!searchTerm.toLowerCase().startsWith('urn:')) {
-                    searchTerm = `"${searchTerm}"`;
-                }
-            }
-            
-            searchInput.value = searchTerm;
-            this.submit();
-        });
-    }
 });
 
 document.onreadystatechange = function () {

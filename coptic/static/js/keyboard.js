@@ -1,7 +1,7 @@
 (function () {
 
     const KEYBOARDS = [
-        
+
         { id: 'cop', name: 'Keyboard_coptic_greek', label: 'Coptic' },
         { id: 'cop-copt', name: 'Keyboard_coptic_qwerty', label: 'Coptic Qwerty' },
         // Add more keyboards here in the same format
@@ -43,8 +43,8 @@
     }
 
     function getKeyboardById(keyboardId) {
-        return  KEYBOARDS.find(k => k.id === keyboardId);
-        }    
+        return KEYBOARDS.find(k => k.id === keyboardId);
+    }
     // Function to set active keyboard and update UI
     function setActiveKeyboard(keyboardId) {
         const keyboard = getKeyboardById(keyboardId);
@@ -66,6 +66,7 @@
     function savePreferences() {
         const virtualKeyboardEnabled = document.getElementById('virtual-keyboard-toggle').checked;
         const exactSearch = document.getElementById('exact-search-toggle').checked;
+        console.log('Saving preferences virtualKeyboardEnabled, exactSearch:', virtualKeyboardEnabled, exactSearch);
         localStorage.setItem('virtualKeyboardEnabled', virtualKeyboardEnabled);
         localStorage.setItem('exactSearch', exactSearch);
         applyPreferences();
@@ -102,35 +103,12 @@
     }
 
     async function applyPreferences() {
-
+        console.log('Reading preferences virtualKeyboardEnabled, exactSearch:', localStorage.getItem('virtualKeyboardEnabled'), localStorage.getItem('exactSearch'));
         const virtualKeyboardEnabled = localStorage.getItem('virtualKeyboardEnabled') === 'true';
         const exactSearch = localStorage.getItem('exactSearch') === 'true';
         const searchInputs = document.querySelectorAll('input[type="text"][name="text"]');
 
-        if (exactSearch) {
-            searchInputs.forEach(input => {
-                    // Remove any existing quotes first
-                    const withoutQuotes = input.value.replace(/"/g, '');
-                    // Split by whitespace, add quotes around each word, and rejoin
-                    const withQuotes = withoutQuotes
-                        .split(/\s+/)
-                        .filter(word => word.length > 0)  // Remove empty strings
-                        .map(word => `"${word}"`)
-                        .join(' ');
-                    if (input.value !== withQuotes) {
-                        input.value = withQuotes;
-                    }
-
-            });
-    
-        } else {
-            searchInputs.forEach(input => {
-                    const withoutQuotes = input.value.replace(/"/g, '');
-                    if (input.value !== withoutQuotes) {
-                        input.value = withoutQuotes;
-                    }
-            });
-        }
+        applyExactSearch(exactSearch, searchInputs);
         await initKeyman(virtualKeyboardEnabled);
 
         const languageSelector = document.getElementById('language-selector');
@@ -158,22 +136,58 @@
         }
     }
 
-
-    // Initialize after document is loaded
-    document.addEventListener('DOMContentLoaded', function () {
-        // Set default value for exactSearch if not present
-        if (localStorage.getItem('exactSearch') === null) {
-            localStorage.setItem('exactSearch', 'true');
-            const exactSearchToggle = document.getElementById('exact-search-toggle');
-                exactSearchToggle.checked = true;
+    function applyExactSearch(exactSearch, searchInputs) {
+        if (exactSearch) {
+            console.log('Setting exactSearch is true');
+            searchInputs.forEach(input => {
+                // Remove any existing quotes first
+                const withoutQuotes = input.value.replace(/"/g, '');
+                // Split by whitespace, add quotes around each word, and rejoin
+                const withQuotes = withoutQuotes
+                    .split(/\s+/)
+                    .filter(word => word.length > 0)  // Remove empty strings
+                    .map(word => `"${word}"`)
+                    .join(' ');
+                if (input.value !== withQuotes) {
+                    input.value = withQuotes;
+                }
+            });
+        } else {
+            console.log('Setting exactSearch is false');
+            searchInputs.forEach(input => {
+                const withoutQuotes = input.value.replace(/"/g, '');
+                if (input.value !== withoutQuotes) {
+                    input.value = withoutQuotes;
+                }
+            });
         }
-        storedKeyboard = localStorage.getItem('preferredKeyboard') || KEYBOARDS[0].id;
-        console.log('storedKeyboard', storedKeyboard);
-        document.getElementById('language-toggle').addEventListener('click', toggleLanguage);
-        document.getElementById('virtual-keyboard-toggle').addEventListener('change', savePreferences);
-        document.getElementById('exact-search-toggle').addEventListener('change', savePreferences);
+    }
+        // Initialize after document is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+            // Set default value for exactSearch if not present
+            if (localStorage.getItem('exactSearch') == null) {
+                console.log('No prefrences found initializeing exactSearch to true');
+                localStorage.setItem('exactSearch', 'true');
+                document.getElementById('exact-search-toggle').checked = true;
+            } else {
+                exactSearch = localStorage.getItem('exactSearch') === 'true';
+                console.log('exactSearch', exactSearch);
+                document.getElementById('exact-search-toggle').checked = exactSearch;
+            }
+            storedKeyboard = localStorage.getItem('preferredKeyboard') || KEYBOARDS[0].id;
+            console.log('storedKeyboard', storedKeyboard);
+            document.getElementById('language-toggle').addEventListener('click', toggleLanguage);
+            document.getElementById('virtual-keyboard-toggle').addEventListener('change', savePreferences);
+            document.getElementById('exact-search-toggle').addEventListener('change', savePreferences);
+            const searchForm = document.querySelector('.search-bar');
+            searchForm.addEventListener('submit', function (e) {
+                console.log("form submitted. Applying Exact searcch before submission")
+                e.preventDefault();
+                applyExactSearch(document.getElementById('exact-search-toggle').checked == true, searchForm.querySelectorAll('input[type="text"][name="text"]'));
+                this.submit();
+            });
+        });
         console.log('Event listeners attached');
         applyPreferences();
-    });
-
-})();
+    }
+)();
