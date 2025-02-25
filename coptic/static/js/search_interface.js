@@ -43,11 +43,16 @@ document.onreadystatechange = function () {
                 false
             );
 
+            const textNodes = [];
             let node;
-            let found = false;
             while (node = walker.nextNode()) {
+                textNodes.push(node);
+            }
+
+            textNodes.forEach(node => {
                 const index = node.textContent.toLocaleUpperCase().indexOf(searchText.toLocaleUpperCase());
                 if (index >= 0) {
+                    
                     // Create highlight span
                     const span = document.createElement('span');
                     span.className = 'search-highlight';
@@ -68,15 +73,12 @@ document.onreadystatechange = function () {
                     parent.removeChild(node);
 
                     // Scroll the first match into view
-                    if (!found) {
-                        span.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                        found = true;
-                    }
+                    span.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
                 }
-            }
+            });
         }
     }
-  };
+};

@@ -3,6 +3,7 @@
   --primary-color: #361b01;
   --secondary-color: #e3d9d8;
   --highlight-color: #8e473d11;
+  --strong-highlight-color: #c87d72bd;
   --highlight-search-color: #8e473d00;
   --font-color: #222222;
   --font-family: 'Asul', Helvetica, Arial, sans-serif;
@@ -845,7 +846,7 @@ kmw-osk-frame {
 
 .fulltext_results .highlight {
   font-family: antinoouRegular, sans-serif;
-  background-color: var(--highlight-color);
+  background-color: var(--strong-highlight-color);
   font-weight: bolder;
   font-size: 120%;
   font-style: italic;
@@ -932,6 +933,10 @@ kmw-osk-frame {
 
 .search-column .search-item {
   padding-bottom: 5px;
+}
+
+.search-highlight {
+  background-color: var(--strong-highlight-color);
 }
 
 .remove_facet {
