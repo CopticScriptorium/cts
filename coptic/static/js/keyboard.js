@@ -142,12 +142,7 @@
             searchInputs.forEach(input => {
                 // Remove any existing quotes first
                 const withoutQuotes = input.value.replace(/"/g, '');
-                // Split by whitespace, add quotes around each word, and rejoin
-                const withQuotes = withoutQuotes
-                    .split(/\s+/)
-                    .filter(word => word.length > 0)  // Remove empty strings
-                    .map(word => `"${word}"`)
-                    .join(' ');
+                const withQuotes = `"${withoutQuotes}"`;
                 if (input.value !== withQuotes) {
                     input.value = withQuotes;
                 }
