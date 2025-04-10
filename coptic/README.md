@@ -33,10 +33,19 @@ Note: this app requires Python 3.10+.
 
 ```sh
 curl -LsSf https://astral.sh/uv/install.sh | sh
+cd coptic
 uv python install 3.12
 uv sync
+source .venv/bin/activate
 ```
-And then you can run the app with:
+And then you can run the app with either:
+
+```sh
+python ./manage.py runserver
+```
+
+if you did not activate the venv:
+
 ```sh
 uv run python ./manage.py runserver
 ```
@@ -50,15 +59,17 @@ conda activate cts
 ```
 
 ##  1. Install requirements in development:
+The preferred method is `uv sync` but you may also:
 
 ```sh
-pip install -r requirements_django_5.txt
+pip3 install -r requirements_django_5.txt
 ```
 
 2. Update requirements:
+The preferred method is `uv lock` but you may also:
 ```sh
-pip install -U -r requirements.txt
-pip freeze > requirements_django_5.txt
+pip3 install -U -r requirements.txt
+pip3 freeze > requirements_django_5.txt
 ```
 
 To install the search-engine:
@@ -103,10 +114,10 @@ The file-based cache is currently set both in development and production to the 
 
 ### 2.  Install requirements in production:
 
-** See the procedure above for using uv. This is the preferred method. ** 
+** See the procedure above for using `uv` which is the preferred method. ** 
 
 ```sh
- pip install -r requirements_django_5.txt
+ pip3 install -r requirements_django_5.txt
 ```
 
 Install meilisearch to `/usr/local/bin`:
@@ -207,7 +218,7 @@ You should now be able to run the server:
 If you want the search engine - it should be running first in a different terminal:
 
 ```sh
-./meilisearch --env=development
+./meilisearch --env=development masterKey
 ```
 
 ##  Importing corpora
