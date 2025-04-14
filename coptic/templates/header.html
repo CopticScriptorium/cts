@@ -7,11 +7,11 @@
                 </a>
             </div>
             {% for field in search_fields %}
-            <div class="nav-item">
-                <a href="/index/{{field.title}}/">
-                    <span class="tool-text"> {{field.title}} </span>
-                </a>
-            </div>
+                <div class="nav-item">
+                    <a href="/index/{{ field.title }}/">
+                        <span class="tool-text"> {{ field.title }} </span>
+                    </a>
+                </div>
             {% endfor %}
             <div class="nav-item">
                 <a href="/search">
@@ -19,18 +19,28 @@
                 </a>
             </div>
         </div>
-
         <!-- Search by text, year, author, country of origin, hagiography, bible texts-->
         <form name="search_box" class="search-bar" action="/search">
+            <div id="language-selector">
+                <button type="button" id="language-toggle">
+                    <span id="current-language"></span>
+                    <!-- Keyboard SVG-->
+                    <img src="/static/img/keyboard.svg" alt="Keyboard icon" width="28" height="28">
+                </button>
+            </div>
             <input type="text"
                    name="text"
-                   value=""
-                   placeholder="Enter URN or query (&quot;besa&quot;, &quot;aphthonia&quot;, ...)">
-            <svg width="28" height="28" viewBox="0 0 490 490" class="search-icon" onclick="document.querySelector('.search-bar').submit()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="490" height="490">
-                    <path fill="none" stroke="#555" stroke-width="36" stroke-linecap="round" d="m280,278a153,153 0 1,0-2,2l170,170m-91-117 110,110-26,26-110-110"/>
-                </svg>
-            </svg>
+                   value="{{query_text}}"
+                   placeholder='besa, ϣⲗⲏⲗ, "ⲡⲉⲧⲣⲟⲥ", ⲉⲕⲕⲗⲏⲥⲓⲁ -Alexandria or URN...'>
+            {% if active_facets %}
+                {% for facet, values in active_facets.items %}
+                    {% for value in values %}
+                        <input type="hidden" name="{{ facet }}" value="{{ value }}">
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            <img alt="Search icon" src="/static/img/magnifying_glass_icon.svg" width="28" height="28" class="search-icon" onclick="document.querySelector('.search-bar').submit()">
         </form>
+        {% include 'preferences.html' %}
     </div>
 </header>
