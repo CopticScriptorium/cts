@@ -1,14 +1,19 @@
 import os
 import sys
+from django.core.exceptions import DisallowedHost
+from django.utils.http import is_same_domain
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-TEMPLATE_DEBUG = True
-ALLOWED_HOSTS = ["localhost", "coptic.dev"]
-SECRET_KEY="ActuallyAnythingWeAreinDev"
+# Fetch the allowed hosts from the environment variable
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '')
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
+TEMPLATE_DEBUG = DEBUG
+
+#SETUP Logging.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -30,12 +35,11 @@ LOGGING = {
     },
 }
 # Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "sqlite3.db",
+        "NAME": "db/sqlite3.db",
         "USER": "",
         "PASSWORD": "",
         "HOST": "",
@@ -50,6 +54,7 @@ CACHES = {
     }
 }
 
+
 SEARCH_CONFIG = {
     "MEILI_HTTP_ADDR":  os.getenv('MEILI_HTTP_ADDR','http://localhost:7700/'),
     "MEILI_MASTER_KEY": os.getenv('MEILLI_MASTER_KEY', 'masterKey'),
@@ -57,17 +62,15 @@ SEARCH_CONFIG = {
     "DISABLE": False,
 }
 
+# Use test database if running tests
 if "test" in sys.argv:
-    DATABASES["default"]["name"] = "tessqlite3.db"
+    DATABASES["default"]["NAME"] = "db/test_sqlite3.db"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
-# For the time being we are using the same value for cache ttl
-# both for http cache and the cached used in the scraper.
-CACHE_TTL = 60  # 60 seconds 
-LOCAL_REPO_PATH =  "../../corpora" # this is for upsun
+LOCAL_REPO_PATH =  "/app/corpora" # this is for upsun
+
+CACHE_TTL = 60 * 60 * 24 * 7  # 1 week
 # Control whether we are lazy loading the HTML generation
-# This has effects both on scraping (much faster)  and in
-# production.
