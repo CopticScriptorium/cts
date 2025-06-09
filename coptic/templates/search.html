@@ -1,60 +1,82 @@
 {% extends "base.html" %}
-
-{% block title %} Search - Coptic Scriptorium {% endblock %}
+{% load custom_filters %}
+{% block title %}Search - Coptic Scriptorium{% endblock %}
 {% block content %}
-
-
-<div class="search-container">
-    <div class="search-column search-results">
-        {% if no_query %}
-        <h4>Please enter some criteria to search.</h4>
-        {% elif all_empty %}
-        <h4 class="explanation">No results found for {{ all_empty_explanation|safe }}. Please try a different query.</h4>
-        {% else %}
-        {% for result in results %}
-        {% if result.texts %}
-        <h4 class="explanation">{{ result.texts.count }} results for {{ result.explanation|safe }}</h4>
-        <div class="search-results-section">
-        {% endif %}
-        {% for text in result.texts %}
-            <div class="search-results-row">
-                    <div>
-                        <a href="/texts/{{text.corpus.slug}}/{{text.slug}}" class="text-link">
-                            <span class="text-title">{{text.title}}</span><br>
-                        </a>
-                        <div class="text-corpus-info">
-                            {% if text.urn_code %}<span class="text-urn">{{text.urn_code}}</span>{% endif %}
-                            <br>
-                            <a href="/texts/{{text.corpus.slug}}/" class="text-link">
-                                (from <span class="text-corpus">{{text.corpus.title}}</span>
-                                {% if text.author %}
-                                by <span class="text-author">{{text.author}}</span>
-                                {% endif %} -
-                                <span class="text-urn">{{text.corpus.urn_code}}</span>)
-                            </a>
+    <div class="search-container">
+        <div class="search-column search-results">
+            {% if no_query %}
+                <h4>Please enter some criteria to search.</h4>
+            {% elif all_empty %}
+                <h4 class="explanation">No results found for {{ all_empty_explanation|safe }}.</h4>
+            {% else %}
+                {% for result in results %}
+                    {% if result.texts %}
+                        <h4 class="explanation">{{ result.texts.count }} results for {{ result.explanation|safe }}</h4>
+                        <div class="search-results-section">
+                        {% endif %}
+                        {% for text in result.texts %}
+                            <div class="search-results-row">
+                                <div>
+                                    <a href="/texts/{{ text.corpus.slug }}/{{ text.slug }}"
+                                       class="text-link">
+                                        <span class="text-title">{{ text.title }}</span>
+                                        <br>
+                                    </a>
+                                    <div class="text-corpus-info">
+                                        {% if text.urn_code %}<span class="text-urn">{{ text.urn_code }}</span>{% endif %}
+                                        <br>
+                                        <a href="/texts/{{ text.corpus.slug }}/" class="text-link">
+                                            (from <span class="text-corpus">{{ text.corpus.title }}</span>
+                                            {% if text.author %}by <span class="text-author">{{ text.author }}</span>{% endif %}
+                                            -
+                                            <span class="text-urn">{{ text.corpus.urn_code }}</span>)
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if result.texts %}</div>{% endif %}
+                {% endfor %}
+            {% endif %}
+            <div class="fulltext_results">
+                {% if fulltext_results %}
+                     <h4>Full-text search results</h4>
+                    {% for result in fulltext_results %}
+                    <div class="search-results-row">
+                    <a href="/texts/{{ result.corpus_slug }}/{{ result.slug }}/analytic#text={{query_text|urlencode}}" class="text-link">
+                        {# FIXME we should be using the standard #:~:text= but that doesnt seem to work well yet. So resorting to #text and a js hack with window.find #}
+                        <h4>
+                            <span class="text-title">{{ result.title }}</span>
+                        </h4>
+                        <div class="result">
+                        {% for field, hits in result.hits.items %}
+                            {# FIXME Implement results for fields other than the text itself #}
+                            <div><span class="fullt_text_field_hit"> Found in {{ field | safe }}:</span>
+                                {% if hits|isinstance:"str" %}
+                                    {{ hits|safe }}
+                                {% else %}
+                                    {{ hits|join:", " |safe }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                         </div>
+                    </a>
                     </div>
+                    {% endfor %}
+                {% endif %}
             </div>
-        {% endfor %}
-        {% if result.texts %}
         </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
+        <div class="search-column search-params">
+            <form action="/search">
+                {% for field in form %}
+                    <div class="search-item">
+                        {{ field.label }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <br>
+                <input type="submit" value="Search">
+            </form>
+        </div>
     </div>
-    <div class="search-column search-params">
-        <form action="/search">
-            {% for field in form %}
-            <div class="search-item">
-                {{ field.label }}
-                {{ field }}
-            </div>
-            {% endfor %}
-            <br/>
-            <input type="submit" value="Search">
-        </form>
-    </div>
-</div>
-
 {% endblock %}
-
