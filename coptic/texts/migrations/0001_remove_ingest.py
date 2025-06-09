@@ -6,7 +6,29 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('texts', '0001_initial'), ('texts', '0002_remove_corpus_urn_code'), ('texts', '0003_corpus_urn_code'), ('texts', '0004_remove_corpus_html_corpora_code'), ('texts', '0005_text_is_expired'), ('texts', '0006_auto_20151102_0045'), ('texts', '0007_auto_20151123_0214'), ('texts', '0008_auto_20160504_2338'), ('texts', '0009_auto_20160520_1728'), ('texts', '0010_auto_20160527_0547'), ('texts', '0011_auto_20160602_0738'), ('texts', '0012_auto_20160603_0537'), ('texts', '0013_auto_20160603_0546'), ('texts', '0014_auto_20160603_2356'), ('texts', '0015_specialmeta'), ('texts', '0016_auto_20160604_0133'), ('texts', '0017_auto_20160604_0136'), ('texts', '0018_auto_20160604_1738'), ('texts', '0019_auto_20161212_2249'), ('texts', '0020_metaorder'), ('texts', '0021_auto_20190822_2305')]
+    replaces = [
+        ("texts", "0001_initial"),
+        ("texts", "0002_remove_corpus_urn_code"),
+        ("texts", "0003_corpus_urn_code"),
+        ("texts", "0004_remove_corpus_html_corpora_code"),
+        ("texts", "0005_text_is_expired"),
+        ("texts", "0006_auto_20151102_0045"),
+        ("texts", "0007_auto_20151123_0214"),
+        ("texts", "0008_auto_20160504_2338"),
+        ("texts", "0009_auto_20160520_1728"),
+        ("texts", "0010_auto_20160527_0547"),
+        ("texts", "0011_auto_20160602_0738"),
+        ("texts", "0012_auto_20160603_0537"),
+        ("texts", "0013_auto_20160603_0546"),
+        ("texts", "0014_auto_20160603_2356"),
+        ("texts", "0015_specialmeta"),
+        ("texts", "0016_auto_20160604_0133"),
+        ("texts", "0017_auto_20160604_0136"),
+        ("texts", "0018_auto_20160604_1738"),
+        ("texts", "0019_auto_20161212_2249"),
+        ("texts", "0020_metaorder"),
+        ("texts", "0021_auto_20190822_2305"),
+    ]
 
     initial = True
 
@@ -14,93 +36,173 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='HtmlVisualizationFormat',
+            name="HtmlVisualizationFormat",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('button_title', models.CharField(max_length=200)),
-                ('slug', models.CharField(max_length=200)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("button_title", models.CharField(max_length=200)),
+                ("slug", models.CharField(max_length=200)),
             ],
             options={
-                'verbose_name': 'HTML Visualization Format',
+                "verbose_name": "HTML Visualization Format",
             },
         ),
         migrations.CreateModel(
-            name='TextMeta',
+            name="TextMeta",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200)),
-                ('value', models.CharField(max_length=10000)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200)),
+                ("value", models.CharField(max_length=10000)),
             ],
             options={
-                'verbose_name': 'Text Meta Item',
+                "verbose_name": "Text Meta Item",
             },
         ),
         migrations.CreateModel(
-            name='HtmlVisualization',
+            name="HtmlVisualization",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('html', models.TextField()),
-                ('visualization_format', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='texts.HtmlVisualizationFormat')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("html", models.TextField()),
+                (
+                    "visualization_format",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="texts.HtmlVisualizationFormat",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'HTML Visualization',
+                "verbose_name": "HTML Visualization",
             },
         ),
         migrations.CreateModel(
-            name='Corpus',
+            name="Corpus",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(editable=False)),
-                ('modified', models.DateTimeField(editable=False)),
-                ('title', models.CharField(max_length=200)),
-                ('slug', models.SlugField(max_length=40)),
-                ('annis_corpus_name', models.CharField(max_length=200)),
-                ('github', models.CharField(max_length=200)),
-                ('urn_code', models.CharField(max_length=200)),
-                ('html_visualization_formats', models.ManyToManyField(blank=True, to='texts.HtmlVisualizationFormat')),
-                ('github_paula', models.CharField(blank=True, max_length=50)),
-                ('github_relannis', models.CharField(blank=True, max_length=50)),
-                ('github_tei', models.CharField(blank=True, max_length=50)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(editable=False)),
+                ("modified", models.DateTimeField(editable=False)),
+                ("title", models.CharField(max_length=200)),
+                ("slug", models.SlugField(max_length=40)),
+                ("annis_corpus_name", models.CharField(max_length=200)),
+                ("github", models.CharField(max_length=200)),
+                ("urn_code", models.CharField(max_length=200)),
+                (
+                    "html_visualization_formats",
+                    models.ManyToManyField(
+                        blank=True, to="texts.HtmlVisualizationFormat"
+                    ),
+                ),
+                ("github_paula", models.CharField(blank=True, max_length=50)),
+                ("github_relannis", models.CharField(blank=True, max_length=50)),
+                ("github_tei", models.CharField(blank=True, max_length=50)),
             ],
             options={
-                'verbose_name_plural': 'Corpora',
+                "verbose_name_plural": "Corpora",
             },
         ),
         migrations.CreateModel(
-            name='Text',
+            name="Text",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('slug', models.SlugField(max_length=40)),
-                ('created', models.DateTimeField(editable=False)),
-                ('modified', models.DateTimeField(editable=False)),
-                ('corpus', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='texts.Corpus')),
-                ('html_visualizations', models.ManyToManyField(blank=True, to='texts.HtmlVisualization')),
-                ('text_meta', models.ManyToManyField(blank=True, to='texts.TextMeta')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("slug", models.SlugField(max_length=40)),
+                ("created", models.DateTimeField(editable=False)),
+                ("modified", models.DateTimeField(editable=False)),
+                (
+                    "corpus",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="texts.Corpus",
+                    ),
+                ),
+                (
+                    "html_visualizations",
+                    models.ManyToManyField(blank=True, to="texts.HtmlVisualization"),
+                ),
+                ("text_meta", models.ManyToManyField(blank=True, to="texts.TextMeta")),
             ],
         ),
         migrations.CreateModel(
-            name='SpecialMeta',
+            name="SpecialMeta",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True)),
-                ('order', models.IntegerField()),
-                ('splittable', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200, unique=True)),
+                ("order", models.IntegerField()),
+                ("splittable", models.BooleanField(default=False)),
             ],
             options={
-                'verbose_name': 'Special Metadata Name',
+                "verbose_name": "Special Metadata Name",
             },
         ),
         migrations.CreateModel(
-            name='MetaOrder',
+            name="MetaOrder",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True)),
-                ('order', models.IntegerField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200, unique=True)),
+                ("order", models.IntegerField()),
             ],
             options={
-                'verbose_name': 'Metadata Order',
+                "verbose_name": "Metadata Order",
             },
         ),
     ]
