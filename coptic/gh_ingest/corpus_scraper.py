@@ -296,7 +296,6 @@ class CorpusScraper:
                         logging.warning(f"Found order '{meta_split_and_cleaned["order"]}'. But could not convert to int.")
                         # If order value can't be converted to int, keep default
                         pass
-                    break
                 text_metas.append(TextMeta(name=name, value=unescape(meta_split_and_cleaned[name])) )
             elif isinstance(meta_split_and_cleaned[name], list):
                 for v in meta_split_and_cleaned[name]:
