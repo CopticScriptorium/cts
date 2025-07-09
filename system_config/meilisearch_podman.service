@@ -1,0 +1,19 @@
+[Unit]
+Description=Meilisearch Container
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStartPre=-/usr/bin/podman rm -f meilisearch
+ExecStart=/usr/bin/podman run --name meilisearch \
+  -p 7700:7700 \
+  -v /opt/meili_data:/meili_data \
+  getmeili/meilisearch:v1.14 \
+  meilisearch --master-key="masterKey"
+ExecStop=/usr/bin/podman stop -t 10 meilisearch
+
+[Install]
+WantedBy=multi-user.target
